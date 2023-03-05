@@ -1,6 +1,6 @@
 {
   "name": "apa-title-case",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Converts a string to title case in APA or Chicago style",
   "keywords": [
     "title",
