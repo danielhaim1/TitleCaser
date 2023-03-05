@@ -35,10 +35,10 @@ String.prototype.toTitleCase(style, options);
 ```
 
 ## Parameters
-- `shortConjunctions`: An array of short conjunctions that should not be capitalized, such as "and", "but", and "if"
-- `articles`: An array of articles that should not be capitalized, such as "a", "an", and "the".
-- `shortPrepositions`: An array of short prepositions that should not be capitalized, such as "of", "to", and "by".
-- `neverCapitalized`: An array of words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
+- `shortConjunctions`: short conjunctions that should not be capitalized, such as "and", "but", and "if"
+- `articles`: articles that should not be capitalized, such as "a", "an", and "the".
+- `shortPrepositions`: short prepositions that should not be capitalized, such as "of", "to", and "by".
+- `neverCapitalized`: words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
 
 ### Return value
 A new string with the original string converted to title case.
