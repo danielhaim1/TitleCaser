@@ -1,0 +1,26 @@
+{
+  "name": "apa-title-case",
+  "version": "1.0.0",
+  "keywords": [
+    "title",
+    "case",
+    "string",
+    "conversion"
+  ],
+  "description": "Converts a string to title case APA style",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author" : {
+    "name" : "Daniel Haim",
+    "url" : "https://github.com/danielhaim1/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

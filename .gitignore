@@ -1,0 +1,23 @@
+# Node.js dependencies
+/node_modules
+
+# Output of 'npm build'
+/dist
+
+# Output of 'npm test'
+/coverage
+
+# Editor files
+/.vscode
+/.idea
+*.sublime-workspace
+
+# Environment files
+.env
+
+# Log files
+*.log
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
