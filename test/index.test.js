@@ -17,12 +17,12 @@ describe('toTitleCase', () => {
     expect(result).toBe('Turning Frowns (and Smiles) Upside Down: A Multilevel Examination of Surface Acting Positive and Negative Emotions on Well-Being');
   });
 
-  test('checks for small words in first word', () => {
+  test('checks if the first word is capitalized', () => {
     const result = 'the quick brown fox jumps over the lazy dog'.toTitleCase();
     expect(result).toBe('The Quick Brown Fox Jumps Over the Lazy Dog');
   });
 
-  test('checks for small words in first word', () => {
+  test('checks for small words in the string', () => {
     const result = 'to be or not to be'.toTitleCase();
     expect(result).toBe('To Be or Not to Be');
   });

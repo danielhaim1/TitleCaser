@@ -7,6 +7,15 @@
     "string",
     "conversion"
   ],
+  
+  "homepage": "https://github.com/danielhaim1/apa-title-case",
+  "bugs": {
+    "url": "https://github.com/danielhaim1/apa-title-case/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/danielhaim1/apa-title-case.git"
+  },
   "description": "Converts a string to title case APA style",
   "main": "index.js",
   "scripts": {
