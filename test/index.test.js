@@ -4,18 +4,17 @@ const { toTitleCase } = require('../index');
 
 describe('String.prototype.toTitleCase', () => {
 
-    test('throws TypeError if input is not a string', () => {
+  test('throws TypeError if input is not a string', () => {
     expect(() => {
       toTitleCase(null);
     }).toThrow(TypeError);
   });
 
-test('throws TypeError if options is not an object', () => {
-  expect(() => {
-    'hello world'.toTitleCase('invalid option');
-  }).toThrow(TypeError);
-});
-
+  test('throws TypeError if options is not an object', () => {
+    expect(() => {
+      'hello world'.toTitleCase('invalid option');
+    }).toThrow(TypeError);
+  });
 
   test('capitalizes the first letter of each word in a sentence', () => {
     const result = 'train your mind for peak performance: a science-based approach for achieving your goals'.toTitleCase();
@@ -43,7 +42,7 @@ test('throws TypeError if options is not an object', () => {
   });
 
   test('excludes specific words from capitalization', () => {
-    const result = 'the name of the musical is The Musical'.toTitleCase( { neverCapitalized: ["The Musical"] });
+    const result = 'the name of the musical is The Musical'.toTitleCase({ neverCapitalized: ["The Musical"] });
     expect(result).toBe('The Name of the Musical Is The Musical');
   });
 

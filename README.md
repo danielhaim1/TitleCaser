@@ -80,19 +80,19 @@ npm test
     ✓ throws TypeError if input is not a string (3 ms)
     ✓ throws TypeError if options is not an object (3 ms)
     ✓ capitalizes the first letter of each word in a sentence
-    ✓ capitalizes the first letter of the first word in a sentence (1 ms)
+    ✓ capitalizes the first letter of the first word in a sentence (2 ms)
     ✓ handles hyphenated words and last words in a sentence
     ✓ capitalizes the first word of a sentence
     ✓ capitalizes all significant words in a sentence
-    ✓ excludes specific words from capitalization (1 ms)
+    ✓ excludes specific words from capitalization
     ✓ capitalizes significant words with Chicago style
-    ✓ does not modify already capitalized words
+    ✓ does not modify already capitalized words (1 ms)
     ✓ returns an empty string for empty input
 
 Test Suites: 1 passed, 1 total
 Tests:       11 passed, 11 total
 Snapshots:   0 total
-Time:        0.138 s, estimated 1 s
+Time:        0.134 s, estimated 1 s
 ```
 
 ## Resources
