@@ -9,19 +9,21 @@
  * @throws TypeError if the input is not a string or if the options are invalid
  */
 
-$uppercaseRegex = "/[A-Z]/";
-$abbreviationRegex = "/\../";
-
-if (!function_exists("toTitleCase")) {
+ if (!function_exists("toTitleCase")) {
     function toTitleCase($str, $options = null)
     {
+        $uppercaseRegex = "/[A-Z]/";
+        $abbreviationRegex = "/\../";
+
         // Check if the input is a string, and if the options are either null or an array
         try {
             if (!is_string($str)) {
                 throw new TypeError("Invalid input: input must be a string.");
             }
 
-            if (isset($options) && !is_array($options)) {
+            if (!isset($options)) {
+                $options = [];
+            } elseif (!is_array($options)) {
                 throw new TypeError(
                     "Invalid options: options must be an object."
                 );
@@ -93,8 +95,8 @@ if (!function_exists("toTitleCase")) {
             // Merge the options based on the input style
             $mergedOptions =
                 isset($options["style"]) && $options["style"] === "chicago"
-                    ? array_merge($defaultOptions, $chicagoOptions)
-                    : array_merge($defaultOptions, $options);
+                ? array_merge($defaultOptions, $chicagoOptions)
+                : array_merge($defaultOptions, $options);
             // Define a function that capitalizes a single word based on the input options
             $capitalizeWord = function ($word) use (
                 $mergedOptions,
@@ -110,7 +112,7 @@ if (!function_exists("toTitleCase")) {
                     return strtolower($word);
                     // Handle words with colons
                 } elseif (strpos($word, ":") !== false) {
-                    $words = explode(" ", $str);
+                    $words = explode(" ", $word);
                     $nextWordIndex = array_search($word, $words) + 1;
                     if ($nextWordIndex < count($words)) {
                         $words[$nextWordIndex] = ucfirst(
@@ -161,7 +163,8 @@ if (!function_exists("toTitleCase")) {
                         return ucfirst(strtolower($word));
                     }
                 }
-            };
+            };            
+
             // Capitalize each word in the input string, ignoring the first and last words
             $words = explode(" ", $str);
             $capitalizedWords = array_map(
@@ -185,3 +188,11 @@ if (!function_exists("toTitleCase")) {
         }
     }
 }
+
+
+// Example usage
+// $string = 'Converts a string to title case, which means capitalizing the first letter of each word, except for certain words like "a", "an", "the", and short prepositions and conjunctions. The function also handles special cases like hyphenated words and abbreviations';
+// $titleCaseString = toTitleCase($string);
+// echo $titleCaseString;
+
+?>
