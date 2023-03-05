@@ -1,54 +1,78 @@
-String.prototype.toTitleCase = function(options) {
-    const defaultOptions = {
-        neverCapitalized: ["etc.", "i.e.", "e.g.", "vs.", "etc"],
-        shortConjunctions: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet"],
-        articles: ["a", "an", "the"],
-        shortPrepositions: ["as", "at", "by", "for", "in", "of", "off", "on", "per", "to", "up", "via"],
+const uppercaseRegex = /[A-Z]/;
+const abbreviationRegex = /\../;
+
+String.prototype.toTitleCase = function (options) {
+  try {
+    if (!(this instanceof String)) {
+      throw new TypeError('Invalid input: input must be a string.');
     }
-    const mergedOptions = { ...defaultOptions, ...options };
-    
-    if (this.length === 0) {
-        return '';
+
+    if (typeof options !== 'undefined' && typeof options !== 'object') {
+      throw new TypeError('Invalid options: options must be an object.');
     }
-    const words = this.split(" ");
-  
-    for (let i = 0; i < words.length; i++) {
-      if (mergedOptions.shortConjunctions.includes(words[i]) || mergedOptions.articles.includes(words[i]) || mergedOptions.shortPrepositions.includes(words[i])) {
-        if (i === 0 || i === words.length - 1) {
-            words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+
+
+
+  const defaultOptions = {
+    neverCapitalized: ["etc.", "i.e.", "e.g.", "vs.", "etc"],
+    shortConjunctions: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet"],
+    articles: ["a", "an", "the"],
+    shortPrepositions: ["as", "at", "by", "for", "in", "of", "off", "on", "per", "to", "up", "via"],
+  };
+
+  const chicagoOptions = {
+    neverCapitalized: ["a", "an", "the", "and", "but", "or", "for", "nor", "on", "at", "to", "from", "by", "with", "in", "of"],
+    shortConjunctions: [],
+    articles: ["a", "an", "the"],
+    shortPrepositions: ["as", "at", "by", "for", "in", "of", "on", "to", "up"],
+  }
+
+  const mergedOptions = options?.style === "chicago" ?
+    { ...defaultOptions, ...chicagoOptions } :
+    { ...defaultOptions, ...options };
+
+  const capitalizeWord = (word) => {
+    if (mergedOptions.shortConjunctions.includes(word) || mergedOptions.articles.includes(word) || mergedOptions.shortPrepositions.includes(word)) {
+      return word.toLowerCase();
+    } else if (word.includes(":")) {
+      const nextWordIndex = words.indexOf(word) + 1;
+      if (nextWordIndex < words.length) {
+        words[nextWordIndex] = words[nextWordIndex].charAt(0).toUpperCase() + words[nextWordIndex].slice(1);
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    } else if (word.includes("-")) {
+      const hyphenatedWord = word.split("-");
+      const capitalizedHyphenatedWord = hyphenatedWord.map((word, index) => {
+        if (index === hyphenatedWord.length - 1 && word.match(/^(IV|VI{0,3}|IX|XI{0,3}|XIV|XV|XVI{0,2}|XVII|XIX|[IVX]+)$/i)) {
+          return word.toUpperCase();
         } else {
-            words[i] = words[i].toLowerCase();
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
         }
-      } else if (words[i].includes(":")) {
-        const nextWordIndex = i + 1;
-          if (nextWordIndex < words.length) {
-              words[nextWordIndex] = words[nextWordIndex][0].toUpperCase() + words[nextWordIndex].slice(1);
-          }
-          words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-      } else if (words[i].includes("-")) {
-        const hyphenatedWord = words[i].split("-");
-        const capitalizedHyphenatedWord = hyphenatedWord.map((word, index) => {
-          if (index === hyphenatedWord.length - 1 && word.match(/^(IV|VI{0,3}|IX|XI{0,3}|XIV|XV|XVI{0,2}|XVII|XIX|[IVX]+)$/i)) {
-              return word.toUpperCase();
-          } else {
-            return word[0].toUpperCase() + word.slice(1).toLowerCase();
-          }
-        }).join("-");
-        words[i] = capitalizedHyphenatedWord;
+      }).join("-");
+      return capitalizedHyphenatedWord;
+    } else {
+      if (uppercaseRegex.test(word.slice(1)) || abbreviationRegex.test(word.slice(1))) {
+        return word;
+      } else if (mergedOptions.neverCapitalized.includes(word)) {
+        return word.toLowerCase();
       } else {
-          if (words[i].slice(1).search(/[A-Z]|\../) > -1) {
-            words[i] = words[i];
-          } else if (i === 0 || i === words.length - 1) {
-            words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-          } else if (mergedOptions.neverCapitalized.includes(words[i])) {
-            words[i] = words[i].toLowerCase();
-          } else {
-            const firstChar = words[i][0];
-            const restOfWord = words[i].slice(1);
-            words[i] = firstChar.toUpperCase() + restOfWord.toLowerCase();
-          }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       }
     }
-    
-    return words.join(" ");
+  }
+
+  const words = this.split(" ");
+  const capitalizedWords = words.map((word, index) => {
+    if (index === 0 || index === words.length - 1) {
+      return capitalizeWord(word.charAt(0).toUpperCase() + word.slice(1));
+    } else {
+      return capitalizeWord(word);
+    }
+  });
+
+  return capitalizedWords.join(" ");
+
+  } catch (error) {
+    throw new TypeError(`Invalid argument: ${error.message}`);
+  }
 };

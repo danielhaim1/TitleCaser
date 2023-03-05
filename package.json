@@ -1,13 +1,15 @@
 {
   "name": "apa-title-case",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "description": "Converts a string to title case in APA or Chicago style",
   "keywords": [
     "title",
     "case",
     "string",
-    "conversion"
+    "conversion",
+    "apa",
+    "chicago"
   ],
-
   "homepage": "https://github.com/danielhaim1/apa-title-case",
   "bugs": {
     "url": "https://github.com/danielhaim1/apa-title-case/issues"
@@ -16,20 +18,19 @@
     "type": "git",
     "url": "git://github.com/danielhaim1/apa-title-case.git"
   },
-  "description": "Converts a string to title case APA style",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "author" : {
-    "name" : "Daniel Haim",
-    "url" : "https://github.com/danielhaim1/"
+  "author": {
+    "name": "Daniel Haim",
+    "url": "https://github.com/danielhaim1"
   },
   "license": "MIT",
-  "devDependencies": {
-    "jest": "^27.5.1"
-  },
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }
