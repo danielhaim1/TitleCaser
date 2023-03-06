@@ -12,54 +12,14 @@ String.prototype.toTitleCase = function (options) {
     }
 
     const defaultOptions = {
-      neverCapitalized: ["etc.", "i.e.", "e.g.", "vs.", "etc"],
-      shortConjunctions: [
-        "and",
-        "as",
-        "but",
-        "for",
-        "if",
-        "nor",
-        "or",
-        "so",
-        "yet"
-      ],
+      neverCapitalized: ["etc.", "i.e.", "e.g.", "vs.", "etc."],
+      shortConjunctions: ["and", "but", "or", "nor", "so", "yet"],
       articles: ["a", "an", "the"],
-      shortPrepositions: [
-        "as",
-        "at",
-        "by",
-        "for",
-        "in",
-        "of",
-        "off",
-        "on",
-        "per",
-        "to",
-        "up",
-        "via"
-      ]
+      shortPrepositions: ["as", "at", "by", "for", "in", "of", "off", "on", "to", "up", "via"]
     };
 
     const chicagoOptions = {
-      neverCapitalized: [
-        "a",
-        "an",
-        "the",
-        "and",
-        "but",
-        "or",
-        "for",
-        "nor",
-        "on",
-        "at",
-        "to",
-        "from",
-        "by",
-        "with",
-        "in",
-        "of"
-      ],
+      neverCapitalized: ["a","an","and","but","or","for","nor","on","at","to","from","by","with","in","of","the","over","as","up"],
       shortConjunctions: [],
       articles: ["a", "an", "the"],
       shortPrepositions: ["as", "at", "by", "for", "in", "of", "on", "to", "up"]

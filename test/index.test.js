@@ -59,7 +59,7 @@ describe('String.prototype.toTitleCase', () => {
         const result = myString.toTitleCase({
             style: "chicago"
         });
-        expect(result).toBe('The Quick Rabbit Together with the Brown Fox Jumped Over the Dog');
+        expect(result).toBe('The Quick Rabbit Together with the Brown Fox Jumped over the Dog');
     });
 
     test('does not modify already capitalized words', () => {
