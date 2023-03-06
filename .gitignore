@@ -1,6 +1,9 @@
 # Node.js dependencies
 /node_modules
 
+/php
+*.php
+
 # Output of 'npm build'
 /dist
 

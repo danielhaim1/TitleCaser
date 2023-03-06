@@ -1,33 +1,33 @@
 ## toTitleCase()
 
-Converts a string to title case APA (default) or Chicago style
+Converts a string to title case
  
-`apa-title-case` is a Node.js package that converts a string to APA or Chicago-style title case. APA follows the first letter of each major word capitalized while Chicago capitalizes every word except for short conjunctions and prepositions.
+`to-title-cased` is a Node.js package that converts a string to APA or Chicago-style title case. APA follows the first letter of each major word capitalized while Chicago capitalizes every word except for short conjunctions and prepositions.
 
 ## Installation
 
 You can install `title-case` using npm:
 
 ```bash
-npm install apa-title-case
+npm install to-title-cased
 ```
 
 Alternatively, you can also install it using yarn:
 
 ```yarn
-yarn add apa-title-case
+yarn add to-title-cased
 ```
 
 After installing the package, you can use it in your code by importing it:
 
 ```javascript
-const toTitleCase = require('apa-title-case');
+const toTitleCase = require('to-title-cased');
 ```
 
 Or if you're using ES6 syntax:
 
 ```javascript
-import { toTitleCase } from 'apa-title-case';
+import { toTitleCase } from 'to-title-cased';
 ```
 
 ```javascript
@@ -77,22 +77,22 @@ npm test
 
 ```bash
   String.prototype.toTitleCase
-    ✓ throws TypeError if input is not a string (3 ms)
+    ✓ throws TypeError if input is not a string (4 ms)
     ✓ throws TypeError if options is not an object (3 ms)
     ✓ capitalizes the first letter of each word in a sentence
-    ✓ capitalizes the first letter of the first word in a sentence (2 ms)
+    ✓ capitalizes the first letter of the first word in a sentence
     ✓ handles hyphenated words and last words in a sentence
     ✓ capitalizes the first word of a sentence
     ✓ capitalizes all significant words in a sentence
-    ✓ excludes specific words from capitalization
+    ✓ excludes specific words from capitalization (1 ms)
     ✓ capitalizes significant words with Chicago style
-    ✓ does not modify already capitalized words (1 ms)
+    ✓ does not modify already capitalized words
     ✓ returns an empty string for empty input
 
 Test Suites: 1 passed, 1 total
 Tests:       11 passed, 11 total
 Snapshots:   0 total
-Time:        0.134 s, estimated 1 s
+Time:        0.104 s, estimated 1 s
 ```
 
 ## Resources
