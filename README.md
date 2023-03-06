@@ -4,6 +4,8 @@ Converts a string to title case
  
 `to-title-cased` is a Node.js package that converts a string to APA or Chicago-style title case. APA follows the first letter of each major word capitalized while Chicago capitalizes every word except for short conjunctions and prepositions.
 
+[see demo here](https://codepen.io/danielhaim/pen/wvEqvQP)
+
 ## Installation
 
 You can install `title-case` using npm:
