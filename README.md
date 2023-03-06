@@ -78,21 +78,21 @@ npm test
 ```bash
   String.prototype.toTitleCase
     ✓ throws TypeError if input is not a string (4 ms)
-    ✓ throws TypeError if options is not an object (3 ms)
-    ✓ capitalizes the first letter of each word in a sentence
+    ✓ throws TypeError if options is not an object (2 ms)
+    ✓ capitalizes the first letter of each word in a sentence (1 ms)
     ✓ capitalizes the first letter of the first word in a sentence
     ✓ handles hyphenated words and last words in a sentence
     ✓ capitalizes the first word of a sentence
-    ✓ capitalizes all significant words in a sentence
-    ✓ excludes specific words from capitalization (1 ms)
+    ✓ capitalizes all significant words in a sentence (1 ms)
+    ✓ excludes specific words from capitalization
     ✓ capitalizes significant words with Chicago style
     ✓ does not modify already capitalized words
-    ✓ returns an empty string for empty input
+    ✓ returns an empty string for empty input (1 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       11 passed, 11 total
 Snapshots:   0 total
-Time:        0.104 s, estimated 1 s
+Time:        0.124 s, estimated 1 s
 ```
 
 ## Resources
