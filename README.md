@@ -128,11 +128,14 @@ Time:        0.124 s, estimated 1 s
 
 ## Resources
 
-- [APA Style Grammar Guidelines: Capitalization](https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case)
+- [AP Stylebook, 56th Edition](https://store.stylebooks.com/ap-stylebook-56th-edition-print.html)
+- [Publication Manual of the American Psychological Association, Seventh Edition (2020)](https://apastyle.apa.org/products/publication-manual-7th-edition)
 - [Chicago Manual of Style: Capitalization](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Chicago%20Manual%20of%20Style%3A%20Capitalization)
+- [The Bluebook: A Uniform System of Citation. 21st ed. Cambridge: Harvard Law Review Association, 2020](https://open.mitchellhamline.edu/cgi/viewcontent.cgi?article=2782&context=wmlr)
+- [The Chicago Manual of Style, 17th Edition](https://press.uchicago.edu/ucp/books/book/chicago/C/bo25956703.html)
+- [The New York Times Manual of Style and Usage](https://www.worldcat.org/title/946964415)
 - [Wikipedia: Letter case](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Wikipedia%3A%20Letter%20case)
-- [Grammarly Handbook: Title Case](https://www.grammarly.com/blog/title-case/) - an overview of title case and its rules
-- [Title Capitalization Rules for Writers](https://www.scribendi.com/advice/title_capitalization_rules.en.html) - a guide to title case with examples and exceptions.
+- [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
 
 ### Notes
 
