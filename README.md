@@ -133,11 +133,4 @@ Time:        0.124 s, estimated 1 s
 - [Wikipedia: Letter case](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Wikipedia%3A%20Letter%20case)
 - [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
 
-### Notes
-
-- The toTitleCase() function correctly capitalizes the first letter of each word in a string, while handling various exceptions and rules.
-- The function supports several optional configuration options, such as specifying words that should never be capitalized, short conjunctions that should not be capitalized, and short prepositions that should not be capitalized.
-- The function also supports two style options: APA style and Chicago style.
-- The function is optimized to improve performance by memoizing capitalized versions of words and avoiding unnecessary work when checking for ignored words, intentionally uppercase words, URLs, hashtags, and handles.
-- The function correctly handles multi-word small words and hyphenated words, as well as non-ASCII characters.
-- The function includes unit tests to ensure proper functionality and prevent regressions.
+### API
