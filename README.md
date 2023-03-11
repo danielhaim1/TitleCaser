@@ -1,9 +1,9 @@
 ## toTitleCase()
+### Converts a string to title case
 
-Converts a string to title case
- 
-`to-title-cased` is a Node.js package that converts a string to AP, APA, Chicago, NYT, Wikipedia or British style with AP being the default. It also supports custom options for words that should never be capitalized, short conjunctions that should not be capitalized, and short prepositions that should not be capitalized. It also supports a custom style option that allows you to specify your own custom options.
+`to-title-cased` is a function that takes a string and converts it to title case using various style guidelines, including the American Psychological Association (APA), American Psychological Association 7th edition (APA 7), Chicago Manual of Style, New York Times (NYT), Wikipedia, and British styles. The function capitalizes the first letter of each word, except for articles, coordinating conjunctions, and prepositions, unless they are the first word of the string. The function also ensures that certain abbreviations and acronyms are in the correct format according to the style guidelines.
 
+This package supports custom options to further refine the conversion, including words that should never be capitalized, words or phrases to ignore, short conjunctions, short prepositions, and more. These options allow for greater customization and flexibility when converting strings to title case.
 
 [see demo here](https://codepen.io/danielhaim/pen/wvEqvQP)
 
