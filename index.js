@@ -4,7 +4,7 @@ const UPPERCASE_COMMON_WORDS = ['AI', 'A/B', 'A11Y', 'API', 'AR', 'ARI', 'ARW', 
 
 const UNIQUE_WORDS = ['IoT', 'OAuth', 'IaaS', 'PaaS', 'SaaS', 'DDoS', 'VoIP', 'PoC', 'PoW', 'JavaScript', 'jQuery', 'MongoDB', 'MySQL', 'PostgreSQL', 'GraphQL', 'DevOps', 'SecOps', 'Frontend', 'Front-end', 'Front end', 'Backend', 'Back-end', 'Back end', 'Fullstack', 'Full-stack', 'Full stack', 'eBook', 'eBooks', 'eReader', 'eCommerce', 'E-commerce', 'eShop', 'eShops', 'eStore', 'eStores', 'eMarket', 'eMarkets', 'eMarketplace', 'eMarketplaces', 'Ltd.', 'Co.', 'Inc.', 'St.', 'Ave.', 'Bldg.', 'No.', 'LoRa', 'NB-IoT', 'Node.j'];
 
-const CORRECTED_TITLE_CASE_TERMS = {'PhD': 'ph.d.','F.Y.I': 'FYI','T.B.D': 'TBD','A.K.A': 'AKA','A.S.A.P': 'ASAP','D.I.Y': 'DIY','F.A.Q': 'FAQ','U.K.': 'UK','U.S.': 'US','U.S.A.': 'USA','U.S.A': 'USA','U.K': 'UK','U.S': 'US','Full-stack': 'Fullstack','Full Stack': 'Fullstack','Front-End': 'Frontend','Back-End': 'Backend','e-Book': 'eBook','e-Books': 'eBooks','e-Commerce': 'eCommerce','ecom': 'eCommerce','ecommerce': 'eCommerce','nodejs': 'Node.js'};
+const CORRECTED_TITLE_CASE_TERMS = {'e-Book': 'eBook','e-Books': 'eBooks','e-Commerce': 'eCommerce','ecom': 'eCommerce','ecommerce': 'eCommerce','nodejs': 'Node.js'};
 
 const TITLE_CASE_STYLES = Object.freeze({
     AP: 'ap',

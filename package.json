@@ -1,6 +1,6 @@
 {
     "name": "to-title-cased",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "description": "Converts the specified string to title case (except for words that are entirely in uppercase, which are considered to be acronyms).",
     "keywords": [
         "titlecase",
