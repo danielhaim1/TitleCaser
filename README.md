@@ -2,7 +2,8 @@
 
 Converts a string to title case
  
-`to-title-cased` is a Node.js package that converts a string to APA or Chicago-style title case. APA follows the first letter of each major word capitalized while Chicago capitalizes every word except for short conjunctions and prepositions.
+`to-title-cased` is a Node.js package that converts a string to AP, APA, Chicago, NYT, Wikipedia or British style with AP being the default. It also supports custom options for words that should never be capitalized, short conjunctions that should not be capitalized, and short prepositions that should not be capitalized. It also supports a custom style option that allows you to specify your own custom options.
+
 
 [see demo here](https://codepen.io/danielhaim/pen/wvEqvQP)
 
@@ -42,10 +43,26 @@ String.prototype.toTitleCase(style, options);
 - `shortPrepositions`: short prepositions that should not be capitalized, such as "of", "to", and "by".
 - `neverCapitalized`: words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
 
+## Options
+
+- `UNIQUE_WORDS` is a list of words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
+- `CORRECTED_TITLE_CASE_TERMS` is a list of words that should be capitalized differently than the default title case rules, such as "Front-End" and "Back-End".
+- `UPPERCASE_COMMON_WORDS` is a list of abbreviations and acronyms that should be capitalized, such as "API" and "HTML".
+
 ### Return value
 A new string with the original string converted to title case.
 
 ### Examples
+
+```javascript
+"Back-End Web Development: Building Scalable APIs with Node.js".toTitleCase();
+"Exploring Back-End Frameworks: Comparing Django, Ruby on Rails, and Laravel".toTitleCase({ style: 'chicago' });
+"Mastering Front-End Web Design: Tips and Tricks for Creating Responsive Layouts".toTitleCase({ style: 'nyt' });
+"Back-End Security: Best Practices for Securing Your Web Applications".toTitleCase({ style: 'wikipedia' });
+"Advanced jQuery Techniques: Tips and Tricks for Experienced Front-End Developers".toTitleCase({ style: 'british' });
+"The Future of Back-End Development: Trends and Technologies to Watch".toTitleCase({ style: 'ap' });
+"Front-End Performance Optimization: Tools and Techniques for Faster Websites".toTitleCase({ style: 'apa' });
+```
 
 ```javascript
 // Example 1: Default title case
@@ -71,6 +88,12 @@ const input = "the quick rabbit together with the brown fox jumped over the dog"
 const output = input.toTitleCase({ style: "chicago" }); // "The Quick Rabbit Together with the Brown Fox Jumped Over the Dog"
 ```
 
+```javascript
+"JQuery Plugins for Front-End Developers: A Comprehensive Guide".toTitleCase({ style: 'apa' });
+// converts JQuery to jQuery, even if it's the first word, 
+// replaces Front-End with Frontend (see correctCapitalization)
+```
+
 ## Tests
 
 ```bash
@@ -80,16 +103,22 @@ npm test
 ```bash
   String.prototype.toTitleCase
     ✓ throws TypeError if input is not a string (4 ms)
-    ✓ throws TypeError if options is not an object (2 ms)
-    ✓ capitalizes the first letter of each word in a sentence (1 ms)
-    ✓ capitalizes the first letter of the first word in a sentence
-    ✓ handles hyphenated words and last words in a sentence
-    ✓ capitalizes the first word of a sentence
-    ✓ capitalizes all significant words in a sentence (1 ms)
-    ✓ excludes specific words from capitalization
-    ✓ capitalizes significant words with Chicago style
-    ✓ does not modify already capitalized words
-    ✓ returns an empty string for empty input (1 ms)
+    ✓ throws TypeError if options is not an object
+    ✓ AP style (1 ms)
+    ✓ Chicago style (1 ms)
+    ✓ APA style (1 ms)
+    ✓ NYT style (2 ms)
+    ✓ Wikipedia style
+    ✓ Reserved keyword (jQuery, Frontend)
+    ✓ Reserved keyword, correct capitalization (Back-End > Backend) (1 ms)
+    ✓ Complex title with various formatting (1 ms)
+    ✓ Colonization of mars with mixed case and possessive (1 ms)
+    ✓ Cryptocurrencies with all caps and ampersand (2 ms)
+    ✓ Technology and mental health with question mark and quotes (1 ms)
+    ✓ Fashion with acronym and hyphen (1 ms)
+    ✓ Nutrition with colon and apostrophe
+    ✓ Correct capitalization for special terms (1 ms)
+    ✓ Correct capitalization for special terms
 
 Test Suites: 1 passed, 1 total
 Tests:       11 passed, 11 total
