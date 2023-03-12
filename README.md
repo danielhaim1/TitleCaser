@@ -1,25 +1,10 @@
 ## toTitleCase()
 ### Converts a string to title case
 
-[![Build Status](https://travis-ci.org/andrewsuzuki/titlecase-js.svg?branch=master)](https://travis-ci.org/andrewsuzuki/titlecase-js)
-[![Coverage Status](https://coveralls.io/repos/github/andrewsuzuki/titlecase-js/badge.svg?branch=master)](https://coveralls.io/github/andrewsuzuki/titlecase-js?branch=master)
 [![npm version](https://badge.fury.io/js/titlecase-js.svg)](https://badge.fury.io/js/titlecase-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dm/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dy/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dw/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dh/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dm/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dy/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dw/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dh/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
-[![Known Vulnerabilities](https://snyk.io/test/github/andrewsuzuki/titlecase-js/badge.svg)](https://snyk.io/test/github/andrewsuzuki/titlecase-js)
-[![dependencies Status](https://david-dm.org/andrewsuzuki/titlecase-js/status.svg)](https://david-dm.org/andrewsuzuki/titlecase-js)
-[![devDependencies Status](https://david-dm.org/andrewsuzuki/titlecase-js/dev-status.svg)](https://david-dm.org/andrewsuzuki/titlecase-js?type=dev)
-[![Greenkeeper badge](https://badges.greenkeeper.io/andrewsuzuki/titlecase-js.svg)](https://greenkeeper.io/)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7b9b7b0b7b7b7b7b7b7b/maintainability)](https://codeclimate.com/github/andrewsuzuki/titlecase-js/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/7b9b7b0b7b7b7b7b7b7b/test_coverage)](https://codeclimate.com/github/andrewsuzuki/titlecase-js/test_coverage)
+[![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
 The repository contains a module that converts a string to title case using a set of rules based on the most common styles guides and English language conventions. The module provides a toTitleCase() method that can be used on any string to convert it to title case.
 
