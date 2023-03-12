@@ -19,11 +19,11 @@ the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) only shows default op
 - Corrects certain common terms to their correct casing.
 
 ## Overview
-- defines several arrays of common words, unique words, and corrected terms, which will be used to determine which words should be capitalized and which shouldn't be.
-- defines several constants representing the different title case styles that can be used.
-- defines a series of helper functions that check whether a word meets certain conditions, such as whether it is a short conjunction, short preposition, or article, or whether it contains a number or intentional uppercase letters.
-- defines a getTitleCaseOptions function that takes an options object and an array of lowercase words and returns an object containing the appropriate articles, short conjunctions, short prepositions, and never capitalized words based on the specified style.
-- defines a toTitleCase method that can be called on a string and accepts an optional options object. This method splits the string into words, checks each word against various conditions, and returns a new string with the appropriate words capitalized.
+- Defines several arrays of common words, unique words, and corrected terms, which will be used to determine which words should be capitalized and which shouldn't be.
+- Defines several constants representing the different title case styles that can be used.
+- Defines a series of helper functions that check whether a word meets certain conditions, such as whether it is a short conjunction, short preposition, or article, or whether it contains a number or intentional uppercase letters.
+- Defines a getTitleCaseOptions function that takes an options object and an array of lowercase words and returns an object containing the appropriate articles, short conjunctions, short prepositions, and never capitalized words based on the specified style.
+- Defines a toTitleCase method that can be called on a string and accepts an optional options object. This method splits the string into words, checks each word against various conditions, and returns a new string with the appropriate words capitalized.
 
 ## Installation
 ```bash
