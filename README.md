@@ -8,6 +8,8 @@
 
 The repository contains a module that converts a string to title case using a set of rules based on the most common styles guides and English language conventions. The module provides a toTitleCase() method that can be used on any string to convert it to title case.
 
+the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) only shows default option (AP style) and Chicago style for now.
+
 ## Features
 - Supports the most common English language conventions and style guides, including AP, APA, Chicago,NY Times, Wikipedia, and British, as well as a custom style.
 - Customizable options for article words, conjunctions, prepositions, and words that should never be capitalized.
