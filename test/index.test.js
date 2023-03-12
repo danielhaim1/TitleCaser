@@ -23,8 +23,11 @@ describe('String.prototype.toTitleCase', () => {
       
       test("AP style", () => {
         const myString = "the iPhone's impact on modern communication: a sociolinguistic analysis";
+        console.log(typeof myString); // debug information
+        console.log(myString); // debug information
         expect(myString.toTitleCase({ style: "ap" })).toBe("The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis");
-    });
+      });
+      
 
     test("Chicago style", () => {
         const myString = "VMware vs. VirtualBox: a comparative study of virtualization software";

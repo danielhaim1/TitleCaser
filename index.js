@@ -4,7 +4,7 @@ const UPPERCASE_COMMON_WORDS = ['AI', 'A/B', 'A11Y', 'API', 'AR', 'ARI', 'ARW', 
 
 const UNIQUE_WORDS = ['IoT', 'OAuth', 'IaaS', 'PaaS', 'SaaS', 'DDoS', 'VoIP', 'PoC', 'PoW', 'JavaScript', 'jQuery', 'MongoDB', 'MySQL', 'PostgreSQL', 'GraphQL', 'DevOps', 'SecOps', 'Frontend', 'Front-end', 'Front end', 'Backend', 'Back-end', 'Back end', 'Fullstack', 'Full-stack', 'Full stack', 'eBook', 'eBooks', 'eReader', 'eCommerce', 'E-commerce', 'eShop', 'eShops', 'eStore', 'eStores', 'eMarket', 'eMarkets', 'eMarketplace', 'eMarketplaces', 'Ltd.', 'Co.', 'Inc.', 'St.', 'Ave.', 'Bldg.', 'No.', 'LoRa', 'NB-IoT', 'Node.j'];
 
-const CORRECTED_TITLE_CASE_TERMS = {'e-Book': 'eBook','e-Books': 'eBooks','e-Commerce': 'eCommerce','ecom': 'eCommerce','ecommerce': 'eCommerce','nodejs': 'Node.js'};
+const CORRECTED_TITLE_CASE_TERMS = {'PhD': 'ph.d.','F.Y.I': 'FYI','T.B.D': 'TBD','A.K.A': 'AKA','A.S.A.P': 'ASAP','D.I.Y': 'DIY','F.A.Q': 'FAQ','U.K.': 'UK','U.S.': 'US','U.S.A.': 'USA','U.S.A': 'USA','U.K': 'UK','U.S': 'US','Full-stack': 'Fullstack','Full Stack': 'Fullstack','Front-End': 'Frontend','Back-End': 'Backend','e-Book': 'eBook','e-Books': 'eBooks','e-Commerce': 'eCommerce','ecom': 'eCommerce','ecommerce': 'eCommerce','nodejs': 'Node.js'};
 
 const TITLE_CASE_STYLES = Object.freeze({
     AP: 'ap',
@@ -55,6 +55,7 @@ const TITLE_CASE_DEFAULT_OPTIONS = Object.freeze({
 });
 const IGNORED_TITLE_CASE_WORDS = [];
 const IGNORED_TITLE_CASE_PHRASES = [];
+
 /**
  * Validates an option
  * 
@@ -64,7 +65,7 @@ const IGNORED_TITLE_CASE_PHRASES = [];
  * @returns {void}
  * 
  */
-function validateOption(key, value) {
+ function validateOption(key, value) {
     if(!Array.isArray(value)) {
         throw new TypeError(`Invalid option: ${key} must be an array`);
     }
@@ -72,6 +73,7 @@ function validateOption(key, value) {
         throw new TypeError(`Invalid option: ${key} must be an array of strings`);
     }
 }
+
 /**
  * Validates the title case options
  * 
@@ -100,6 +102,7 @@ function validateOptions(options) {
         validateOption(key, options[key]);
     }
 }
+
 /**
  * Gets the title case options for a given style
  * 
@@ -117,12 +120,6 @@ function getTitleCaseOptions(options = {}, lowercaseWords = LOWERCASE_COMMON_WOR
     const shortConjunctions = options.shortConjunctions || defaultOptions.shortConjunctions;
     const shortPrepositions = options.shortPrepositions || defaultOptions.shortPrepositions;
     const neverCapitalized = options.neverCapitalized || defaultOptions.neverCapitalized;
-    // console.log("defaultOptions", defaultOptions);
-    // console.log("lowercaseWords", lowercaseWords);
-    // console.log("articles", articles);
-    // console.log("shortConjunctions", shortConjunctions);
-    // console.log("shortPrepositions", shortPrepositions);
-    // console.log("neverCapitalized", neverCapitalized);
     return {
         articles: [...new Set([...articles, ...lowercaseWords.filter(word => !defaultOptions.articles.includes(word))])],
         shortConjunctions: [...new Set([...shortConjunctions, ...lowercaseWords.filter(word => !defaultOptions.shortConjunctions.includes(word))])],
@@ -130,6 +127,7 @@ function getTitleCaseOptions(options = {}, lowercaseWords = LOWERCASE_COMMON_WOR
         neverCapitalized: [...neverCapitalized],
     };
 }
+
 /**
  * Checks if a word is a short conjunction
  * 
@@ -140,13 +138,13 @@ function getTitleCaseOptions(options = {}, lowercaseWords = LOWERCASE_COMMON_WOR
  * 
  */
 function isShortConjunction(word, style) {
-    // console.log("Checking if word is a short conjunction");
     const shortConjunctions = [...getTitleCaseOptions({
         style: style
     }).shortConjunctions];
     const wordLowerCase = word.toLowerCase();
     return shortConjunctions.includes(wordLowerCase);
 }
+
 /**
  * Checks if a word is an article
  * 
@@ -160,10 +158,9 @@ function isArticle(word, style) {
     const articles = getTitleCaseOptions({
         style: style
     }).articles;
-    // console.log(`Checking if ${word} is an article`);
-    // console.log(`Found articles: ${articles}`);
     return articles.includes(word.toLowerCase());
 }
+
 /**
  * Checks if a word is a short preposition
  * 
@@ -184,9 +181,9 @@ function isShortPreposition(word, style) {
         style: style
     }).shortPrepositions];
     const isShort = shortPrepositions.includes(word.toLowerCase());
-    // console.log(`isShortPreposition(${word}, ${style}): ${isShort}`);
     return isShort;
 }
+
 /**
  * Checks if a word is never capitalized.
  * 
@@ -208,6 +205,7 @@ function isNeverCapitalized(word, style) {
     }
     return false;
 }
+
 /**
  * Checks if a word has a number in it.
  * 
@@ -218,9 +216,9 @@ function isNeverCapitalized(word, style) {
  * hasNumbersInWord("asf8"); // true
  */
 function hasNumbersInWord(word) {
-    // console.log('Checking if the word has a number in it: ' + word);
     return /\d/.test(word);
 }
+
 /**
  * Checks if a word has more than 2 uppercase letters in it.
  * 
@@ -242,9 +240,9 @@ function hasMultipleUppercaseLetters(word) {
             }
         }
     }
-    // console.log("Found no uppercase letters in: " + word);
     return false;
 }
+
 /**
  * Checks if a word has any intentional uppercase letter in it, i.e., an uppercase letter that is not the first letter of the word.
  * 
@@ -257,7 +255,6 @@ function hasMultipleUppercaseLetters(word) {
  * 
  */
 function hasIntentionalUppercase(word) {
-    // console.log(`Checking if ${word} has an intentional uppercase letter`);
     for(let i = 1; i < word.length; i++) {
         // Check if the current character is uppercase.
         if(/[A-Z]/.test(word[i])) {
@@ -272,6 +269,7 @@ function hasIntentionalUppercase(word) {
     // No intentional uppercase letter found.
     return false;
 }
+
 /**
  * Checks if a word contains a hyphen.
  *
@@ -289,6 +287,7 @@ function hasIntentionalUppercase(word) {
 function hasHyphen(word) {
     return word.includes('-') || word.includes('–') || word.includes('—');
 }
+
 /**
  * Checks if a word starts with a hashtag.
  * 
@@ -301,9 +300,9 @@ function hasHyphen(word) {
  *  
  */
 function startsWithHashtag(word) {
-    // console.log('Checking if word starts with a hashtag');
     return word.startsWith('#');
 }
+
 /**
  * Checks if a word starts with an at symbol.
  * 
@@ -318,6 +317,7 @@ function startsWithHashtag(word) {
 function startsWithAtSymbol(word) {
     return word.charAt(0) === '@';
 }
+
 /**
  * Checks if a word ends with a symbol.
  *
@@ -337,6 +337,7 @@ function startsWithAtSymbol(word) {
 function endsWithSymbol(word, symbols = [".", ";", ":", "?", "!", "]", ")", "}"]) {
     return symbols.some(symbol => word.endsWith(symbol)) || symbols.some(symbol => word.endsWith(` ${symbol}`));
 }
+
 /**
  * Capitalizes the first letter of a word and returns the result.
  * 
@@ -350,6 +351,7 @@ function endsWithSymbol(word, symbols = [".", ";", ":", "?", "!", "]", ")", "}"]
 function capitalizeWord(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
 /**
  * Checks if a word is the first word in an array of words.
  *  
@@ -365,6 +367,7 @@ function capitalizeWord(word) {
 function isFirst(word, wordsArray) {
     return word === wordsArray[0];
 }
+
 /**
  * Checks if a word is the last word in an array of words.
  * 
@@ -380,6 +383,7 @@ function isFirst(word, wordsArray) {
 function isLast(word, wordsArray) {
     return word === wordsArray[wordsArray.length - 1];
 }
+
 /**
  * Checks if a word is the first or last word in an array of words.
  * 
@@ -395,6 +399,7 @@ function isLast(word, wordsArray) {
 function isFirstOrLast(wordsArray, word) {
     return isFirst(word, wordsArray) || isLast(word, wordsArray);
 }
+
 /**
  * Checks if a word is a roman numeral.
  * 
@@ -407,7 +412,6 @@ function isFirstOrLast(wordsArray, word) {
  * isRomanNumeral('IV'); // true
  */
 function isRomanNumeral(word) {
-    // console.log("Checking if " + word + " is a Roman Numeral");
     return /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i.test(word);
 }
 /**
@@ -422,13 +426,9 @@ function isRomanNumeral(word) {
  * isRomanNumeral('IV'); // true
  */
 function hasHyphenRomanNumeral(word) {
-    //   console.log('word is', word);
     const parts = word.split('-');
-    //   console.log('parts are', parts);
     for(let i = 0; i < parts.length; i++) {
-        //   console.log('part is', parts[i]);
         if(!/^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i.test(parts[i])) {
-            //   console.log('not a roman numeral');
             return false;
         }
     }
@@ -449,19 +449,41 @@ function hasHyphenRomanNumeral(word) {
  */
 function isWordIgnored(word, list) {
     const ignoreList = Array.isArray(list) ? list : [];
-    // console.log('word: ', word);
-    // console.log('ignoreList: ', ignoreList);
     const result = ignoreList.includes(word.toLowerCase());
-    // console.log('result: ', result);
     return result;
 }
 
+/**
+ * Checks if a word is in an array of words.
+ * 
+ * @param {string} word - The word to check.
+ * @param {string[]} list - The array of words to check against.
+ * 
+ * @returns {boolean} - True if the word is in the array of words, false otherwise.
+ * 
+ * isWordInArray('hello', ['hello', 'world']); // true
+ * isWordInArray('world', ['hello', 'world']); // true
+ * isWordInArray('foo', ['hello', 'world']); // false
+ */
 function isWordInArray(word, list) {
     const array = Array.isArray(list) ? list : [];
     const result = array.map(word => word.toLowerCase()).includes(word.toLowerCase());
     return result;
 }
 
+/**
+ * Returns the index of a word in the unique words array.
+ * 
+ * @param {string} word - The word to check.
+ * @param {string[]} list - The array of words to check against.
+ * 
+ * @returns {number} - The index of the word in the array of words, -1 if not found.
+ *
+ * getUniqueWordIndex('hello', ['hello', 'world']); // 0
+ * getUniqueWordIndex('world', ['hello', 'world']); // 1
+ * getUniqueWordIndex('foo', ['hello', 'world']); // -1
+ *  
+ */
 function getUniqueCapitalizedWord(word) {
     const lowerCaseWord = word.toLowerCase();
     const uniqueWordIndex = UNIQUE_WORDS.findIndex(w => w.toLowerCase() === lowerCaseWord);
@@ -472,19 +494,42 @@ function getUniqueCapitalizedWord(word) {
     }
 }
 
+/**
+ * Returns the corrected term for a word in the list of corrected terms.
+ * 
+ * @param {string} word - The word to check.
+ * @param {string[]} list - The array of words to check against.
+ * 
+ * @returns {string} - The corrected term for the word, or the original word if not found.
+ * 
+ * correctTerm('hello', ['hello', 'world']); // 'Hello'
+ * correctTerm('world', ['hello', 'world']); // 'World'
+ * correctTerm('foo', ['hello', 'world']); // 'foo'
+ * 
+ */
 function correctTerm(word, arr) {
     const lowerCaseWord = word.toLowerCase();
     const correctWordIndex = arr.findIndex(w => w.toLowerCase() === lowerCaseWord);
     if(correctWordIndex >= 0) {
         const correctedTerm = Object.values(CORRECTED_TITLE_CASE_TERMS)[correctWordIndex];
-        console.log(`Corrected ${word} to ${correctedTerm}`);
         return correctedTerm;
     } else {
-        console.log(`${word} was not corrected`);
         return word;
     }
 }
 
+/**
+ * Checks if a word is an incorrect term.
+ * 
+ * @param {string} word - The word to check.
+ * @param {string[]} list - The array of words to check against.
+ * 
+ * @returns {boolean} - True if the word is an incorrect term, false otherwise.
+ * 
+ * isIncorrectTerm('hello', ['hello', 'world']); // true
+ * isIncorrectTerm('world', ['hello', 'world']); // true
+ * isIncorrectTerm('foo', ['hello', 'world']); // false
+ */
 function isIncorrectTerm(word, arr) {
     const lowerCaseWord = word.toLowerCase();
     const correctWordIndex = arr.findIndex(w => w.toLowerCase() === lowerCaseWord);
@@ -494,6 +539,7 @@ function isIncorrectTerm(word, arr) {
         return false;
     }
 }
+
 /**
  * Checks if a phrase is in the list of ignored phrases.
  * 
@@ -526,22 +572,20 @@ function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
     }
     return false;
 }
+
 /**
- * Checks if a word is a short conjunction.
+ * Checks and processes a hyphenated word
  * 
  * @param {string} word - The word to check.
- * @param {string[]} style - The style to check against.
+ * @param {string} style - The style to use.
+ *  
+ * @returns {string} - The processed word.
  * 
- * @returns {boolean} - True if the word is a short conjunction, false otherwise.
- * 
- * isShortConjunction('and', ['hello', 'world']); // true
- * isShortConjunction('or', ['hello', 'world']); // true
- * isShortConjunction('but', ['hello', 'world']); // true
- * isShortConjunction('foo', ['hello', 'world']); // false
+ * processHyphenatedWord('hello-world', 'title'); // 'Hello-World'
+ * processHyphenatedWord('louis-iv', 'sentence'); // 'louis-IV'
  */
 function processHyphenatedWord(word, style) {
     const hyphenatedWords = word.split("-");
-    // console.log('hyphenatedWords:', hyphenatedWords);
     const processedWords = hyphenatedWords.map((hyphenatedWord, j) => {
         if(isShortConjunction(hyphenatedWord, style) || isArticle(hyphenatedWord, style) || isShortPreposition(hyphenatedWord, style) ||
             isNeverCapitalized(hyphenatedWord, style)) {
@@ -554,9 +598,9 @@ function processHyphenatedWord(word, style) {
             return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
         }
     });
-    // console.log('processedWords:', processedWords);
     return processedWords.join("-");
 }
+
 /**
  * toTitleCase function
  * 
@@ -568,9 +612,10 @@ String.prototype.toTitleCase = function(options = {
     style: "ap"
 }) {
     try {
-        if(!(this instanceof String)) {
+        if (typeof this !== 'string') {
             throw new TypeError("Invalid input: input must be a string.");
-        }
+          }
+          
         if(typeof options !== "undefined" && typeof options !== "object") {
             throw new TypeError("Invalid options: options must be an object.");
         }
@@ -601,14 +646,7 @@ String.prototype.toTitleCase = function(options = {
                 }
                 return word;
             }
-            // hasIntentionalUppercase
             if(hasIntentionalUppercase(word) || hasIntentionalUppercase(word)) {
-                // if(isWordInArray(word, UNIQUE_WORDS)) {
-                //     word = getUniqueCapitalizedWord(word);
-                // }
-                // if(isWordInArray(word, UPPERCASE_COMMON_WORDS)) {
-                //     word = word.toUpperCase();
-                // }
                 return word;
             }
             if(isShortConjunction(word, style) || isArticle(word, style) || isShortPreposition(word, style) ||
@@ -641,6 +679,6 @@ String.prototype.toTitleCase = function(options = {
 
         return result.join(" ");
     } catch (error) {
-        throw new TypeError(`Invalid argument in getTitleCaseOptions function: ${error.message}`);
+        throw error;
     }
 };

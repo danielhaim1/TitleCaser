@@ -1,55 +1,110 @@
 ## toTitleCase()
 ### Converts a string to title case
 
-`to-title-cased` The to-title-cased function expertly converts strings to title case, adhering to diverse style guidelines, including APA, APA 7, AP, Chicago Manual of Style, NYT, Wikipedia, and British styles. It capitalizes the first letter of each word, excluding articles, coordinating conjunctions, and prepositions (unless they are the initial word), and formats specific abbreviations and acronyms as per the style guidelines. Custom options permit users to further refine the conversion process, including specifications for words that never require capitalization, phrases to ignore, short conjunctions, and prepositions, thus facilitating greater flexibility and customization for the creation of perfectly-tailored title-cased strings
+[![Build Status](https://travis-ci.org/andrewsuzuki/titlecase-js.svg?branch=master)](https://travis-ci.org/andrewsuzuki/titlecase-js)
+[![Coverage Status](https://coveralls.io/repos/github/andrewsuzuki/titlecase-js/badge.svg?branch=master)](https://coveralls.io/github/andrewsuzuki/titlecase-js?branch=master)
+[![npm version](https://badge.fury.io/js/titlecase-js.svg)](https://badge.fury.io/js/titlecase-js)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dm/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dy/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dw/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dh/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dm/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dy/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dw/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Downloads](https://img.shields.io/npm/dh/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![Known Vulnerabilities](https://snyk.io/test/github/andrewsuzuki/titlecase-js/badge.svg)](https://snyk.io/test/github/andrewsuzuki/titlecase-js)
+[![dependencies Status](https://david-dm.org/andrewsuzuki/titlecase-js/status.svg)](https://david-dm.org/andrewsuzuki/titlecase-js)
+[![devDependencies Status](https://david-dm.org/andrewsuzuki/titlecase-js/dev-status.svg)](https://david-dm.org/andrewsuzuki/titlecase-js?type=dev)
+[![Greenkeeper badge](https://badges.greenkeeper.io/andrewsuzuki/titlecase-js.svg)](https://greenkeeper.io/)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7b9b7b0b7b7b7b7b7b7b/maintainability)](https://codeclimate.com/github/andrewsuzuki/titlecase-js/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7b9b7b0b7b7b7b7b7b7b/test_coverage)](https://codeclimate.com/github/andrewsuzuki/titlecase-js/test_coverage)
+
+The repository contains a module that converts a string to title case using a set of rules based on the most common styles guides and English language conventions. The module provides a toTitleCase() method that can be used on any string to convert it to title case.
+
+## Features
+- Supports the most common English language conventions and style guides, including AP, APA, Chicago,NY Times, Wikipedia, and British, as well as a custom style.
+- Customizable options for article words, conjunctions, prepositions, and words that should never be capitalized.
+- Ignores certain words and phrases that should not be capitalized in titles.
+- Handles hyphenated words and capitalization of Roman numerals.
+- Includes a list of unique words that should always be capitalized in titles.
+- Corrects certain common terms to their correct casing.
+
+## Overview
+- defines several arrays of common words, unique words, and corrected terms, which will be used to determine which words should be capitalized and which shouldn't be.
+- defines several constants representing the different title case styles that can be used.
+- defines a series of helper functions that check whether a word meets certain conditions, such as whether it is a short conjunction, short preposition, or article, or whether it contains a number or intentional uppercase letters.
+- defines a getTitleCaseOptions function that takes an options object and an array of lowercase words and returns an object containing the appropriate articles, short conjunctions, short prepositions, and never capitalized words based on the specified style.
+- defines a toTitleCase method that can be called on a string and accepts an optional options object. This method splits the string into words, checks each word against various conditions, and returns a new string with the appropriate words capitalized.
 
 ## Installation
-
-You can install `title-case` using npm:
-
 ```bash
-npm install to-title-cased
+npm install titlecase-js
 ```
 
-Alternatively, you can also install it using yarn:
+## CLI
+```bash
+$ npm run build
+$ npm run build-min
+$ npm run build-dev
+$ npm run prepublish
+$ npm run test
 
-```yarn
-yarn add to-title-cased
-```
 
-After installing the package, you can use it in your code by importing it:
-
+## Usage
 ```javascript
-const toTitleCase = require('to-title-cased');
+const toTitleCase = require('titlecase-js');
+
+const title = 'the quick brown fox jumps over the lazy dog';
+const options = { style: 'apa' };
+const result = title.toTitleCase(options);
+
+console.log(result); // "The Quick Brown Fox Jumps over the Lazy Dog"
 ```
 
-Or if you're using ES6 syntax:
 
-```javascript
-import { toTitleCase } from 'to-title-cased';
-```
+## API
+### String.prototype.toTitleCase(options)
 
-```javascript
-String.prototype.toTitleCase(style, options);
-```
+- `options` (Object): An object containing the options for the conversion.
+- `style` (String): The style of title case to apply. Allowed values are `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`. Default is `'ap'`.
+- `articles` (Array<String>): An array of words to be treated as articles in title case.
+- `shortConjunctions` (Array<String>): An array of words to be treated as short conjunctions in title case.
+- `shortPrepositions` (Array<String>): An array of words to be treated as short prepositions in title case.
+- `neverCapitalized` (Array<String>): An array of words to never capitalize in title case.
 
-## Parameters
-- `shortConjunctions`: short conjunctions that should not be capitalized, such as "and", "but", and "if"
-- `articles`: articles that should not be capitalized, such as "a", "an", and "the".
-- `shortPrepositions`: short prepositions that should not be capitalized, such as "of", "to", and "by".
-- `neverCapitalized`: words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
+## Functions
+- `validateOption`: validates if an option is an array and if its elements are all strings.
+- `validateOptions`: validates if an object's keys correspond to valid options and if their values are valid.
+- `getTitleCaseOptions`: returns an object containing the options for converting a word to title case.
+- `isShortConjunction`: determines whether a word is a short conjunction.
+- `isArticle`: determines whether a word is an article.
+- `isShortPreposition`: determines whether a word is a short preposition.
+- `isNeverCapitalized`: determines whether a word should never be capitalized in title case.
+- `hasNumbersInWord`: determines whether a word contains a number.
+- `hasMultipleUppercaseLetters`: determines whether a word has two or more consecutive uppercase letters.
+- `hasIntentionalUppercase`: determines whether a word intentionally uses uppercase letters.
+- `hasHyphen`: determines whether a word contains a hyphen.
+- `startsWithHashtag`: determines whether a word starts with a hashtag (#).
+- `startsWithAtSymbol`: determines whether a word starts with an at symbol (@).
+- `endsWithSymbol`: determines whether a word ends with a symbol.
+- `capitalizeWord`: capitalizes the first letter of a word.
+- `isFirst`: determines whether a word is the first word in an array.
+- `isLast`: determines whether a word is the last word in an array.
+- `isFirstOrLast`: determines whether a word is either the first or last word in an array.
+- `isRomanNumeral`: determines whether a word is a Roman numeral.
+- `hasHyphenRomanNumeral`: determines whether a hyphenated word contains a Roman numeral.
+- `isWordIgnored`: determines whether a word is in a list of ignored words.
+- `isWordInArray`: determines whether a word is in an array.
+- `getUniqueCapitalizedWord`: returns a capitalized unique word.
+- `correctTerm`: corrects a term to its proper spelling.
+- `isIncorrectTerm`: determines whether a word is not spelled correctly.
+- `isPhraseIgnored`: determines whether a phrase is in a list of ignored phrases.
+- `processHyphenatedWord`: processes a hyphenated word to be converted to title case.
+- `String.prototype.toTitleCase`: converts a string to title case based on the options passed to it.
 
-## Options
-
-- `UNIQUE_WORDS` is a list of words that should never be capitalized, such as "etc.", "i.e.", and "vs.".
-- `CORRECTED_TITLE_CASE_TERMS` is a list of words that should be capitalized differently than the default title case rules, such as "Front-End" and "Back-End".
-- `UPPERCASE_COMMON_WORDS` is a list of abbreviations and acronyms that should be capitalized, such as "API" and "HTML".
-
-### Return value
-A new string with the original string converted to title case.
-
-### Examples
-
+## Examples
 ```javascript
 "Back-End Web Development: Building Scalable APIs with Node.js".toTitleCase();
 "Exploring Back-End Frameworks: Comparing Django, Ruby on Rails, and Laravel".toTitleCase({ style: 'chicago' });
@@ -58,6 +113,22 @@ A new string with the original string converted to title case.
 "Advanced jQuery Techniques: Tips and Tricks for Experienced Front-End Developers".toTitleCase({ style: 'british' });
 "The Future of Back-End Development: Trends and Technologies to Watch".toTitleCase({ style: 'ap' });
 "Front-End Performance Optimization: Tools and Techniques for Faster Websites".toTitleCase({ style: 'apa' });
+```
+
+```javascript
+const title = "the quick brown fox jumps over the lazy dog";
+
+const options = {
+  style: "ap",
+  articles: ["the", "an", "a"],
+  shortConjunctions: ["and", "but", "or", "for", "nor", "yet", "so"],
+  shortPrepositions: ["in", "on", "at", "by", "to", "up", "as", "of", "off"],
+  neverCapitalized: ["and", "or", "but", "nor", "a", "an", "the", "as", "at", "by", "for", "in", "of", "on", "to", "up", "yet", "so"],
+};
+
+const titleCased = title.toTitleCase(options);
+
+console.log(titleCased); // The Quick Brown Fox Jumps over the Lazy Dog
 ```
 
 ```javascript
@@ -91,25 +162,24 @@ const output = input.toTitleCase({ style: "chicago" }); // "The Quick Rabbit Tog
 ```
 
 ## Tests
-
 ```bash
 npm test
 ```
 
 ```bash
   String.prototype.toTitleCase
-    ✓ throws TypeError if input is not a string (4 ms)
-    ✓ throws TypeError if options is not an object
+    ✓ throws TypeError if input is not a string (2 ms)
+    ✓ throws TypeError if options is not an object (1 ms)
     ✓ AP style (1 ms)
     ✓ Chicago style (1 ms)
     ✓ APA style (1 ms)
     ✓ NYT style (2 ms)
     ✓ Wikipedia style
-    ✓ Reserved keyword (jQuery, Frontend)
+    ✓ Reserved keyword (jQuery, Frontend) (1 ms)
     ✓ Reserved keyword, correct capitalization (Back-End > Backend) (1 ms)
     ✓ Complex title with various formatting (1 ms)
-    ✓ Colonization of mars with mixed case and possessive (1 ms)
-    ✓ Cryptocurrencies with all caps and ampersand (2 ms)
+    ✓ Colonization of mars with mixed case and possessive (2 ms)
+    ✓ Cryptocurrencies with all caps and ampersand
     ✓ Technology and mental health with question mark and quotes (1 ms)
     ✓ Fashion with acronym and hyphen (1 ms)
     ✓ Nutrition with colon and apostrophe
@@ -117,13 +187,12 @@ npm test
     ✓ Correct capitalization for special terms
 
 Test Suites: 1 passed, 1 total
-Tests:       11 passed, 11 total
+Tests:       17 passed, 17 total
 Snapshots:   0 total
-Time:        0.124 s, estimated 1 s
+Time:        0.636 s
 ```
 
 ## Resources
-
 - [AP Stylebook, 56th Edition](https://store.stylebooks.com/ap-stylebook-56th-edition-print.html)
 - [Publication Manual of the American Psychological Association, Seventh Edition (2020)](https://apastyle.apa.org/products/publication-manual-7th-edition)
 - [Chicago Manual of Style: Capitalization](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Chicago%20Manual%20of%20Style%3A%20Capitalization)
@@ -132,5 +201,3 @@ Time:        0.124 s, estimated 1 s
 - [The New York Times Manual of Style and Usage](https://www.worldcat.org/title/946964415)
 - [Wikipedia: Letter case](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Wikipedia%3A%20Letter%20case)
 - [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
-
-### API
