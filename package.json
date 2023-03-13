@@ -1,6 +1,6 @@
 {
     "name": "titlecase-js",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
         "titlecase",
@@ -25,7 +25,6 @@
         "test": "jest",
         "webpack": "webpack --mode production",
         "minify": "terser dist/titlecase.js -o dist/titlecase.min.js",
-        "prepublishOnly": "npm run build",
         "build": "npm run webpack && npm run minify"
     },
     "author": {
@@ -33,10 +32,8 @@
         "url": "https://github.com/danielhaim1"
     },
     "license": "MIT",
-    "dependencies": {
-        "lodash": "^4.17.21"
-    },
     "devDependencies": {
+        "lodash": "^4.17.21",
         "@babel/cli": "^7.21.0",
         "@babel/core": "^7.21.0",
         "@babel/plugin-transform-modules-commonjs": "^7.21.2",
