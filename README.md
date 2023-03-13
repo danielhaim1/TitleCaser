@@ -6,9 +6,11 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-The repository contains a module that converts a string to title case using a set of rules based on the most common styles guides and English language conventions. The module provides a toTitleCase() method that can be used on any string to convert it to title case.
+The repository contains a module that converts a string to title case using a set of rules based on the most common styles, guides, and English language conventions. 
 
-the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) only shows default option (AP style) and Chicago style for now.
+The module provides a `toTitleCase()` method that can be used on any string to convert it to title case.
+
+The [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) shows two default options (AP, Chicago) for now.
 
 ## Features
 - Supports the most common English language conventions and style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British, as well as a custom style.
