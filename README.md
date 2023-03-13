@@ -26,11 +26,13 @@ the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) only shows default op
 - Defines a toTitleCase method that can be called on a string and accepts an optional options object. This method splits the string into words, checks each word against various conditions, and returns a new string with the appropriate words capitalized.
 
 ## Installation
+
 ```bash
 npm install titlecase-js
 ```
 
 ## CLI
+
 ```bash
 $ npm run build
 $ npm run build-min
@@ -38,8 +40,8 @@ $ npm run build-dev
 $ npm run prepublish
 $ npm run test
 
-
 ## Usage
+
 ```javascript
 const toTitleCase = require('titlecase-js');
 
@@ -49,7 +51,6 @@ const result = title.toTitleCase(options);
 
 console.log(result); // "The Quick Brown Fox Jumps over the Lazy Dog"
 ```
-
 
 ## API
 ### String.prototype.toTitleCase(options)
