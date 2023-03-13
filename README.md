@@ -11,19 +11,12 @@ The repository contains a module that converts a string to title case using a se
 the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) only shows default option (AP style) and Chicago style for now.
 
 ## Features
-- Supports the most common English language conventions and style guides, including AP, APA, Chicago,NY Times, Wikipedia, and British, as well as a custom style.
+- Supports the most common English language conventions and style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British, as well as a custom style.
 - Customizable options for article words, conjunctions, prepositions, and words that should never be capitalized.
 - Ignores certain words and phrases that should not be capitalized in titles.
 - Handles hyphenated words and capitalization of Roman numerals.
 - Includes a list of unique words that should always be capitalized in titles.
 - Corrects certain common terms to their correct casing.
-
-## Overview
-- Defines several arrays of common words, unique words, and corrected terms, which will be used to determine which words should be capitalized and which shouldn't be.
-- Defines several constants representing the different title case styles that can be used.
-- Defines a series of helper functions that check whether a word meets certain conditions, such as whether it is a short conjunction, short preposition, or article, or whether it contains a number or intentional uppercase letters.
-- Defines a getTitleCaseOptions function that takes an options object and an array of lowercase words and returns an object containing the appropriate articles, short conjunctions, short prepositions, and never capitalized words based on the specified style.
-- Defines a toTitleCase method that can be called on a string and accepts an optional options object. This method splits the string into words, checks each word against various conditions, and returns a new string with the appropriate words capitalized.
 
 ## Installation
 
@@ -36,8 +29,6 @@ npm install titlecase-js
 ```bash
 $ npm run build
 $ npm run build-min
-$ npm run build-dev
-$ npm run prepublish
 $ npm run test
 ```
 
