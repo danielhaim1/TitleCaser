@@ -39,6 +39,7 @@ $ npm run build-min
 $ npm run build-dev
 $ npm run prepublish
 $ npm run test
+```
 
 ## Usage
 
