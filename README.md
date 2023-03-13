@@ -45,7 +45,6 @@ console.log(result); // "The Quick Brown Fox Jumps over the Lazy Dog"
 ```
 
 ## API
-### String.prototype.toTitleCase(options)
 
 - `options` (Object): An object containing the options for the conversion.
 - `style` (String): The style of title case to apply. Allowed values are `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`. Default is `'ap'`.
