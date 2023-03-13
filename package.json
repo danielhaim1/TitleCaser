@@ -1,56 +1,62 @@
 {
     "name": "titlecase-js",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
-      "titlecase",
-      "formatting",
-      "text transformation",
-      "capitalization",
-      "text editing",
-      "apa",
-      "apa style",
-      "chicago manual of style"
+        "titlecase",
+        "formatting",
+        "text transformation",
+        "capitalization",
+        "text editing",
+        "apa",
+        "apa style",
+        "chicago manual of style"
     ],
     "homepage": "https://www.npmjs.com/package/titlecase-js",
     "bugs": {
-      "url": "https://github.com/danielhaim1/titlecase-js/issues"
+        "url": "https://github.com/danielhaim1/titlecase-js/issues"
     },
     "repository": {
-      "type": "git",
-      "url": "git://github.com/danielhaim1/titlecase-js.git"
+        "type": "git",
+        "url": "git://github.com/danielhaim1/titlecase-js.git"
     },
-    "main": "index.js",
+    "main": "dist/titlecase.js",
     "scripts": {
-      "test": "jest",
-      "build": "babel index.js -o dist/titlecase.js",
-      "build-min": "babel index.js -o dist/titlecase.min.js --no-comments --minified",
-      "dev": "npm run build-dev && npm run test",
-      "prepublish": "npm run build && npm run build-min"
+        "test": "jest",
+        "webpack": "webpack --mode production",
+        "minify": "terser dist/titlecase.js -o dist/titlecase.min.js",
+        "prepublishOnly": "npm run build",
+        "build": "npm run webpack && npm run minify"
     },
     "author": {
-      "name": "Daniel Haim",
-      "url": "https://github.com/danielhaim1"
+        "name": "Daniel Haim",
+        "url": "https://github.com/danielhaim1"
     },
     "license": "MIT",
     "dependencies": {
-      "lodash": "^4.17.21"
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
-      "@babel/cli": "^7.21.0",
-      "@babel/core": "^7.21.0",
-      "@babel/preset-env": "^7.20.2",
-      "@jest/expect": "^29.5.0",
-      "babel-jest": "^29.5.0",
-      "babel-plugin-transform-remove-console": "^6.9.4",
-      "jest": "^29.5.0",
-      "jest-environment-jsdom": "^29.5.0",
-      "jest-environment-puppeteer": "^8.0.5",
-      "jest-puppeteer": "^8.0.5"
+        "@babel/cli": "^7.21.0",
+        "@babel/core": "^7.21.0",
+        "@babel/plugin-transform-modules-commonjs": "^7.21.2",
+        "@babel/plugin-transform-runtime": "^7.21.0",
+        "@babel/preset-env": "^7.20.2",
+        "@babel/runtime-corejs3": "^7.21.0",
+        "@jest/expect": "^29.5.0",
+        "babel-jest": "^29.5.0",
+        "babel-loader": "^9.1.2",
+        "jest": "^29.5.0",
+        "jest-environment-jsdom": "^29.5.0",
+        "jest-environment-puppeteer": "^8.0.5",
+        "jest-puppeteer": "^8.0.5",
+        "terser-webpack-plugin": "^5.3.7",
+        "webpack": "^5.76.1",
+        "webpack-cli": "^5.0.1",
+        "webpack-node-externals": "^3.0.0"
     },
     "publishConfig": {
-      "access": "public",
-      "registry": "https://registry.npmjs.org/"
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
     }
-  }
-  
+}

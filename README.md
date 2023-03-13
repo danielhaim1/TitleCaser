@@ -137,9 +137,14 @@ const output = input.toTitleCase({ style: "chicago" }); // "The Quick Rabbit Tog
 ```
 
 ```javascript
-"JQuery Plugins for Front-End Developers: A Comprehensive Guide".toTitleCase({ style: 'apa' });
-// converts JQuery to jQuery, even if it's the first word, 
-// replaces Front-End with Frontend (see correctCapitalization)
+// Example 5: WordReplacement:
+const myArray = ["Google"];
+const input = "goOgle";
+input.toTitleCase({ style: "ap", ARR_WORD_REPLACEMENT: myArray }); // "Google"
+```
+
+```javascript
+"JQuEry Plugins for Front-End Developers: A Comprehensive Guide".toTitleCase({ style: 'apa' }); // jQuery Plugins for Front-End Developers: A Comprehensive Guide
 ```
 
 ## Tests
@@ -149,23 +154,27 @@ npm test
 
 ```bash
   String.prototype.toTitleCase
-    ✓ throws TypeError if input is not a string (2 ms)
+    ✓ throws TypeError if input is not a string (3 ms)
     ✓ throws TypeError if options is not an object (1 ms)
-    ✓ AP style (1 ms)
-    ✓ Chicago style (1 ms)
-    ✓ APA style (1 ms)
+    ✓ AP style (13 ms)
+    ✓ Chicago style (2 ms)
+    ✓ APA style (2 ms)
     ✓ NYT style (2 ms)
-    ✓ Wikipedia style
-    ✓ Reserved keyword (jQuery, Frontend) (1 ms)
-    ✓ Reserved keyword, correct capitalization (Back-End > Backend) (1 ms)
-    ✓ Complex title with various formatting (1 ms)
-    ✓ Colonization of mars with mixed case and possessive (2 ms)
-    ✓ Cryptocurrencies with all caps and ampersand
-    ✓ Technology and mental health with question mark and quotes (1 ms)
-    ✓ Fashion with acronym and hyphen (1 ms)
-    ✓ Nutrition with colon and apostrophe
-    ✓ Correct capitalization for special terms (1 ms)
-    ✓ Correct capitalization for special terms
+    ✓ Wikipedia style (8 ms)
+    ✓ Reserved keyword (jQuery, Frontend) (2 ms)
+    ✕ Reserved keyword, correct capitalization (Back-End > Backend) (2 ms)
+    ✓ Convert string to title case with APA style formatting (1 ms)
+    ✓ Convert string to title case with AP style formatting, including possessive (1 ms)
+    ✓ Convert string to title case with Chicago style formatting, including all-caps and ampersand (1 ms)
+    ✓ Convert string to title case with NYT style formatting, including question mark and quotes (2 ms)
+    ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen (3 ms)
+    ✓ Convert string to title case with APA style formatting, including colon and apostrophe (1 ms)
+    ✕ Convert string to title case with Chicago style formatting, including special terms such as node.js (2 ms)
+    ✓ Convert string to title case with AP style formatting, including special terms such as eBook, CTO (3 ms)
+    ✓ Convert string to title case with NYT style formatting, including special terms such as IoT, AI (3 ms)
+    ✓ Convert string to title case with APA style formatting, including colon and short conjunctions (2 ms)
+    ✓ Convert string to title case with Wikipedia style formatting, including special terms such as DevOps (2 ms)
+    ✓ Convert string to title case with Chicago style formatting, including reserved terms GooGlE to Google (2 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       17 passed, 17 total
