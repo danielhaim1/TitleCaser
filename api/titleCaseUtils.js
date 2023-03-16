@@ -361,35 +361,21 @@ export function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
 }
 
 export function processHyphenatedWord(word, style) {
-    console.log(`Processing hyphenated word: ${word}`);
-
     const hyphenatedWords = word.split("-");
-    console.log(`Hyphenated words: ${hyphenatedWords}`);
     const processedWords = hyphenatedWords.map((hyphenatedWord, j) => {
-        console.log(`Processing hyphenated word: ${hyphenatedWord}`);
 
-        if (
-            isShortConjunction(hyphenatedWord, style)
-            || isArticle(hyphenatedWord, style)
-            || isShortPreposition(hyphenatedWord, style)
-            || isNeverCapitalized(hyphenatedWord, style)) {
-            console.log(`The word ${hyphenatedWord} is a short conjunction, article, preposition, or never capitalized word.`);
+        if ( isShortWord(hyphenatedWord, style) ) {
             return hyphenatedWord.toLowerCase();
-        } else if (isRomanNumeral(hyphenatedWord)) {
-            console.log(`The word ${hyphenatedWord} is a roman numeral.`);
-            console.log(`Returning the word in uppercase: ${hyphenatedWord.toUpperCase()}`);
+        } 
+        
+        if (isRomanNumeral(hyphenatedWord)) {
             return hyphenatedWord.toUpperCase();
-        } else if (
-            j > 0 && !isRomanNumeral(hyphenatedWords[j - 1])
-        ) {
-            console.log(`The word ${hyphenatedWord} is not a short conjunction, article, preposition, or never capitalized word, and the previous word is not a roman numeral.`);
-            console.log(`Returning the word in title case: ${hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase()}`);
-            return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
-        } else {
-            console.log(`The word ${hyphenatedWord} is not a short conjunction, article, preposition, or never capitalized word, and the previous word is a roman numeral.`);
-            console.log(`Returning the word in lowercase: ${hyphenatedWord.toLowerCase()}`);
+        } 
+
+        if ( j > 0 && !isRomanNumeral(hyphenatedWords[j - 1]) ) {
             return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
         }
+        return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
     });
 
     return processedWords.join("-");

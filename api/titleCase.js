@@ -96,12 +96,7 @@ String.prototype.toTitleCase = function(options = {}) {
                 return processedWords.join("");
             }
 
-            if(hasHyphen(word) &&
-                !isWordInArray(word, CORRECT_TITLE_CASE) &&
-                !isWordIgnored(word) &&
-                !isWordIgnored(word, IGNORED_TITLE_CASE_PHRASES) &&
-                !isWordInArray(word, REPLACE_TERMS) &&
-                !isWordInArray(word, COMMON_ABBREVIATIONS)) {
+            if(hasHyphen(word)) {
                 word = processHyphenatedWord(word, style);
                 return word;
             }

@@ -1,6 +1,6 @@
 {
     "name": "titlecase-js",
-    "version": "1.1.9",
+    "version": "1.2.0",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
         "titlecase",

@@ -161,4 +161,15 @@ describe('String.prototype.toTitleCase', () => {
         })).toBe("Google vs. VirtualBox: A Comparative Study of Virtualization Software");
     });
 
+    test("mastering node.js on aws: an advanced guide to server-side javascript development", () => {
+        const myString = "mastering node.js on aws: an advanced guide to server-side javascript development";
+        expect(myString.toTitleCase({
+            style: "chicago"
+        })).toBe("Mastering Node.js on AWS: An Advanced Guide to Server-Side JavaScript Development");
+    });
+
+    // create test for:
+    // mastering node.js on aws: an advanced guide to server-side javascript development
+    // saas vs. on-premises on aws: a comparative analysis of cloud computing solutions for business
+
 });
