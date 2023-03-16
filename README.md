@@ -10,7 +10,7 @@ The repository contains a module that converts a string to title case using a se
 
 The module provides a `toTitleCase()` method that can be used on any string to convert it to title case.
 
-The [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) shows two default options (AP, Chicago) for now.
+The [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) shows two default options (AP, Chicago) for now, with word replacement and custom options.
 
 ## Features
 - Supports the most common English language conventions and style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British, as well as a custom style.
@@ -19,6 +19,11 @@ The [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) shows two default opt
 - Handles hyphenated words and capitalization of Roman numerals.
 - Includes a list of unique words that should always be capitalized in titles.
 - Corrects certain common terms to their correct casing.
+- Includes a CLI for building, testing, and minifying the module.
+- Includes word lists for articles, conjunctions, prepositions, and words that should never be capitalized.
+- Includes a list of unique words that should always be capitalized in titles.
+- Includes a list of common terms that should be capitalized in titles.
+- Includes a list of common phrases that should not be capitalized in titles.
 
 ## Installation
 
@@ -29,6 +34,8 @@ npm install titlecase-js
 ## CLI
 
 ```bash
+$ npx webpack
+
 $ npm run build
 $ npm run build-min
 $ npm run test
@@ -56,34 +63,36 @@ console.log(result); // "The Quick Brown Fox Jumps over the Lazy Dog"
 - `neverCapitalized` (Array<String>): An array of words to never capitalize in title case.
 
 ## Functions
-- `validateOption`: validates if an option is an array and if its elements are all strings.
-- `validateOptions`: validates if an object's keys correspond to valid options and if their values are valid.
-- `getTitleCaseOptions`: returns an object containing the options for converting a word to title case.
-- `isShortConjunction`: determines whether a word is a short conjunction.
-- `isArticle`: determines whether a word is an article.
-- `isShortPreposition`: determines whether a word is a short preposition.
-- `isNeverCapitalized`: determines whether a word should never be capitalized in title case.
-- `hasNumbersInWord`: determines whether a word contains a number.
-- `hasMultipleUppercaseLetters`: determines whether a word has two or more consecutive uppercase letters.
-- `hasIntentionalUppercase`: determines whether a word intentionally uses uppercase letters.
-- `hasHyphen`: determines whether a word contains a hyphen.
-- `startsWithHashtag`: determines whether a word starts with a hashtag (#).
-- `startsWithAtSymbol`: determines whether a word starts with an at symbol (@).
-- `endsWithSymbol`: determines whether a word ends with a symbol.
-- `capitalizeWord`: capitalizes the first letter of a word.
-- `isFirst`: determines whether a word is the first word in an array.
-- `isLast`: determines whether a word is the last word in an array.
-- `isFirstOrLast`: determines whether a word is either the first or last word in an array.
-- `isRomanNumeral`: determines whether a word is a Roman numeral.
-- `hasHyphenRomanNumeral`: determines whether a hyphenated word contains a Roman numeral.
-- `isWordIgnored`: determines whether a word is in a list of ignored words.
-- `isWordInArray`: determines whether a word is in an array.
-- `getUniqueCapitalizedWord`: returns a capitalized unique word.
-- `correctTerm`: corrects a term to its proper spelling.
-- `isIncorrectTerm`: determines whether a word is not spelled correctly.
-- `isPhraseIgnored`: determines whether a phrase is in a list of ignored phrases.
-- `processHyphenatedWord`: processes a hyphenated word to be converted to title case.
-- `String.prototype.toTitleCase`: converts a string to title case based on the options passed to it.
+- `validateOption:` Validates if the input option is an array of strings.
+- `validateOptions:` Validates if all options passed to it are valid.
+- `getTitleCaseOptions:` Returns an object with options to use for title casing strings.
+- `isShortConjunction:` Returns true if the word is a short conjunction.
+- `isArticle:` Returns true if the word is an article.
+- `isShortPreposition:` Returns true if the word is a short preposition.
+- `isNeverCapitalized:` Returns true if the word is never capitalized.
+- `isShortWord:` Returns true if the word is a short word (a conjunction, an article, a preposition or a never capitalized word).
+- `hasNumbersInWord:` Returns true if the word contains any number.
+- `hasMultipleUppercaseLetters:` Returns true if the word contains multiple uppercase letters.
+- `hasIntentionalUppercase:` Returns true if the word has intentional uppercase.
+- `hasHyphen:` Returns true if the word contains a hyphen.
+- `startsWithHashtag:` Returns true if the word starts with a hashtag.
+- `startsWithAtSymbol:` Returns true if the word starts with an at symbol.
+- `startsWithDot:` Returns true if the word starts with a dot.
+- `endsWithSymbol:` Returns true if the word ends with a symbol.
+- `capitalizeWord:` Returns the word with the first letter capitalized.
+- `isFirst:` Returns true if the word is the first element in the array.
+- `isLast:` Returns true if the word is the last element in the array.
+- `isFirstOrLast:` Returns true if the word is the first or last element in the array.
+- `isRomanNumeral:` Returns true if the word is a valid Roman numeral.
+- `hasHyphenRomanNumeral:` Returns true if the word is a hyphenated Roman numeral.
+- `isWordIgnored:` Returns true if the word is in the list of ignored words.
+- `isWordInArray:` Returns true if the word is in the given array.
+- `getCorrectTitleCasing:` Returns the correctly capitalized version of the word if it's a known unique term, otherwise returns the original word.
+- `correctTerm:` Replaces any instances of a word in a sentence with the correct version, given a list of correctly spelled words.
+- `replaceTerm:` Replaces any instances of a word in a sentence with a replacement term, given a map of terms to replace.
+- `isIncorrectTerm:` Returns true if the word is a known term that is spelled incorrectly.
+- `isPhraseIgnored:` Returns true if any phrase is in the list of ignored title case phrases.
+- `processHyphenatedWord` is a function that takes a hyphenated word and a title case style as input and processes it according to the rules of the specified title case style.`
 
 ## Examples
 ```javascript
@@ -153,33 +162,33 @@ npm test
 ```
 
 ```bash
-  String.prototype.toTitleCase
     ✓ throws TypeError if input is not a string (3 ms)
     ✓ throws TypeError if options is not an object (1 ms)
-    ✓ AP style (13 ms)
-    ✓ Chicago style (2 ms)
-    ✓ APA style (2 ms)
-    ✓ NYT style (2 ms)
-    ✓ Wikipedia style (8 ms)
-    ✓ Reserved keyword (jQuery, Frontend) (2 ms)
-    ✕ Reserved keyword, correct capitalization (Back-End > Backend) (2 ms)
-    ✓ Convert string to title case with APA style formatting (1 ms)
-    ✓ Convert string to title case with AP style formatting, including possessive (1 ms)
-    ✓ Convert string to title case with Chicago style formatting, including all-caps and ampersand (1 ms)
-    ✓ Convert string to title case with NYT style formatting, including question mark and quotes (2 ms)
-    ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen (3 ms)
-    ✓ Convert string to title case with APA style formatting, including colon and apostrophe (1 ms)
-    ✕ Convert string to title case with Chicago style formatting, including special terms such as node.js (2 ms)
-    ✓ Convert string to title case with AP style formatting, including special terms such as eBook, CTO (3 ms)
-    ✓ Convert string to title case with NYT style formatting, including special terms such as IoT, AI (3 ms)
-    ✓ Convert string to title case with APA style formatting, including colon and short conjunctions (2 ms)
-    ✓ Convert string to title case with Wikipedia style formatting, including special terms such as DevOps (2 ms)
-    ✓ Convert string to title case with Chicago style formatting, including reserved terms GooGlE to Google (2 ms)
+    ✓ AP style (27 ms)
+    ✓ Replace term back-end, front-end (6 ms)
+    ✓ Chicago style (9 ms)
+    ✓ APA style (8 ms)
+    ✓ NYT style (10 ms)
+    ✓ Wikipedia style (17 ms)
+    ✓ Replace incorrect capitalization for reserved words, replace reserved words (Jquery>jQuery, Front-End>Frontend) (10 ms)
+    ✓ Reserved keyword, correct capitalization (Back-End > Backend) (13 ms)
+    ✓ Convert string to title case with APA style formatting (6 ms)
+    ✓ Convert string to title case with AP style formatting, including possessive (9 ms)
+    ✓ Convert string to title case with Chicago style formatting, including all-caps and ampersand (8 ms)
+    ✓ Convert string to title case with NYT style formatting, including question mark and quotes (16 ms)
+    ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen (8 ms)
+    ✓ Convert string to title case with APA style formatting, including colon and apostrophe (7 ms)
+    ✓ Convert string to title case with Chicago style formatting, including special terms such as node.js (5 ms)
+    ✓ Convert string to title case with AP style formatting, including special terms such as eBook, CTO (12 ms)
+    ✓ Convert string to title case with NYT style formatting, including special terms such as IoT, AI (8 ms)
+    ✓ Convert string to title case with APA style formatting, including colon and short conjunctions (12 ms)
+    ✓ Convert string to title case with Wikipedia style formatting, including special terms such as DevOps (12 ms)
+    ✓ Convert string to title case with Chicago style formatting, including reserved terms GooGlE to Google (7 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       17 passed, 17 total
+Tests:       22 passed, 22 total
 Snapshots:   0 total
-Time:        0.636 s
+Time:        1.172 s, estimated 2 s
 ```
 
 ## Resources

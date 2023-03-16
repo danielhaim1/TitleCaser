@@ -7,7 +7,10 @@ module.exports = {
 	],
 	ignore: ['node_modules'],
 	include: ['./api/**/*.js'],
-	plugins: [],
-	sourceMaps: true
+	plugins: [
+	  '@babel/plugin-proposal-object-rest-spread',
+	  '@babel/plugin-proposal-class-properties'
+	],
+	sourceMaps: false
   };
   
