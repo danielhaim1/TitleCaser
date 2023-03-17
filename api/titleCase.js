@@ -16,21 +16,21 @@ import {
     isRomanNumeral,
     endsWithSymbol,
     startsWithDot,
-    processHyphenatedWord,
+    correctHyphenatedTerm,
     correctTerm,
     isShortWord,
     getTitleCaseOptions
 } from "./titleCaseUtils.js";
 
 
-String.prototype.toTitleCase = function(options = {}) {
+String.prototype.toTitleCase = function (options = {}) {
     try {
 
-        if(typeof this !== 'string') {
+        if (typeof this !== 'string') {
             throw new TypeError("Invalid input: input must be a string.");
         }
 
-        if(typeof options !== "undefined" && typeof options !== "object") {
+        if (typeof options !== "undefined" && typeof options !== "object") {
             throw new TypeError("Invalid options: options must be an object.");
         }
 
@@ -48,44 +48,44 @@ String.prototype.toTitleCase = function(options = {}) {
         const result = words.map((word, i) => {
             console.log(`Word: ${word}`);
 
-            if(isWordIgnored(word)) {
+            if (isWordIgnored(word)) {
                 return word;
             }
 
-            if(replaceTermsArray.includes(word.toLowerCase())) {
+            if (replaceTermsArray.includes(word.toLowerCase())) {
                 const correctedTerm = replaceTermsObj[word.toLowerCase()];
                 return correctedTerm;
             }
 
-            if(isWordInArray(word, CORRECT_TITLE_CASE)) {
+            if (isWordInArray(word, CORRECT_TITLE_CASE)) {
                 console.log(`Correcting ${word} to ${correctTerm(word, CORRECT_TITLE_CASE)}`);
                 const correctedWord = correctTerm(word, CORRECT_TITLE_CASE);
                 return correctedWord;
             }
 
-            if(hasIntentionalUppercase(word) ||
+            if (hasIntentionalUppercase(word) ||
                 hasIntentionalUppercase(word)) {
                 return word;
             }
 
-            if(isShortWord(word, style) && i !== 0) {
+            if (isShortWord(word, style) && i !== 0) {
 
-                if(i > 0 && endsWithSymbol(words[i - 1], [':', '?', '!', '.'])) {
+                if (i > 0 && endsWithSymbol(words[i - 1], [':', '?', '!', '.'])) {
                     return word.charAt(0).toUpperCase() + word.slice(1);
                 }
 
                 return word.toLowerCase();
             }
 
-            if(endsWithSymbol(word)) {
+            if (endsWithSymbol(word)) {
                 console.log(`Word ends with symbol: ${word}`);
                 const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()])/g);
                 const processedWords = splitWord.map((splitWord, j) => {
-                    if(isWordInArray(splitWord, CORRECT_TITLE_CASE)) {
+                    if (isWordInArray(splitWord, CORRECT_TITLE_CASE)) {
                         const correctedWord = correctTerm(splitWord, CORRECT_TITLE_CASE);
                         return correctedWord;
                     } else {
-                        if(j > 0 && endsWithSymbol(splitWord)) {
+                        if (j > 0 && endsWithSymbol(splitWord)) {
                             return splitWord.charAt(0).toUpperCase() + splitWord.slice(1);
                         }
 
@@ -96,27 +96,27 @@ String.prototype.toTitleCase = function(options = {}) {
                 return processedWords.join("");
             }
 
-            if(hasHyphen(word)) {
-                word = processHyphenatedWord(word, style);
+            if (hasHyphen(word)) {
+                word = correctHyphenatedTerm(word, style);
                 return word;
             }
 
-            if(
+            if (
                 startsWithHashtag(word) ||
                 startsWithAtSymbol(word) ||
                 startsWithDot(word)) {
-                if(!isWordInArray(word, CORRECT_TITLE_CASE)) {
+                if (!isWordInArray(word, CORRECT_TITLE_CASE)) {
                     return word;
                 } else {
                     return correctTerm(word);
                 }
             }
 
-            if(isRomanNumeral(word)) {
+            if (isRomanNumeral(word)) {
                 return word.toUpperCase();
             }
 
-            if(hasNumbersInWord(word)) {
+            if (hasNumbersInWord(word)) {
                 return word;
             }
 

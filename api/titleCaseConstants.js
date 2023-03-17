@@ -3,7 +3,6 @@ export const COMMON_ABBREVIATIONS = [
     'a', 'an', 'the', 'as', 'at', 'by', 'for', 'in', 'of', 'on', 'to', 'up', 'yet', 'so', 'but', 'nor', 'or', 'and',
 ];
 
-
 export const CORRECT_TITLE_CASE = [
     // Web Technologies
     'AJAX', 'CSS', 'DOM', 'ES6', 'HTML', 'JavaScript', 'jQuery', 'MobX', 'SCSS', 'TypeScript', 'Vue.js', '.NET', 'ASP', 'ASPX', 'MySQL', 'PHP', 'PostgreSQL', 'Python', 'SQL', 'GraphQL', 'HTML5',
@@ -40,7 +39,7 @@ export const CORRECT_TITLE_CASE = [
     'NGO', 'NPO', 'NGOs', 'NPOs', 'UN', 'UNESCO', 'UNICEF', 'UNHCR', 'UNODC', 'UNDP', 'UNFPA', 'UNEP',
 
     // Brands:
-    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot',
+    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola',
     
     // Sports
     'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',

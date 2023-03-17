@@ -360,23 +360,47 @@ export function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
     return false;
 }
 
-export function processHyphenatedWord(word, style) {
-    const hyphenatedWords = word.split("-");
-    const processedWords = hyphenatedWords.map((hyphenatedWord, j) => {
 
-        if ( isShortWord(hyphenatedWord, style) ) {
-            return hyphenatedWord.toLowerCase();
-        } 
-        
-        if (isRomanNumeral(hyphenatedWord)) {
-            return hyphenatedWord.toUpperCase();
-        } 
-
-        if ( j > 0 && !isRomanNumeral(hyphenatedWords[j - 1]) ) {
-            return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
+export function correctHyphenatedTerm(words, style) {
+    const hyphenatedWords = words.split("-");
+    const processedWords = hyphenatedWords.map((hyphenatedWord, i) => {
+        switch (style) {
+            case 'ap':
+                if (i === 0) {
+                    return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1);
+                } else {
+                    return hyphenatedWord.toLowerCase();
+                }
+                break;
+            case 'chicago':
+                return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1);
+                break;
+            case 'apa':
+                if (isShortWord(hyphenatedWord, style) && i > 0 && i < hyphenatedWords.length - 1) {
+                    return hyphenatedWord.toLowerCase();
+                } else if (i === 0 || i === hyphenatedWords.length - 1) {
+                    return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1);
+                } else {
+                    return hyphenatedWord;
+                }
+                break;
+            case 'nyt':
+                if (i === 0) {
+                    return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1);
+                } else {
+                    return hyphenatedWord.toLowerCase();
+                }
+                break;
+            case 'wikipedia':
+                if (i === 0) {
+                    return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1);
+                } else {
+                    return hyphenatedWord.toLowerCase();
+                }
+                break;
+            default:
+                return hyphenatedWord;
         }
-        return hyphenatedWord.charAt(0).toUpperCase() + hyphenatedWord.slice(1).toLowerCase();
     });
-
     return processedWords.join("-");
 }
