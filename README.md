@@ -6,11 +6,13 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-The repository contains a module that converts a string to title case using a set of rules based on the most common styles, guides, and English language conventions. 
+This repository houses a module for converting strings to title case based on various style guides, language conventions, and rules. The module contains a `toTitleCase()` method that can be applied to any string for conversion.
 
-The module provides a `toTitleCase()` method that can be used on any string to convert it to title case.
+A module within this repository offers string conversion to title case, drawing upon a range of established style guides, linguistic norms, and other guidelines. Utilize the `toTitleCase()` method to convert a given string to title case.
 
-The [demo page](https://codepen.io/danielhaim/pen/oNPGzKw) shows two default options (AP, Chicago) for now, with word replacement and custom options.
+Within this repository, you'll find a module designed to convert strings to title case by following a variety of linguistic, stylistic, and best practice guidelines. The `toTitleCase()` method can be used on any string to initiate the conversion process.
+
+See the module in action in the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw).
 
 ## Key Features:
 - Supports popular English language conventions and style guides, such as AP, APA, Chicago, NY Times, Wikipedia, and British, along with a customizable style option.
@@ -152,3 +154,7 @@ Useful materials for improving your knowledge of writing and language style guid
 - [The New York Times Manual of Style and Usage](https://www.worldcat.org/title/946964415)
 - [Wikipedia: Letter case](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Wikipedia%3A%20Letter%20case)
 - [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
+
+## Report Bugs
+
+If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. We appreciate your help in improving the library and making it as bug-free as possible.
