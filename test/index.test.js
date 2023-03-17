@@ -74,8 +74,6 @@ describe('String.prototype.toTitleCase', () => {
         })).toBe("The Art of Negotiation: Strategies for Successful Business Deals");
     });
 
-
-    // ----------------- TESTS FOR SPECIAL TERMS ----------------- //
     test("Convert string to title case with Wikipedia style formatting, including acronym and hyphen", () => {
         const myString = "The Business of Fashion: How Luxury Brands Set Themselves Apart";
         expect(myString.toTitleCase({

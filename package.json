@@ -1,31 +1,21 @@
 {
     "name": "titlecase-js",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
         "titlecase",
-        "formatting",
         "text transformation",
         "capitalization",
-        "text editing",
-        "apa",
-        "apa style",
-        "chicago manual of style"
+        "formatting"
     ],
-    "homepage": "https://www.npmjs.com/package/titlecase-js",
-    "bugs": {
-        "url": "https://github.com/danielhaim1/titlecase-js/issues"
-    },
     "repository": {
         "type": "git",
-        "url": "git://github.com/danielhaim1/titlecase-js.git"
+        "url": "https://github.com/danielhaim1/titlecase-js.git"
     },
     "main": "dist/titlecase.js",
     "scripts": {
         "test": "jest",
-        "webpack": "webpack --mode production",
-        "minify": "terser dist/titlecase.js -o dist/titlecase.min.js",
-        "build": "npm run webpack && npm run minify"
+        "build": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js"
     },
     "author": {
         "name": "Daniel Haim",
@@ -33,7 +23,6 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "lodash": "^4.17.21",
         "@babel/cli": "^7.21.0",
         "@babel/core": "^7.21.0",
         "@babel/plugin-transform-modules-commonjs": "^7.21.2",
@@ -51,9 +40,5 @@
         "webpack": "^5.76.1",
         "webpack-cli": "^5.0.1",
         "webpack-node-externals": "^3.0.0"
-    },
-    "publishConfig": {
-        "access": "public",
-        "registry": "https://registry.npmjs.org/"
     }
 }
