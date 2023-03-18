@@ -1,4 +1,4 @@
-## toTitleCase()
+## TitleCase-JS
 ### Converts a string to title case
 
 [![npm version](https://badge.fury.io/js/titlecase-js.svg)](https://badge.fury.io/js/titlecase-js)
@@ -6,39 +6,34 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-This repository houses a module for converting strings to title case based on various style guides, language conventions, and rules. The module contains a `toTitleCase()` method that can be applied to any string for conversion.
+This module provides extensive support for adhering to popular English language conventions and style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also offers a customizable style option.
 
-A module within this repository offers string conversion to title case, drawing upon a range of established style guides, linguistic norms, and other guidelines. Utilize the `toTitleCase()` method to convert a given string to title case.
+Users can customize article words, conjunctions, prepositions, and words that should not be capitalized, and the module excludes specific words and phrases that should not be capitalized in titles.
 
-Within this repository, you'll find a module designed to convert strings to title case by following a variety of linguistic, stylistic, and best practice guidelines. The `toTitleCase()` method can be used on any string to initiate the conversion process.
+Moreover, the module correctly handles various aspects of capitalization, including hyphenated words, suffixes, prefixes, reserved words, and Roman numerals.
+
+Additionally, the module includes a list of unique arrays that should always be title cased in titles, and a set of common terms that require capitalization. It also corrects common terms to their proper case, and provides a CLI for easy building, testing, and minification of the module.
 
 See the module in action in the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw).
 
 ## Key Features:
-- Supports popular English language conventions and style guides, such as AP, APA, Chicago, NY Times, Wikipedia, and British, along with a customizable style option.
-- Allows customization of article words, conjunctions, prepositions, and words that should not be capitalized.
-- Excludes specific words and phrases that should not be capitalized in titles.
-- Handles hyphenated words and capitalization of Roman numerals correctly.
-- Includes a list of unique words that should always be capitalized in titles, along with a set of common terms that require capitalization.
-- Corrects common terms to their proper case.
-- Offers a CLI for easy building, testing, and minification of the module.
-- Provides pre-defined word lists for articles, conjunctions, prepositions, and words that should not be capitalized in titles.
-- Maintains a list of common phrases that should not be capitalized in titles.
+
+The modules provides the following features for users writing in the English language:
+
+- It conforms to widely recognized style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British, while also allowing for customization of style.
+- It provides customization options for article words, conjunctions, prepositions, and words that should not be capitalized.
+- The module accurately handles suffixes, prefixes, hyphenated words, and reserved words.
+- It excludes specific words and phrases that should not be capitalized in titles, and also handles the capitalization of hyphenated words and Roman numerals.
+- It includes a list of unique words that must always be capitalized in titles, as well as a set of common terms that require capitalization.
+- The module corrects common terms to their proper case.
+- A command-line interface is available for easy building, testing, and minification of the module.
+- Pre-defined word lists for articles, conjunctions, prepositions, and words that should not be capitalized in titles are provided.
+- The module maintains a list of common phrases that should not be capitalized in titles.
 
 ## Installation
 
 ```bash
-npm install titlecase-js
-```
-
-## CLI
-
-```bash
-$ npx webpack
-
-$ npm run build
-$ npm run build-min
-$ npm run test
+$ npm install titlecase-js
 ```
 
 ## Usage
@@ -46,43 +41,46 @@ $ npm run test
 ```javascript
 const toTitleCase = require('titlecase-js');
 
-const title = 'the quick brown fox jumps over the lazy dog';
+const input = 'the quick brown fox jumps over the lazy dog';
 const options = { style: 'apa' };
-const result = title.toTitleCase(options);
+const output = input.toTitleCase(options);
 
-console.log(result); // "The Quick Brown Fox Jumps over the Lazy Dog"
+console.log(output);
 ```
 
 ## API
 
-- `options` (Object): An object containing the options for the conversion.
-- `style` (String): The style of title case to apply. Allowed values are `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`
-- `articles`: words to be treated as articles in title case
-- `shortConjunctions`: words to be treated as short conjunctions in title case
-- `shortPrepositions`: words to be treated as short prepositions in title case
-- `neverCapitalized`: words to never capitalize in title case
-- `REPLACE_TERMS`: a map of terms to replace in title case
+- The `options` parameter is an object that contains the settings for the conversion process.
+- The `style` parameter is a string that determines the specific title case style to be applied. Permissible values include: `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`.
+- `articles` refers to the words that should be treated as articles in title case.
+- `shortConjunctions` pertains to the words that should be treated as short conjunctions in title case.
+- `shortPrepositions` relates to the words that should be treated as short prepositions in title case.
+- `neverCapitalized` contains the words that should never be capitalized in title case.
+- `replaceCasing` is a map of terms that will be replaced during the title case conversion process.
 
 ### API Examples:
 
 ```javascript
 const options = {
-  style: "ap",
-  articles: ["the", "an", "a"],
-  shortConjunctions: ["and", "but", "or", "for", "nor", "yet", "so"],
-  shortPrepositions: ["in", "on", "at", "by", "to", "up", "as", "of", "off"],
-  neverCapitalized: ["and", "or", "but", "nor", "a", "an", "the", "as", "at", "by", "for", "in", "of", "on", "to", "up", "yet", "so"],
+    style: "ap",
+    articles: ["the", "an", "a"],
+    shortConjunctions: ["and", "but", "or", "for", "nor", "yet", "so"],
+    shortPrepositions: ["in", "on", "at", "by", "to", "up", "as", "of", "off"],
+    neverCapitalized: ["and", "or", "but", "nor", "a", "an", "the", "as", "at", "by", "for", "in", "of", "on", "to", "up", "yet", "so"],
 };
 
-const string = "jquery plugins for frontend developers: a comprehensive guide";
-string.toTitleCase(options);
+const input = "JQUery plugins for frontend developers: a comprehensive guide";
+const output = input.toTitleCase(options);
 // jQuery Plugins for Frontend Developers: A Comprehensive Guide
 ```
 
 ```javascript
-const myTerms = ["Google", "VMware"];
-const myString = "goOgle and VMWARE ";
-myString.toTitleCase({ style: "ap", REPLACE_TERMS: myTerms });
+const correctCasing = ["Google", "VMware"];
+const input = "goOgle and VMWARE ";
+input.toTitleCase({
+    style: "ap",
+    replaceCasing: correctCasing
+});
 // "Google and VMware"
 ```
 
@@ -93,26 +91,32 @@ input.toTitleCase();
 ```
 
 ```javascript
-const myString = "to be or not to be";
-input.toTitleCase();
+const input = "to be or not to be";
+const output = input.toTitleCase();
 // "To Be or Not to Be"
 ```
 
 ```javascript
-const myString = "the name of the musical is The Musical";
-myString.toTitleCase( { neverCapitalized: ["The Musical"] });
+const input = "the name of the musical is The Musical";
+input.toTitleCase({
+    neverCapitalized: ["The Musical"]
+});
 // "The Name of the Musical Is The Musical"
 ```
 
 ```javascript
-const myString = "a comprehensive guide to a/b testing with github actions: best practices for optimizing your website!";
-myString.toTitleCase({ style: "chicago" });
+const input = "a comprehensive guide to a/b testing with github actions: best practices for optimizing your website!";
+input.toTitleCase({
+    style: "chicago"
+});
 // "A Comprehensive Guide to A/B Testing with GitHub Actions: Best Practices for Optimizing Your Website!"
 ```
 
 ```javascript
-const myString = "JQuEry Plugins for Front-End Developers: A Comprehensive Guide";
-myString.toTitleCase({ style: 'apa' }); 
+const input = "JQuEry Plugins for Front-End Developers: A Comprehensive Guide";
+input.toTitleCase({
+    style: 'apa'
+});
 // jQuery Plugins for Frontend Developers: A Comprehensive Guide
 ```
 
@@ -123,23 +127,27 @@ $ npm run test
 ```
 
 ```bash
-    ✓ throws TypeError if input is not a string (3 ms)
-    ✓ throws TypeError if options is not an object
-    ✓ Convert string to title case with AP style formatting, including hyphenated words, word and brand replacement (28 ms)
-    ✓ Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement (10 ms)
-    ✓ Convert string to title case with AP style formatting, including custom term replacement for Google and VMware (7 ms)
-    ✓ Convert string to title case with AP style formatting, including a possessive noun and a colon (8 ms)
-    ✓ Convert string to title case with AP style formatting, including lowercase back-end and front-end terms (2 ms)
-    ✓ Convert string to title case with Chicago style formatting, including a comparison and a colon (11 ms)
-    ✓ Convert string to title case with APA style formatting, including a colon (12 ms)
-    ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen (10 ms)
-    ✓ Convert string to title case with APA style formatting, including colon and apostrophe (10 ms)
-    ✓ Convert string to title case with Chicago style formatting, including special terms such as node.js (9 ms)
-    ✓ AP Style capitalization test with special terms eBook and CTO and a colon (10 ms)
-    ✓ NYT style capitalization test with special terms IoT and AI and a colon (12 ms)
-    ✓ APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat) (14 ms)
-    ✓ Wikipedia style capitalization test with special term DevOps and a colon (11 ms)
-    ✓ Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon (6 ms)
+    ✓ throws TypeError if input is not a string (2 ms)
+    ✓ throws TypeError if options is not an object (1 ms)
+    ✓ Convert string to title case with AP style formatting, including hyphenated words, word and brand replacement (2 ms)
+    ✓ Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement
+    ✓ Convert string to title case with AP style formatting, including custom term replacement for Google and VMware (1 ms)
+    ✓ Convert string to title case with AP style formatting, including a possessive noun and a colon (3 ms)
+    ✓ Convert string to title case with AP style formatting, including lowercase back-end and front-end terms
+    ✓ Convert string to title case with Chicago style formatting, including a comparison and a colon (1 ms)
+    ✓ Convert string to title case with APA style formatting, including a colon
+    ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen (1 ms)
+    ✓ Convert string to title case with APA style formatting, including colon and apostrophe
+    ✓ Convert string to title case with Chicago style formatting, including special terms such as node.js
+    ✓ AP Style capitalization test with special terms eBook and CTO and a colon
+    ✓ NYT style capitalization test with special terms IoT and AI and a colon (1 ms)
+    ✓ APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat)
+    ✓ Wikipedia style capitalization test with special term DevOps and a colon (1 ms)
+    ✓ Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon
+    ✓ GOOgle -> Google
+    ✓ GOOgle's -> Google's
+    ✓ GOOgle-Tensorflow -> Google-TensorFlow
+    ✓ GOOGle's-Tensorflow -> Google's-TensorFlow
 ```
 
 ## Resources

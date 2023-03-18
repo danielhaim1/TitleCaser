@@ -1,7 +1,7 @@
 import {
     COMMON_ABBREVIATIONS,
     CORRECT_TITLE_CASE,
-    REPLACE_TERMS,
+    replaceCasing,
 } from "./consts.js";
 
 import {
@@ -36,10 +36,10 @@ String.prototype.toTitleCase = function(options = {}) {
             shortPrepositions,
             neverCapitalized,
             replaceTerms
-        } = getTitleCaseOptions(options, COMMON_ABBREVIATIONS, REPLACE_TERMS);
+        } = getTitleCaseOptions(options, COMMON_ABBREVIATIONS, replaceCasing);
 
-        const replaceTermsArray = REPLACE_TERMS.map(term => Object.keys(term)[0].toLowerCase());
-        const replaceTermsObj = Object.fromEntries(REPLACE_TERMS.map(term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]));
+        const replaceTermsArray = replaceCasing.map(term => Object.keys(term)[0].toLowerCase());
+        const replaceTermsObj = Object.fromEntries(replaceCasing.map(term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]));
         const words = this.split(" ");
 
         const wordsInTitleCase = words.map((word, i) => {

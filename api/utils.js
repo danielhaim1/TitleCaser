@@ -4,7 +4,7 @@ import {
     TITLE_CASE_DEFAULT_OPTIONS,
     IGNORED_WORDS,
     IGNORED_TITLE_CASE_PHRASES,
-    REPLACE_TERMS,
+    replaceCasing,
 } from "./consts.js";
 
 function validateOption(key, value) {
@@ -22,15 +22,15 @@ function validateOptions(options) {
             if (typeof options.style !== 'string') {
                 throw new TypeError(`Invalid option: ${key} must be a string`);
             } else if (!ALLOWED_TITLE_CASE_STYLES.includes(options.style)) {
-                throw new TypeError(`Invalid option: ${key}`);
+                throw new TypeError(`Invalid option: ${key} must be a string`);
             }
             continue;
         }
-        if (key === 'REPLACE_TERMS') {
-            if (!Array.isArray(options.REPLACE_TERMS)) {
+        if (key === 'replaceCasing') {
+            if (!Array.isArray(options.replaceCasing)) {
                 throw new TypeError(`Invalid option: ${key} must be an array`);
             } else {
-                for (const term of options.REPLACE_TERMS) {
+                for (const term of options.replaceCasing) {
                     if (typeof term !== 'string') {
                         throw new TypeError(`Invalid option: ${key} must contain only strings`);
                     }
@@ -45,36 +45,33 @@ function validateOptions(options) {
     }
 }
 
-export function getTitleCaseOptions({
-        style = "ap",
-        articles,
-        shortConjunctions,
-        shortPrepositions,
-        neverCapitalized,
-        replaceTerms
-    } = {},
-    lowercaseWords = [],
-) {
-    const {
-        articles: defaultArticles,
-        shortConjunctions: defaultShortConjunctions,
-        shortPrepositions: defaultShortPrepositions,
-        neverCapitalized: defaultNeverCapitalized,
-    } = TITLE_CASE_DEFAULT_OPTIONS[style];
+const titleCaseOptionsCache = new Map();
 
-    const mergedArticles = defaultArticles.concat(articles || lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
-    const mergedShortConjunctions = defaultShortConjunctions.concat(shortConjunctions || lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
-    const mergedShortPrepositions = defaultShortPrepositions.concat(shortPrepositions || lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
-    const mergedReplaceTerms = replaceTerms ? [...replaceTerms.map(([key, value]) => [key.toLowerCase(), value]), ...REPLACE_TERMS] : REPLACE_TERMS;
+export function getTitleCaseOptions(options = {}, lowercaseWords = []) {
+    const cacheKey = JSON.stringify({ options, lowercaseWords });
 
-    return {
+    if (titleCaseOptionsCache.has(cacheKey)) {
+        return titleCaseOptionsCache.get(cacheKey);
+    }
+
+    const mergedOptions = { ...TITLE_CASE_DEFAULT_OPTIONS[options.style], ...options };
+    const mergedArticles = mergedOptions.articles.concat(lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
+    const mergedShortConjunctions = mergedOptions.shortConjunctions.concat(lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
+    const mergedShortPrepositions = mergedOptions.shortPrepositions.concat(lowercaseWords).filter((word, index, array) => array.indexOf(word) === index);
+    const mergedReplaceTerms = [...(mergedOptions.replaceTerms || []).map(([key, value]) => [key.toLowerCase(), value]), ...replaceCasing];
+
+    const result = {
         articles: mergedArticles,
         shortConjunctions: mergedShortConjunctions,
         shortPrepositions: mergedShortPrepositions,
-        neverCapitalized: [...defaultNeverCapitalized, ...(neverCapitalized || [])],
+        neverCapitalized: [...mergedOptions.neverCapitalized],
         replaceTerms: mergedReplaceTerms,
     };
+
+    titleCaseOptionsCache.set(cacheKey, result);
+    return result;
 }
+
 
 function isShortConjunction(word, style) {
     const shortConjunctions = [...getTitleCaseOptions({
@@ -100,13 +97,21 @@ function isShortPreposition(word, style) {
     return shortPrepositions.includes(word.toLowerCase());
 }
 
+const isNeverCapitalizedCache = new Map();
+
 function isNeverCapitalized(word, style) {
-    const {
-        neverCapitalized
-    } = getTitleCaseOptions({
-        style
-    });
-    return neverCapitalized.includes(word.toLowerCase());
+  const cacheKey = `${style}_${word.toLowerCase()}`;
+
+  if (isNeverCapitalizedCache.has(cacheKey)) {
+    return isNeverCapitalizedCache.get(cacheKey);
+  }
+
+  const { neverCapitalized } = getTitleCaseOptions({ style });
+
+  const result = neverCapitalized.includes(word.toLowerCase());
+  isNeverCapitalizedCache.set(cacheKey, result);
+
+  return result;
 }
 
 export function isShortWord(word, style) {
@@ -216,37 +221,39 @@ export function isWordIgnored(word, ignoredWords = IGNORED_WORDS) {
 
 export function isWordInArray(targetWord, wordList) {
     if (!Array.isArray(wordList)) {
-        return false;
+      return false;
     }
+  
+    return wordList.some((word) => word.toLowerCase() === targetWord.toLowerCase());
+  }
+  
 
-    const lowercaseWords = wordList.map(word => word.toLowerCase());
-    return lowercaseWords.includes(targetWord.toLowerCase());
-}
-
-export function getCorrectTitleCasing(word, includeApostrophe = false) {
+  export function getCorrectTitleCasing(word, includeApostrophe = false) {
     if (!word) {
-        throw new Error('Word is empty.');
+      throw new Error('Word is empty.');
     }
-
+  
     const lowerCaseWord = word.toLowerCase();
     const uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === lowerCaseWord);
-
+  
     if (uniqueTermsIndex >= 0) {
-        if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-            return `${CORRECT_TITLE_CASE[uniqueTermsIndex]}'s`;
-        } else {
-            return CORRECT_TITLE_CASE[uniqueTermsIndex];
-        }
+      const correctCase = CORRECT_TITLE_CASE[uniqueTermsIndex];
+      if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
+        return `${correctCase}'s`;
+      } else {
+        return correctCase;
+      }
     }
-
+  
     if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-        const baseWord = lowerCaseWord.slice(0, -2);
-        const titleCaseBase = getCorrectTitleCasing(baseWord, true);
-        return `${titleCaseBase}'s`;
+      const baseWord = lowerCaseWord.slice(0, -2);
+      const titleCaseBase = getCorrectTitleCasing(baseWord, true);
+      return `${titleCaseBase}'s`;
     }
-
+  
     return lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
-}
+  }
+  
 
 export function hasSuffix(word) {
     const suffix = "'s";
