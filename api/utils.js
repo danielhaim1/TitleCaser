@@ -3,7 +3,7 @@ import {
     ALLOWED_TITLE_CASE_STYLES,
     TITLE_CASE_DEFAULT_OPTIONS,
     IGNORED_WORDS,
-    IGNORED_TITLE_CASE_PHRASES,
+    ignorePhrases,
     replaceCasing,
 } from "./consts.js";
 
@@ -367,20 +367,3 @@ export function correctHyphenatedTerm(word, style) {
   
     return processedWords.join("-");
   }
-  
-
-export function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
-    return words.some((word, i) => {
-        const ignorePhrase = IGNORED_TITLE_CASE_PHRASES.find(phrase => phrase.toLowerCase().startsWith(word.toLowerCase()));
-        if (ignorePhrase) {
-            const remainingWords = words.slice(i + 1);
-            const remainingIgnorePhrases = IGNORED_TITLE_CASE_PHRASES.filter(phrase => phrase.toLowerCase().startsWith(ignorePhrase.toLowerCase() + ' '));
-            if (remainingIgnorePhrases.length > 0) {
-                return isPhraseIgnored(remainingWords, remainingIgnorePhrases);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    });
-}

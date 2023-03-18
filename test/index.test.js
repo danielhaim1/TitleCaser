@@ -118,6 +118,13 @@ describe('String.prototype.toTitleCase', () => {
         })).toBe("The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat");
     });
 
+    test("Testing CORRECT_PHRASE_CASE", () => {
+        const myString = "announcing a new collaboration with the cybersmile foundation: how to combat cyberbullying";
+        expect(myString.toTitleCase({
+            style: "wikipedia",
+        })).toBe("Announcing a New Collaboration With The Cybersmile Foundation: How to Combat Cyberbullying");
+    });
+
     test("Wikipedia style capitalization test with special term DevOps and a colon", () => {
         const myString = "the future of devops: how to prepare for the next era of software development";
         expect(myString.toTitleCase({

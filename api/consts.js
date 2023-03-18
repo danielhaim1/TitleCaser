@@ -9,7 +9,7 @@ export const CORRECT_TITLE_CASE = [
 
     //  Acronyms/Abbreviations:
     'API', 'APIs', 'ASCII', 'AWS', 'CI', 'CircleCI', 'CLI', 'DLL', 'DNS', 'EC2', 'FTP', 'HTTP', 'HTTPs', 'ICMP', 'IDE', 'IP', 'ISP', 'JSON', 'JSP', 'LPWAN', 'M2M', 'MQTT', 'OOP', 'REST', 'SSH', 'SSL', 'TCP', 'UDP', 'URL', 'WLAN', 'WYSIWYG', 'XML', 'YAML', 'YML', 'IMAP', 'RSS', 'IaaS', 'PaaS', 'SaaS', 'CaaS', 'FaaS', 'XaaS', 'RaaS',
-     'IoE', 'IoT', 'LoRa', 'NB-IoT', 'RFID', 'RF', 'RFI', 'RFQ', 'ECMAScript', 'IO', 'I/O', 'DevOps', 'SecOps', 'DDoS', 'VoIP',
+    'IoE', 'IoT', 'LoRa', 'NB-IoT', 'RFID', 'RF', 'RFI', 'RFQ', 'ECMAScript', 'IO', 'I/O', 'DevOps', 'SecOps', 'DDoS', 'VoIP',
 
     // Misc.
     'AI', 'AR', 'ML', 'VR',
@@ -40,7 +40,7 @@ export const CORRECT_TITLE_CASE = [
 
     // Brands:
     'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola',
-    
+
     // Sports
     'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
 
@@ -49,7 +49,7 @@ export const CORRECT_TITLE_CASE = [
 
     // Professional abbreviations, degrees, and titles: Includes abbreviations for professional titles, degrees, and certifications.
     'ph.d.', 'm.d.', 'd.d.s.', 'd.m.d.', 'd.o.', 'd.c.', 'd.v.m.', 'd.n.p.', 'd.p.m.', 'd.s.w.', 'd.s.n.', 'd.n.sc.', 'd.n.a.', 'd.n.t.', 'd.n.p.t.', 'd.n.o.', 'd.n.m.', 'd.n.e.', 'd.n.s.', 'd.n.p.s.',
-    
+
     // Academic & literary abbreviations: Includes abbreviations for academic and literary terms, such as 'ed.' for 'edition' and 'vol.' for 'volume'.
     'adj.', 'adv.', 'cf.', 'cm.', 'co.', 'corp.', 'dept.', 'dist.', 'ed.', 'edn.', 'esp.', 'etc.', 'ex.', 'i.e.', 'e.g.', 'op. cit.', 'vs.',
 
@@ -59,31 +59,31 @@ export const CORRECT_TITLE_CASE = [
     // Misc:
     'w/', 'w/o'
 ];
-    
+
 export const replaceCasing = [
-    {'phd': 'ph.d.'},
-    {'f.y.i': 'FYI'},
-    {'t.b.d': 'TBD'},
-    {'a.k.a': 'AKA'},
-    {'a.s.a.p': 'ASAP'},
-    {'d.i.y': 'DIY'},
-    {'f.a.q': 'FAQ'},
-    {'f.a.q.s': 'FAQs'},
-    {'f.a.q.a': 'FAQs'},
-    {'angularjs': 'Angular.js'},
-    {'reactjs': 'React.js'},
-    {'vuejs': 'Vue.js'},
-    {'nextjs': 'Next.js'},
-    {'nuxtjs': 'Nuxt.js'},
-    {'nodejs': 'Node.js'},
-    {'full-stack': 'Fullstack'},
-    {'front-end': 'Frontend'},
-    {'back-end': 'Backend'},
-    {'e-book': 'eBook'},
-    {'e-books': 'eBooks'},
-    {'e-commerce': 'eCommerce'},
-    {'ecommerce': 'eCommerce'},
-    {'ecom': 'eCommerce'}
+    { 'phd': 'ph.d.' },
+    { 'f.y.i': 'FYI' },
+    { 't.b.d': 'TBD' },
+    { 'a.k.a': 'AKA' },
+    { 'a.s.a.p': 'ASAP' },
+    { 'd.i.y': 'DIY' },
+    { 'f.a.q': 'FAQ' },
+    { 'f.a.q.s': 'FAQs' },
+    { 'f.a.q.a': 'FAQs' },
+    { 'angularjs': 'Angular.js' },
+    { 'reactjs': 'React.js' },
+    { 'vuejs': 'Vue.js' },
+    { 'nextjs': 'Next.js' },
+    { 'nuxtjs': 'Nuxt.js' },
+    { 'nodejs': 'Node.js' },
+    { 'full-stack': 'Fullstack' },
+    { 'front-end': 'Frontend' },
+    { 'back-end': 'Backend' },
+    { 'e-book': 'eBook' },
+    { 'e-books': 'eBooks' },
+    { 'e-commerce': 'eCommerce' },
+    { 'ecommerce': 'eCommerce' },
+    { 'ecom': 'eCommerce' }
 ];
 
 export const TITLE_CASE_STYLES = Object.freeze({
@@ -136,7 +136,12 @@ export const TITLE_CASE_DEFAULT_OPTIONS = Object.freeze({
 
 
 export const IGNORED_WORDS = [];
-export const IGNORED_TITLE_CASE_PHRASES = [];
+export const ignorePhrases = [];
+
+export const CORRECT_PHRASE_CASE = [
+    'The Cybersmile Foundation',
+    'CO. by Colgate',
+];
 
 export const ARR_UNIQUE_TERMS = [];
 export const ARR_CORRECT_CAPITALIZED = [];

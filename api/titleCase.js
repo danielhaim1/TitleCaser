@@ -2,6 +2,7 @@ import {
     COMMON_ABBREVIATIONS,
     CORRECT_TITLE_CASE,
     replaceCasing,
+    CORRECT_PHRASE_CASE,
 } from "./consts.js";
 
 import {
@@ -22,13 +23,13 @@ import {
 } from "./utils.js";
 
 
-String.prototype.toTitleCase = function(options = {}) {
+String.prototype.toTitleCase = function (options = {}) {
     try {
         if (typeof this !== 'string') throw new TypeError("Invalid input: input must be a string.");
         if (typeof options !== "undefined" && typeof options !== "object") throw new TypeError("Invalid options: options must be an object.");
 
         const {
-            style = "ap"
+            style = "ap",
         } = options;
         const {
             articles,
@@ -76,7 +77,16 @@ String.prototype.toTitleCase = function(options = {}) {
             }
         });
 
-        return wordsInTitleCase.join(" ");
+        let inputString = wordsInTitleCase.join(" ");
+
+        for (const phrase of CORRECT_PHRASE_CASE) {
+            if (inputString.toLowerCase().includes(phrase.toLowerCase())) {
+                inputString = inputString.replace(new RegExp(phrase, 'gi'), phrase);
+            }
+        }
+
+        return inputString;
+
     } catch (error) {
         throw new Error(error);
     }
