@@ -14,8 +14,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'titleCaseConstants': path.resolve(__dirname, 'api/titleCaseConstants.js'),
-            'titleCaseUtils': path.resolve(__dirname, 'api/titleCaseUtils.js'),
+            'consts': path.resolve(__dirname, 'api/consts.js'),
+            'utils': path.resolve(__dirname, 'api/utils.js'),
             'titleCase': path.resolve(__dirname, 'api/titleCase.js'),
         }
     },

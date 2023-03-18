@@ -1,0 +1,56 @@
+[
+  {
+    "description": "AP Style capitalization test with special terms eBook and CTO and a colon",
+    "input": "revolutionizing the publishing industry: insights from a cto on ebook development and innovation",
+    "expectedOutput": "Revolutionizing the Publishing Industry: Insights From a CTO on eBook Development and Innovation",
+    "style": "ap"
+  },
+  {
+    "description": "APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat)",
+    "input": "the impact of social media on mental health: a study of instagram, Tiktok, and SnapChat",
+    "expectedOutput": "The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat",
+    "style": "apa"
+  },
+  {
+    "description": "Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon",
+    "input": "GooGlE vs. VirtualBox: a comparative study of virtualization software",
+    "expectedOutput": "Google vs. VirtualBox: A Comparative Study of Virtualization Software",
+    "style": "chicago"
+  },
+  {
+    "description": "Convert string to title case with AP style formatting, including a possessive noun and a colon",
+    "input": "the iPhone's impact on modern communication: a sociolinguistic analysis",
+    "expectedOutput": "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis",
+    "style": "ap"
+  },
+  {
+    "description": "Convert string to title case with AP style formatting, including custom term replacement for Google and VMware",
+    "input": "GOOgLE's TensorFlow Rival: A Look at the Top Contenders in the Machine Learning Framework Arena",
+    "expectedOutput": "Google's TensorFlow Rival: A Look at the Top Contenders in the Machine Learning Framework Arena",
+    "style": "ap"
+  },
+  {
+    "description": "Convert string to title case with AP style formatting, including hyphenated words, word and brand replacement",
+    "input": "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
+    "expectedOutput": "Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment",
+    "style": "ap"
+  },
+  {
+    "description": "Convert string to title case with AP style formatting, including lowercase back-end and front-end terms",
+    "input": "back-end and front-end",
+    "expectedOutput": "Backend and Frontend",
+    "style": "ap"
+  },
+  {
+    "description": "Convert string to title case with Chicago style formatting, including a comparison and a colon",
+    "input": "VMware vs. VirtualBox: a comparative study of virtualization software",
+    "expectedOutput": "VMware vs. VirtualBox: A Comparative Study of Virtualization Software",
+    "style": "chicago"
+  },
+  {
+    "description": "Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement",
+    "input": "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
+    "expectedOutput": "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment",
+    "style": "chicago"
+  }
+]

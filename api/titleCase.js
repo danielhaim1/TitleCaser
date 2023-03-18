@@ -2,13 +2,15 @@ import {
     COMMON_ABBREVIATIONS,
     CORRECT_TITLE_CASE,
     REPLACE_TERMS,
-} from "./titleCaseConstants.js";
+} from "./consts.js";
 
 import {
     isWordInArray,
     isWordIgnored,
     hasIntentionalUppercase,
     hasHyphen,
+    hasSuffix,
+    correctSuffix,
     startsWithSymbol,
     hasNumbersInWord,
     isRomanNumeral,
@@ -17,7 +19,7 @@ import {
     correctTerm,
     isShortWord,
     getTitleCaseOptions
-} from "./titleCaseUtils.js";
+} from "./utils.js";
 
 
 String.prototype.toTitleCase = function(options = {}) {
@@ -48,6 +50,10 @@ String.prototype.toTitleCase = function(options = {}) {
                     return replaceTermsObj[word.toLowerCase()];
                 case isWordInArray(word, CORRECT_TITLE_CASE):
                     return correctTerm(word, CORRECT_TITLE_CASE);
+                case hasSuffix(word, style):
+                    return correctSuffix(word, CORRECT_TITLE_CASE);
+                case hasHyphen(word):
+                    return correctHyphenatedTerm(word, style);
                 case hasIntentionalUppercase(word):
                     return word;
                 case isShortWord(word, style) && i !== 0:
@@ -59,8 +65,6 @@ String.prototype.toTitleCase = function(options = {}) {
                         else return (j > 0 && endsWithSymbol(splitWord)) ? splitWord.charAt(0).toUpperCase() + splitWord.slice(1) : splitWord.charAt(0).toUpperCase() + splitWord.slice(1);
                     });
                     return processedWords.join("");
-                case hasHyphen(word):
-                    return correctHyphenatedTerm(word, style);
                 case startsWithSymbol(word):
                     return !isWordInArray(word, CORRECT_TITLE_CASE) ? word : correctTerm(word);
                 case isRomanNumeral(word):

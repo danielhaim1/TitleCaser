@@ -5,7 +5,7 @@ import {
     IGNORED_WORDS,
     IGNORED_TITLE_CASE_PHRASES,
     REPLACE_TERMS,
-} from "./titleCaseConstants.js";
+} from "./consts.js";
 
 function validateOption(key, value) {
     if (!Array.isArray(value)) {
@@ -148,6 +148,10 @@ export function hasHyphen(word) {
     return word.indexOf('-') !== -1 || word.indexOf('–') !== -1 || word.indexOf('—') !== -1;
 }
 
+export function hasApostrophe(word) {
+    return word.indexOf("'") !== -1;
+}
+
 export function startsWithSymbol(word) {
     if (typeof word !== 'string') {
         throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
@@ -181,7 +185,6 @@ export function isRomanNumeral(word) {
 
     return romanNumeralRegex.test(word);
 }
-
 
 export function hasHyphenRomanNumeral(word) {
     if (typeof word !== "string" || word === "") {
@@ -220,8 +223,7 @@ export function isWordInArray(targetWord, wordList) {
     return lowercaseWords.includes(targetWord.toLowerCase());
 }
 
-
-export function getCorrectTitleCasing(word) {
+export function getCorrectTitleCasing(word, includeApostrophe = false) {
     if (!word) {
         throw new Error('Word is empty.');
     }
@@ -230,10 +232,43 @@ export function getCorrectTitleCasing(word) {
     const uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === lowerCaseWord);
 
     if (uniqueTermsIndex >= 0) {
-        return CORRECT_TITLE_CASE[uniqueTermsIndex];
+        if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
+            return `${CORRECT_TITLE_CASE[uniqueTermsIndex]}'s`;
+        } else {
+            return CORRECT_TITLE_CASE[uniqueTermsIndex];
+        }
+    }
+
+    if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
+        const baseWord = lowerCaseWord.slice(0, -2);
+        const titleCaseBase = getCorrectTitleCasing(baseWord, true);
+        return `${titleCaseBase}'s`;
     }
 
     return lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
+}
+
+export function hasSuffix(word) {
+    const suffix = "'s";
+    return word.length > suffix.length && word.endsWith(suffix);
+}
+
+export function correctSuffix(word, correctTerms) {
+    const suffix = "'s";
+    const lowerCasedWord = word.toLowerCase();
+
+    if (lowerCasedWord.endsWith(suffix)) {
+        const wordWithoutSuffix = word.slice(0, -suffix.length);
+        const matchingIndex = correctTerms.findIndex(
+            (term) => term.toLowerCase() === wordWithoutSuffix.toLowerCase()
+        );
+        if (matchingIndex >= 0) {
+            const correctCase = correctTerms[matchingIndex];
+            return correctCase + suffix;
+        }
+    }
+
+    return word;
 }
 
 export function correctTerm(word, correctTerms) {
@@ -245,18 +280,18 @@ export function correctTerm(word, correctTerms) {
         throw new TypeError("Invalid input: correctTerms must be an array.");
     }
 
-    const words = word.split(" ");
-    const numWords = words.length;
+    const parts = word.split(/[-']/);
+    const numParts = parts.length;
 
-    for (let i = 0; i < numWords; i++) {
-        const lowercasedWord = words[i].toLowerCase();
-        const index = correctTerms.findIndex((t) => t.toLowerCase() === lowercasedWord);
+    for (let i = 0; i < numParts; i++) {
+        const lowercasedPart = parts[i].toLowerCase();
+        const index = correctTerms.findIndex((t) => t.toLowerCase() === lowercasedPart);
         if (index >= 0) {
-            words[i] = correctTerms[index];
+            parts[i] = correctTerms[index];
         }
     }
 
-    return words.join(" ");
+    return parts.join(/[-']/);
 }
 
 export function replaceTerm(word, replaceTermsObj) {
@@ -287,6 +322,46 @@ export function replaceTerm(word, replaceTermsObj) {
     return word;
 }
 
+export function correctHyphenatedTerm(word, style) {
+    const hyphenatedWords = word.split("-");
+    const capitalizeFirst = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+    const lowercaseRest = (word) => word.charAt(0) + word.slice(1).toLowerCase();
+  
+    const styleFunctions = {
+      ap: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
+      chicago: capitalizeFirst,
+      apa: (word, index, length) => {
+        if (isShortWord(word, style) && index > 0 && index < length - 1) {
+          return word.toLowerCase();
+        } else {
+          return capitalizeFirst(word);
+        }
+      },
+      nyt: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
+      wikipedia: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
+    };
+  
+    const processWord = styleFunctions[style] || lowercaseRest;
+    const processedWords = hyphenatedWords.map((word, i) => {
+      let correctedWord = word;
+      const lowerCaseWord = word.toLowerCase();
+      const uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === lowerCaseWord);
+      if (uniqueTermsIndex >= 0) {
+        correctedWord = CORRECT_TITLE_CASE[uniqueTermsIndex];
+      } else if (lowerCaseWord.endsWith("'s")) {
+        const rootWord = lowerCaseWord.substring(0, lowerCaseWord.length - 2);
+        const rootWordIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === rootWord);
+        if (rootWordIndex >= 0) {
+          correctedWord = `${CORRECT_TITLE_CASE[rootWordIndex]}'s`;
+        }
+      }
+      return processWord(correctedWord, i, hyphenatedWords.length);
+    });
+  
+    return processedWords.join("-");
+  }
+  
+
 export function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
     return words.some((word, i) => {
         const ignorePhrase = IGNORED_TITLE_CASE_PHRASES.find(phrase => phrase.toLowerCase().startsWith(word.toLowerCase()));
@@ -301,29 +376,4 @@ export function isPhraseIgnored(words, IGNORED_TITLE_CASE_PHRASES) {
         }
         return false;
     });
-}
-
-export function correctHyphenatedTerm(word, style) {
-    const hyphenatedWords = word.split("-");
-    const capitalizeFirst = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-    const lowercaseRest = (word) => word.charAt(0) + word.slice(1).toLowerCase();
-
-    const styleFunctions = {
-        ap: (word, index) => index === 0 ? capitalizeFirst(word) : lowercaseRest(word),
-        chicago: capitalizeFirst,
-        apa: (word, index, length) => {
-            if (isShortWord(word, style) && index > 0 && index < length - 1) {
-                return word.toLowerCase();
-            } else {
-                return capitalizeFirst(word);
-            }
-        },
-        nyt: (word, index) => index === 0 ? capitalizeFirst(word) : lowercaseRest(word),
-        wikipedia: (word, index) => index === 0 ? capitalizeFirst(word) : lowercaseRest(word)
-    };
-
-    const processWord = styleFunctions[style] || lowercaseRest;
-    const processedWords = hyphenatedWords.map((word, i) => processWord(word, i, hyphenatedWords.length));
-
-    return processedWords.join("-");
 }

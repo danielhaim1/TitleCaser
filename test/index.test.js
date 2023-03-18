@@ -8,7 +8,10 @@ const {
     toTitleCase
 } = require('../api/titleCase.js');
 
+
 describe('String.prototype.toTitleCase', () => {
+
+    
     test('throws TypeError if input is not a string', () => {
         expect(() => toTitleCase()).toThrow(TypeError);
         expect(() => toTitleCase(123)).toThrow(TypeError);
@@ -25,7 +28,6 @@ describe('String.prototype.toTitleCase', () => {
         const myString = "nodejs development on aws: an in-depth tutorial on server-side javascript deployment";
         expect(myString.toTitleCase({
             style: "ap",
-            REPLACE_TERMS: ["nodejs", "aws", "javascript"]
         })).toBe("Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment");
     });
 
@@ -46,7 +48,7 @@ describe('String.prototype.toTitleCase', () => {
     });
 
     test("Convert string to title case with AP style formatting, including a possessive noun and a colon", () => {
-        const myString = "the iPhone's impact on modern communication: a sociolinguistic analysis";
+        const myString = "the iphone's impact on modern communication: a sociolinguistic analysis";
         expect(myString.toTitleCase({
             style: "ap"
         })).toBe("The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis");
@@ -130,4 +132,35 @@ describe('String.prototype.toTitleCase', () => {
         })).toBe("Google vs. VirtualBox: A Comparative Study of Virtualization Software");
     });
 
+    // Test incorrect uppercase in reserved words
+    test("GOOgle -> Google", () => {
+        const myString = "GOOGle Tensorflow";
+        expect(myString.toTitleCase({
+            style: "chicago"
+        })).toBe("Google Tensorflow");
+    });
+
+    // Test incorrect uppercase in reserved suffixes
+    test("GOOgle's > Google's", () => {
+        const myString = "GOOGle's Tensorflow";
+        expect(myString.toTitleCase({
+            style: "chicago"
+        })).toBe("Google's Tensorflow");
+    });
+
+    // Test incorrect uppercase in reserved hyphenated
+    test("GOOgle-Tensorflow -> Google-Tensorflow", () => {
+        const myString = "GOOGle-Tensorflow";
+        expect(myString.toTitleCase({
+            style: "chicago"
+        })).toBe("Google-Tensorflow");
+    });
+
+        // Test incorrect uppercase in reserved hyphenated
+        test("GOOGle's-Tensorflow -> Google's-Tensorflow", () => {
+            const myString = "GOOGle's-Tensorflow";
+            expect(myString.toTitleCase({
+                style: "chicago"
+            })).toBe("Google's-Tensorflow");
+        });
 });
