@@ -97,18 +97,19 @@ String.prototype.toTitleCase = function (options = {}) {
 };
 
 
-// export function titleCaseInit() {
-//     const nodes = document.querySelectorAll('.titlecase-js');
-//     if (nodes.length > 0) {
-//         nodes.forEach(node => {
-//             const text = node.innerHTML;
-//             const textBreak = text.replace(/<br\s*[\/]?>/gi, " nl2br");
-//             const textBreakTrimmed = textBreak.trim();
-//             const textBreakStringed = textBreakTrimmed.toString();
-//             const textCase = textBreakStringed.toTitleCase({ style: 'ap', neverCapitalize: ['nl2br'] });
-//             const textCaseBreak = textCase.replace(/nl2br/gi, "<br />");
-//             node.innerHTML = textCaseBreak;
-//         });
-//     }
-// }
-
+export function titleCase(nodes = null) {
+    if (nodes === null) {
+        nodes = document.querySelectorAll('.title-case');
+        if (nodes.length > 0) {
+            nodes.forEach(node => {
+                const text = node.innerHTML;
+                const textBreak = text.replace(/<br\s*[\/]?>/gi, " nl2br");
+                const textBreakTrimmed = textBreak.trim();
+                const textBreakStringed = textBreakTrimmed.toString();
+                const textCase = textBreakStringed.toTitleCase({ style: 'ap', neverCapitalize: ['nl2br'] });
+                const textCaseBreak = textCase.replace(/nl2br/gi, "<br />");
+                node.innerHTML = textCaseBreak;
+            });
+        }
+    }
+}
