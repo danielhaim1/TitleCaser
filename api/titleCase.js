@@ -22,7 +22,6 @@ import {
     getTitleCaseOptions
 } from "./utils.js";
 
-
 String.prototype.toTitleCase = function (options = {}) {
     try {
         if (typeof this !== 'string') throw new TypeError("Invalid input: input must be a string.");
@@ -41,6 +40,11 @@ String.prototype.toTitleCase = function (options = {}) {
 
         const replaceTermsArray = replaceCasing.map(term => Object.keys(term)[0].toLowerCase());
         const replaceTermsObj = Object.fromEntries(replaceCasing.map(term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]));
+
+        // ! TODO trim white space
+        // if has <br /> tags, convert them to ` nl2br`
+        // add `nl2br` to the ignoreList.
+
         const words = this.split(" ");
 
         const wordsInTitleCase = words.map((word, i) => {
@@ -91,3 +95,20 @@ String.prototype.toTitleCase = function (options = {}) {
         throw new Error(error);
     }
 };
+
+
+// export function titleCaseInit() {
+//     const nodes = document.querySelectorAll('.titlecase-js');
+//     if (nodes.length > 0) {
+//         nodes.forEach(node => {
+//             const text = node.innerHTML;
+//             const textBreak = text.replace(/<br\s*[\/]?>/gi, " nl2br");
+//             const textBreakTrimmed = textBreak.trim();
+//             const textBreakStringed = textBreakTrimmed.toString();
+//             const textCase = textBreakStringed.toTitleCase({ style: 'ap', neverCapitalize: ['nl2br'] });
+//             const textCaseBreak = textCase.replace(/nl2br/gi, "<br />");
+//             node.innerHTML = textCaseBreak;
+//         });
+//     }
+// }
+
