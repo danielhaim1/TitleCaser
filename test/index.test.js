@@ -163,11 +163,27 @@ describe('String.prototype.toTitleCase', () => {
         })).toBe("Google-TensorFlow");
     });
 
-        // Test incorrect uppercase in reserved hyphenated
-        test("GOOGle's-Tensorflow -> Google's-TensorFlow", () => {
-            const myString = "GOOGle's-Tensorflow";
-            expect(myString.toTitleCase({
-                style: "chicago"
-            })).toBe("Google's-TensorFlow");
-        });
+    // Test incorrect uppercase in reserved hyphenated
+    test("GOOGle's-Tensorflow -> Google's-TensorFlow", () => {
+        const myString = "GOOGle's-Tensorflow";
+        expect(myString.toTitleCase({
+            style: "chicago"
+        })).toBe("Google's-TensorFlow");
+    });
+
+
+    test("test <br /> to nl2br with right spacing proprtions", () => {
+        const myString = "the future of devops: <br />how to prepare for the next era of software development";
+        expect(myString.toTitleCase({
+            style: "wikipedia"
+        })).toBe("The Future of DevOps: <br />How to Prepare for the Next Era of Software Development");
+    });
+
+    test("test untrimmed space", () => {
+        const myString = `      This    string   has   too   many  spaces  `;
+        expect(myString.toTitleCase({
+            style: "wikipedia"
+        })).toBe("This String Has Too Many Spaces");
+    });
+
 });

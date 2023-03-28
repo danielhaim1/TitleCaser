@@ -8,6 +8,7 @@ import {
 import {
     isWordInArray,
     isWordIgnored,
+    isWordBreak,
     hasIntentionalUppercase,
     hasHyphen,
     hasSuffix,
@@ -29,7 +30,10 @@ String.prototype.toTitleCase = function (options = {}) {
 
         const {
             style = "ap",
+            neverCapitalize = []
         } = options;
+
+        const ignoreList = ["nl2br", ...neverCapitalize];
         const {
             articles,
             shortConjunctions,
@@ -41,15 +45,16 @@ String.prototype.toTitleCase = function (options = {}) {
         const replaceTermsArray = replaceCasing.map(term => Object.keys(term)[0].toLowerCase());
         const replaceTermsObj = Object.fromEntries(replaceCasing.map(term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]));
 
-        // ! TODO trim white space
-        // if has <br /> tags, convert them to ` nl2br`
-        // add `nl2br` to the ignoreList.
+        let inputString = this.trim();
+        inputString = inputString.replace(/ {2,}/g, (match) => match.slice(0, 1));
+        inputString = inputString.replace(/<br\s*[\/]?>/gi, "nl2br ");
 
-        const words = this.split(" ");
-
+        const words = inputString.split(" ");
         const wordsInTitleCase = words.map((word, i) => {
             switch (true) {
-                case isWordIgnored(word):
+                case isWordBreak(word):
+                    return word;
+                case isWordIgnored(word, ignoreList):
                     return word;
                 case replaceTermsArray.includes(word.toLowerCase()):
                     return replaceTermsObj[word.toLowerCase()];
@@ -77,11 +82,11 @@ String.prototype.toTitleCase = function (options = {}) {
                 case hasNumbersInWord(word):
                     return word;
                 default:
-                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-            }
-        });
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }
+    });
 
-        let inputString = wordsInTitleCase.join(" ");
+        inputString = wordsInTitleCase.join(" ");
 
         for (const phrase of CORRECT_PHRASE_CASE) {
             if (inputString.toLowerCase().includes(phrase.toLowerCase())) {
@@ -89,27 +94,37 @@ String.prototype.toTitleCase = function (options = {}) {
             }
         }
 
+        inputString = inputString.replace(/nl2br /gi, "<br />");
         return inputString;
-
     } catch (error) {
         throw new Error(error);
     }
 };
 
-
 export function titleCase(nodes = null) {
-    if (nodes === null) {
-        nodes = document.querySelectorAll('.title-case');
-        if (nodes.length > 0) {
-            nodes.forEach(node => {
-                const text = node.innerHTML;
-                const textBreak = text.replace(/<br\s*[\/]?>/gi, " nl2br");
-                const textBreakTrimmed = textBreak.trim();
-                const textBreakStringed = textBreakTrimmed.toString();
-                const textCase = textBreakStringed.toTitleCase({ style: 'ap', neverCapitalize: ['nl2br'] });
-                const textCaseBreak = textCase.replace(/nl2br/gi, "<br />");
-                node.innerHTML = textCaseBreak;
-            });
+    try {
+        if (nodes === null) {
+            nodes = document.querySelectorAll('.title-case');
         }
+
+        if (!Array.isArray(nodes)) {
+            nodes = [nodes];
+        }
+
+        for (const node of nodes) {
+            if (node instanceof HTMLElement) {
+                const text = node.innerHTML;
+                const textCase = text.toTitleCase({ style: 'ap', neverCapitalize: ['nl2br'] });
+                node.innerHTML = textCase;
+            } else {
+                throw new Error("Invalid argument: nodes must be an array of DOM elements.");
+            }
+        }
+    } catch (error) {
+        throw new Error(error);
     }
 }
+
+
+
+                   

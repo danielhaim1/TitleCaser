@@ -219,6 +219,14 @@ export function isWordIgnored(word, ignoredWords = IGNORED_WORDS) {
     return ignoredWords.includes(lowercasedWord);
 }
 
+export function isWordBreak(word) {
+    if (word === "nl2br") {
+        return true;
+    }
+
+    return false;
+}
+
 export function isWordInArray(targetWord, wordList) {
     if (!Array.isArray(wordList)) {
       return false;
@@ -253,7 +261,6 @@ export function isWordInArray(targetWord, wordList) {
   
     return lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
   }
-  
 
 export function hasSuffix(word) {
     const suffix = "'s";
