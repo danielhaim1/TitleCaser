@@ -61,67 +61,61 @@ console.log(output);
 ### API Examples:
 
 ```javascript
-const options = {
-    style: "ap",
-    articles: ["the", "an", "a"],
-    shortConjunctions: ["and", "but", "or", "for", "nor", "yet", "so"],
-    shortPrepositions: ["in", "on", "at", "by", "to", "up", "as", "of", "off"],
-    neverCapitalized: ["and", "or", "but", "nor", "a", "an", "the", "as", "at", "by", "for", "in", "of", "on", "to", "up", "yet", "so"],
-};
-
-const input = "JQUery plugins for frontend developers: a comprehensive guide";
-const output = input.toTitleCase(options);
-// jQuery Plugins for Frontend Developers: A Comprehensive Guide
-```
-
-```javascript
-const correctCasing = ["Google", "VMware"];
-const input = "goOgle and VMWARE ";
-input.toTitleCase({
-    style: "ap",
-    replaceCasing: correctCasing
+test('should convert string to title case with custom options', () => {
+  const options = { style: 'chicago' };
+  const titleCaser = new TitleCaser(options);
+  const input = 'the book   of     life';
+  const expectedOutput = 'The Book of Life';
+  const actualOutput = titleCaser.toTitleCase(input);
+  expect(actualOutput).toEqual(expectedOutput);
 });
-// "Google and VMware"
-```
 
-```javascript
-const input = "the business of ransomware: a study of raas marketplaces and their impact on cybersecurity";
-input.toTitleCase(); 
-// "The Business of Ransomware: A Study of RaaS Marketplaces and Their Impact on Cybersecurity"
-```
-
-```javascript
-const input = "to be or not to be";
-const output = input.toTitleCase();
-// "To Be or Not to Be"
-```
-
-```javascript
-const input = "the name of the musical is The Musical";
-input.toTitleCase({
-    neverCapitalized: ["The Musical"]
+test('should convert string to title case with AP style formatting, including hyphenated words, word and brand replacement', () => {
+  const titleCaser = new TitleCaser({ style: 'ap' });
+  const input = 'nodejs development on aws: an in-depth tutorial on server-side javascript deployment';
+  const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment';
+  const actualOutput = titleCaser.toTitleCase(input);
+  expect(actualOutput).toEqual(expectedOutput);
 });
-// "The Name of the Musical Is The Musical"
-```
 
-```javascript
-const input = "a comprehensive guide to a/b testing with github actions: best practices for optimizing your website!";
-input.toTitleCase({
-    style: "chicago"
+test("Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement", () => {
+    const options = { style: "chicago" };
+    const titleCaser = new TitleCaser(options);
+    const input = "nodejs development on aws: an in-depth tutorial on server-side javascript deployment";
+    const expectedOutput = "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment";
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput).toEqual(expectedOutput);
 });
-// "A Comprehensive Guide to A/B Testing with GitHub Actions: Best Practices for Optimizing Your Website!"
-```
 
-```javascript
-const input = "JQuEry Plugins for Front-End Developers: A Comprehensive Guide";
-input.toTitleCase({
-    style: 'apa'
+test("Convert string to title case with AP style formatting, including custom term replacement for Google and VMware", () => {
+    const options = { style: "ap", replaceTerms = {} };
+    const titleCaser = new TitleCaser(options);
+    const input = "GOOgle and VMWARE";
+    const expectedOutput = "Google and VMware";
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput).toEqual(expectedOutput);
 });
-// jQuery Plugins for Frontend Developers: A Comprehensive Guide
+
+test("Convert string to title case with AP style formatting, including a possessive noun and a colon", () => {
+    const options = { style: "ap" };
+    const titleCaser = new TitleCaser(options);
+    const input = "the iphone's impact on modern communication: a sociolinguistic analysis";
+    const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
+    const actualOutput = titleCaser.toTitleCase(input);
+});
+
+
+test("Convert string to title case with AP style formatting, including lowercase back-end and front-end terms", () => {
+    const options = { style: "ap" };
+    const titleCaser = new TitleCaser(options);
+    const input = "BACK-end and front-end";
+    const expectedOutput = "Backend and Frontend";
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput).toEqual(expectedOutput);
+});
 ```
 
 ## Tests
-
 ```bash
 $ npm run test
 ```

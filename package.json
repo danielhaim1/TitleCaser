@@ -1,6 +1,6 @@
 {
     "name": "titlecase-js",
-    "version": "1.2.6",
+    "version": "1.2.7",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
         "titlecase",
@@ -39,9 +39,7 @@
         "terser-webpack-plugin": "^5.3.7",
         "webpack": "^5.76.3",
         "webpack-cli": "^5.0.1",
-        "webpack-node-externals": "^3.0.0"
-    },
-    "dependencies": {
+        "webpack-node-externals": "^3.0.0",
         "puppeteer-core": "^19.8.0"
     }
 }
