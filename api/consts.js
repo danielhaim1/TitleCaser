@@ -24,7 +24,7 @@ export const CORRECT_TITLE_CASE = [
     'CAGR', 'DCF', 'ETF', 'IPO', 'IRR', 'M&A', 'NAV', 'PE', 'PEG', 'PPE', 'ROE', 'S&P', 'TVM', 'VC',
 
     // Marketing terms
-    'B2B', 'B2C', 'CMO', 'CPA', 'CPC', 'CPL', 'CPM', 'CRM', 'CTA', 'CTR', 'SEO', 'SEM', 'SMM', 'USP', 'A/B', 'CTA', 'CTOR', 'CTR', 'KPI', 'PWA', 'SEM', 'SERP', 'SERPs', 'SMM', 'SMO', 'FAQ', 'FAQA', 'FAQS', 'UI', 'UI/UX', 'UX', 'T&C', 'TOS', 'PP', 'CRM', 'PoE', 'PoW', 'PoC', 'A11Y', 'SEO', 'AWS', 'GCP',
+    'B2B', 'B2C', 'CMO', 'CPA', 'CPC', 'CPL', 'CPM', 'CRM', 'CTA', 'CTR', 'SEO', 'SEM', 'SMM', 'USP', 'A/B', 'CTA', 'CTOR', 'CTR', 'KPI', 'PWA', 'SEM', 'SERP', 'SERPs', 'SMM', 'SMO', 'FAQ', 'FAQA', 'FAQS', 'UI', 'UI/UX', 'UX', 'T&C', 'TOS', 'PP', 'CRM', 'PoE', 'PoW', 'PoC', 'A11Y', 'PR',
 
     // Sales terms
     'BANT', 'GAP', 'KPI', 'MQL', 'NPS', 'POS', 'SPIN', 'SQL', 'SWOT',
@@ -39,7 +39,7 @@ export const CORRECT_TITLE_CASE = [
     'NGO', 'NPO', 'NGOs', 'NPOs', 'UN', 'UNESCO', 'UNICEF', 'UNHCR', 'UNODC', 'UNDP', 'UNFPA', 'UNEP',
 
     // Brands:
-    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola',
+    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola', 'AWS', 'GCP', 
 
     // Sports
     'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
