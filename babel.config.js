@@ -8,7 +8,7 @@ module.exports = {
         }]
     ],
     ignore: ['node_modules'],
-    include: ['./api/**/*.js'],
+    include: ['./src/*.js'],
     plugins: [
         '@babel/plugin-proposal-object-rest-spread',
         '@babel/plugin-proposal-class-properties'

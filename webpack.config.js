@@ -6,21 +6,14 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
     mode: 'production',
     target: 'node',
-    entry: './index.js',
+    entry: './src/index.js',
 
     output: {
         filename: 'titlecase.js',
         path: path.resolve(__dirname, 'dist'),
     },
-    resolve: {
-        alias: {
-            'consts': path.resolve(__dirname, 'api/consts.js'),
-            'utils': path.resolve(__dirname, 'api/utils.js'),
-            'titleCase': path.resolve(__dirname, 'api/titleCase.js'),
-        }
-    },
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
