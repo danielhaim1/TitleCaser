@@ -8,7 +8,7 @@ export const CORRECT_TITLE_CASE = [
     'AJAX', 'CSS', 'DOM', 'ES6', 'HTML', 'JavaScript', 'jQuery', 'MobX', 'SCSS', 'TypeScript', 'Vue.js', '.NET', 'ASP', 'ASPX', 'MySQL', 'PHP', 'PostgreSQL', 'Python', 'SQL', 'GraphQL', 'HTML5',
 
     //  Acronyms/Abbreviations:
-    'API', 'APIs', 'ASCII', 'AWS', 'CI', 'CircleCI', 'CLI', 'DLL', 'DNS', 'EC2', 'FTP', 'HTTP', 'HTTPs', 'ICMP', 'IDE', 'IP', 'ISP', 'JSON', 'JSP', 'LPWAN', 'M2M', 'MQTT', 'OOP', 'REST', 'SSH', 'SSL', 'TCP', 'UDP', 'URL', 'WLAN', 'WYSIWYG', 'XML', 'YAML', 'YML', 'IMAP', 'RSS', 'IaaS', 'PaaS', 'SaaS', 'CaaS', 'FaaS', 'XaaS', 'RaaS',
+    'API', 'APIs', 'ASCII', 'CI', 'CircleCI', 'CLI', 'DLL', 'DNS', 'EC2', 'FTP', 'HTTP', 'HTTPs', 'ICMP', 'IDE', 'IP', 'ISP', 'JSON', 'JSP', 'LPWAN', 'M2M', 'MQTT', 'OOP', 'REST', 'SSH', 'SSL', 'TCP', 'UDP', 'URL', 'WLAN', 'WYSIWYG', 'XML', 'YAML', 'YML', 'IMAP', 'RSS', 'IaaS', 'PaaS', 'SaaS', 'CaaS', 'FaaS', 'XaaS', 'RaaS',
     'IoE', 'IoT', 'LoRa', 'NB-IoT', 'RFID', 'RF', 'RFI', 'RFQ', 'ECMAScript', 'IO', 'I/O', 'DevOps', 'SecOps', 'DDoS', 'VoIP',
 
     // Misc.
@@ -39,7 +39,7 @@ export const CORRECT_TITLE_CASE = [
     'NGO', 'NPO', 'NGOs', 'NPOs', 'UN', 'UNESCO', 'UNICEF', 'UNHCR', 'UNODC', 'UNDP', 'UNFPA', 'UNEP',
 
     // Brands:
-    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola', 'AWS', 'GCP', 
+    'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter', 'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix', 'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod', 'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce', 'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac', 'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch', 'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber', 'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola', 'AWS', 'GCP', 'VMware',
 
     // Sports
     'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
@@ -133,7 +133,6 @@ export const TITLE_CASE_DEFAULT_OPTIONS = Object.freeze({
         neverCapitalized: []
     },
 });
-
 
 export const IGNORED_WORDS = [];
 export const ignorePhrases = [];
