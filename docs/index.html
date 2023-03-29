@@ -1,0 +1,41 @@
+---
+layout: default
+title: TitleCase in JavaScript (Demo)
+---
+
+<div class="demo-container" onload="initTitleCase()">
+    <form>
+        <div class="from-group-right">
+            <div class="form-group">
+                <select class="form-control" id="styleSelect">
+                    <option value="chicago">Chicago</option>
+                    <option value="ap">AP</option>
+                    <option value="apa">APA</option>
+                    <option value="nyt">NYT</option>
+                    <option value="wikipedia">Wikipedia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" id="titleShuffleBtn" class="btn btn-secondary"><span>Randomize</span></button>
+            </div>
+            <div class="form-group-btn">
+                <button type="button" id="titleConvertBtn" class="btn btn-primary"><span>Convert Text</span></button>
+            </div>
+        </div>
+
+        <div class="form-group" style="position: relative;">
+            <label for="textField">Enter Text:</label>
+            <div id="timer"></div>
+            <textarea id="textField" class="form-control" placeholder="Type or paste your text here"></textarea>
+        </div>
+        <div class="form-group" style="display: none;">
+            <label for="neverCapitalized">Words to never capitalize (comma-separated):</label>
+            <input type="text" id="neverCapitalized" class="form-control" value="">
+        </div>
+    </form>
+    <div id="output">
+        <p id="before"></p>
+        <p class="text-muted">Title-cased text:</p>
+        <p id="after"></p>
+    </div>
+</div>

@@ -29,6 +29,16 @@ test('should convert string to title case with AP style formatting, including hy
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
+test('should capitalize suffix word in a sentence', () => {
+    const titleCaser = new TitleCaser({
+        style: 'ap'
+    });
+    const input = "what's to say about this?";
+    const expectedOutput = "What's to Say About This?";
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput)
+        .toEqual(expectedOutput);
+});
 test("Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement", () => {
     const options = {
         style: "chicago"

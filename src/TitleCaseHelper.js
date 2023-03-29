@@ -284,12 +284,17 @@ export default class TitleCaseHelper {
             const matchingIndex = correctTerms.findIndex(
                 (term) => term.toLowerCase() === wordWithoutSuffix.toLowerCase()
             );
+
             if (matchingIndex >= 0) {
                 const correctCase = correctTerms[matchingIndex];
                 return correctCase + suffix;
+            } else {
+                const firstLetter = wordWithoutSuffix.charAt(0);
+                const capitalizedWord = firstLetter.toUpperCase() + wordWithoutSuffix.slice(1);
+                return capitalizedWord + suffix;
             }
         }
-        
+
         return word;
     }
     

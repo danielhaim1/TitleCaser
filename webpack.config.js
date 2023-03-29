@@ -7,13 +7,14 @@ module.exports = {
     mode: 'production',
     target: 'node',
     entry: './src/index.js',
+  // devtool: 'source-map',
 
     output: {
         filename: 'titlecase.js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
