@@ -13,27 +13,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
-        ruby-version: 2.7.x
+        node-version: '16'
 
-    - name: Install dependencies
+    - name: Install dependencies and build docs
       run: |
-        gem install bundler
+        npm install
+        npm run build-docs
+
+    - name: Builds the site
+      run: |
         cd docs
-        bundle install --path vendor/bundle
-        cd ..
+        gem install --user-install bundler
+        export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
+        bundle install --gemfile=docs/Gemfile --path vendor/bundle
 
     - name: Build the site
-      run: |
-        cd docs
-        npm run build-docs
-        bundle exec jekyll build
-        cd ..
+      run: bundle exec jekyll build --destination _site
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/_site
+        publish_dir: ./_site
