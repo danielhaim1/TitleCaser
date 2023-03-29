@@ -25,10 +25,13 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.1'
+    - name: Install Bundler
+      run: |
+        sudo gem install bundler
     - name: Install Jekyll dependencies
       run: |
         cd docs
-        gem install bundler
+        bundle config set path 'vendor/bundle'
         bundle install
     - name: Build Jekyll site
       run: |
