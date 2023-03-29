@@ -1,5 +1,5 @@
-const TitleCaser = require('./TitleCaser')
-    .default;
+const TitleCaser = require('./TitleCaser').default;
+
 test('should convert string to title case with default options', () => {
     const titleCaser = new TitleCaser();
     const input = 'hello world';

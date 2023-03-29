@@ -5,7 +5,9 @@ import {
     CORRECT_PHRASE_CASE,
 }
 from "./TitleCaseConsts.js";
+
 import TitleCaseHelper from "./TitleCaseHelper.js";
+
 class TitleCaser {
     constructor(options = {}) {
         this.options = options;
@@ -93,4 +95,5 @@ class TitleCaser {
         }
     }
 }
+
 export default TitleCaser;

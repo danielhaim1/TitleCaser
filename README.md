@@ -112,7 +112,12 @@ test("Convert string to title case with AP style formatting, including lowercase
 });
 ```
 
-## Tests
+## CLI
+
+```bash
+$ npm run build-package
+```
+
 ```bash
 $ npm run test
 ```

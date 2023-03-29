@@ -219,34 +219,6 @@ export default class TitleCaseHelper {
         return wordList.some((word) => word.toLowerCase() === targetWord.toLowerCase());
     }
     
-    static getCorrectTitleCasing(word, includeApostrophe = false) {
-        if (!word) {
-            throw new Error('Word is empty.');
-        }
-        
-        const lowerCaseWord = word.toLowerCase();
-        const uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === lowerCaseWord);
-        
-        if (uniqueTermsIndex >= 0) {
-            const correctCase = CORRECT_TITLE_CASE[uniqueTermsIndex];
-            if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-                return `${correctCase}'s`;
-            }
-            else {
-                return correctCase;
-            }
-        }
-        
-        if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-            const baseWord = lowerCaseWord.slice(0, -2);
-            const titleCaseBase = getCorrectTitleCasing(baseWord, true);
-            return `${titleCaseBase}'s`;
-        }
-        
-        return lowerCaseWord.charAt(0)
-            .toUpperCase() + lowerCaseWord.slice(1);
-    }
-    
     static replaceTerm(word, replaceTermsObj) {
         if (typeof word !== "string" || word === "") {
             throw new TypeError("Invalid input: word must be a non-empty string.");
@@ -332,7 +304,7 @@ export default class TitleCaseHelper {
             ap: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
             chicago: capitalizeFirst,
             apa: (word, index, length) => {
-                if (isShortWord(word, style) && index > 0 && index < length - 1) {
+                if (TitleCaseHelper.isShortWord(word, style) && index > 0 && index < length - 1) {
                     return word.toLowerCase();
                 }
                 else {
