@@ -1,7 +1,7 @@
 ## TitleCase-JS
 ### Converts a string to title case
 
-[![npm version](https://badge.fury.io/js/titlecase-js.svg?t=1623709119)](https://badge.fury.io/js/titlecase-js)
+[![npm version](https://badge.fury.io/js/titlecase-js.svg?t=1623701119)](https://badge.fury.io/js/titlecase-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
