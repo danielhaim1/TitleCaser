@@ -1,12 +1,9 @@
 title: TitleCase Demo
 description: Converts a string to title case
 
-source: .
+source: docs
 destination: _site
-plugins_dir: _plugins
 layouts_dir: _layouts
-data_dir: _data
-includes_dir: _includes
 
 sass:
   sass_dir: _sass
@@ -14,9 +11,6 @@ sass:
 
 safe: false
 
-keep_files: ["images"]
-
-# include: [".htaccess"]
 exclude:
   - .sass-cache/
   - .jekyll-cache/
@@ -28,19 +22,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-
-# Gems
-gems:
-  - jekyll-inline-svg
-
-svg:
-  optimize: true
-
-picture:
-  output: "assets/img/srcset"
-  
-# Plugins
-whitelist: []
 
 # Filtering Content
 show_drafts: null
