@@ -65,6 +65,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll
+  unicode-display_width
   webrick (~> 1.7)
 
 BUNDLED WITH
