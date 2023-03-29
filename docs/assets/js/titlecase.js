@@ -370,40 +370,6 @@ var TitleCaseHelper = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "getCorrectTitleCasing",
-    value: function (_getCorrectTitleCasing) {
-      function getCorrectTitleCasing(_x) {
-        return _getCorrectTitleCasing.apply(this, arguments);
-      }
-      getCorrectTitleCasing.toString = function () {
-        return _getCorrectTitleCasing.toString();
-      };
-      return getCorrectTitleCasing;
-    }(function (word) {
-      var includeApostrophe = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (!word) {
-        throw new Error('Word is empty.');
-      }
-      var lowerCaseWord = word.toLowerCase();
-      var uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex(function (w) {
-        return w.toLowerCase() === lowerCaseWord;
-      });
-      if (uniqueTermsIndex >= 0) {
-        var correctCase = CORRECT_TITLE_CASE[uniqueTermsIndex];
-        if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-          return "".concat(correctCase, "'s");
-        } else {
-          return correctCase;
-        }
-      }
-      if (includeApostrophe && lowerCaseWord.endsWith("'s")) {
-        var baseWord = lowerCaseWord.slice(0, -2);
-        var titleCaseBase = getCorrectTitleCasing(baseWord, true);
-        return "".concat(titleCaseBase, "'s");
-      }
-      return lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
-    })
-  }, {
     key: "replaceTerm",
     value: function replaceTerm(word, replaceTermsObj) {
       if (typeof word !== "string" || word === "") {
@@ -486,7 +452,7 @@ var TitleCaseHelper = /*#__PURE__*/function () {
         },
         chicago: capitalizeFirst,
         apa: function apa(word, index, length) {
-          if (isShortWord(word, style) && index > 0 && index < length - 1) {
+          if (TitleCaseHelper.isShortWord(word, style) && index > 0 && index < length - 1) {
             return word.toLowerCase();
           } else {
             return capitalizeFirst(word);
