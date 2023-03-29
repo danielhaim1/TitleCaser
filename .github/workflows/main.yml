@@ -31,7 +31,9 @@ jobs:
         bundle install --path vendor/bundle
 
     - name: Build the site
-      run: bundle exec jekyll build --destination _site
+      run: |
+        export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
+        bundle exec jekyll build --destination _site
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
