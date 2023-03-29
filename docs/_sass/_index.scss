@@ -10,6 +10,20 @@ html {
     margin: 0 auto;
 }
 
+@media (min-width: 1024px) {
+    html {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 600px;
+    }
+    body { 
+        width: 100%;
+        max-width: 768px;
+    }
+}
+
 body {
     font-family: "Noto Sans", sans-serif;
 }
@@ -196,6 +210,7 @@ form {
     color: #fff;
     transition-property: outline, outline-offset, background-color, color, border-color;
     transition-duration: 250ms;
+    user-select: none;
 }
 
 .btn:hover {
