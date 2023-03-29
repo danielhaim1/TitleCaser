@@ -33,6 +33,7 @@ jobs:
 
     - name: Build the site
       run: |
+        cd docs
         export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
         bundle exec jekyll build --destination _site
 
