@@ -31,16 +31,15 @@ jobs:
         export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
         rm -f Gemfile.lock
         bundle install --path vendor/bundle
-        bundle config set --local path 'vendor/bundle
 
     - name: Build the site
       run: |
         cd docs
         export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
         bundle exec jekyll build --destination _site
-    
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.ACCESS_TOKEN }}
-        publish_dir: ./docs/_site
+        publish_dir: ./_site
