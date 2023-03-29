@@ -1,6 +1,6 @@
 {
     "name": "titlecase-js",
-    "version": "1.2.7",
+    "version": "1.2.8",
     "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
     "keywords": [
         "titlecase",
@@ -15,7 +15,9 @@
     "main": "dist/titlecase.js",
     "scripts": {
         "test": "jest",
-        "build": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js"
+        "build": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js",
+        "build-docs": "npm run build && cp -R dist/ docs/assets/js",
+        "tree": "tree -I 'node_modules'"
     },
     "author": {
         "name": "Daniel Haim",
@@ -36,10 +38,10 @@
         "jest-environment-jsdom": "^29.5.0",
         "jest-environment-puppeteer": "^8.0.5",
         "jest-puppeteer": "^8.0.5",
+        "puppeteer-core": "^19.8.0",
         "terser-webpack-plugin": "^5.3.7",
         "webpack": "^5.76.3",
         "webpack-cli": "^5.0.1",
-        "webpack-node-externals": "^3.0.0",
-        "puppeteer-core": "^19.8.0"
+        "webpack-node-externals": "^3.0.0"
     }
 }

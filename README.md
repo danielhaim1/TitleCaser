@@ -6,29 +6,26 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-This module provides extensive support for adhering to popular English language conventions and style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also offers a customizable style option.
+This module helps writers follow English language conventions and style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also allows users to customize their own style. Users can change article words, conjunctions, prepositions, and words that should not be capitalized. The module also knows which words and phrases should not be capitalized in titles.
 
-Users can customize article words, conjunctions, prepositions, and words that should not be capitalized, and the module excludes specific words and phrases that should not be capitalized in titles.
+The module can handle capitalization in different scenarios, including hyphenated words, suffixes, prefixes, reserved words, and Roman numerals. It also has a list of specific arrays that should always be in title case and common terms that require capitalization. The module corrects common terms to their proper case.
 
-Moreover, the module correctly handles various aspects of capitalization, including hyphenated words, suffixes, prefixes, reserved words, and Roman numerals.
-
-Additionally, the module includes a list of unique arrays that should always be title cased in titles, and a set of common terms that require capitalization. It also corrects common terms to their proper case, and provides a CLI for easy building, testing, and minification of the module.
+There is a command-line interface (CLI) for building, testing, and minimizing the module.
 
 See the module in action in the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw).
 
 ## Key Features:
 
-The modules provides the following features for users writing in the English language:
+This module provides the following features for English writers:
 
-- It conforms to widely recognized style guides, including AP, APA, Chicago, NY Times, Wikipedia, and British, while also allowing for customization of style.
-- It provides customization options for article words, conjunctions, prepositions, and words that should not be capitalized.
-- The module accurately handles suffixes, prefixes, hyphenated words, and reserved words.
-- It excludes specific words and phrases that should not be capitalized in titles, and also handles the capitalization of hyphenated words and Roman numerals.
-- It includes a list of unique words that must always be capitalized in titles, as well as a set of common terms that require capitalization.
-- The module corrects common terms to their proper case.
-- A command-line interface is available for easy building, testing, and minification of the module.
-- Pre-defined word lists for articles, conjunctions, prepositions, and words that should not be capitalized in titles are provided.
-- The module maintains a list of common phrases that should not be capitalized in titles.
+- It follows popular style guides (AP, APA, Chicago, NY Times, Wikipedia, British) and allows for customization.
+- You can customize article words, conjunctions, prepositions, and uncapitalized words.
+- The module handles suffixes, prefixes, hyphenated words, and reserved words.
+- Specific words and phrases that should not be capitalized in titles are excluded, along with the capitalization of hyphenated words and Roman numerals.
+- It has a list of unique words and common terms that require capitalization and corrects common terms to their proper case.
+- A command-line interface is available for building, testing, and minimizing the module.
+- Pre-defined word lists for articles, conjunctions, prepositions, and uncapitalized words in titles are provided.
+- Common phrases that should not be capitalized in titles are maintained.
 
 ## Installation
 
