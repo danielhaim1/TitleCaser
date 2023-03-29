@@ -1,0 +1,36 @@
+name: Jekyll Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+
+    - name: Install dependencies
+      run: |
+        npm install
+        npm run build-docs
+        gem install bundler
+        bundle install --path vendor/bundle
+
+    - name: Build the site
+      working-directory: docs
+      run: bundle exec jekyll build --destination ../_site
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
