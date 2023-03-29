@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: '16'
       - name: Install dependencies and build docs
-          run: |
+        run: |
             rm -f package-lock.json
             npm install
             npm run build-docs
