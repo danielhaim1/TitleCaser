@@ -12,17 +12,27 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Node.js
+    - name: Install Node.js and dependencies
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '14.x'
+    - run: npm install
 
-    - name: Install dependencies and build project
+    - name: Build and bundle JavaScript code
+      run: npm run build-docs
+
+    - name: Install Ruby and Jekyll
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.1'
+    - name: Install Jekyll dependencies
       run: |
-        npm install
-        npm run build-docs
         cd docs
+        gem install bundler
         bundle install
+    - name: Build Jekyll site
+      run: |
+        cd docs
         bundle exec jekyll build
 
     - name: Deploy to GitHub Pages
