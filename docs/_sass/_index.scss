@@ -123,7 +123,7 @@ form {
 }
 
 .form-group textarea:focus{
-    outline: .25em solid rgb(96 125 139 / 18%);
+    outline: .25em solid rgba(96, 125, 139, .1);
 }
 
 .form-group select {
