@@ -22,7 +22,7 @@ jobs:
       run: |
         npm install
         npm run build-docs
-        gem install bundler
+        gem install --user-install bundler
         bundle install --path vendor/bundle
 
     - name: Build the site
