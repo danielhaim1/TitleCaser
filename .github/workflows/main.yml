@@ -28,7 +28,7 @@ jobs:
         cd docs
         gem install --user-install bundler
         export PATH="$PATH:/home/runner/.local/share/gem/ruby/3.0.0/bin"
-        bundle install --gemfile=docs/Gemfile --path vendor/bundle
+        bundle install --path vendor/bundle
 
     - name: Build the site
       run: bundle exec jekyll build --destination _site
