@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ page.title }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ page.description }}">
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container">
-        <a href="/" class="logo">TitleCase</a>
-        <nav class="site-nav">
-          <ul>
-            <li><a target="_blank" href="https://github.com/danielhaim1/titlecase-js">Documentation</a></li>
-            <li><a target="_blank" href="https://www.npmjs.com/package/titlecase-js">npm</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <main>
-      {{ content }}
-    </main>
-    <script src="{{ site.baseurl }}/assets/js/titlecase.min.js"></script>
-    <script src="{{ site.baseurl }}/assets/js/app.js"></script>
-  </body>
+
+<head>
+  <title>{{ page.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ page.description }}">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">TitleCase</a>
+      <nav class="site-nav">
+        <ul>
+          <li><a target="_blank" href="https://github.com/danielhaim1/titlecase-js">Documentation</a></li>
+          <li><a target="_blank" href="https://www.npmjs.com/package/titlecase-js">npm</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    {{ content }}
+  </main>
+  <script src="assets/js/titlecase.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
 </html>

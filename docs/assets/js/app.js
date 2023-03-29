@@ -1,158 +1,117 @@
 function highlight(beforeText, afterText) {
-  const beforeWords = beforeText.trim().split(/\s+/);
-  const afterWords = afterText.trim().split(/\s+/);
-  let text = "";
+    const beforeWords = beforeText.trim().split(/\s+/);
+    const afterWords = afterText.trim().split(/\s+/);
+    let text = "";
 
-  const length = Math.min(beforeWords.length, afterWords.length);
-  for (let i = 0; i < length; i++) {
-    if (afterWords[i] !== beforeWords[i]) {
-      text += `<span class="highlight">${afterWords[i]}</span> `;
-    } else {
-      text += afterWords[i] + " ";
+    const length = Math.min(beforeWords.length, afterWords.length);
+    for(let i = 0; i < length; i++) {
+        if(afterWords[i] !== beforeWords[i]) {
+            text += `<span class="highlight">${afterWords[i]}</span> `;
+        } else {
+            text += afterWords[i] + " ";
+        }
     }
-  }
 
-  if (afterWords.length > beforeWords.length) {
-    text += afterWords.slice(beforeWords.length).join(" ");
-  }
+    if(afterWords.length > beforeWords.length) {
+        text += afterWords.slice(beforeWords.length).join(" ");
+    }
 
-  return text.trim();
+    return text.trim();
 }
 
 function convertToTitleCase(inputString) {
     const styleSelect = document.getElementById("styleSelect");
     const styleValue = styleSelect.value;
 
-    const options = { style: styleValue };
+    const options = {
+        style: styleValue
+    };
     const titleCasedString = inputString.toTitleCase(options);
 
     return titleCasedString;
 }
 
 function processInput(inputString, styleSelect, beforeEl, afterEl) {
-    const options = { style: styleSelect.value };
+    const options = {
+        style: styleSelect.value
+    };
     const titleCasedString = convertToTitleCase(inputString, options);
-  beforeEl.textContent = inputString;
-  afterEl.textContent = titleCasedString;
-  const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
-  afterEl.innerHTML = highlightedText;
+    beforeEl.textContent = inputString;
+    afterEl.textContent = titleCasedString;
+    const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
+    afterEl.innerHTML = highlightedText;
 }
 
 function handleTitleCase() {
     const textField = document.getElementById("textField");
-    if (textField.value === '') {
+    if(textField.value === '') {
         return
     };
 
-  const styleSelect = document.getElementById("styleSelect");
-  const beforeEl = document.querySelector("#before");
-  const afterEl = document.querySelector("#after");
-  const titleConvertBtn = document.getElementById("titleConvertBtn");
+    const styleSelect = document.getElementById("styleSelect");
+    const beforeEl = document.querySelector("#before");
+    const afterEl = document.querySelector("#after");
+    const titleConvertBtn = document.getElementById("titleConvertBtn");
 
-  titleConvertBtn.addEventListener("click", () => {
-    if (textField.value === '') {
-        titleConvertBtn.classList.add('is-empty');
-        return;
-    }
-    titleConvertBtn.classList.remove('is-empty');
-    const inputString = textField.value;
-    processInput(inputString, styleSelect, beforeEl, afterEl);
-  });
+    titleConvertBtn.addEventListener("click", () => {
+        if(textField.value === '') {
+            titleConvertBtn.classList.add('is-empty');
+            return;
+        }
+        titleConvertBtn.classList.remove('is-empty');
+        const inputString = textField.value;
+        processInput(inputString, styleSelect, beforeEl, afterEl);
+    });
 }
 
 function startTitleCasing() {
-  const textField = document.getElementById("textField");
-  // textField.value
-  if (textField.value === '') return;
+    const textField = document.getElementById("textField");
+    // textField.value
+    if(textField.value === '') return;
 
-  const beforeEl = document.getElementById("before");
-  const afterEl = document.getElementById("after");
-  let intervalId = null;
+    const beforeEl = document.getElementById("before");
+    const afterEl = document.getElementById("after");
+    let intervalId = null;
 
     function debounce(func, delay) {
-      let timerId;
-      return function(...args) {
-        clearTimeout(timerId);
-        timerId = setTimeout(() => func.apply(this, args), delay);
-      };
+        let timerId;
+        return function(...args) {
+            clearTimeout(timerId);
+            timerId = setTimeout(() => func.apply(this, args), delay);
+        };
     }
 
     const debouncedTitleCase = debounce(() => {
-      const inputString = textField.value;
-      afterEl.innerHTML = '';
+        const inputString = textField.value;
+        afterEl.innerHTML = '';
 
-      if (inputString === '') return;
+        if(inputString === '') return;
 
-      const titleCasedString = convertToTitleCase(inputString);
-      beforeEl.textContent = inputString;
-      afterEl.textContent = titleCasedString;
+        const titleCasedString = convertToTitleCase(inputString);
+        beforeEl.textContent = inputString;
+        afterEl.textContent = titleCasedString;
 
-      const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
-      afterEl.innerHTML = highlightedText;
+        const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
+        afterEl.innerHTML = highlightedText;
     }, 1000);
 
     textField.addEventListener('input', debouncedTitleCase);
-
-  // textField.addEventListener("focus", handleFocus);
-
-  // function handleFocus() {
-  //   let timeLeft = 3;
-  //   const timerEl = document.getElementById("timer");
-  //   timerEl.textContent = `Time left: ${timeLeft}s`;
-
-  //   intervalId = setInterval(() => {
-  //     timeLeft--;
-  //     timerEl.textContent = `Time left: ${timeLeft}s`;
-
-  //     if (timeLeft === 0) {
-  //       clearInterval(intervalId);
-
-  //       const inputString = textField.value;
-  //       afterEl.innerHTML = '';
-
-  //       if (inputString === '') return;
-
-  //       const titleCasedString = convertToTitleCase(inputString);
-  //       beforeEl.textContent = inputString;
-  //       afterEl.textContent = titleCasedString;
-
-  //       const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
-  //       afterEl.innerHTML = highlightedText;
-  //     }
-  //   }, 1000);
-
-  //   textField.addEventListener("blur", handleBlur);
-  // }
-
-  // function handleBlur() {
-  //   clearInterval(intervalId);
-  //   textField.removeEventListener("blur", handleBlur);
-  //   textField.removeEventListener("focus", handleFocus);
-  //   textField.addEventListener("focus", handleFocus);
-  // }
-
-  // textField.addEventListener("focus", handleFocus);
 }
-
-
 
 function clearOutputIfEmpty() {
-  const textField = document.getElementById("textField");
-  const afterEl = document.getElementById("after");
-  const titleConvertBtn = document.getElementById("titleConvertBtn");
+    const textField = document.getElementById("textField");
+    const afterEl = document.getElementById("after");
+    const titleConvertBtn = document.getElementById("titleConvertBtn");
 
-  if (document.activeElement === textField && textField.value === '') {
-    titleConvertBtn.classList.add("is-empty");
-    titleConvertBtn.setAttribute('disabled', '');
-    afterEl.innerHTML = '';
-  } else {
-    titleConvertBtn.classList.remove("is-empty");
-    titleConvertBtn.removeAttribute('disabled');
-  }
+    if(document.activeElement === textField && textField.value === '') {
+        titleConvertBtn.classList.add("is-empty");
+        titleConvertBtn.setAttribute('disabled', '');
+        afterEl.innerHTML = '';
+    } else {
+        titleConvertBtn.classList.remove("is-empty");
+        titleConvertBtn.removeAttribute('disabled');
+    }
 }
-
-
-
 
 const titles = [
     "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
@@ -198,8 +157,9 @@ const titles = [
 ];
 
 let currentIndex = 0;
+
 function shuffleTitles() {
-    for (let i = titles.length - 1; i > 0; i--) {
+    for(let i = titles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [titles[i], titles[j]] = [titles[j], titles[i]];
     }
@@ -209,30 +169,27 @@ function shuffleTitles() {
     document.getElementById("titleConvertBtn").click();
 }
 
-
 function initializeTitleCaser() {
-  startTitleCasing();
+    startTitleCasing();
 
-  const titleConvertBtn = document.getElementById("titleConvertBtn");
-  const titleShuffleBtn = document.getElementById("titleShuffleBtn");
+    const titleConvertBtn = document.getElementById("titleConvertBtn");
+    const titleShuffleBtn = document.getElementById("titleShuffleBtn");
 
-  titleConvertBtn.addEventListener("click", handleTitleCase);
+    titleConvertBtn.addEventListener("click", handleTitleCase);
 
-  const titleField = document.getElementById("textField");
-  titleField.addEventListener("input", clearOutputIfEmpty);
+    const titleField = document.getElementById("textField");
+    titleField.addEventListener("input", clearOutputIfEmpty);
 
-  titleShuffleBtn.addEventListener("click", () => {
-    titleConvertBtn.classList.remove("is-empty");
-    titleConvertBtn.removeAttribute('disabled');
+    titleShuffleBtn.addEventListener("click", () => {
+        titleConvertBtn.classList.remove("is-empty");
+        titleConvertBtn.removeAttribute('disabled');
 
-    shuffleTitles();
-    titleField.textContent = titles[0];
-    titleConvertBtn.click();
-  });
+        shuffleTitles();
+        titleField.textContent = titles[0];
+        titleConvertBtn.click();
+    });
 
-  
-  titleShuffleBtn.click();
+    titleShuffleBtn.click();
 }
 
 initializeTitleCaser();
-

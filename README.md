@@ -6,13 +6,15 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
+<img src="dist/img.png" width="100%" height="auto">
+
 This module helps writers follow English language conventions and style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also allows users to customize their own style. Users can change article words, conjunctions, prepositions, and words that should not be capitalized. The module also knows which words and phrases should not be capitalized in titles.
 
 The module can handle capitalization in different scenarios, including hyphenated words, suffixes, prefixes, reserved words, and Roman numerals. It also has a list of specific arrays that should always be in title case and common terms that require capitalization. The module corrects common terms to their proper case.
 
 There is a command-line interface (CLI) for building, testing, and minimizing the module.
 
-See the module in action in the [demo page](https://codepen.io/danielhaim/pen/oNPGzKw).
+See the module in action in the [demo page](https://www.danielhaim.com/tools/titlecaser/).
 
 ## Key Features:
 
