@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-<img src="dist/img.png" width="100%" height="auto">
+<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/img.png" width="100%" height="auto"></a>
 
 This module helps writers follow English language conventions and style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also allows users to customize their own style. Users can change article words, conjunctions, prepositions, and words that should not be capitalized. The module also knows which words and phrases should not be capitalized in titles.
 
