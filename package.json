@@ -12,11 +12,11 @@
     "type": "git",
     "url": "https://github.com/danielhaim1/titlecase-js.git"
   },
-  "main": "dist/titlecase.node.js",
+  "main": "dist/titlecase.js",
   "scripts": {
     "test": "jest",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
-    "build-package": "webpack --mode production && terser dist/titlecase.node.js -o dist/titlecase.node.min.js",
+    "build-package": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js",
     "copy-package-to-docs": "cp -R dist/ docs/assets/js",
     "tree": "tree -I 'node_modules'",
     "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
