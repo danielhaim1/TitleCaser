@@ -1,14 +1,14 @@
 import {
-    COMMON_ABBREVIATIONS,
-    CORRECT_TITLE_CASE,
-    replaceCasing,
-    CORRECT_PHRASE_CASE,
+    commonAbbreviationList,
+    correctTitleCasingList,
+    correctPhraseCasingList,
+    wordReplacementsList,
 }
 from "./TitleCaseConsts.js";
 
 import TitleCaseHelper from "./TitleCaseHelper.js";
 
-class TitleCaser {
+export class TitleCaser {
     constructor(options = {}) {
         this.options = options;
     }
@@ -24,14 +24,14 @@ class TitleCaser {
             } = this.options;
             const ignoreList = ["nl2br", ...neverCapitalize];
             const {
-                articles,
-                shortConjunctions,
-                shortPrepositions,
-                neverCapitalized,
+                articlesList,
+                shortConjunctionsList,
+                shortPrepositionsList,
+                neverCapitalizedList,
                 replaceTerms
-            } = TitleCaseHelper.getTitleCaseOptions(this.options, COMMON_ABBREVIATIONS, replaceCasing);
-            const replaceTermsArray = replaceCasing.map(term => Object.keys(term)[0].toLowerCase());
-            const replaceTermsObj = Object.fromEntries(replaceCasing.map(term => [Object.keys(term)[0].toLowerCase(),
+            } = TitleCaseHelper.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
+            const replaceTermsArray = wordReplacementsList.map(term => Object.keys(term)[0].toLowerCase());
+            const replaceTermsObj = Object.fromEntries(wordReplacementsList.map(term => [Object.keys(term)[0].toLowerCase(),
                 Object.values(term)[0]
             ]));
             let inputString = str.trim();
@@ -46,10 +46,10 @@ class TitleCaser {
                         return word;
                     case replaceTermsArray.includes(word.toLowerCase()):
                         return replaceTermsObj[word.toLowerCase()];
-                    case TitleCaseHelper.isWordInArray(word, CORRECT_TITLE_CASE):
-                        return TitleCaseHelper.correctTerm(word, CORRECT_TITLE_CASE);
+                    case TitleCaseHelper.isWordInArray(word, correctTitleCasingList):
+                        return TitleCaseHelper.correctTerm(word, correctTitleCasingList);
                     case TitleCaseHelper.hasSuffix(word, style):
-                        return TitleCaseHelper.correctSuffix(word, CORRECT_TITLE_CASE);
+                        return TitleCaseHelper.correctSuffix(word, correctTitleCasingList);
                     case TitleCaseHelper.hasHyphen(word):
                         return TitleCaseHelper.correctTermHyphenated(word, style);
                     case TitleCaseHelper.hasUppercaseIntentional(word):
@@ -61,15 +61,15 @@ class TitleCaser {
                     case TitleCaseHelper.endsWithSymbol(word):
                         const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()])/g);
                         const processedWords = splitWord.map((splitWord, j) => {
-                            if (TitleCaseHelper.isWordInArray(splitWord, CORRECT_TITLE_CASE)) return TitleCaseHelper.correctTerm(splitWord,
-                                CORRECT_TITLE_CASE);
+                            if (TitleCaseHelper.isWordInArray(splitWord, correctTitleCasingList)) return TitleCaseHelper.correctTerm(splitWord,
+                                correctTitleCasingList);
                             else return (j > 0 && TitleCaseHelper.endsWithSymbol(splitWord)) ? splitWord.charAt(0)
                                 .toUpperCase() + splitWord.slice(1) : splitWord.charAt(0)
                                 .toUpperCase() + splitWord.slice(1);
                         });
                         return processedWords.join("");
                     case TitleCaseHelper.startsWithSymbol(word):
-                        return !TitleCaseHelper.isWordInArray(word, CORRECT_TITLE_CASE) ? word : TitleCaseHelper.correctTerm(word);
+                        return !TitleCaseHelper.isWordInArray(word, correctTitleCasingList) ? word : TitleCaseHelper.correctTerm(word);
                     case TitleCaseHelper.hasRomanNumeral(word):
                         return word.toUpperCase();
                     case TitleCaseHelper.hasNumbers(word):
@@ -81,7 +81,7 @@ class TitleCaser {
                 }
             });
             inputString = wordsInTitleCase.join(" ");
-            for (const phrase of CORRECT_PHRASE_CASE) {
+            for (const phrase of correctPhraseCasingList) {
                 if (inputString.toLowerCase()
                     .includes(phrase.toLowerCase())) {
                     inputString = inputString.replace(new RegExp(phrase, 'gi'), phrase);
@@ -96,4 +96,8 @@ class TitleCaser {
     }
 }
 
-export default TitleCaser;
+// Export the `TitleCaser` class for Node.js
+if (typeof module === 'object' && module.exports) {
+  module.exports = { TitleCaser };
+}
+

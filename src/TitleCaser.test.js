@@ -1,4 +1,4 @@
-const TitleCaser = require('./TitleCaser').default;
+import { TitleCaser } from './TitleCaser';
 
 test('should convert string to title case with default options', () => {
     const titleCaser = new TitleCaser();
@@ -169,7 +169,7 @@ test("APA Style Capitalization Test with a Colon and Short Conjunction Terms (In
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Testing CORRECT_PHRASE_CASE", () => {
+test("Testing correctPhraseCasingList", () => {
     const options = {
         style: "wikipedia"
     };

@@ -1,13 +1,51 @@
 import {
-    ALLOWED_TITLE_CASE_STYLES,
-    TITLE_CASE_DEFAULT_OPTIONS,
-    replaceCasing,
-    CORRECT_TITLE_CASE,
-    IGNORED_WORDS,
+    allowedTitleCaseStylesList,
+    titleCaseDefaultOptionsList,
+    wordReplacementsList,
+    correctTitleCasingList,
+    ignoredWordsList,
 }
 from "./TitleCaseConsts.js";
 
 export default class TitleCaseHelper {
+    static validateOption(key, value) {
+        if (!Array.isArray(value)) {
+            throw new TypeError(`Invalid option: ${key} must be an array`);
+        }
+        if (!value.every((word) => typeof word === "string")) {
+            throw new TypeError(`Invalid option: ${key} must be an array of strings`);
+        }
+    }
+
+    static validateOptions(options) {
+        for (const key of Object.keys(options)) {
+            if (key === 'style') {
+                if (typeof options.style !== 'string') {
+                    throw new TypeError(`Invalid option: ${key} must be a string`);
+                } else if (!allowedTitleCaseStylesList.includes(options.style)) {
+                    throw new TypeError(`Invalid option: ${key} must be a string`);
+                }
+                continue;
+            }
+            if (key === 'wordReplacementsList') {
+                if (!Array.isArray(options.wordReplacementsList)) {
+                    throw new TypeError(`Invalid option: ${key} must be an array`);
+                } else {
+                    for (const term of options.wordReplacementsList) {
+                        if (typeof term !== 'string') {
+                            throw new TypeError(`Invalid option: ${key} must contain only strings`);
+                        }
+                    }
+                }
+                continue;
+            }
+            if (!titleCaseDefaultOptionsList.hasOwnProperty(key)) {
+                throw new TypeError(`Invalid option: ${key}`);
+            }
+            TitleCaseValidator.validateOption(key, options[key]);
+        }
+    }
+
     static titleCaseOptionsCache = new Map();
     static getTitleCaseOptions(options = {}, lowercaseWords = []) {
         const cacheKey = JSON.stringify({
@@ -20,26 +58,26 @@ export default class TitleCaseHelper {
         }
         
         const mergedOptions = {
-            ...TITLE_CASE_DEFAULT_OPTIONS[options.style || "ap"],
+            ...titleCaseDefaultOptionsList[options.style || "ap"],
             ...options
         };
-        const mergedArticles = mergedOptions.articles.concat(lowercaseWords)
+        const mergedArticles = mergedOptions.articlesList.concat(lowercaseWords)
             .filter((word, index, array) => array.indexOf(word) === index);
-        const mergedShortConjunctions = mergedOptions.shortConjunctions.concat(lowercaseWords)
+        const mergedShortConjunctions = mergedOptions.shortConjunctionsList.concat(lowercaseWords)
             .filter((word, index, array) => array.indexOf(word) === index);
-        const mergedShortPrepositions = mergedOptions.shortPrepositions.concat(lowercaseWords)
+        const mergedShortPrepositions = mergedOptions.shortPrepositionsList.concat(lowercaseWords)
             .filter((word, index, array) => array.indexOf(word) === index);
         const mergedReplaceTerms = [
             ...(mergedOptions.replaceTerms || [])
             .map(([key, value]) => [key.toLowerCase(), value]),
-            ...replaceCasing,
+            ...wordReplacementsList,
         ];
         
         const result = {
-            articles: mergedArticles,
-            shortConjunctions: mergedShortConjunctions,
-            shortPrepositions: mergedShortPrepositions,
-            neverCapitalized: [...mergedOptions.neverCapitalized],
+            articlesList: mergedArticles,
+            shortConjunctionsList: mergedShortConjunctions,
+            shortPrepositionsList: mergedShortPrepositions,
+            neverCapitalizedList: [...mergedOptions.neverCapitalizedList],
             replaceTerms: mergedReplaceTerms,
         };
         
@@ -50,30 +88,30 @@ export default class TitleCaseHelper {
     static isNeverCapitalizedCache = new Map();
     
     static isShortConjunction(word, style) {
-        const shortConjunctions = [...TitleCaseHelper.getTitleCaseOptions({
+        const shortConjunctionsList = [...TitleCaseHelper.getTitleCaseOptions({
                 style: style
             })
-            .shortConjunctions
+            .shortConjunctionsList
         ];
         const wordLowerCase = word.toLowerCase();
-        return shortConjunctions.includes(wordLowerCase);
+        return shortConjunctionsList.includes(wordLowerCase);
     }
     
     static isArticle(word, style) {
-        const articles = TitleCaseHelper.getTitleCaseOptions({
+        const articlesList = TitleCaseHelper.getTitleCaseOptions({
                 style: style
             })
-            .articles;
-        return articles.includes(word.toLowerCase());
+            .articlesList;
+        return articlesList.includes(word.toLowerCase());
     }
     
     static isShortPreposition(word, style) {
         const {
-            shortPrepositions
+            shortPrepositionsList
         } = TitleCaseHelper.getTitleCaseOptions({
             style: style
         });
-        return shortPrepositions.includes(word.toLowerCase());
+        return shortPrepositionsList.includes(word.toLowerCase());
     }
     
     static isNeverCapitalized(word, style) {
@@ -84,12 +122,12 @@ export default class TitleCaseHelper {
         }
         
         const {
-            neverCapitalized
+            neverCapitalizedList
         } = TitleCaseHelper.getTitleCaseOptions({
             style
         });
         
-        const result = neverCapitalized.includes(word.toLowerCase());
+        const result = neverCapitalizedList.includes(word.toLowerCase());
         TitleCaseHelper.isNeverCapitalizedCache.set(cacheKey, result);
         
         return result;
@@ -100,8 +138,8 @@ export default class TitleCaseHelper {
             throw new TypeError(`Invalid input: word must be a string. Received ${typeof word}.`);
         }
         
-        if (!ALLOWED_TITLE_CASE_STYLES.includes(style)) {
-            throw new Error(`Invalid option: style must be one of ${ALLOWED_TITLE_CASE_STYLES.join(", ")}.`);
+        if (!allowedTitleCaseStylesList.includes(style)) {
+            throw new Error(`Invalid option: style must be one of ${allowedTitleCaseStylesList.join(", ")}.`);
         }
         
         return TitleCaseHelper.isShortConjunction(word, style) ||
@@ -196,7 +234,7 @@ export default class TitleCaseHelper {
         return symbols.some(symbol => word.endsWith(symbol)) || symbols.includes(word.slice(-2));
     }
     
-    static isWordIgnored(word, ignoredWords = IGNORED_WORDS) {
+    static isWordIgnored(word, ignoredWords = ignoredWordsList) {
         if (!Array.isArray(ignoredWords)) {
             throw new TypeError("Invalid input: ignoredWords must be an array.");
         }
@@ -319,15 +357,15 @@ export default class TitleCaseHelper {
         const processedWords = hyphenatedWords.map((word, i) => {
             let correctedWord = word;
             const lowerCaseWord = word.toLowerCase();
-            const uniqueTermsIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === lowerCaseWord);
+            const uniqueTermsIndex = correctTitleCasingList.findIndex((w) => w.toLowerCase() === lowerCaseWord);
             if (uniqueTermsIndex >= 0) {
-                correctedWord = CORRECT_TITLE_CASE[uniqueTermsIndex];
+                correctedWord = correctTitleCasingList[uniqueTermsIndex];
             }
             else if (lowerCaseWord.endsWith("'s")) {
                 const rootWord = lowerCaseWord.substring(0, lowerCaseWord.length - 2);
-                const rootWordIndex = CORRECT_TITLE_CASE.findIndex((w) => w.toLowerCase() === rootWord);
+                const rootWordIndex = correctTitleCasingList.findIndex((w) => w.toLowerCase() === rootWord);
                 if (rootWordIndex >= 0) {
-                    correctedWord = `${CORRECT_TITLE_CASE[rootWordIndex]}'s`;
+                    correctedWord = `${correctTitleCasingList[rootWordIndex]}'s`;
                 }
             }
             return processWord(correctedWord, i, hyphenatedWords.length);
@@ -336,43 +374,3 @@ export default class TitleCaseHelper {
         return processedWords.join("-");
     }
 }
-
-// export default class TitleCaseValidator {
-//     static validateOption(key, value) {
-//         if (!Array.isArray(value)) {
-//             throw new TypeError(`Invalid option: ${key} must be an array`);
-//         }
-//         if (!value.every((word) => typeof word === "string")) {
-//             throw new TypeError(`Invalid option: ${key} must be an array of strings`);
-//         }
-//     }
-
-//     static validateOptions(options) {
-//         for (const key of Object.keys(options)) {
-//             if (key === 'style') {
-//                 if (typeof options.style !== 'string') {
-//                     throw new TypeError(`Invalid option: ${key} must be a string`);
-//                 } else if (!ALLOWED_TITLE_CASE_STYLES.includes(options.style)) {
-//                     throw new TypeError(`Invalid option: ${key} must be a string`);
-//                 }
-//                 continue;
-//             }
-//             if (key === 'replaceCasing') {
-//                 if (!Array.isArray(options.replaceCasing)) {
-//                     throw new TypeError(`Invalid option: ${key} must be an array`);
-//                 } else {
-//                     for (const term of options.replaceCasing) {
-//                         if (typeof term !== 'string') {
-//                             throw new TypeError(`Invalid option: ${key} must contain only strings`);
-//                         }
-//                     }
-//                 }
-//                 continue;
-//             }
-//             if (!TITLE_CASE_DEFAULT_OPTIONS.hasOwnProperty(key)) {
-//                 throw new TypeError(`Invalid option: ${key}`);
-//             }
-//             TitleCaseValidator.validateOption(key, options[key]);
-//         }
-//     }
-// }

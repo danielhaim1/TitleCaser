@@ -3,33 +3,62 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const nodeExternals = require('webpack-node-externals');
 const TerserPlugin = require('terser-webpack-plugin');
 
-module.exports = {
+module.exports = [
+  {
     mode: 'production',
     target: 'node',
     entry: './src/index.js',
     output: {
-        filename: 'titlecase.js',
-        path: path.resolve(__dirname, 'dist'),
+      filename: 'titlecase.node.js',
+      path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()],
+      minimize: true,
+      minimizer: [new TerserPlugin()],
     },
     module: {
-        rules: [{
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: [
-                        ['@babel/preset-env']
-                    ]
-                },
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [['@babel/preset-env']],
             },
-        }, ],
+          },
+        },
+      ],
     },
     externals: nodeExternals({
-        allowlist: ['@babel/runtime-corejs3']
-    })
-};
+      allowlist: ['@babel/runtime-corejs3'],
+    }),
+  },
+  {
+    mode: 'production',
+    target: 'web',
+    entry: './src/index.js',
+    output: {
+      filename: 'titlecase.browser.js',
+      path: path.resolve(__dirname, 'dist'),
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [['@babel/preset-env', { modules: false }]],
+            },
+          },
+        },
+      ],
+    },
+  },
+];

@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/gouch/to-title-case/badge.svg)](https://snyk.io/test/github/gouch/to-title-case)
 
-<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/img.png" width="100%" height="auto"></a>
+<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
 
 This module helps writers follow English language conventions and style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also allows users to customize their own style. Users can change article words, conjunctions, prepositions, and words that should not be capitalized. The module also knows which words and phrases should not be capitalized in titles.
 
@@ -51,11 +51,11 @@ console.log(output);
 
 - The `options` parameter is an object that contains the settings for the conversion process.
 - The `style` parameter is a string that determines the specific title case style to be applied. Permissible values include: `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`.
-- `articles` refers to the words that should be treated as articles in title case.
-- `shortConjunctions` pertains to the words that should be treated as short conjunctions in title case.
-- `shortPrepositions` relates to the words that should be treated as short prepositions in title case.
-- `neverCapitalized` contains the words that should never be capitalized in title case.
-- `replaceCasing` is a map of terms that will be replaced during the title case conversion process.
+- `articlesList` refers to the words that should be treated as articles in title case.
+- `shortConjunctionsList` pertains to the words that should be treated as short conjunctions in title case.
+- `shortPrepositionsList` relates to the words that should be treated as short prepositions in title case.
+- `neverCapitalizedList` contains the words that should never be capitalized in title case.
+- `wordReplacementsList` is a map of terms that will be replaced during the title case conversion process.
 
 ### API Examples:
 
@@ -140,7 +140,7 @@ $ npm run test
   ✓ AP Style capitalization test with special terms eBook and CTO and a colon (1 ms)
   ✓ NYT style capitalization test with special terms IoT and AI and a colon
   ✓ APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat)
-  ✓ Testing CORRECT_PHRASE_CASE
+  ✓ Testing correctPhraseCasingListList
   ✓ Wikipedia style capitalization test with special term DevOps and a colon
   ✓ Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon (1 ms)
   ✓ Convert string containing a term with mixed case to title case

@@ -1,61 +1,49 @@
 {
-    "name": "titlecase-js",
-    "version": "1.2.14",
-    "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
-    "keywords": [
-        "titlecase",
-        "text transformation",
-        "capitalization",
-        "formatting"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/danielhaim1/titlecase-js.git"
-    },
-    "main": "dist/titlecase.js",
-    "scripts": {
-        "test": "jest",
-        "build-docs": "cd docs && bundle install && bundle exec jekyll build",
-        "build-package": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js",
-        "copy-package-to-docs": "cp -R dist/ docs/assets/js",
-        "tree": "tree -I 'node_modules'",
-        "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
-    },
-    "files": [
-        "LICENSE",
-        "README.md",
-        "babel.config.js",
-        "package-lock.json",
-        "package.json",
-        "src/**/*",
-        "webpack.config.js"
-    ],
-    "author": {
-        "name": "Daniel Haim",
-        "url": "https://github.com/danielhaim1"
-    },
-    "license": "MIT",
-    "optionalDependencies": {
-        "@jest/expect": "^29.5.0",
-        "babel-jest": "^29.5.0",
-        "jest": "^29.5.0",
-        "jest-environment-jsdom": "^29.5.0",
-        "jest-environment-puppeteer": "^8.0.5",
-        "jest-puppeteer": "^8.0.5",
-        "puppeteer": "^19.8.2",
-        "puppeteer-core": "^19.8.0"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.21.0",
-        "@babel/core": "^7.21.0",
-        "@babel/plugin-transform-modules-commonjs": "^7.21.2",
-        "@babel/plugin-transform-runtime": "^7.21.0",
-        "@babel/preset-env": "^7.20.2",
-        "@babel/runtime-corejs3": "^7.21.0",
-        "babel-loader": "^9.1.2",
-        "terser-webpack-plugin": "^5.3.7",
-        "webpack": "^5.76.3",
-        "webpack-cli": "^5.0.1",
-        "webpack-node-externals": "^3.0.0"
-    }
+  "name": "titlecase-js",
+  "version": "1.2.14",
+  "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
+  "keywords": ["titlecase", "text transformation", "capitalization", "formatting"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielhaim1/titlecase-js.git"
+  },
+  "main": "dist/titlecase.node.js",
+  "scripts": {
+    "test": "jest",
+    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
+    "build-package": "webpack --mode production && terser dist/titlecase.node.js -o dist/titlecase.node.min.js",
+    "copy-package-to-docs": "cp -R dist/ docs/assets/js",
+    "tree": "tree -I 'node_modules'",
+    "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
+  },
+  "files": ["LICENSE", "README.md", "babel.config.js", "package-lock.json", "package.json", "src/**/*", "webpack.config.js"],
+  "author": {
+    "name": "Daniel Haim",
+    "url": "https://github.com/danielhaim1"
+  },
+  "license": "MIT",
+  "optionalDependencies": {
+    "@jest/expect": "^29.5.0",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-puppeteer": "^8.0.5",
+    "jest-puppeteer": "^8.0.5",
+    "puppeteer": "^19.8.2",
+    "puppeteer-core": "^19.8.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.21.2",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/runtime-corejs3": "^7.21.0",
+    "babel-loader": "^9.1.2",
+    "esbuild-jest": "^0.5.0",
+    "exports-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.7",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1",
+    "webpack-node-externals": "^3.0.0"
+  }
 }
