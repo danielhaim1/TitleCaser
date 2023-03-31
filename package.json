@@ -1,8 +1,13 @@
 {
   "name": "titlecase-js",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
-  "keywords": ["titlecase", "text transformation", "capitalization", "formatting"],
+  "keywords": [
+    "titlecase",
+    "text transformation",
+    "capitalization",
+    "formatting"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/danielhaim1/titlecase-js.git"
@@ -16,7 +21,15 @@
     "tree": "tree -I 'node_modules'",
     "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
   },
-  "files": ["LICENSE", "README.md", "babel.config.js", "package-lock.json", "package.json", "src/**/*", "webpack.config.js"],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "babel.config.js",
+    "package-lock.json",
+    "package.json",
+    "src/**/*",
+    "webpack.config.js"
+  ],
   "author": {
     "name": "Daniel Haim",
     "url": "https://github.com/danielhaim1"
