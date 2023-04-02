@@ -57,7 +57,7 @@ console.log(output);
 
 ## Examples
 
-This code demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
+The example below demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
 
 ```js
 // Set the options to Chicago style
@@ -79,7 +79,36 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
-This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
+The example below demonstrates how to use the TitleCaser class to convert a string to title case with specific settings.
+
+```js
+// Set the options object
+const options = {
+  style: "nyt",
+  wordReplacementsList: {
+    "nodejs": "Node.js",
+    "javascript": "JavaScript",
+    "mongodb": "MongoDB"
+  }
+};
+
+// Instantiate a new TitleCaser object with the options
+const titleCaser = new TitleCaser(options);
+
+// Set the input string to test
+const input = "the basics of nodejs development with mongodb";
+
+// Set the expected output
+const expectedOutput = "The Basics of Node.js Development with MongoDB";
+
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
+
+// Log the actual output
+console.log(actualOutput);
+```
+
+The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
 
 ```js
 // Instantiate a new TitleCaser object with AP style formatting
@@ -98,7 +127,7 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
-This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
+The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
 
 ```js
 // Instantiate a new TitleCaser object with AP style formatting
@@ -117,7 +146,7 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
-This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including lowercase back-end and front-end terms.
+The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including lowercase back-end and front-end terms.
 
 ```js
 // Instantiate a new TitleCaser object with AP style formatting
