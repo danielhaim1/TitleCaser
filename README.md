@@ -5,28 +5,27 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
 
+The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
+
+To streamline workflow, the Language Conventions and Style Module is available in both browser and node environment versions and includes a command-line interface for building, testing, and minimizing the module. Additionally, it features a filter ability that allows users to ignore certain phrases containing short words, preventing the module from mistakenly flagging instances where short words are used as part of a larger term or phrase.
+
+The module has been designed to handle various capitalization scenarios, including hyphenated words, prefixes, suffixes, reserved words, Roman numerals, proper nouns that contain lowercase letters, and words that require capitalization in specific contexts. This ensures that your content meets the appropriate style and formatting guidelines, regardless of the context. It also offers word replacement capabilities, as well as ignored phrases to create consistency in cases where certain terms may be capitalized differently depending on the context, such as converting variations of gOogle to Google, front-end to Frontend.
+
+So whether you're developing web content for a major news organization or simply looking to improve your writing skills, the Language Conventions and Style Module is an essential tool that can help ensure your work is accurate, consistent, and conforms to the latest style guidelines.
+
+## Demo
+
 <a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
-
-This module helps writers follow English language conventions and style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles. It also allows users to customize their own style. Users can change article words, conjunctions, prepositions, and words that should not be capitalized. The module also knows which words and phrases should not be capitalized in titles.
-
-The module can handle capitalization in different scenarios, including hyphenated words, suffixes, prefixes, reserved words, and Roman numerals. It also has a list of specific arrays that should always be in title case and common terms that require capitalization. The module corrects common terms to their proper case.
-
-There is a command-line interface (CLI) for building, testing, and minimizing the module.
-
-See the module in action in the [demo page](https://www.danielhaim.com/tools/titlecaser/).
 
 ## Key Features:
 
-This module provides the following features for English writers:
-
-- It follows popular style guides (AP, APA, Chicago, NY Times, Wikipedia, British) and allows for customization.
-- You can customize article words, conjunctions, prepositions, and uncapitalized words.
-- The module handles suffixes, prefixes, hyphenated words, and reserved words.
-- Specific words and phrases that should not be capitalized in titles are excluded, along with the capitalization of hyphenated words and Roman numerals.
-- It has a list of unique words and common terms that require capitalization and corrects common terms to their proper case.
-- A command-line interface is available for building, testing, and minimizing the module.
-- Pre-defined word lists for articles, conjunctions, prepositions, and uncapitalized words in titles are provided.
-- Common phrases that should not be capitalized in titles are maintained.
+- Support for popular style guides and customizable preferences
+- Advanced capitalization handling for suffixes, prefixes, hyphenated words, and reserved words
+- Support for proper capitalization of Roman numerals and exclusion of specific words and phrases from title capitalization
+- Word replacement capabilities for consistency in capitalization
+Command-line interface for building, testing, and minimizing the module
+- Pre-defined word lists for articles, conjunctions, prepositions, and uncapitalized words in titles
+- Exclusion of common phrases from title capitalization
 
 ## Installation
 
@@ -56,26 +55,48 @@ console.log(output);
 - `neverCapitalizedList` contains the words that should never be capitalized in title case.
 - `wordReplacementsList` is a map of terms that will be replaced during the title case conversion process.
 
-### API Examples:
+## Examples
 
-```javascript
-test('should convert string to title case with custom options', () => {
-  const options = { style: 'chicago' };
-  const titleCaser = new TitleCaser(options);
-  const input = 'the book   of     life';
-  const expectedOutput = 'The Book of Life';
-  const actualOutput = titleCaser.toTitleCase(input);
-  expect(actualOutput).toEqual(expectedOutput);
-});
+```js
+// This code demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
+
+// Set the options to Chicago style
+const options = { style: 'chicago' };
+
+// Instantiate a new TitleCaser object with the options
+const titleCaser = new TitleCaser(options);
+
+// Set the input string to test
+const input = 'the    Book  of  lIfe';
+
+// Set the expected output
+const expectedOutput = 'The Book of Life';
+
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
+
+// Log the actual output
+console.log(actualOutput);
+```
+
+```js
+// This test case checks if the TitleCaser class converts a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
 
 test('should convert string to title case with AP style formatting, including hyphenated words, word and brand replacement', () => {
-  const titleCaser = new TitleCaser({ style: 'ap' });
-  const input = 'nodejs development on aws: an in-depth tutorial on server-side javascript deployment';
-  const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment';
-  const actualOutput = titleCaser.toTitleCase(input);
-  expect(actualOutput).toEqual(expectedOutput);
-});
+// Instantiate a new TitleCaser object with AP style formatting
+const titleCaser = new TitleCaser({ style: 'ap' });
 
+// Set the input string to test
+const input = 'nodejs development on aws: an in-depth tutorial on server-side javascript deployment';
+
+// Set the expected output
+const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment';
+
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
+```
+
+```js
 test("Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement", () => {
     const options = { style: "chicago" };
     const titleCaser = new TitleCaser(options);
@@ -113,7 +134,7 @@ test("Convert string to title case with AP style formatting, including lowercase
 });
 ```
 
-## CLI
+## Command Line
 
 ```bash
 $ npm run build-package
