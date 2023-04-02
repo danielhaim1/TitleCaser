@@ -57,9 +57,9 @@ console.log(output);
 
 ## Examples
 
-```js
-// This code demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
+This code demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
 
+```js
 // Set the options to Chicago style
 const options = { style: 'chicago' };
 
@@ -79,10 +79,9 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
-```js
-// This test case checks if the TitleCaser class converts a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
+This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
 
-test('should convert string to title case with AP style formatting, including hyphenated words, word and brand replacement', () => {
+```js
 // Instantiate a new TitleCaser object with AP style formatting
 const titleCaser = new TitleCaser({ style: 'ap' });
 
@@ -94,44 +93,47 @@ const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Serv
 
 // Call the toTitleCase method and store the result in actualOutput
 const actualOutput = titleCaser.toTitleCase(input);
+
+// Log the actual output
+console.log(actualOutput);
 ```
 
+This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
+
 ```js
-test("Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement", () => {
-    const options = { style: "chicago" };
-    const titleCaser = new TitleCaser(options);
-    const input = "nodejs development on aws: an in-depth tutorial on server-side javascript deployment";
-    const expectedOutput = "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment";
-    const actualOutput = titleCaser.toTitleCase(input);
-    expect(actualOutput).toEqual(expectedOutput);
-});
+// Instantiate a new TitleCaser object with AP style formatting
+const titleCaser = new TitleCaser({ style: "ap" });
 
-test("Convert string to title case with AP style formatting, including custom term replacement for Google and VMware", () => {
-    const options = { style: "ap", replaceTerms = {} };
-    const titleCaser = new TitleCaser(options);
-    const input = "GOOgle and VMWARE";
-    const expectedOutput = "Google and VMware";
-    const actualOutput = titleCaser.toTitleCase(input);
-    expect(actualOutput).toEqual(expectedOutput);
-});
+// Set the input string to test
+const input = "the iphone's impact on modern communication: a sociolinguistic analysis";
 
-test("Convert string to title case with AP style formatting, including a possessive noun and a colon", () => {
-    const options = { style: "ap" };
-    const titleCaser = new TitleCaser(options);
-    const input = "the iphone's impact on modern communication: a sociolinguistic analysis";
-    const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
-    const actualOutput = titleCaser.toTitleCase(input);
-});
+// Set the expected output
+const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
 
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
 
-test("Convert string to title case with AP style formatting, including lowercase back-end and front-end terms", () => {
-    const options = { style: "ap" };
-    const titleCaser = new TitleCaser(options);
-    const input = "BACK-end and front-end";
-    const expectedOutput = "Backend and Frontend";
-    const actualOutput = titleCaser.toTitleCase(input);
-    expect(actualOutput).toEqual(expectedOutput);
-});
+// Log the actual output
+console.log(actualOutput);
+```
+
+This code demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including lowercase back-end and front-end terms.
+
+```js
+// Instantiate a new TitleCaser object with AP style formatting
+const titleCaser = new TitleCaser({ style: "ap" });
+
+// Set the input string to test
+const input = "BACK-end and front-end";
+
+// Set the expected output
+const expectedOutput = "Backend and Frontend";
+
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
+
+// Log the actual output
+console.log(actualOutput);
 ```
 
 ## Command Line
