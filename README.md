@@ -1,4 +1,5 @@
 ## TitleCase-JS
+
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
 ## Demo
@@ -217,4 +218,6 @@ Useful materials for improving your knowledge of writing and language style guid
 
 ## Report Bugs
 
-If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. We appreciate your help in improving the library and making it as bug-free as possible.
+If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. 
+
+When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. I appreciate any contribution to improve this library.
