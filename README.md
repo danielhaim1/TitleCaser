@@ -1,6 +1,10 @@
 ## TitleCase-JS
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
+## Demo
+
+<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
+
 [![npm version](https://badge.fury.io/js/titlecase-js.svg?t=1623701119)](https://badge.fury.io/js/titlecase-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
@@ -12,10 +16,6 @@ To streamline workflow, the Language Conventions and Style Module is available i
 The module has been designed to handle various capitalization scenarios, including hyphenated words, prefixes, suffixes, reserved words, Roman numerals, proper nouns that contain lowercase letters, and words that require capitalization in specific contexts. This ensures that your content meets the appropriate style and formatting guidelines, regardless of the context. It also offers word replacement capabilities, as well as ignored phrases to create consistency in cases where certain terms may be capitalized differently depending on the context, such as converting variations of gOogle to Google, front-end to Frontend.
 
 So whether you're developing web content for a major news organization or simply looking to improve your writing skills, the Language Conventions and Style Module is an essential tool that can help ensure your work is accurate, consistent, and conforms to the latest style guidelines.
-
-## Demo
-
-<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
 
 ## Key Features:
 
