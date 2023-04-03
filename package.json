@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/danielhaim1/titlecase-js.git"
   },
-  "main": "dist/titlecase.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
@@ -24,11 +24,12 @@
   "files": [
     "LICENSE",
     "README.md",
-    "babel.config.js",
-    "package-lock.json",
     "package.json",
-    "src/**/*",
-    "webpack.config.js"
+    "src/index.js",
+    "src/TitleCaseConsts.js",
+    "src/TitleCaseHelper.js",
+    "src/index.js",
+
   ],
   "author": {
     "name": "Daniel Haim",

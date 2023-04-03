@@ -18,7 +18,7 @@ export const correctTitleCasingList = [
   'YML', 'IMAP', 'RSS', 'IaaS', 'PaaS', 'SaaS', 'CaaS', 'FaaS',
   'XaaS', 'RaaS', 'IoE', 'IoT', 'LoRa', 'NB-IoT', 'RFID', 'RF',
   'RFI', 'RFQ', 'ECMAScript', 'IO', 'I/O', 'DevOps', 'SecOps',
-  'DDoS', 'VoIP', 'AI', 'AR', 'ML', 'VR', 
+  'DDoS', 'VoIP', 'AI', 'AR', 'ML', 'VR',
 
   // Misc.
   'w/', 'w/o',
@@ -62,21 +62,23 @@ export const correctTitleCasingList = [
   'NGO', 'NPO', 'NGOs', 'NPOs', 'UN', 'UNESCO', 'UNICEF',
   'UNHCR', 'UNODC', 'UNDP', 'UNFPA', 'UNEP',
 
-  // Brands
-  'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter',
-  'Google', 'TensorFlow', 'Microsoft', 'Amazon', 'Netflix',
-  'LinkedIn', 'Airbnb', 'eBay', 'iPhone', 'iPad', 'iPod',
-  'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'Salesforce',
-  'CodeIgniter', 'WordPress', 'WooCommerce', 'MongoDB', 'JIRA',
-  'HubSpot', 'AirDrop', 'AirPlay', 'AirPods', 'AirTags',
-  'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac',
-  'iMessage', 'iMovie', 'iPhoto', 'iPod', 'iTunes', 'iWatch',
-  'iWork', 'iWork', 'LogicPro', 'macOS', 'ProTools',
-  'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Uber',
-  'Dropbox', 'Slack', 'Trello', 'Zoom', 'Twitch', 'Snapchat',
-  'WhatsApp', 'Telegram', 'Discord', 'Reddit', 'Quora',
-  'StackOverflow', 'StackExchange', 'Coca-Cola', 'AWS', 'GCP',
-  'VMware',
+  'Adobe', 'Airbnb', 'Alibaba', 'Allstate', 'American Express', 'Apple',
+  'AT&T', 'BMW', 'Boeing', 'Cisco', 'Citigroup', 'Coca', 'Deloitte', 'Disney',
+  'Dropbox', 'ExxonMobil', 'Ford', 'GE', 'General', 'Goldman Sachs', 'Google',
+  'Hilton', 'HP', 'IBM', 'Intel', 'JPMorgan', 'Johnson & Johnson', 'LinkedIn',
+  "McDonald's", 'Mercedes-Benz', 'Microsoft', 'Nestle', 'Nike', 'Nissan',
+  'Oracle', 'PepsiCo', 'Pfizer', 'Salesforce', 'Samsung', 'Shell', 'Sony',
+  'Tesla', 'Toyota', 'Uber', 'Verizon', 'Visa', 'Walmart', 'Wells Fargo',
+  'Yahoo', 'Zara', 'IKEA', 'Facebook', 'YouTube', 'Instagram', 'Twitter',
+  'TensorFlow', 'Amazon', 'Netflix', 'eBay', 'iPhone', 'iPad', 'iPod',
+  'PlayStation', 'PayPal', 'GitHub', 'GitLab', 'CodeIgniter', 'WordPress',
+  'WooCommerce', 'MongoDB', 'JIRA', 'HubSpot', 'AirDrop', 'AirPlay', 'AirPods',
+  'AirTags', 'FinalCut', 'GarageBand', 'iBooks', 'iCloud', 'iLife', 'iMac',
+  'iMessage', 'iMovie', 'iPhoto', 'iWatch', 'iWork', 'LogicPro', 'macOS',
+  'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Slack', 'Trello',
+  'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit',
+  'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola',
+  'AWS', 'GCP', 'VMware', 'CVS',
 
   // Sports
   'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
@@ -129,6 +131,7 @@ export const wordReplacementsList = [
     { 'phd': 'ph.d.' },
 ];
 
+// ! TODO
 // const wordReplacementsList = [
 //     { word: 'a.k.a', replacement: 'AKA' },
 //     { word: 'a.s.a.p', replacement: 'ASAP' },
@@ -207,4 +210,5 @@ export const ignoredWordsList = [];
 export const correctPhraseCasingList = [
     'The Cybersmile Foundation',
     'CO. by Colgate',
+    "The Simpsons",
 ];

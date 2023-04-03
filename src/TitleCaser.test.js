@@ -29,6 +29,16 @@ test('AP-style title case conversion with replacements', () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
+test('AP-style title case conversion with replacements', () => {
+    const titleCaser = new TitleCaser({
+        style: 'ap'
+    });
+    const input = 'louis-iv';
+    const expectedOutput = 'Louis-IV';
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput)
+        .toEqual(expectedOutput);
+});
 test('Capitalize suffix word in sentence', () => {
     const titleCaser = new TitleCaser({
         style: 'ap'
