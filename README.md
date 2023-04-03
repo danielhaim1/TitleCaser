@@ -177,30 +177,31 @@ $ npm run test
 ```
 
 ```bash
-  ✓ should convert string to title case with default options (2 ms)
-  ✓ should convert string to title case with custom options
-  ✓ should convert string to title case with AP style formatting, including hyphenated words, word and brand replacement (1 ms)
-  ✓ Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement (1 ms)
-  ✓ Convert string to title case with AP style formatting, including custom term replacement for Google and VMware
-  ✓ Convert string to title case with AP style formatting, including a possessive noun and a colon
-  ✓ Convert string to title case with AP style formatting, including lowercase back-end and front-end terms
-  ✓ Convert string to title case with Chicago style formatting, including a comparison and a colon
-  ✓ Convert string to title case with APA style formatting, including a colon (1 ms)
-  ✓ Convert string to title case with Wikipedia style formatting, including acronym and hyphen
-  ✓ Convert string to title case with APA style formatting, including colon and apostrophe (1 ms)
-  ✓ Convert string to title case with Chicago style formatting, including special terms such as node.js
-  ✓ AP Style capitalization test with special terms eBook and CTO and a colon (1 ms)
-  ✓ NYT style capitalization test with special terms IoT and AI and a colon
-  ✓ APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat)
-  ✓ Testing correctPhraseCasingListList
-  ✓ Wikipedia style capitalization test with special term DevOps and a colon
-  ✓ Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon (1 ms)
-  ✓ Convert string containing a term with mixed case to title case
-  ✓ Convert string containing a possessive term with mixed case to title case
-  ✓ Convert hyphenated word with brand name from GOOgle-Tensorflow to Google-TensorFlow
-  ✓ Convert hyphenated word with brand name and possessive from GOOGle's-Tensorflow to Google's-TensorFlow
-  ✓ Convert string with HTML line break tag to title case with correct spacing
-  ✓ Convert string with untrimmed spaces to title case with correct spacing (1 ms)
+  ✓ Default title case conversion
+  ✓ Customized title case conversion
+  ✓ AP-style title case conversion with replacements
+  ✓ Capitalize suffix word in sentence
+  ✓ Hyphenated, colon, and short word replacements
+  ✓ Capitalization and word replacements
+  ✓ AP-style title case with possessive and colon
+  ✓ AP-style title case with lowercase back/front-end terms
+  ✓ Chicago style title case with comparison and colon
+  ✓ APA style title case with colon
+  ✓ Wikipedia style title case with acronym and hyphen
+  ✓ APA style title case with colon and apostrophe
+  ✓ Chicago style title case with custom term replacements
+  ✓ AP-style capitalization test with special terms and colon
+  ✓ NYT-style capitalization test with special terms and colon
+  ✓ APA style capitalization test with short conjunction terms and colon
+  ✓ Correct phrase casing list testing
+  ✓ Wikipedia style capitalization test with special term and colon
+  ✓ Chicago style capitalization test with custom term replacement and colon
+  ✓ Mixed case term to title case conversion
+  ✓ Mixed case possessive term to title case conversion
+  ✓ Hyphenated word with brand name conversion
+  ✓ Hyphenated word with brand name and possessive conversion
+  ✓ Title case conversion with HTML line break `<br />` tag
+  ✓ Title case conversion with untrimmed spaces
 ```
 
 ## Resources

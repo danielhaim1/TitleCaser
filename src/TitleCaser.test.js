@@ -1,6 +1,6 @@
 import { TitleCaser } from './TitleCaser';
 
-test('should convert string to title case with default options', () => {
+test('Default title case conversion', () => {
     const titleCaser = new TitleCaser();
     const input = 'hello world';
     const expectedOutput = 'Hello World';
@@ -8,7 +8,7 @@ test('should convert string to title case with default options', () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test('should convert string to title case with custom options', () => {
+test('Customized title case conversion', () => {
     const options = {
         style: 'chicago'
     };
@@ -19,7 +19,7 @@ test('should convert string to title case with custom options', () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test('should convert string to title case with AP style formatting, including hyphenated words, word and brand replacement', () => {
+test('AP-style title case conversion with replacements', () => {
     const titleCaser = new TitleCaser({
         style: 'ap'
     });
@@ -29,7 +29,7 @@ test('should convert string to title case with AP style formatting, including hy
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test('should capitalize suffix word in a sentence', () => {
+test('Capitalize suffix word in sentence', () => {
     const titleCaser = new TitleCaser({
         style: 'ap'
     });
@@ -39,7 +39,7 @@ test('should capitalize suffix word in a sentence', () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with Chicago style formatting, including hyphenated words, word and brand replacement", () => {
+test("Hyphenated, colon, and short word replacements", () => {
     const options = {
         style: "chicago"
     };
@@ -50,7 +50,7 @@ test("Convert string to title case with Chicago style formatting, including hyph
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with AP style formatting, including custom term replacement for Google and VMware", () => {
+test("Capitalization and word replacements", () => {
     const options = {
         style: "ap"
     };
@@ -61,7 +61,7 @@ test("Convert string to title case with AP style formatting, including custom te
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with AP style formatting, including a possessive noun and a colon", () => {
+test("AP-style title case with possessive and colon", () => {
     const options = {
         style: "ap"
     };
@@ -70,7 +70,7 @@ test("Convert string to title case with AP style formatting, including a possess
     const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
     const actualOutput = titleCaser.toTitleCase(input);
 });
-test("Convert string to title case with AP style formatting, including lowercase back-end and front-end terms", () => {
+test("AP-style title case with lowercase back/front-end terms", () => {
     const options = {
         style: "ap"
     };
@@ -81,7 +81,7 @@ test("Convert string to title case with AP style formatting, including lowercase
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with Chicago style formatting, including a comparison and a colon", () => {
+test("Chicago style title case with comparison and colon", () => {
     const options = {
         style: "chicago"
     };
@@ -92,7 +92,7 @@ test("Convert string to title case with Chicago style formatting, including a co
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with APA style formatting, including a colon", () => {
+test("APA style title case with colon", () => {
     const options = {
         style: "apa"
     };
@@ -103,7 +103,7 @@ test("Convert string to title case with APA style formatting, including a colon"
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with Wikipedia style formatting, including acronym and hyphen", () => {
+test("Wikipedia style title case with acronym and hyphen", () => {
     const options = {
         style: "wikipedia"
     };
@@ -114,7 +114,7 @@ test("Convert string to title case with Wikipedia style formatting, including ac
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with APA style formatting, including colon and apostrophe", () => {
+test("APA style title case with colon and apostrophe", () => {
     const options = {
         style: "apa"
     };
@@ -125,7 +125,7 @@ test("Convert string to title case with APA style formatting, including colon an
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string to title case with Chicago style formatting, including special terms such as node.js", () => {
+test("Chicago style title case with custom term replacements", () => {
     const options = {
         style: "chicago"
     };
@@ -136,7 +136,7 @@ test("Convert string to title case with Chicago style formatting, including spec
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("AP Style capitalization test with special terms eBook and CTO and a colon", () => {
+test("AP-style capitalization test with special terms and colon", () => {
     const options = {
         style: "chicago"
     };
@@ -147,7 +147,7 @@ test("AP Style capitalization test with special terms eBook and CTO and a colon"
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("NYT style capitalization test with special terms IoT and AI and a colon", () => {
+test("NYT-style capitalization test with special terms and colon", () => {
     const options = {
         style: "chicago"
     };
@@ -158,7 +158,7 @@ test("NYT style capitalization test with special terms IoT and AI and a colon", 
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("APA Style Capitalization Test with a Colon and Short Conjunction Terms (Instagram, TikTok, and Snapchat)", () => {
+test("APA style capitalization test with short conjunction terms and colon", () => {
     const options = {
         style: "chicago"
     };
@@ -169,7 +169,7 @@ test("APA Style Capitalization Test with a Colon and Short Conjunction Terms (In
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Testing correctPhraseCasingList", () => {
+test("Correct phrase casing list testing", () => {
     const options = {
         style: "wikipedia"
     };
@@ -180,7 +180,7 @@ test("Testing correctPhraseCasingList", () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Wikipedia style capitalization test with special term DevOps and a colon", () => {
+test("Wikipedia style capitalization test with special term and colon", () => {
     const options = {
         style: "wikipedia"
     };
@@ -191,7 +191,7 @@ test("Wikipedia style capitalization test with special term DevOps and a colon",
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Chicago Style capitalization test with custom term replacement for GooGlE to Google and a comparison with a colon", () => {
+test("Chicago style capitalization test with custom term replacement and colon", () => {
     const options = {
         style: "chicago"
     };
@@ -202,7 +202,7 @@ test("Chicago Style capitalization test with custom term replacement for GooGlE 
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string containing a term with mixed case to title case", () => {
+test("Mixed case term to title case conversion", () => {
     const options = {
         style: "chicago"
     };
@@ -213,7 +213,7 @@ test("Convert string containing a term with mixed case to title case", () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string containing a possessive term with mixed case to title case", () => {
+test("Mixed case possessive term to title case conversion", () => {
     const options = {
         style: "chicago"
     };
@@ -224,7 +224,7 @@ test("Convert string containing a possessive term with mixed case to title case"
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert hyphenated word with brand name from GOOgle-Tensorflow to Google-TensorFlow", () => {
+test("Hyphenated word with brand name conversion", () => {
     const options = {
         style: "chicago"
     };
@@ -235,7 +235,7 @@ test("Convert hyphenated word with brand name from GOOgle-Tensorflow to Google-T
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert hyphenated word with brand name and possessive from GOOGle's-Tensorflow to Google's-TensorFlow", () => {
+test("Hyphenated word with brand name and possessive conversion", () => {
     const options = {
         style: "chicago"
     };
@@ -246,7 +246,7 @@ test("Convert hyphenated word with brand name and possessive from GOOGle's-Tenso
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string with HTML line break tag to title case with correct spacing", () => {
+test("Title case conversion with HTML line break <br /> tag", () => {
     const options = {
         style: "chicago"
     };
@@ -257,7 +257,7 @@ test("Convert string with HTML line break tag to title case with correct spacing
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
-test("Convert string with untrimmed spaces to title case with correct spacing", () => {
+test("Title case conversion with untrimmed spaces", () => {
     const options = {
         style: "chicago"
     };
