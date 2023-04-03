@@ -106,29 +106,29 @@ export const correctTitleCasingList = [
 ];
 
 export const wordReplacementsList = [
-    { 'a.k.a': 'AKA' },
-    { 'a.s.a.p': 'ASAP' },
-    { 'angularjs': 'Angular.js' },
-    { 'back-end': 'Backend' },
-    { 'd.i.y': 'DIY' },
-    { 'e-book': 'eBook' },
-    { 'e-books': 'eBooks' },
-    { 'e-commerce': 'eCommerce' },
-    { 'ecom': 'eCommerce' },
-    { 'ecommerce': 'eCommerce' },
-    { 'f.a.q': 'FAQ' },
-    { 'f.a.q.a': 'FAQs' },
-    { 'f.a.q.s': 'FAQs' },
-    { 'f.y.i': 'FYI' },
-    { 'front-end': 'Frontend' },
-    { 'full-stack': 'Fullstack' },
-    { 'nextjs': 'Next.js' },
-    { 'nodejs': 'Node.js' },
-    { 'nuxtjs': 'Nuxt.js' },
-    { 'reactjs': 'React.js' },
-    { 't.b.d': 'TBD' },
-    { 'vuejs': 'Vue.js' },
-    { 'phd': 'ph.d.' },
+  { 'a.k.a': 'AKA' },
+  { 'a.s.a.p': 'ASAP' },
+  { 'angularjs': 'Angular.js' },
+  { 'back-end': 'Backend' },
+  { 'd.i.y': 'DIY' },
+  { 'e-book': 'eBook' },
+  { 'e-books': 'eBooks' },
+  { 'e-commerce': 'eCommerce' },
+  { 'ecom': 'eCommerce' },
+  { 'ecommerce': 'eCommerce' },
+  { 'f.a.q': 'FAQ' },
+  { 'f.a.q.a': 'FAQs' },
+  { 'f.a.q.s': 'FAQs' },
+  { 'f.y.i': 'FYI' },
+  { 'front-end': 'Frontend' },
+  { 'full-stack': 'Fullstack' },
+  { 'nextjs': 'Next.js' },
+  { 'nodejs': 'Node.js' },
+  { 'nuxtjs': 'Nuxt.js' },
+  { 'reactjs': 'React.js' },
+  { 't.b.d': 'TBD' },
+  { 'vuejs': 'Vue.js' },
+  { 'phd': 'ph.d.' },
 ];
 
 // ! TODO
@@ -159,12 +159,12 @@ export const wordReplacementsList = [
 // ];
 
 export const titleCaseStylesList = Object.freeze({
-    AP: 'ap',
-    APA: 'apa',
-    BRITISH: 'british',
-    CHICAGO: 'chicago',
-    NYT: 'nyt',
-    WIKIPEDIA: 'wikipedia'
+  AP: 'ap',
+  APA: 'apa',
+  BRITISH: 'british',
+  CHICAGO: 'chicago',
+  NYT: 'nyt',
+  WIKIPEDIA: 'wikipedia'
 });
 export const allowedTitleCaseStylesList = Object.values(titleCaseStylesList);
 export const titleCaseDefaultOptionsList = Object.freeze({
@@ -208,7 +208,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
 
 export const ignoredWordsList = [];
 export const correctPhraseCasingList = [
-    'The Cybersmile Foundation',
-    'CO. by Colgate',
-    "The Simpsons",
+  'The Cybersmile Foundation',
+  'CO. by Colgate',
+  "The Simpsons",
 ];

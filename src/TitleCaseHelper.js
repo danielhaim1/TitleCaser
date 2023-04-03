@@ -4,8 +4,7 @@ import {
     wordReplacementsList,
     correctTitleCasingList,
     ignoredWordsList,
-}
-    from "./TitleCaseConsts.js";
+} from "./TitleCaseConsts.js";
 
 export default class TitleCaseHelper {
 
@@ -104,10 +103,9 @@ export default class TitleCaseHelper {
         return result;
     }
 
-
-
     static isNeverCapitalizedCache = new Map();
 
+    // Check if the word is a short conjunction
     static isShortConjunction(word, style) {
         // Get the list of short conjunctions from the TitleCaseHelper
         const shortConjunctionsList = [...TitleCaseHelper.getTitleCaseOptions({
@@ -249,6 +247,7 @@ export default class TitleCaseHelper {
         return romanNumeralRegex.test(word);
     }
 
+    // Check if a word is a hyphenated Roman numeral
     static hasHyphenRomanNumeral(word) {
         if (typeof word !== "string" || word === "") {
             throw new TypeError("Invalid input: word must be a non-empty string.");
@@ -263,6 +262,7 @@ export default class TitleCaseHelper {
         return true;
     }
 
+    // Check if a word has `nl2br` in it
     static hasHtmlBreak(word) {
         if (word === "nl2br") {
             return true;
@@ -271,6 +271,7 @@ export default class TitleCaseHelper {
         return false;
     }
 
+    // Check if a word starts with a symbol
     static startsWithSymbol(word) {
         if (typeof word !== 'string') {
             throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
@@ -289,6 +290,7 @@ export default class TitleCaseHelper {
         );
     }
 
+    // Check if a word ends with a symbol
     static endsWithSymbol(word, symbols = [".", ",", ";", ":", "?", "!"]) {
         // Check if the word is a string and the symbols is an array
         if (typeof word !== "string" || !Array.isArray(symbols))
@@ -317,11 +319,13 @@ export default class TitleCaseHelper {
         return ignoredWords.includes(lowercasedWord);
     }
 
+    // Check if the wordList is a valid array
     static isWordInArray(targetWord, wordList) {
         if (!Array.isArray(wordList)) {
             return false;
         }
 
+        // Check if the targetWord is in the wordList
         return wordList.some((word) => word.toLowerCase() === targetWord.toLowerCase());
     }
 
@@ -331,53 +335,53 @@ export default class TitleCaseHelper {
         if (typeof word !== "string" || word === "") {
             throw new TypeError("Invalid input: word must be a non-empty string.");
         }
-    
+
         if (!replaceTermsObj || typeof replaceTermsObj !== "object") {
             throw new TypeError("Invalid input: replaceTermsObj must be a non-null object.");
         }
-    
+
         // Check if the word is in the object with lowercase key
         const lowercasedWord = word.toLowerCase();
         if (replaceTermsObj.hasOwnProperty(lowercasedWord)) {
             return replaceTermsObj[lowercasedWord];
         }
-    
+
         // Check if the word is in the object with original case key
         if (replaceTermsObj.hasOwnProperty(word)) {
             return replaceTermsObj[word];
         }
-    
+
         // Check if the word is in the object with uppercase key
         const uppercasedWord = word.toUpperCase();
         if (replaceTermsObj.hasOwnProperty(uppercasedWord)) {
             return replaceTermsObj[uppercasedWord];
         }
-    
+
         // If the word is not in the object, return the original word
         return word;
     }
-    
+
     // This function is used to check if a suffix is present in a word that is in the correct terms list
     static correctSuffix(word, correctTerms) {
         // Validate input
         if (typeof word !== "string" || word === "") {
             throw new TypeError("Invalid input: word must be a non-empty string.");
         }
-    
+
         if (!correctTerms || !Array.isArray(correctTerms) || correctTerms.some((term) => typeof term !== "string")) {
             throw new TypeError("Invalid input: correctTerms must be an array of strings.");
         }
-    
+
         // Define the regular expression for the suffix
         const suffixRegex = /'s$/i;
-    
+
         // If the word ends with the suffix
         if (suffixRegex.test(word)) {
             // Remove the suffix from the word
             const wordWithoutSuffix = word.slice(0, -2);
             // Check if the word without the suffix matches any of the correct terms
             const matchingIndex = correctTerms.findIndex((term) => term.toLowerCase() === wordWithoutSuffix.toLowerCase());
-    
+
             if (matchingIndex >= 0) {
                 // If it does, return the correct term with the suffix
                 const correctCase = correctTerms[matchingIndex];
@@ -388,11 +392,11 @@ export default class TitleCaseHelper {
                 return `${capitalizedWord}'s`;
             }
         }
-    
+
         // If the word doesn't end with the suffix, return the word as-is
         return word;
     }
-    
+
     // This function is used to check if a word is in the correct terms list
     static correctTerm(word, correctTerms, delimiters = /[-']/) {
         // Validate input
