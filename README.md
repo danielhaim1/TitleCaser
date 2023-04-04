@@ -98,40 +98,28 @@ The `{options}` parameter is an object that contains the settings for the conver
 
 ## Methods
 
-### `setReplaceTerms(terms: object): void`
-
-This method sets the word replacement terms to be used during the title casing. It takes an object as a parameter, where the keys represent the words to be replaced, and the values represent the replacements. Multiple calls to this method can be made to add or update multiple word replacements.
-
-Example usage:
-
-```js
-const titleCaser = new TitleCaser({ style: 'apa' });
-titleCaser.setReplaceTerms({ 'hello world': 'Hello World', 'replace me': 'Replace Me' });
-```
+- `setReplaceTerms(terms: object)`: Sets word replacement terms to be used during title casing. Multiple calls can be made to add or update multiple word replacements.
+- `removeReplaceTerm(term: string)`: Removes a replace term from the `wordReplacementsList` array in the options object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the options object.
+- `addReplaceTerm(term: string, replacement: string)`: Adds a new replace term to the wordReplacementsList array in the options object of the TitleCaser instance. The method takes two string arguments: term specifies the word to be replaced, and replacement specifies the replacement for the word. If the term already exists in the array, the method updates its replacement value. Otherwise, it adds a new object with the term and replacement to the array. The method then updates the wordReplacementsList property in the options object.
+- `setStyle(style: string)`: Sets the style option in the options object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the options object.
 
 ## Examples
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
 
+### Basic Usage
+
 ```js
-// Set the options to Chicago style
-const options = { style: 'chicago' };
-
 // Instantiate a new TitleCaser object with the options
-const titleCaser = new TitleCaser(options);
+const titleCaser = new TitleCaser();
 
-// Set the input string to test
 const input = 'the    Book  of  lIfe';
+const output = titleCaser.toTitleCase(input);
 
-// Set the expected output
-const expectedOutput = 'The Book of Life';
-
-// Call the toTitleCase method and store the result in actualOutput
-const actualOutput = titleCaser.toTitleCase(input);
-
-// Log the actual output
-console.log(actualOutput);
+console.log(output); // The Book of Life
 ```
+
+### Customizing Word Replacements Method
 
 In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to title case.
 
@@ -157,6 +145,8 @@ const expectedOutput = "Hello World, Replace Me!";
 // Call toTitleCase() to convert the input string to title case
 const outputString = titleCaser.toTitleCase(inputString);
 ```
+
+### Customizing TitleCaser
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with specific settings.
 
@@ -187,6 +177,8 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
+### TitleCaser With Default Word Replacement  
+
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
 
 ```js
@@ -205,6 +197,8 @@ const actualOutput = titleCaser.toTitleCase(input);
 // Log the actual output
 console.log(actualOutput);
 ```
+
+### TitleCaser With Possessive Noun and a Colon 
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
 
@@ -225,30 +219,16 @@ const actualOutput = titleCaser.toTitleCase(input);
 console.log(actualOutput);
 ```
 
-The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including lowercase back-end and front-end terms.
-
-```js
-// Instantiate a new TitleCaser object with AP style formatting
-const titleCaser = new TitleCaser({ style: "ap" });
-
-// Set the input string to test
-const input = "BACK-end and front-end";
-
-// Set the expected output
-const expectedOutput = "Backend and Frontend";
-
-// Call the toTitleCase method and store the result in actualOutput
-const actualOutput = titleCaser.toTitleCase(input);
-
-// Log the actual output
-console.log(actualOutput);
-```
-
-## Command Line
+## Build Process
 
 ```bash
 $ npm run build-package
+$ npm run build-docs
+$ npm run copy-package-to-docs
+$ npm run test
 ```
+
+## Test
 
 ```bash
 $ npm run test

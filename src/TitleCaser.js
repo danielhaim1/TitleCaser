@@ -160,6 +160,56 @@ export class TitleCaser {
       // Update the replace terms option
       this.options.wordReplacementsList = wordReplacementsList;
     }
+
+    addReplaceTerm(term, replacement) {
+        if (typeof term !== 'string' || typeof replacement !== 'string') {
+          throw new TypeError('Invalid argument: term and replacement must be strings.');
+        }
+
+        const index = this.wordReplacementsList.findIndex(obj => obj[term]);
+        
+        if (index !== -1) {
+          // If the term already exists in the array, update the replacement value
+          this.wordReplacementsList[index][term] = replacement;
+        } else {
+          // If the term doesn't exist in the array, add a new object with the term and replacement
+          this.wordReplacementsList.push({ [term]: replacement });
+        }
+
+        // Update the replace terms option
+        this.options.wordReplacementsList = this.wordReplacementsList;
+    }
+
+    removeReplaceTerm(term) {
+        if (typeof term !== 'string') {
+            throw new TypeError('Invalid argument: term must be a string.');
+        }
+
+        // Find the index of the term in the wordReplacementsList array
+        const index = this.wordReplacementsList.findIndex(obj => Object.keys(obj)[0] === term);
+
+        // If the term is not found in the array, throw an error
+        if (index === -1) {
+            throw new Error(`Term '${term}' not found in word replacements list.`);
+        }
+
+        // Remove the term from the array
+        this.wordReplacementsList.splice(index, 1);
+
+        // Log the updated wordReplacementsList array
+        // console.log(this.wordReplacementsList);
+
+        // Update the replace terms option
+        this.options.wordReplacementsList = this.wordReplacementsList;
+    }
+
+    setStyle(style) {
+        if (typeof style !== 'string') {
+            throw new TypeError('Invalid argument: style must be a string.');
+        }
+        
+        this.options.style = style;
+    }
 }
 
 // If the module is being used in a Node environment, export the module.

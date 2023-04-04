@@ -51,6 +51,34 @@ test('Capitalize suffix word in sentence', () => {
 });
 test("Test setReplaceTerms", () => {
     const titleCaser = new TitleCaser({
+      style: 'apa'
+    });
+
+    // Set multiple replacement terms using setReplaceTerms()
+    titleCaser.setReplaceTerms({ 
+      'hello world': 'Hello World', 
+      'replace me': 'Replace Me' 
+    });
+    titleCaser.setReplaceTerms({ 
+      'apa': 'APA' 
+    });
+
+    // Use removeReplaceTerm() to remove a replace term
+    titleCaser.removeReplaceTerm('hello world');
+
+    // Use descriptive variable names for the input and expected output
+    const inputString = "hello world, replace me!";
+    const expectedOutput = "Hello World, Replace Me!";
+
+    // Call toTitleCase() to convert the input string to title case
+    const outputString = titleCaser.toTitleCase(inputString);
+    // Check that the output matches the expected output
+    expect(outputString).toEqual(expectedOutput);
+});
+
+
+test("Test setReplaceTerms", () => {
+    const titleCaser = new TitleCaser({
       style: 'ap'
     });
     const replaceTerms = [
