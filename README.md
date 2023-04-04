@@ -235,33 +235,41 @@ $ npm run test
 ```
 
 ```bash
-  ✓ Default title case conversion (2 ms)
-  ✓ Customized title case conversion (1 ms)
-  ✓ AP-style title case conversion with replacements (1 ms)
-  ✓ AP-style title case conversion with replacements (1 ms)
-  ✓ Capitalize suffix word in sentence
-  ✓ Testing setReplaceTerms (15 ms)
-  ✓ Hyphenated, colon, and short word replacements (1 ms)
-  ✓ Capitalization and word replacements
-  ✓ AP-style title case with possessive and colon (3 ms)
-  ✓ AP-style title case with lowercase back/front-end terms
-  ✓ Chicago style title case with comparison and colon
-  ✓ APA style title case with colon
-  ✓ Wikipedia style title case with acronym and hyphen
-  ✓ APA style title case with colon and apostrophe
-  ✓ Chicago style title case with custom term replacements
-  ✓ AP-style capitalization test with special terms and colon (1 ms)
-  ✓ NYT-style capitalization test with special terms and colon
-  ✓ APA style capitalization test with short conjunction terms and colon (1 ms)
-  ✓ Correct phrase casing list testing
-  ✓ Wikipedia style capitalization test with special term and colon (1 ms)
-  ✓ Chicago style capitalization test with custom term replacement and colon
-  ✓ Mixed case term to title case conversion
-  ✓ Mixed case possessive term to title case conversion
-  ✓ Hyphenated word with brand name conversion
-  ✓ Hyphenated word with brand name and possessive conversion
-  ✓ Title case conversion with HTML line break <br /> tag
-  ✓ Title case conversion with untrimmed spaces (1 ms)
+Test Basic Options
+✓ Default title case conversion
+✓ Customized title case conversion
+✓ AP-style title case conversion with replacements
+✓ AP-style title case conversion with replacements
+✓ Capitalize suffix word in sentence
+
+Test Methods
+✓ removeReplaceTerm
+✓ setReplaceTerms
+
+Test Variation Stability
+✓ Hyphenated, colon, and short word replacements
+✓ Capitalization and word replacements
+✓ AP-style title case with possessive and colon
+✓ AP-style title case with lowercase back/front-end terms
+✓ Chicago style title case with comparison and colon
+✓ APA style title case with colon
+✓ Wikipedia style title case with acronym and hyphen
+✓ APA style title case with colon and apostrophe
+✓ Chicago style title case with custom term replacements
+✓ AP-style capitalization test with special terms and colon
+✓ NYT-style capitalization test with special terms and colon
+✓ APA style capitalization test with short conjunction terms and colon
+✓ Correct phrase casing list testing
+✓ Wikipedia style capitalization test with special term and colon
+
+Test Reserved Words
+✓ Reserved word
+✓ Reserved word with colon
+✓ Reserved word, posessive
+✓ Hyphenated reserved word
+✓ Hyphenated reserved word, possessive
+✓ HTML line break nl2br, <br /> tag
+✓ Untrimmed white spaces
 ```
 
 ## Resources
