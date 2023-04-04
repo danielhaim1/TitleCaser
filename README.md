@@ -1,13 +1,13 @@
-# TitleCase-JS
+# TitleCaser
 
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
 ## Demo
 
-<a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
+<a target="_blank" href="https://danielhaim1.github.io/titlecaser/"><img src="dist/demo.png" width="100%" height="auto"></a>
 
-[![npm version](https://badge.fury.io/js/titlecase-js.svg?t=1623701119)](https://badge.fury.io/js/titlecase-js)
-[![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![npm version](https://badge.fury.io/js/titlecaser.svg?t=1623701119)](https://badge.fury.io/js/titlecaser)
+[![Downloads](https://img.shields.io/npm/dt/titlecaser.svg)](https://www.npmjs.com/package/titlecaser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
@@ -32,7 +32,7 @@ Command-line interface for building, testing, and minimizing the module
 You can install this module via npm:
 
 ```bash
-npm i titlecase-js
+npm i @danielhaim/titlecaser
 ```
 
 ## Usage
@@ -41,8 +41,8 @@ The package can be imported and used in both Node.js and browser environments us
 
 ```js
 // CommonJS
-const { TitleCaser } = require('./path/to/titlecase-js');
-const TitleCaser = require('./path/to/titlecase-js');
+const { TitleCaser } = require('./path/to/titlecaser');
+const TitleCaser = require('./path/to/titlecaser');
 
 // ECMAScript
 import { TitleCaser } from './TitleCaser';

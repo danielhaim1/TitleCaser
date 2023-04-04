@@ -9,7 +9,7 @@ module.exports = [
     target: 'node',
     entry: './src/index.js',
     output: {
-      filename: 'titlecase.js',
+      filename: 'titlecaser.js',
       path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
@@ -39,7 +39,7 @@ module.exports = [
     target: 'web',
     entry: './src/index.js',
     output: {
-      filename: 'titlecase.browser.js',
+      filename: 'titlecaser.browser.js',
       path: path.resolve(__dirname, 'dist'),
     },
     optimization: {

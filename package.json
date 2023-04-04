@@ -1,5 +1,5 @@
 {
-  "name": "titlecase-js",
+  "name": "@danielhaim/titlecaser",
   "version": "1.2.23",
   "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
   "keywords": [
@@ -10,13 +10,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielhaim1/titlecase-js.git"
+    "url": "https://github.com/danielhaim1/titlecaser.git"
   },
   "main": "src/TitleCaser.js",
   "scripts": {
     "test": "jest",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
-    "build-package": "webpack --mode production && terser dist/titlecase.js -o dist/titlecase.min.js",
+    "build-package": "webpack --mode production && terser dist/titlecaser.js -o dist/titlecaser.min.js",
     "copy-package-to-docs": "cp -R dist/ docs/assets/js",
     "tree": "tree -I 'node_modules'",
     "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
