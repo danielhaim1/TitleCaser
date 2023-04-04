@@ -32,7 +32,7 @@ Command-line interface for building, testing, and minimizing the module
 You can install this module via npm:
 
 ```bash
-npm i @danielhaim/titlecaser
+$ npm i @danielhaim/titlecaser
 ```
 
 ## Usage
