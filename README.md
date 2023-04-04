@@ -6,9 +6,8 @@ Transform any text to proper title case format using popular style guides such a
 
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="dist/demo.png" width="100%" height="auto"></a>
 
-[![npm version](https://badge.fury.io/js/titlecaser.svg?t=16237011191)](https://badge.fury.io/js/TitleCaser)
-[![Downloads](https://img.shields.io/npm/dt/titlecaser.svg)](https://www.npmjs.com/package/@danielhaim/titlecaser)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![npm](https://img.shields.io/npm/dt/@danielhaim/titlecaser)
+![GitHub](https://img.shields.io/github/license/danielhaim1/titlecaser)
 
 The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
 
