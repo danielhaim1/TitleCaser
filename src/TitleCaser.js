@@ -11,6 +11,7 @@ import TitleCaseHelper from "./TitleCaseHelper.js";
 export class TitleCaser {
     constructor (options = {}) {
         this.options = options;
+        this.wordReplacementsList = wordReplacementsList;
     }
     toTitleCase(str) {
         try {
@@ -23,7 +24,11 @@ export class TitleCaser {
             // If options is not an object, throw an error.
             if (typeof this.options !== "undefined" && typeof this.options !== "object") throw new TypeError("Invalid options: options must be an object.");
 
-            const { style = "ap", neverCapitalize = [] } = this.options;
+            const { 
+                style = "ap",
+                neverCapitalize = [],
+                replaceTermsList = wordReplacementsList
+            } = this.options;
             const ignoreList = ["nl2br", ...neverCapitalize];
             const {
                 articlesList,
@@ -31,16 +36,15 @@ export class TitleCaser {
                 shortPrepositionsList,
                 neverCapitalizedList,
                 replaceTerms
-            } = TitleCaseHelper.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
+          } = TitleCaseHelper.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
 
+          // Prerocess the replaceTerms array to make it easier to search for.
+          const replaceTermsArray = replaceTermsList.map(term => Object.keys(term)[0].toLowerCase());
+          // Create an object from the replaceTerms array to make it easier to search for.
+          const replaceTermsObj = Object.fromEntries(replaceTermsList.map(
+            term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]
+          ));
 
-            // Prerocess the replaceTerms array to make it easier to search for.
-            const replaceTermsArray = wordReplacementsList.map(term => Object.keys(term)[0].toLowerCase());
-
-            // Create an object from the replaceTerms array to make it easier to search for.
-            const replaceTermsObj = Object.fromEntries(wordReplacementsList.map(
-                term => [Object.keys(term)[0].toLowerCase(),Object.values(term)[0]]
-            ));
 
             // Remove extra spaces and replace <br> tags with a placeholder.
             let inputString = str.trim();
@@ -132,10 +136,35 @@ export class TitleCaser {
             throw new Error(error);
         }
     }
+
+    setReplaceTerms(terms) {
+      if (typeof terms !== 'object') {
+        throw new TypeError('Invalid argument: replace terms must be an object.');
+      }
+
+      // Add the new replace terms to the wordReplacementsList array
+      Object.entries(terms).forEach(([term, replacement]) => {
+        const index = wordReplacementsList.findIndex(obj => obj[term]);
+        if (index !== -1) {
+          // If the term already exists in the array, update the replacement value
+          wordReplacementsList[index][term] = replacement;
+        } else {
+          // If the term doesn't exist in the array, add a new object with the term and replacement
+          wordReplacementsList.push({ [term]: replacement });
+        }
+      });
+
+      // Log the updated wordReplacementsList array
+      // console.log(wordReplacementsList);
+
+      // Update the replace terms option
+      this.options.wordReplacementsList = wordReplacementsList;
+    }
 }
 
 // If the module is being used in a Node environment, export the module.
 if (typeof module === 'object' && module.exports) {
     module.exports = { TitleCaser };
 }
+
 

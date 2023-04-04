@@ -1,5 +1,6 @@
 module.exports = {
   transform: {
-    '^.+\\.js$': 'esbuild-jest',
+    '^.+\\.js$': 'esbuild-jest'
   },
+  testEnvironment: 'jsdom',
 };

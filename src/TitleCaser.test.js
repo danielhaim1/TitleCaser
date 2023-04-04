@@ -49,6 +49,20 @@ test('Capitalize suffix word in sentence', () => {
     expect(actualOutput)
         .toEqual(expectedOutput);
 });
+test("Test setReplaceTerms", () => {
+    const titleCaser = new TitleCaser({
+      style: 'ap'
+    });
+    const replaceTerms = [
+      { 'hello world': 'Hello World' },
+      { 'replace me': 'Replace Me' }
+    ];
+    titleCaser.setReplaceTerms(replaceTerms);
+    const input = "hello world, replace me!";
+    const expectedOutput = "Hello World, Replace Me!";
+    const actualOutput = titleCaser.toTitleCase(input);
+    expect(actualOutput).toEqual(expectedOutput);
+});
 test("Hyphenated, colon, and short word replacements", () => {
     const options = {
         style: "chicago"

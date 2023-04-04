@@ -8,6 +8,7 @@ import {
 
 export default class TitleCaseHelper {
 
+    // Validate the option key
     static validateOption(key, value) {
         // Check if value is an array
         if (!Array.isArray(value)) {
@@ -18,7 +19,6 @@ export default class TitleCaseHelper {
         if (!value.every((word) => typeof word === "string")) {
             throw new TypeError(`Invalid option: ${key} must be an array of strings`);
         }
-
     }
 
     // Validate the options object

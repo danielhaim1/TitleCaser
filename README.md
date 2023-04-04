@@ -1,4 +1,4 @@
-## TitleCase-JS
+# TitleCase-JS
 
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
@@ -7,8 +7,8 @@ Transform any text to proper title case format using popular style guides such a
 <a target="_blank" href="https://danielhaim1.github.io/titlecase-js/"><img src="dist/demo.png" width="100%" height="auto"></a>
 
 [![npm version](https://badge.fury.io/js/titlecase-js.svg?t=1623701119)](https://badge.fury.io/js/titlecase-js)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://img.shields.io/npm/dt/titlecase-js.svg)](https://www.npmjs.com/package/titlecase-js)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
 
@@ -29,32 +29,85 @@ Command-line interface for building, testing, and minimizing the module
 - Exclusion of common phrases from title capitalization
 
 ## Installation
+You can install this module via npm:
 
 ```bash
-$ npm install titlecase-js
+npm i titlecase-js
 ```
 
 ## Usage
 
-```javascript
-const toTitleCase = require('titlecase-js');
+The package can be imported and used in both Node.js and browser environments using the following syntax:
 
-const input = 'the quick brown fox jumps over the lazy dog';
-const options = { style: 'apa' };
-const output = input.toTitleCase(options);
+```js
+// CommonJS
+const { TitleCaser } = require('./path/to/titlecase-js');
+const TitleCaser = require('./path/to/titlecase-js');
 
-console.log(output);
+// ECMAScript
+import { TitleCaser } from './TitleCaser';
 ```
 
-## API
+Here's an example of how to use the modulate function:
 
-- The `options` parameter is an object that contains the settings for the conversion process.
-- The `style` parameter is a string that determines the specific title case style to be applied. Permissible values include: `'ap'`, `'apa'`, `'british'`, `'chicago'`, `'nyt'`, and `'wikipedia'`.
+```js
+const options = {
+        style: 'chicago'
+      };
+
+const titleCaser = new TitleCaser(options);
+
+const input = 'the book   of     life';
+const output = titleCaser.toTitleCase(input);
+
+console.log(output); // 'The Book of Life'
+```
+
+## Usage in the Browser
+
+The function can also be used in a browser environment by including the `titlecase.browser.js` script in your HTML file:
+
+Here's an example of how to use the modulate function:
+
+```html
+<script src="./path/to/titlecase.browser.js"></script>
+```
+
+After that, the `toTitleCase()` function can be accessed in your JavaScript code like this:
+
+```js
+const options = { 
+  style: 'apa'
+};
+const input = 'the future of devops: the next era';
+const output = input.toTitleCase(options);
+
+console.log(output); // The Future of DevOps: The Next Era
+```
+
+## Options
+
+The `{options}` parameter is an object that contains the settings for the conversion process.
+
+- `style`: determines the specific title case style to be applied. Permissible values include: `['ap', 'apa', 'british', 'chicago', 'nyt', 'wikipedia']`
 - `articlesList` refers to the words that should be treated as articles in title case.
 - `shortConjunctionsList` pertains to the words that should be treated as short conjunctions in title case.
 - `shortPrepositionsList` relates to the words that should be treated as short prepositions in title case.
 - `neverCapitalizedList` contains the words that should never be capitalized in title case.
 - `wordReplacementsList` is a map of terms that will be replaced during the title case conversion process.
+
+## Methods
+
+### `setReplaceTerms(terms: object): void`
+
+This method sets the word replacement terms to be used during the title casing. It takes an object as a parameter, where the keys represent the words to be replaced, and the values represent the replacements. Multiple calls to this method can be made to add or update multiple word replacements.
+
+Example usage:
+
+```js
+const titleCaser = new TitleCaser({ style: 'apa' });
+titleCaser.setReplaceTerms({ 'hello world': 'Hello World', 'replace me': 'Replace Me' });
+```
 
 ## Examples
 
@@ -78,6 +131,31 @@ const actualOutput = titleCaser.toTitleCase(input);
 
 // Log the actual output
 console.log(actualOutput);
+```
+
+In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to title case.
+
+```js
+// CommonJS
+const titleCaser = new TitleCaser({
+  style: 'apa'
+});
+
+// Set multiple replacement terms using two separate calls to setReplaceTerms()
+titleCaser.setReplaceTerms({ 
+  'hello world': 'Hello World', 
+  'replace me': 'Replace Me' 
+});
+titleCaser.setReplaceTerms({ 
+  'apa': 'APA' 
+});
+
+// Use descriptive variable names for the input and expected output
+const inputString = "hello world, replace me!";
+const expectedOutput = "Hello World, Replace Me!";
+
+// Call toTitleCase() to convert the input string to title case
+const outputString = titleCaser.toTitleCase(inputString);
 ```
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with specific settings.
@@ -177,31 +255,33 @@ $ npm run test
 ```
 
 ```bash
-  ✓ Default title case conversion
-  ✓ Customized title case conversion
-  ✓ AP-style title case conversion with replacements
+  ✓ Default title case conversion (2 ms)
+  ✓ Customized title case conversion (1 ms)
+  ✓ AP-style title case conversion with replacements (1 ms)
+  ✓ AP-style title case conversion with replacements (1 ms)
   ✓ Capitalize suffix word in sentence
-  ✓ Hyphenated, colon, and short word replacements
+  ✓ Testing setReplaceTerms (15 ms)
+  ✓ Hyphenated, colon, and short word replacements (1 ms)
   ✓ Capitalization and word replacements
-  ✓ AP-style title case with possessive and colon
+  ✓ AP-style title case with possessive and colon (3 ms)
   ✓ AP-style title case with lowercase back/front-end terms
   ✓ Chicago style title case with comparison and colon
   ✓ APA style title case with colon
   ✓ Wikipedia style title case with acronym and hyphen
   ✓ APA style title case with colon and apostrophe
   ✓ Chicago style title case with custom term replacements
-  ✓ AP-style capitalization test with special terms and colon
+  ✓ AP-style capitalization test with special terms and colon (1 ms)
   ✓ NYT-style capitalization test with special terms and colon
-  ✓ APA style capitalization test with short conjunction terms and colon
+  ✓ APA style capitalization test with short conjunction terms and colon (1 ms)
   ✓ Correct phrase casing list testing
-  ✓ Wikipedia style capitalization test with special term and colon
+  ✓ Wikipedia style capitalization test with special term and colon (1 ms)
   ✓ Chicago style capitalization test with custom term replacement and colon
   ✓ Mixed case term to title case conversion
   ✓ Mixed case possessive term to title case conversion
   ✓ Hyphenated word with brand name conversion
   ✓ Hyphenated word with brand name and possessive conversion
-  ✓ Title case conversion with HTML line break `<br />` tag
-  ✓ Title case conversion with untrimmed spaces
+  ✓ Title case conversion with HTML line break <br /> tag
+  ✓ Title case conversion with untrimmed spaces (1 ms)
 ```
 
 ## Resources
