@@ -63,12 +63,12 @@ console.log(output); // 'The Book of Life'
 
 ## Usage in the Browser
 
-The function can also be used in a browser environment by including the `titlecase.browser.js` script in your HTML file:
+The function can also be used in a browser environment by including the `titlecaser.browser.js` script in your HTML file:
 
 Here's an example of how to use the modulate function:
 
 ```html
-<script src="./path/to/titlecase.browser.js"></script>
+<script src="./path/to/titlecaser.browser.js"></script>
 ```
 
 After that, the `toTitleCase()` function can be accessed in your JavaScript code like this:
