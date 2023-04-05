@@ -1,12 +1,14 @@
 # TitleCaser
 
+[![npm version](https://img.shields.io/npm/v/@danielhaim/titlecaser)](https://www.npmjs.com/package/@danielhaim/titlecaser)
+[![Downloads](https://img.shields.io/npm/dt/@danielhaim/titlecaser.svg)](https://www.npmjs.com/package/@danielhaim/titlecaser)
+![GitHub](https://img.shields.io/github/license/danielhaim1/titlecaser)
+
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
 ## Demo
 
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="dist/demo.png" width="100%" height="auto"></a>
-
-![GitHub](https://img.shields.io/github/license/danielhaim1/titlecaser)
 
 ## Table of Contents
 
