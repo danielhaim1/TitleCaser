@@ -61,12 +61,7 @@ $ npm i @danielhaim/titlecaser
 The package can be imported and used in both Node.js and browser environments using the following syntax:
 
 ```js
-// CommonJS
-const { TitleCaser } = require('./path/to/titlecaser');
-const TitleCaser = require('./path/to/titlecaser');
-
-// ECMAScript
-import { TitleCaser } from './TitleCaser';
+import TitleCaser from '.path/to/@danielhaim/titlecaser';
 ```
 
 Here's an example of how to use the modulate function:
