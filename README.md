@@ -29,6 +29,8 @@ Transform any text to proper title case format using popular style guides such a
   * [Resources](#resources)
   * [Report Bugs](#report-bugs)
 
+## Introduction
+
 The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
 
 To streamline workflow, the Language Conventions and Style Module is available in both browser and node environment versions and includes a command-line interface for building, testing, and minimizing the module. Additionally, it features a filter ability that allows users to ignore certain phrases containing short words, preventing the module from mistakenly flagging instances where short words are used as part of a larger term or phrase.
