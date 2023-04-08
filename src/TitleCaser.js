@@ -138,8 +138,7 @@ export class TitleCaser {
 
             // Replace the nl2br placeholder with <br> tags.
             inputString = inputString.replace(/nl2br /gi, "<br />");
-            console.log(inputString);
-
+            
             // Return the string.
             return inputString;
         }
