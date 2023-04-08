@@ -318,6 +318,15 @@ describe(`
         expect(actualOutput)
             .toEqual(expectedOutput);
     });
+    test("Ampersand in a sentence should return & and not &Amp\;", () => {
+        const options = { style: "chicago" };
+        const titleCaser = new TitleCaser(options);
+        const input = "This & That";
+        const expectedOutput = "This & That";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput)
+            .toEqual(expectedOutput);
+    });
     test("Untrimmed white spaces", () => {
         const options = {
             style: "chicago"

@@ -45,6 +45,13 @@ export class TitleCaser {
             term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]
           ));
 
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+          };
 
             // Remove extra spaces and replace <br> tags with a placeholder.
             let inputString = str.trim();
@@ -53,13 +60,16 @@ export class TitleCaser {
             inputString = inputString.replace(/ {2,}/g, (match) => match.slice(0, 1));
 
             // Replace <br> tags with a placeholder.
-            inputString = inputString.replace(/<br\s*[\/]?>/gi, "nl2br ");
+            inputString = inputString.replace(/<br\s*\/?>/gi, "nl2br ");
 
             // Split the string into an array of words.
             const words = inputString.split(" ");
             
             const wordsInTitleCase = words.map((word, i) => {
                 switch (true) {
+                    case TitleCaseHelper.isWordAmpersand(word):
+                        // if the word is an ampersand, return it as is.
+                        return word;
                     case TitleCaseHelper.hasHtmlBreak(word):
                         // If the word is a <br> tag, return it as is.
                         return word;
@@ -128,6 +138,7 @@ export class TitleCaser {
 
             // Replace the nl2br placeholder with <br> tags.
             inputString = inputString.replace(/nl2br /gi, "<br />");
+            console.log(inputString);
 
             // Return the string.
             return inputString;

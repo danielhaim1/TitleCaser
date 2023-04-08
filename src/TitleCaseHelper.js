@@ -271,6 +271,22 @@ export default class TitleCaseHelper {
         return false;
     }
 
+    // Check if a string has Unicode symbols.
+    static hasUnicodeSymbols(str) {
+      return /[^\x00-\x7F\u00A0-\u00FF\u0100-\u017F\u0180-\u024F\u0250-\u02AF\u02B0-\u02FF\u0300-\u036F\u0370-\u03FF\u0400-\u04FF\u0500-\u052F\u0530-\u058F\u0590-\u05FF\u0600-\u06FF\u0700-\u074F\u0750-\u077F\u0780-\u07BF\u07C0-\u07FF\u0800-\u083F\u0840-\u085F\u0860-\u087F\u0880-\u08AF\u08B0-\u08FF\u0900-\u097F\u0980-\u09FF\u0A00-\u0A7F\u0A80-\u0AFF\u0B00-\u0B7F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F\u0D80-\u0DFF\u0E00-\u0E7F\u0E80-\u0EFF\u0F00-\u0FFF]/.test(str);
+    }
+
+    // Checks whether a string contains any currency symbols
+    static hasCurrencySymbols(str) {
+      return /[^\x00-\x7F\u00A0-\u00FF\u20AC\u20A0-\u20B9\u20BD\u20A1-\u20A2\u00A3-\u00A5\u058F\u060B\u09F2-\u09F3\u0AF1\u0BF9\u0E3F\u17DB\u20A6\u20A8\u20B1\u2113\u20AA-\u20AB\u20AA\u20AC-\u20AD\u20B9]/.test(str);
+    }
+
+    // Check if a word is ampersand
+    static isWordAmpersand(str) {
+      return /&amp;|&/.test(str);
+    }
+
+
     // Check if a word starts with a symbol
     static startsWithSymbol(word) {
         if (typeof word !== 'string') {
@@ -289,6 +305,45 @@ export default class TitleCaseHelper {
             firstChar === '.'
         );
     }
+
+    static escapeSpecialCharacters(str) {
+      return str.replace(/[&<>"']/g, function (match) {
+        switch (match) {
+          case "&":
+            return "&amp;";
+          case "<":
+            return "&lt;";
+          case ">":
+            return "&gt;";
+          case '"':
+            return "&quot;";
+          case "'":
+            return "&#x27;";
+          default:
+            return match;
+        }
+      });
+    }
+
+    static unescapeSpecialCharacters(str) {
+      return str.replace(/&amp;|&lt;|&gt;|&quot;|&#x27;/g, function (match) {
+        switch (match) {
+          case "&amp;":
+            return "&";
+          case "&lt;":
+            return "<";
+          case "&gt;":
+            return ">";
+          case "&quot;":
+            return '"';
+          case "&#x27;":
+            return "'";
+          default:
+            return match;
+        }
+      });
+    }
+
 
     // Check if a word ends with a symbol
     static endsWithSymbol(word, symbols = [".", ",", ";", ":", "?", "!"]) {
