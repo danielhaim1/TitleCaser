@@ -1,6 +1,6 @@
 {
   "name": "@danielhaim/titlecaser",
-  "version": "1.2.27",
+  "version": "1.2.28",
   "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
   "keywords": [
     "titlecase",
