@@ -78,7 +78,7 @@ export const correctTitleCasingList = [
   'ProTools', 'QuickTime', 'AdWords', 'AdSense', 'TikTok', 'Slack', 'Trello',
   'Zoom', 'Twitch', 'Snapchat', 'WhatsApp', 'Telegram', 'Discord', 'Reddit',
   'Quora', 'StackOverflow', 'StackExchange', 'Coca-Cola',
-  'AWS', 'GCP', 'VMware', 'CVS',
+  'AWS', 'GCP', 'VMware', 'CVS', 'ESL',
 
   // Sports
   'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
