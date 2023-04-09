@@ -84,19 +84,16 @@ export const correctTitleCasingList = [
   'NBA', 'NCAA', 'NFL', 'WWE', 'WWF', 'FIFA',
 
   // Time-related, numbers, and measurements: Includes abbreviations for
-  // time-related terms, numbers, and measurements.
   'a.m.', 'p.m.', 'ca.', 'cc.', 'fig.', 'pl.', 'pt.', 'rev.',
   'sr.', 'v.', 'vol.', 'et al.', 'pp.', 'p.',
 
   // Professional abbreviations, degrees, and titles: Includes abbreviations
-  // for professional titles, degrees, and certifications.
   'ph.d.', 'm.d.', 'd.d.s.', 'd.m.d.', 'd.o.', 'd.c.', 'd.v.m.',
   'd.n.p.', 'd.p.m.', 'd.s.w.', 'd.s.n.', 'd.n.sc.', 'd.n.a.',
   'd.n.t.', 'd.n.p.t.', 'd.n.o.', 'd.n.m.', 'd.n.e.', 'd.n.s.',
   'd.n.p.s.',
 
   // Academic & literary abbreviations: Includes abbreviations for academic 
-  // and literary terms, such as 'ed.' for 'edition' and 'vol.' for 'volume'.
   'adj.', 'adv.', 'cf.', 'cm.', 'co.', 'corp.', 'dept.',
   'dist.', 'ed.', 'edn.', 'esp.', 'etc.', 'ex.', 'i.e.', 'e.g.',
   'op. cit.', 'vs.',
