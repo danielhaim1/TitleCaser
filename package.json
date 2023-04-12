@@ -27,7 +27,7 @@
     "type": "git",
     "url": "https://github.com/danielhaim1/titlecaser.git"
   },
-  "main": "src/index.js",
+  "main": "src/TitleCaser.js",
   "scripts": {
     "test": "jest",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
