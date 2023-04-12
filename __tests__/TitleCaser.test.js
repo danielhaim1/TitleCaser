@@ -1,4 +1,4 @@
-import { TitleCaser } from './TitleCaser';
+import { TitleCaser } from '../index.js';
 
 describe(`
     Test Basic Options`, () => {

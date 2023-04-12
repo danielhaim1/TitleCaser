@@ -23,53 +23,56 @@
     "Chicago Manual of Style",
     "British style"
   ],
+  "homepage": "https://github.com/danielhaim1/titlecaser#readme",
+  "bugs": "https://github.com/danielhaim1/titlecaser/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielhaim1/titlecaser/#readme"
+    "url": "https://github.com/danielhaim1/titlecaser.git"
   },
-  "main": "src/TitleCaser.js",
-  "scripts": {
-    "test": "jest",
-    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
-    "build-package": "webpack --mode production && terser dist/titlecaser.js -o dist/titlecaser.min.js",
-    "copy-package-to-docs": "cp -R dist/ docs/assets/js",
-    "tree": "tree -I 'node_modules'",
-    "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
-  },
-  "files": [
-    "package.json",
-    "src/TitleCaserConsts.js",
-    "src/TitleCaserUtils.js",
-    "src/TitleCaser.js",
-    "src/index.js",
-    "LICENSE",
-    "README.md"
-  ],
+  "license": "Apache-2.0",
   "author": {
     "name": "Daniel Haim",
     "url": "https://github.com/danielhaim1"
   },
-  "license": "MIT",
+  "main": "./src/TitleCaser.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "src/",
+    "package.json"
+  ],
+  "scripts": {
+    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
+    "build-package": "webpack --mode production && terser dist/titlecaser.js -o dist/titlecaser.min.js",
+    "copy-package-to-docs": "cp -R dist/ docs/assets/js",
+    "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push",
+    "test": "jest",
+    "tree": "tree -I 'node_modules'"
+  },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.4",
     "@babel/plugin-transform-modules-commonjs": "^7.21.2",
     "@babel/preset-env": "^7.21.4",
     "@babel/runtime-corejs3": "^7.21.0",
+    "@jest/expect": "^29.5.0",
+    "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "esbuild-jest": "^0.5.0",
     "exports-loader": "^4.0.0",
-    "terser-webpack-plugin": "^5.3.7",
-    "webpack": "^5.78.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-node-externals": "^3.0.0",
-    "@jest/expect": "^29.5.0",
-    "babel-jest": "^29.5.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jest-environment-puppeteer": "^8.0.6",
     "jest-puppeteer": "^8.0.6",
     "puppeteer": "^19.8.5",
-    "puppeteer-core": "^19.8.5"
+    "puppeteer-core": "^19.8.5",
+    "terser-webpack-plugin": "^5.3.7",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

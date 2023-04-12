@@ -6,7 +6,7 @@ const path = require("path"),
 module.exports = [{
   mode: "production",
   target: "web",
-  entry: "./src/index.js",
+  entry: "./index.js",
   output: {
     filename: "titlecaser.amd.js",
     path: path.resolve(__dirname, "dist")
@@ -35,7 +35,7 @@ module.exports = [{
 }, {
   mode: "production",
   target: "node",
-  entry: "./src/index.js",
+  entry: "./index.js",
   output: {
     filename: "titlecaser.js",
     path: path.resolve(__dirname, "dist"),

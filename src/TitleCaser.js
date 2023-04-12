@@ -221,10 +221,3 @@ export class TitleCaser {
         this.options.style = style;
     }
 }
-
-// If the module is being used in a Node environment, export the module.
-if (typeof module === 'object' && module.exports) {
-    module.exports = { TitleCaser };
-}
-
-
