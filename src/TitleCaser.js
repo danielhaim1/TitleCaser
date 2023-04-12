@@ -27,7 +27,7 @@ export class TitleCaser {
             const { 
                 style = "ap",
                 neverCapitalize = [],
-                replaceTermsList = wordReplacementsList
+                replaceTermList = wordReplacementsList
             } = this.options;
             const ignoreList = ["nl2br", ...neverCapitalize];
             const {
@@ -39,9 +39,9 @@ export class TitleCaser {
           } = TitleCaseHelper.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
 
           // Prerocess the replaceTerms array to make it easier to search for.
-          const replaceTermsArray = replaceTermsList.map(term => Object.keys(term)[0].toLowerCase());
+          const replaceTermsArray = replaceTermList.map(term => Object.keys(term)[0].toLowerCase());
           // Create an object from the replaceTerms array to make it easier to search for.
-          const replaceTermsObj = Object.fromEntries(replaceTermsList.map(
+          const replaceTermObj = Object.fromEntries(replaceTermList.map(
             term => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]
           ));
 
@@ -78,7 +78,7 @@ export class TitleCaser {
                         return word;
                     case replaceTermsArray.includes(word.toLowerCase()):
                         // If the word is in the replaceTerms array, return the replacement.
-                        return replaceTermsObj[word.toLowerCase()];
+                        return replaceTermObj[word.toLowerCase()];
                     case TitleCaseHelper.isWordInArray(word, correctTitleCasingList):
                         // If the word is in the correctTitleCasingList array, return the correct casing.
                         return TitleCaseHelper.correctTerm(word, correctTitleCasingList);

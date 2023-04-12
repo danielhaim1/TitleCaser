@@ -3,7 +3,7 @@ import {
     titleCaseDefaultOptionsList,
     wordReplacementsList,
     correctTitleCasingList,
-    ignoredWordsList,
+    ignoredWordList,
 } from "./TitleCaseConsts.js";
 
 export default class TitleCaseHelper {
@@ -21,9 +21,11 @@ export default class TitleCaseHelper {
         }
     }
 
-    // Validate the options object
+    // Validate the option object
+    static TitleCaseValidator;
     static validateOptions(options) {
         for (const key of Object.keys(options)) {
+
             if (key === 'style') {
                 if (typeof options.style !== 'string') {
                     throw new TypeError(`Invalid option: ${key} must be a string`);
@@ -32,6 +34,7 @@ export default class TitleCaseHelper {
                 }
                 continue;
             }
+
             if (key === 'wordReplacementsList') {
                 if (!Array.isArray(options.wordReplacementsList)) {
                     throw new TypeError(`Invalid option: ${key} must be an array`);
@@ -44,10 +47,12 @@ export default class TitleCaseHelper {
                 }
                 continue;
             }
+
             if (!titleCaseDefaultOptionsList.hasOwnProperty(key)) {
                 throw new TypeError(`Invalid option: ${key}`);
             }
-            TitleCaseValidator.validateOption(key, options[key]);
+
+            this.TitleCaseValidator.validateOption(key, options[key]);
         }
     }
 
@@ -264,11 +269,7 @@ export default class TitleCaseHelper {
 
     // Check if a word has `nl2br` in it
     static hasHtmlBreak(word) {
-        if (word === "nl2br") {
-            return true;
-        }
-
-        return false;
+        return word === "nl2br";
     }
 
     // Check if a string has Unicode symbols.
@@ -355,7 +356,7 @@ export default class TitleCaseHelper {
     }
 
     // This function accepts two arguments: a word and an array of ignored words.
-    static isWordIgnored(word, ignoredWords = ignoredWordsList) {
+    static isWordIgnored(word, ignoredWords = ignoredWordList) {
         // If the ignoredWords argument is not an array, throw an error.
         if (!Array.isArray(ignoredWords)) {
             throw new TypeError("Invalid input: ignoredWords must be an array.");
@@ -366,8 +367,9 @@ export default class TitleCaseHelper {
             throw new TypeError("Invalid input: word must be a non-empty string.");
         }
 
-        // Convert the word to lowercase and trim any whitespace.
-        const lowercasedWord = word.toLowerCase()
+        // Convert the word to lowercase and trim any space.
+        let lowercasedWord;
+        lowercasedWord = word.toLowerCase()
             .trim();
 
         // If the word is in the ignoredWords array, return true. Otherwise, return false.
@@ -385,31 +387,34 @@ export default class TitleCaseHelper {
     }
 
     // This function is used to replace a word with a term in the replaceTerms object
-    static replaceTerm(word, replaceTermsObj) {
+    static replaceTerm(word, replaceTermObj) {
         // Validate input
         if (typeof word !== "string" || word === "") {
             throw new TypeError("Invalid input: word must be a non-empty string.");
         }
 
-        if (!replaceTermsObj || typeof replaceTermsObj !== "object") {
-            throw new TypeError("Invalid input: replaceTermsObj must be a non-null object.");
+        if (!replaceTermObj || typeof replaceTermObj !== "object") {
+            throw new TypeError("Invalid input: replaceTermObj must be a non-null object.");
         }
 
+        // Convert the word to lowercase
+        let lowercasedWord;
+        lowercasedWord = word.toLowerCase();
+
         // Check if the word is in the object with lowercase key
-        const lowercasedWord = word.toLowerCase();
-        if (replaceTermsObj.hasOwnProperty(lowercasedWord)) {
-            return replaceTermsObj[lowercasedWord];
+        if (replaceTermObj.hasOwnProperty(lowercasedWord)) {
+            return replaceTermObj[lowercasedWord];
         }
 
         // Check if the word is in the object with original case key
-        if (replaceTermsObj.hasOwnProperty(word)) {
-            return replaceTermsObj[word];
+        if (replaceTermObj.hasOwnProperty(word)) {
+            return replaceTermObj[word];
         }
 
         // Check if the word is in the object with uppercase key
         const uppercasedWord = word.toUpperCase();
-        if (replaceTermsObj.hasOwnProperty(uppercasedWord)) {
-            return replaceTermsObj[uppercasedWord];
+        if (replaceTermObj.hasOwnProperty(uppercasedWord)) {
+            return replaceTermObj[uppercasedWord];
         }
 
         // If the word is not in the object, return the original word
@@ -493,8 +498,7 @@ export default class TitleCaseHelper {
         }
 
         // Join the parts back together using the first delimiter as the default delimiter
-        const joined = parts.join(delimiters.source.charAt(0));
-        return joined;
+        return parts.join(delimiters.source.charAt(0));
     }
 
     // This function is used to check if a word is in the correct terms list

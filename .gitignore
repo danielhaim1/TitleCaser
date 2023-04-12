@@ -703,3 +703,7 @@ FodyWeavers.xsd
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
+.idea/vcs.xml
+.idea/titlecaser.iml
+.idea/php.xml
+.idea/modules.xml

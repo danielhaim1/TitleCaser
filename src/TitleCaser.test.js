@@ -129,6 +129,8 @@ describe(`
         const input = "the iphone's impact on modern communication: a sociolinguistic analysis";
         const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
         const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput)
+            .toEqual(expectedOutput);
     });
     test("AP-style title case with lowercase back/front-end terms", () => {
         const options = {

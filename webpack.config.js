@@ -8,7 +8,7 @@ module.exports = [{
   target: "web",
   entry: "./src/index.js",
   output: {
-    filename: "titlecaser.browser.js",
+    filename: "titlecaser.amd.js",
     path: path.resolve(__dirname, "dist")
   },
   optimization: {

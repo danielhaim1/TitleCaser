@@ -7,7 +7,7 @@ export const correctTitleCasingList = [
   // Web Technologies
   'AJAX', 'CSS', 'DOM', 'ES6', 'HTML', 'JavaScript', 'jQuery',
   'MobX', 'SCSS', 'TypeScript', 'Vue.js', '.NET', 'ASP', 'ASPX',
-  'MySQL', 'PHP', 'PostgreSQL', 'Python', 'SQL', 'GraphQL',
+  'MySQL', 'PHP', 'PostgresQL', 'Python', 'SQL', 'GraphQL',
   'HTML5',
 
   // Acronyms/Abbreviations
@@ -45,7 +45,7 @@ export const correctTitleCasingList = [
   'PP', 'CRM', 'PoE', 'PoW', 'PoC', 'A11Y', 'PR',
 
   // Sales terms
-  'BANT', 'GAP', 'KPI', 'MQL', 'NPS', 'POS', 'SPIN', 'SQL',
+  'BANT', 'KPI', 'MQL', 'NPS', 'POS', 'SPIN', 'SQL',
   'SWOT',
 
   // Legal terms
@@ -203,7 +203,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
   },
 });
 
-export const ignoredWordsList = [];
+export const ignoredWordList = [];
 export const correctPhraseCasingList = [
   'The Cybersmile Foundation',
   'CO. by Colgate',

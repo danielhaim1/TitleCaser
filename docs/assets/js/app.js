@@ -22,7 +22,8 @@ function highlight(beforeText, afterText, ignoreCase = false) {
 
         // check if the characters are different and not a dash
         if (beforeChar !== afterChar && beforeChar !== "-" && afterChar !== "-") {
-            textArr.push(`<span class="highlight">${afterChar}</span>`); // wrap the changed character in a <span class="highlight"> element and add it to the array
+            // wrap the changed character in a <span class="highlight"> an element and add it to the array
+            textArr.push(`<span class="highlight">${afterChar}</span>`);
         } else {
             textArr.push(afterChar); // add the unchanged character to the array
         }
@@ -32,7 +33,7 @@ function highlight(beforeText, afterText, ignoreCase = false) {
     if (afterText.length > beforeText.length) {
         textArr.push(
             `<span class="highlight">${afterText.slice(beforeText.length)}</span>`
-        ); // wrap the added characters in a <span class="highlight"> element and add them to the array
+        ); // wrap the added characters in a <span class="highlight"> an element and add them to the array
     }
 
     return textArr.join(""); // join the characters in the array into a string and return it
@@ -62,10 +63,8 @@ function convertToTitleCase(inputString) {
         style: styleValue
     };
 
-    // Convert the input string to title case using the options.
-    const titleCasedString = inputString.toTitleCase(options);
-
-    return titleCasedString;
+    // Convert the input string to a title case using the options.
+    return inputString.toTitleCase(options);
 }
 
 /**
@@ -87,15 +86,13 @@ function processInput(inputString, styleSelect, beforeEl, afterEl) {
         style: styleSelect.value
     };
 
-    // Convert the input string to title case and update the before element
-    const titleCasedString = convertToTitleCase(inputString, options);
+    // Convert the input string to a title case and update the before element
+    let titleCasedString;
+    titleCasedString = convertToTitleCase(inputString, options);
     beforeEl.textContent = inputString;
 
-    // Highlight the changes between the input string and the processed string
-    const highlightedText = highlight(inputString, titleCasedString);
-
     // Update the after element with the processed string and highlighted changes
-    afterEl.innerHTML = highlightedText;
+    afterEl.innerHTML = highlight(inputString, titleCasedString);
 }
 
 /**
@@ -175,8 +172,7 @@ function startTitleCasing() {
         beforeEl.textContent = inputString;
         afterEl.textContent = titleCasedString;
 
-        const highlightedText = highlight(beforeEl.textContent, afterEl.textContent);
-        afterEl.innerHTML = highlightedText;
+        afterEl.innerHTML = highlight(beforeEl.textContent, afterEl.textContent);
     }, 1000);
 
     // Attach event listener to text field to trigger title casing
@@ -206,13 +202,6 @@ function clearOutputIfEmpty() {
         throw err;
     }
 }
-
-/**
- * Randomly shuffles the titles array and sets the value of the text field to the first title
- * in the shuffled array. Then clicks the "Title Case" button to convert the shuffled title to
- * title case and display it in the output.
- */
-let currentIndex = 0;
 function shuffleTitles() {
     // Shuffle the titles array
     for (let i = titles.length - 1; i > 0; i--) {
@@ -250,8 +239,7 @@ function initializeTitleCaser() {
     titleShuffleBtn.addEventListener("click", () => {
         // Shuffle titles
         shuffleTitles();
-        const title = titles[0];
-        titleField.value = title;
+        titleField.value = titles[0];
 
         // Click title convert button
         titleConvertBtn.classList.remove("is-empty");

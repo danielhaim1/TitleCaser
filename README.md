@@ -12,8 +12,10 @@ Transform any text to proper title case format using popular style guides such a
 
 ## Table of Contents
 
-[TitleCaser](#titlecaser)
+- [TitleCaser](#titlecaser)
   * [Demo](#demo)
+  * [Table of Contents](#table-of-contents)
+  * [Introduction](#introduction)
   * [Key Features:](#key-features)
   * [Installation](#installation)
   * [Usage](#usage)
@@ -33,13 +35,15 @@ Transform any text to proper title case format using popular style guides such a
 
 ## Introduction
 
-The Language Conventions and Style Module is a comprehensive library designed to help web content developers adhere to the latest style guides and English language conventions. It offers a wide range of features, including support for various style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles, and customizable preferences to suit your specific needs.
 
-To streamline workflow, the Language Conventions and Style Module is available in both browser and node environment versions and includes a command-line interface for building, testing, and minimizing the module. Additionally, it features a filter ability that allows users to ignore certain phrases containing short words, preventing the module from mistakenly flagging instances where short words are used as part of a larger term or phrase.
 
-The module has been designed to handle various capitalization scenarios, including hyphenated words, prefixes, suffixes, reserved words, Roman numerals, proper nouns that contain lowercase letters, and words that require capitalization in specific contexts. This ensures that your content meets the appropriate style and formatting guidelines, regardless of the context. It also offers word replacement capabilities, as well as ignored phrases to create consistency in cases where certain terms may be capitalized differently depending on the context, such as converting variations of gOogle to Google, front-end to Frontend.
+The comprehensive Language Conventions and Style Library is specifically designed to assist web content developers in adhering to the latest style guides and English language conventions. This all-inclusive library has various features, including support for numerous style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles and customizable preferences to tailor to individual needs. TitleCaser is a component of this library, and LCSL is set to be open-sourced by the end of 2023
 
-So whether you're developing web content for a major news organization or simply looking to improve your writing skills, the Language Conventions and Style Module is an essential tool that can help ensure your work is accurate, consistent, and conforms to the latest style guidelines.
+To streamline workflow, modules are available in both browser and node environment versions and include a command-line interface for building, testing, and minimizing the module. Additionally, it features a filter ability that allows users to ignore certain phrases containing short words, preventing the module from mistakenly flagging instances where short words are used as part of a larger term or phrase.
+
+The module has been designed to handle various capitalization scenarios, including hyphenated words, prefixes, suffixes, reserved words, Roman numerals, proper nouns that contain lowercase letters, and words that require capitalization in specific contexts. This ensures that your content meets the appropriate style and formatting guidelines, regardless of the context. It also offers word replacement capabilities, as well as ignored phrases to create consistency in cases where certain terms may be capitalized differently depending on the context.
+
+Whether you're developing web content for a major news organization or simply looking to improve your writing skills, this module is an essential tool that can help ensure your work is accurate, consistent, and conforms to the latest style guidelines.
 
 ## Key Features:
 
@@ -48,7 +52,7 @@ So whether you're developing web content for a major news organization or simply
 - Support for proper capitalization of Roman numerals and exclusion of specific words and phrases from title capitalization
 - Word replacement capabilities for consistency in capitalization
 Command-line interface for building, testing, and minimizing the module
-- Pre-defined word lists for articles, conjunctions, prepositions, and uncapitalized words in titles
+- Pre-defined word lists for articles, conjunctions, prepositions, and non-capitalized words in titles
 - Exclusion of common phrases from title capitalization
 
 ## Installation
@@ -83,12 +87,12 @@ console.log(output); // 'The Book of Life'
 
 ## Usage in the Browser
 
-The function can also be used in a browser environment by including the `titlecaser.browser.js` script in your HTML file:
+The function can also be used in a browser environment by including the `titlecaser.amd.js` script in your HTML file:
 
 Here's an example of how to use the modulate function:
 
 ```html
-<script src="./path/to/titlecaser.browser.js"></script>
+<script src="./path/to/titlecaser.amd.js"></script>
 ```
 
 After that, the `toTitleCase()` function can be accessed in your JavaScript code like this:
@@ -117,9 +121,9 @@ The `{options}` parameter is an object that contains the settings for the conver
 ## Methods
 
 - `setReplaceTerms(terms: object)`: Sets word replacement terms to be used during title casing. Multiple calls can be made to add or update multiple word replacements.
-- `removeReplaceTerm(term: string)`: Removes a replace term from the `wordReplacementsList` array in the options object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the options object.
-- `addReplaceTerm(term: string, replacement: string)`: Adds a new replace term to the wordReplacementsList array in the options object of the TitleCaser instance. The method takes two string arguments: term specifies the word to be replaced, and replacement specifies the replacement for the word. If the term already exists in the array, the method updates its replacement value. Otherwise, it adds a new object with the term and replacement to the array. The method then updates the wordReplacementsList property in the options object.
-- `setStyle(style: string)`: Sets the style option in the options object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the options object.
+- `removeReplaceTerm(term: string)`: Removes a replaced term from the `wordReplacementsList` array in the option object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the option object.
+- `addReplaceTerm(term: string, replacement: string)`: Adds a new term to the `wordReplacementsList` array in the options object of the TitleCaser instance. The method takes two string arguments: term specifies the word to be replaced, and replacement specifies the replacement for the word. If the term already exists in the array, the method updates its replacement value. Otherwise, it adds a new object with the term and replacement to the array. The method then updates the wordReplacementsList property in the object.
+- `setStyle(style: string)`: Sets the style option in the object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the object.
 
 ## Examples
 
@@ -139,7 +143,7 @@ console.log(output); // The Book of Life
 
 ### Customizing Word Replacements Method
 
-In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to title case.
+In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to a title case.
 
 ```js
 // CommonJS
@@ -166,7 +170,7 @@ const outputString = titleCaser.toTitleCase(inputString);
 
 ### Customizing TitleCaser
 
-The example below demonstrates how to use the TitleCaser class to convert a string to title case with specific settings.
+The example below demonstrates how to use the TitleCaser class to convert a string to a title case with specific settings.
 
 ```js
 // Set the options object
@@ -197,7 +201,7 @@ console.log(actualOutput);
 
 ### TitleCaser With Default Word Replacement  
 
-The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including hyphenated words and word/brand replacement.
+The example below demonstrates how to use the TitleCaser class to convert a string to a title case with AP style formatting, including hyphenated words and word/brand replacement.
 
 ```js
 // Instantiate a new TitleCaser object with AP style formatting
@@ -307,4 +311,4 @@ Useful materials for improving your knowledge of writing and language style guid
 
 If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. 
 
-When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. I appreciate any contribution to improve this library.
+When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. I appreciate any contribution to improving this library.
