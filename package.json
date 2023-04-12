@@ -37,15 +37,13 @@
     "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push"
   },
   "files": [
-    "LICENSE",
-    "README.md",
     "package.json",
     "src/TitleCaserConsts.js",
     "src/TitleCaserUtils.js",
     "src/TitleCaser.js",
     "src/index.js",
-    "dist/titlecaser.min.js",
-    "dist/titlecaser.amd.js"
+    "LICENSE",
+    "README.md"
   ],
   "author": {
     "name": "Daniel Haim",
