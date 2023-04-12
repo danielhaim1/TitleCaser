@@ -40,10 +40,10 @@
     "LICENSE",
     "README.md",
     "package.json",
-    "src/index.js",
-    "src/TitleCaser.js",
     "src/TitleCaserConsts.js",
     "src/TitleCaserUtils.js",
+    "src/TitleCaser.js",
+    "src/index.js",
     "dist/titlecaser.min.js",
     "dist/titlecaser.amd.js"
   ],
