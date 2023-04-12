@@ -43,7 +43,7 @@
     "src/index.js",
     "src/TitleCaser.js",
     "src/TitleCaserConsts.js",
-    "src/TitleCaseUtils.js",
+    "src/TitleCaserUtils.js",
     "dist/titlecaser.min.js",
     "dist/titlecaser.amd.js"
   ],
