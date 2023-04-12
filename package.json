@@ -34,7 +34,7 @@
     "name": "Daniel Haim",
     "url": "https://github.com/danielhaim1"
   },
-  "main": "./src/TitleCaser.js",
+  "main": "./index.js",
   "files": [
     "LICENSE",
     "README.md",
