@@ -57,16 +57,16 @@ describe(`
     Test Methods`, () => {
     test("removeReplaceTerm", () => {
         const titleCaser = new TitleCaser({
-          style: 'apa'
+            style: 'apa'
         });
 
         // Set multiple replacement terms using setReplaceTerms()
-        titleCaser.setReplaceTerms({ 
-          'hello world': 'Hello World', 
-          'replace me': 'Replace Me' 
+        titleCaser.setReplaceTerms({
+            'hello world': 'Hello World',
+            'replace me': 'Replace Me'
         });
-        titleCaser.setReplaceTerms({ 
-          'apa': 'APA' 
+        titleCaser.setReplaceTerms({
+            'apa': 'APA'
         });
 
         // Use removeReplaceTerm() to remove a replace term
@@ -83,11 +83,11 @@ describe(`
     });
     test("setReplaceTerms", () => {
         const titleCaser = new TitleCaser({
-          style: 'ap'
+            style: 'ap'
         });
         const replaceTerms = [
-          { 'hello world': 'Hello World' },
-          { 'replace me': 'Replace Me' }
+            { 'hello world': 'Hello World' },
+            { 'replace me': 'Replace Me' }
         ];
         titleCaser.setReplaceTerms(replaceTerms);
         const input = "hello world, replace me!";
@@ -277,7 +277,7 @@ describe(`
         const actualOutput = titleCaser.toTitleCase(input);
         expect(actualOutput)
             .toEqual(expectedOutput);
-    }); 
+    });
     test("Reserved word, posessive", () => {
         const options = {
             style: "chicago"

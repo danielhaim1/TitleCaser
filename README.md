@@ -258,40 +258,41 @@ $ npm run test
 
 ```bash
 Test Basic Options
-✓ Default title case conversion
-✓ Customized title case conversion
+✓ Default title case conversion (2 ms)
+✓ Customized title case conversion (1 ms)
+✓ AP-style title case conversion with replacements (1 ms)
 ✓ AP-style title case conversion with replacements
-✓ AP-style title case conversion with replacements
-✓ Capitalize suffix word in sentence
+✓ Capitalize suffix word in sentence (1 ms)
 
 Test Methods
 ✓ removeReplaceTerm
 ✓ setReplaceTerms
 
 Test Variation Stability
-✓ Hyphenated, colon, and short word replacements
+✓ Hyphenated, colon, and short word replacements (1 ms)
 ✓ Capitalization and word replacements
 ✓ AP-style title case with possessive and colon
 ✓ AP-style title case with lowercase back/front-end terms
 ✓ Chicago style title case with comparison and colon
-✓ APA style title case with colon
-✓ Wikipedia style title case with acronym and hyphen
+✓ APA style title case with colon (3 ms)
+✓ Wikipedia style title case with acronym and hyphen (1 ms)
 ✓ APA style title case with colon and apostrophe
 ✓ Chicago style title case with custom term replacements
-✓ AP-style capitalization test with special terms and colon
+✓ AP-style capitalization test with special terms and colon (1 ms)
 ✓ NYT-style capitalization test with special terms and colon
-✓ APA style capitalization test with short conjunction terms and colon
+✓ APA style capitalization test with short conjunction terms and colon (1 ms)
 ✓ Correct phrase casing list testing
-✓ Wikipedia style capitalization test with special term and colon
+✓ Wikipedia style capitalization test with special term and colon (1 ms)
 
 Test Reserved Words
 ✓ Reserved word
 ✓ Reserved word with colon
 ✓ Reserved word, posessive
-✓ Hyphenated reserved word
+✓ Hyphenated reserved word (1 ms)
 ✓ Hyphenated reserved word, possessive
 ✓ HTML line break nl2br, <br /> tag
-✓ Untrimmed white spaces
+✓ Ampersand in a sentence should return & and not &Amp;
+✓ Untrimmed white spaces (1 ms)
 ```
 
 ## Resources
