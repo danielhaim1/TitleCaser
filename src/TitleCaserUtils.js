@@ -6,7 +6,7 @@ import {
     ignoredWordList,
 } from "./TitleCaserConsts.js";
 
-export default class TitleCaseHelper {
+export default class Utils {
 
     // Validate the option key
     static validateOption(key, value) {
@@ -65,8 +65,8 @@ export default class TitleCaseHelper {
         });
 
         // If the cache already has an entry for this key, return the cached options
-        if (TitleCaseHelper.titleCaseOptionsCache.has(cacheKey)) {
-            return TitleCaseHelper.titleCaseOptionsCache.get(cacheKey);
+        if (Utils.titleCaseOptionsCache.has(cacheKey)) {
+            return Utils.titleCaseOptionsCache.get(cacheKey);
         }
 
         // Merge the default options with the user-provided options
@@ -104,7 +104,7 @@ export default class TitleCaseHelper {
         };
 
         // Add the merged options to the cache and return them
-        TitleCaseHelper.titleCaseOptionsCache.set(cacheKey, result);
+        Utils.titleCaseOptionsCache.set(cacheKey, result);
         return result;
     }
 
@@ -113,7 +113,7 @@ export default class TitleCaseHelper {
     // Check if the word is a short conjunction
     static isShortConjunction(word, style) {
         // Get the list of short conjunctions from the TitleCaseHelper
-        const shortConjunctionsList = [...TitleCaseHelper.getTitleCaseOptions({
+        const shortConjunctionsList = [...Utils.getTitleCaseOptions({
             style: style
         })
             .shortConjunctionsList
@@ -129,7 +129,7 @@ export default class TitleCaseHelper {
     // Check if the word is an article
     static isArticle(word, style) {
         // Get the list of articles for the language
-        const articlesList = TitleCaseHelper.getTitleCaseOptions({
+        const articlesList = Utils.getTitleCaseOptions({
             style: style
         })
             .articlesList;
@@ -142,7 +142,7 @@ export default class TitleCaseHelper {
         // Get the list of short prepositions from the Title Case Helper.
         const {
             shortPrepositionsList
-        } = TitleCaseHelper.getTitleCaseOptions({
+        } = Utils.getTitleCaseOptions({
             style: style
         });
         // Check if the word is in the list of short prepositions.
@@ -154,20 +154,20 @@ export default class TitleCaseHelper {
     static isNeverCapitalized(word, style) {
         // Check if the word is in the cache. If it is, return it.
         const cacheKey = `${style}_${word.toLowerCase()}`;
-        if (TitleCaseHelper.isNeverCapitalizedCache.has(cacheKey)) {
-            return TitleCaseHelper.isNeverCapitalizedCache.get(cacheKey);
+        if (Utils.isNeverCapitalizedCache.has(cacheKey)) {
+            return Utils.isNeverCapitalizedCache.get(cacheKey);
         }
 
         // If the word is not in the cache, then check if it is in the word list for the given style.
         const {
             neverCapitalizedList
-        } = TitleCaseHelper.getTitleCaseOptions({
+        } = Utils.getTitleCaseOptions({
             style
         });
 
         const result = neverCapitalizedList.includes(word.toLowerCase());
         // Store the result in the cache so it can be used again
-        TitleCaseHelper.isNeverCapitalizedCache.set(cacheKey, result);
+        Utils.isNeverCapitalizedCache.set(cacheKey, result);
 
         return result;
     }
@@ -185,10 +185,10 @@ export default class TitleCaseHelper {
 
         // If the word is a short conjunction, article, preposition, or is in the never-capitalized list, return true.
         // Otherwise, return false.
-        return TitleCaseHelper.isShortConjunction(word, style) ||
-            TitleCaseHelper.isArticle(word, style) ||
-            TitleCaseHelper.isShortPreposition(word, style) ||
-            TitleCaseHelper.isNeverCapitalized(word, style);
+        return Utils.isShortConjunction(word, style) ||
+            Utils.isArticle(word, style) ||
+            Utils.isShortPreposition(word, style) ||
+            Utils.isNeverCapitalized(word, style);
     }
 
     // Check if a word has a number
@@ -260,7 +260,7 @@ export default class TitleCaseHelper {
 
         const parts = word.split("-");
         for (let i = 0; i < parts.length; i++) {
-            if (!TitleCaseHelper.hasRomanNumeral(parts[i])) {
+            if (!Utils.hasRomanNumeral(parts[i])) {
                 return false;
             }
         }
@@ -517,7 +517,7 @@ export default class TitleCaseHelper {
             ap: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
             chicago: capitalizeFirst,
             apa: (word, index, length) => {
-                if (TitleCaseHelper.isShortWord(word, style) && index > 0 && index < length - 1) {
+                if (Utils.isShortWord(word, style) && index > 0 && index < length - 1) {
                     return word.toLowerCase();
                 }
                 else {
