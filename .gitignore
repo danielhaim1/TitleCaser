@@ -707,7 +707,3 @@ FodyWeavers.xsd
 .idea/php.xml
 .idea/modules.xml
 .idea/workspace.xml
-
-docs/assets/js/titlecaser.min.js
-docs/assets/js/titlecaser.js
-docs/assets/js/titlecaser.amd.js
