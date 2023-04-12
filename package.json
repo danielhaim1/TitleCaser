@@ -3,10 +3,17 @@
   "version": "1.2.32",
   "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
   "keywords": [
-    "titlecase",
-    "text transformation",
-    "capitalization",
-    "formatting"
+    "Title Case",
+    "Text Transformation",
+    "Text Capitalization",
+    "Text Formatting",
+    "English",
+    "British",
+    "AP",
+    "APA",
+    "Chicago",
+    "NYTimes",
+    "Wikipedia"
   ],
   "repository": {
     "type": "git",
