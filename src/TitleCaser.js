@@ -6,7 +6,7 @@ import {
 }
     from "./TitleCaserConsts.js";
 
-import Utils from "./TitleCaserUtils.js";
+import TitleCaserUtils from "./TitleCaserUtils.js";
 
 export class TitleCaser {
     constructor (options = {}) {
@@ -36,7 +36,7 @@ export class TitleCaser {
                 shortPrepositionsList,
                 neverCapitalizedList,
                 replaceTerms
-            } = Utils.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
+            } = TitleCaserUtils.getTitleCaseOptions(this.options, commonAbbreviationList, wordReplacementsList);
 
             // Prerocess the replaceTerms array to make it easier to search for.
             const replaceTermsArray = replaceTermList.map(term => Object.keys(term)[0].toLowerCase());
@@ -67,54 +67,54 @@ export class TitleCaser {
 
             const wordsInTitleCase = words.map((word, i) => {
                 switch (true) {
-                    case Utils.isWordAmpersand(word):
+                    case TitleCaserUtils.isWordAmpersand(word):
                         // if the word is an ampersand, return it as is.
                         return word;
-                    case Utils.hasHtmlBreak(word):
+                    case TitleCaserUtils.hasHtmlBreak(word):
                         // If the word is a <br> tag, return it as is.
                         return word;
-                    case Utils.isWordIgnored(word, ignoreList):
+                    case TitleCaserUtils.isWordIgnored(word, ignoreList):
                         // If the word is in the ignore list, return it as is.
                         return word;
                     case replaceTermsArray.includes(word.toLowerCase()):
                         // If the word is in the replaceTerms array, return the replacement.
                         return replaceTermObj[word.toLowerCase()];
-                    case Utils.isWordInArray(word, correctTitleCasingList):
+                    case TitleCaserUtils.isWordInArray(word, correctTitleCasingList):
                         // If the word is in the correctTitleCasingList array, return the correct casing.
-                        return Utils.correctTerm(word, correctTitleCasingList);
-                    case Utils.hasSuffix(word, style):
+                        return TitleCaserUtils.correctTerm(word, correctTitleCasingList);
+                    case TitleCaserUtils.hasSuffix(word, style):
                         // If the word has a suffix, return the correct casing.
-                        return Utils.correctSuffix(word, correctTitleCasingList);
-                    case Utils.hasHyphen(word):
+                        return TitleCaserUtils.correctSuffix(word, correctTitleCasingList);
+                    case TitleCaserUtils.hasHyphen(word):
                         // If the word has a hyphen, return the correct casing.
-                        return Utils.correctTermHyphenated(word, style);
-                    case Utils.hasUppercaseIntentional(word):
+                        return TitleCaserUtils.correctTermHyphenated(word, style);
+                    case TitleCaserUtils.hasUppercaseIntentional(word):
                         // If the word has an intentional uppercase letter, return the correct casing.
                         return word;
-                    case Utils.isShortWord(word, style) && i !== 0:
+                    case TitleCaserUtils.isShortWord(word, style) && i !== 0:
                         // If the word is a short word, return the correct casing.
-                        return (i > 0 && Utils.endsWithSymbol(words[i - 1],
+                        return (i > 0 && TitleCaserUtils.endsWithSymbol(words[i - 1],
                             [':', '?', '!', '.'])) ? word.charAt(0).toUpperCase() + word.slice(1) : word.toLowerCase();
-                    case Utils.endsWithSymbol(word):
+                    case TitleCaserUtils.endsWithSymbol(word):
                         // If the word ends with a symbol, return the correct casing.
                         const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()])/g);
                         const processedWords = splitWord.map((splitWord, j) => {
                             // If the word is in the correctTitleCasingList array, return the correct casing.
-                            if (Utils.isWordInArray(splitWord, correctTitleCasingList)) return Utils.correctTerm(splitWord, correctTitleCasingList);
+                            if (TitleCaserUtils.isWordInArray(splitWord, correctTitleCasingList)) return TitleCaserUtils.correctTerm(splitWord, correctTitleCasingList);
                             // Else return the word with the correct casing.
-                            else return (j > 0 && Utils.endsWithSymbol(splitWord)) ? splitWord.charAt(0)
+                            else return (j > 0 && TitleCaserUtils.endsWithSymbol(splitWord)) ? splitWord.charAt(0)
                                 .toUpperCase() + splitWord.slice(1) : splitWord.charAt(0)
                                     .toUpperCase() + splitWord.slice(1);
                         });
                         // Join the processed words and return them.
                         return processedWords.join("");
-                    case Utils.startsWithSymbol(word):
+                    case TitleCaserUtils.startsWithSymbol(word):
                         // If the word starts with a symbol, return the correct casing.
-                        return !Utils.isWordInArray(word, correctTitleCasingList) ? word : Utils.correctTerm(word);
-                    case Utils.hasRomanNumeral(word):
+                        return !TitleCaserUtils.isWordInArray(word, correctTitleCasingList) ? word : TitleCaserUtils.correctTerm(word);
+                    case TitleCaserUtils.hasRomanNumeral(word):
                         // If the word has a roman numeral, return the correct casing.
                         return word.toUpperCase();
-                    case Utils.hasNumbers(word):
+                    case TitleCaserUtils.hasNumbers(word):
                         // If the word has numbers, return the correct casing.
                         return word;
                     default:
