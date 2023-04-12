@@ -6,7 +6,7 @@ import {
     ignoredWordList,
 } from "./TitleCaserConsts.js";
 
-export default class TitleCaserUtils {
+export class TitleCaserUtils {
 
     // Validate the option key
     static validateOption(key, value) {
@@ -565,6 +565,5 @@ export default class TitleCaserUtils {
         // Rejoin the words
         return processedWords.join("-");
     }
-
 
 }

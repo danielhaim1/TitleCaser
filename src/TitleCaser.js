@@ -6,7 +6,7 @@ import {
 }
     from "./TitleCaserConsts.js";
 
-import TitleCaserUtils from "./TitleCaserUtils.js";
+import { TitleCaserUtils } from "./TitleCaserUtils.js";
 
 export class TitleCaser {
     constructor (options = {}) {
