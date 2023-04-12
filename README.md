@@ -8,7 +8,7 @@ Transform any text to proper title case format using popular style guides such a
 
 ## Demo
 
-<a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://danielhaim1.github.io/TitleCaser/assets/demo.png" width="100%" height="auto"></a>
+<a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://raw.githubusercontent.com/danielhaim1/TitleCaser/main/docs/assets/demo.png" width="100%" height="auto"></a>
 
 ## Table of Contents
 
