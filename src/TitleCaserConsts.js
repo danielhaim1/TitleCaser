@@ -10,6 +10,7 @@ export const correctTitleCasingList = [
 	'MySQL', 'PHP', 'PostgresQL', 'Python', 'SQL', 'GraphQL',
 	'HTML5',
 	
+	
 	// Acronyms/Abbreviations
 	'API', 'APIs', 'ASCII', 'CI', 'CircleCI', 'CLI', 'DLL', 'DNS',
 	'EC2', 'FTP', 'HTTP', 'HTTPs', 'ICMP', 'IDE', 'IP', 'ISP',
