@@ -10,7 +10,6 @@ export const correctTitleCasingList = [
 	'MySQL', 'PHP', 'PostgresQL', 'Python', 'SQL', 'GraphQL',
 	'HTML5',
 	
-	
 	// Acronyms/Abbreviations
 	'API', 'APIs', 'ASCII', 'CI', 'CircleCI', 'CLI', 'DLL', 'DNS',
 	'EC2', 'FTP', 'HTTP', 'HTTPs', 'ICMP', 'IDE', 'IP', 'ISP',
@@ -19,7 +18,7 @@ export const correctTitleCasingList = [
 	'YML', 'IMAP', 'RSS', 'IaaS', 'PaaS', 'SaaS', 'CaaS', 'FaaS',
 	'XaaS', 'RaaS', 'IoE', 'IoT', 'LoRa', 'NB-IoT', 'RFID', 'RF',
 	'RFI', 'RFQ', 'ECMAScript', 'IO', 'I/O', 'DevOps', 'SecOps',
-	'DDoS', 'VoIP', 'AI', 'AR', 'ML', 'VR',
+	'DDoS', 'VoIP', 'AI', 'AR', 'ML', 'VR', 'CI/CD',
 	
 	// Misc.
 	'w/', 'w/o',
