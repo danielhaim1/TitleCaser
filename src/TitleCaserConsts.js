@@ -41,7 +41,7 @@ export const correctTitleCasingList = [
 	'B2B', 'B2C', 'CMO', 'CPA', 'CPC', 'CPL', 'CPM', 'CRM', 'CTA',
 	'CTR', 'SEO', 'SEM', 'SMM', 'USP', 'A/B', 'CTA', 'CTOR',
 	'CTR', 'KPI', 'PWA', 'SEM', 'SERP', 'SERPs', 'SMM', 'SMO',
-	'FAQ', 'FAQA', 'FAQS', 'UI', 'UI/UX', 'UX', 'T&C', 'TOS',
+	'FAQ', 'FAQs', 'UI', 'UI/UX', 'UX', 'T&C', 'TOS',
 	'PP', 'CRM', 'PoE', 'PoW', 'PoC', 'A11Y', 'PR',
 	
 	// Sales terms

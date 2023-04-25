@@ -314,9 +314,30 @@ describe ( `
 	test ( "HTML line break nl2br, <br /> tag", () => {
 		const options = { style: "chicago" };
 		const titleCaser = new TitleCaser ( options );
-		const input = "the future of devops: <br />how to prepare for the next era of software development";
-		const expectedOutput = "The Future of DevOps: <br />How to Prepare for the Next Era of Software Development";
+		const input = "Our Ambassadors prove That<br> Not all heroes Wear Capes";
+		const expectedOutput = "Our Ambassadors Prove That <br /> Not All Heroes Wear Capes";
 		const actualOutput = titleCaser.toTitleCase ( input );
+		console.log(actualOutput);
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	} );
+	test ( "HTML line break nl2br, <br /> tag", () => {
+		const options = { style: "chicago" };
+		const titleCaser = new TitleCaser ( options );
+		const input = "the future of devops:<br> how to prepare for the next era of software development";
+		const expectedOutput = "The Future of DevOps: <br /> How to Prepare for the Next Era of Software Development";
+		const actualOutput = titleCaser.toTitleCase ( input );
+		console.log(actualOutput);
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	} );
+	test ( "HTML line break nl2br, <br /> tag", () => {
+		const options = { style: "chicago" };
+		const titleCaser = new TitleCaser ( options );
+		const input = "the future of devops:<br>how to prepare for the next era of software development";
+		const expectedOutput = "The Future of DevOps: <br /> How to Prepare for the Next Era of Software Development";
+		const actualOutput = titleCaser.toTitleCase ( input );
+		console.log(actualOutput);
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	} );

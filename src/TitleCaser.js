@@ -57,12 +57,16 @@ export class TitleCaser {
 			// Remove extra spaces and replace <br> tags with a placeholder.
 			let inputString = str.trim ();
 			
+			// Replace <br> and <br /> tags with a placeholder.
+			inputString = inputString.replace(/<\s*br\s*\/?\s*>/gi, " nl2br ");
+
 			// Remove extra spaces and replace <br> tags with a placeholder.
 			inputString = inputString.replace ( / {2,}/g, ( match ) => match.slice ( 0, 1 ) );
 			
-			// Replace <br> tags with a placeholder.
-			inputString = inputString.replace ( /<br\s*\/?>/gi, "nl2br " );
-			
+
+			// console.log(inputString);
+
+
 			// Split the string into an array of words.
 			const words = inputString.split ( " " );
 			
@@ -138,7 +142,7 @@ export class TitleCaser {
 			}
 			
 			// Replace the nl2br placeholder with <br> tags.
-			inputString = inputString.replace ( /nl2br /gi, "<br />" );
+			inputString = inputString.replace(/nl2br/gi, "<br />");
 			
 			// Return the string.
 			return inputString;
