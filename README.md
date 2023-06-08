@@ -13,7 +13,9 @@ Transform any text to proper title case format using popular style guides such a
 ## Table of Contents
 
 - [TitleCaser](#titlecaser)
-  * [Demo](#demo)
+  * [Demo 1](https://danielhaim1.github.io/TitleCaser/)
+  * [Demo 2](https://codepen.io/danielhaim/pen/oNPGzKw)
+  * [Demo 3](https://codepen.io/danielhaim/pen/oNQgjBv)
   * [Table of Contents](#table-of-contents)
   * [Introduction](#introduction)
   * [Key Features:](#key-features)
