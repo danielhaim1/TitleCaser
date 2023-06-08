@@ -65,7 +65,7 @@ $ npm i @danielhaim/titlecaser
 The package can be imported and used in both Node.js and browser environments using the following syntax:
 
 ```js
-import { TitleCaser } from './path/to/@danielhaim/titlecaser';
+import "./path/to/@danielhaim/titlecaser";
 
 const options = {
   style: 'chicago'
@@ -101,6 +101,33 @@ const output = input.toTitleCase(options);
 console.log(output); // The Future of DevOps: The Next Era
 ```
 
+### Example 2
+
+```html
+<h2>nodejs development on aws: an in-depth tutorial on server-side javascript deployment</h2>
+<h2>the iphone's impact on modern communication: a sociolinguistic analysis</h2>
+<h2>back-end and front-end</h2>
+```
+
+```js
+function applyTitleCaseToH2Elements(options = { style: "apa" }) {
+  try {
+    const h2Elements = document.querySelectorAll("h2");
+    h2Elements.forEach((h2) => {
+      const innerHTML = h2.innerHTML;
+      const modifiedContent = innerHTML.toTitleCase(options);
+      h2.innerHTML = modifiedContent;
+    });
+  } catch (error) {
+    console.error(
+      "An error occurred while applying title case transformation:",
+      error
+    );
+  }
+}
+
+applyTitleCaseToH2Elements();
+```
 ## Options
 
 The `{options}` parameter is an object that contains the settings for the conversion process.
@@ -128,7 +155,7 @@ The example below demonstrates how to use the TitleCaser class to convert a stri
 In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to a title case.
 
 ```js
-import { TitleCaser } from './path/to/@danielhaim/titlecaser';
+import "./path/to/@danielhaim/titlecaser";
 
 const titleCaser = new TitleCaser({
   style: 'apa'
@@ -156,7 +183,7 @@ const outputString = titleCaser.toTitleCase(inputString);
 The example below demonstrates how to use the TitleCaser class to convert a string to a title case with specific settings.
 
 ```js
-import { TitleCaser } from './path/to/@danielhaim/titlecaser';
+import "./path/to/@danielhaim/titlecaser";
 
 // Set the options object
 const options = {
@@ -186,7 +213,7 @@ const actualOutput = titleCaser.toTitleCase(input);
 The example below demonstrates how to use the TitleCaser class to convert a string to a title case with AP style formatting, including hyphenated words and word/brand replacement.
 
 ```js
-import { TitleCaser } from './path/to/@danielhaim/titlecaser';
+import "./path/to/@danielhaim/titlecaser";
 
 // Instantiate a new TitleCaser object with AP style formatting
 const titleCaser = new TitleCaser({ style: 'ap' });
@@ -206,7 +233,7 @@ const actualOutput = titleCaser.toTitleCase(input);
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
 
 ```js
-import { TitleCaser } from './path/to/@danielhaim/titlecaser';
+import "./path/to/@danielhaim/titlecaser";
 
 // Instantiate a new TitleCaser object with AP style formatting
 const titleCaser = new TitleCaser({ style: "ap" });
