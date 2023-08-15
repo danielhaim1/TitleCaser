@@ -110,6 +110,29 @@ describe ( `
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	} );
+	test ( "Test Country Code Uk to UK", () => {
+		const options = {
+			style: "chicago"
+		};
+		const titleCaser = new TitleCaser ( options );
+		const input = "Technology Trends in the us, usa, and uk";
+		const expectedOutput = "Technology Trends in the US, USA, and UK";
+		const actualOutput = titleCaser.toTitleCase ( input );
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	} );
+	test ( "Replaces X with ×", () => {
+		const options = {
+			style: "chicago"
+		};
+		const titleCaser = new TitleCaser ( options );
+		const input = "Coca Cola x Gibson";
+		const expectedOutput = "Coca Cola × Gibson";
+		const actualOutput = titleCaser.toTitleCase ( input );
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	} );
+	
 	test ( "Capitalization and word replacements", () => {
 		const options = {
 			style: "ap"
