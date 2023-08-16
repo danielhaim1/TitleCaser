@@ -28,8 +28,8 @@ Transform any text to proper title case format using popular style guides such a
     + [Basic Usage](#basic-usage)
     + [Customizing Word Replacements Method](#customizing-word-replacements-method)
     + [Customizing TitleCaser](#customizing-titlecaser)
-    + [TitleCaser With Default Word Replacement](#titlecaser-with-default-word-replacement)
-    + [TitleCaser With Possessive Noun and a Colon](#titlecaser-with-possessive-noun-and-a-colon)
+    + [TitleCaser with Default Word Replacement](#titlecaser-with-default-word-replacement)
+    + [TitleCaser with Possessive Noun and a Colon](#titlecaser-with-possessive-noun-and-a-colon)
   * [Build Process](#build-process)
   * [Test](#test)
   * [Resources](#resources)
@@ -130,6 +130,7 @@ function applyTitleCaseToH2Elements(options = { style: "apa" }) {
 
 applyTitleCaseToH2Elements();
 ```
+
 ## Options
 
 The `{options}` parameter is an object that contains the settings for the conversion process.
@@ -140,6 +141,7 @@ The `{options}` parameter is an object that contains the settings for the conver
 - `shortPrepositionsList` relates to the words that should be treated as short prepositions in title case.
 - `neverCapitalizedList` contains the words that should never be capitalized in title case.
 - `wordReplacementsList` is a map of terms that will be replaced during the title case conversion process.
+- `smartQuotes` boolean value that determines whether quotes should be replaced with smart quotes.
 
 ## Methods
 
@@ -147,6 +149,7 @@ The `{options}` parameter is an object that contains the settings for the conver
 - `removeReplaceTerm(term: string)`: Removes a replaced term from the `wordReplacementsList` array in the option object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the option object.
 - `addReplaceTerm(term: string, replacement: string)`: Adds a new term to the `wordReplacementsList` array in the options object of the TitleCaser instance. The method takes two string arguments: term specifies the word to be replaced, and replacement specifies the replacement for the word. If the term already exists in the array, the method updates its replacement value. Otherwise, it adds a new object with the term and replacement to the array. The method then updates the wordReplacementsList property in the object.
 - `setStyle(style: string)`: Sets the style option in the object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the object.
+- `smartQuotes(smartQuotes: boolean)`: Specifies whether to replace straight quotes with smart quotes during title casing. Provide a boolean argument smartQuotes to enable or disable this feature.
 
 ## Examples
 
@@ -200,7 +203,7 @@ const options = {
 // Instantiate a new TitleCaser object with the options
 const titleCaser = new TitleCaser(options);
 
-// Set the input string to test
+// Set the input string to be tested
 const input = "the basics of nodejs development with mongodb";
 
 // Set the expected output
@@ -210,7 +213,7 @@ const expectedOutput = "The Basics of Node.js Development with MongoDB";
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-### TitleCaser With Default Word Replacement  
+### TitleCaser with Default Word Replacement  
 
 The example below demonstrates how to use the TitleCaser class to convert a string to a title case with AP style formatting, including hyphenated words and word/brand replacement.
 
@@ -220,7 +223,7 @@ import "./path/to/@danielhaim/titlecaser";
 // Instantiate a new TitleCaser object with AP style formatting
 const titleCaser = new TitleCaser({ style: 'ap' });
 
-// Set the input string to test
+// Set the input string to be tested
 const input = 'nodejs development on aws: an in-depth tutorial on server-side javascript deployment';
 
 // Set the expected output
@@ -230,7 +233,7 @@ const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Serv
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-### TitleCaser With Possessive Noun and a Colon 
+### TitleCaser with Possessive Noun and a Colon 
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
 
@@ -240,11 +243,34 @@ import "./path/to/@danielhaim/titlecaser";
 // Instantiate a new TitleCaser object with AP style formatting
 const titleCaser = new TitleCaser({ style: "ap" });
 
-// Set the input string to test
+// Set the input string to be tested
 const input = "the iphone's impact on modern communication: a sociolinguistic analysis";
 
 // Set the expected output
 const expectedOutput = "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis";
+
+// Call the toTitleCase method and store the result in actualOutput
+const actualOutput = titleCaser.toTitleCase(input);
+```
+
+### TitleCaser with Smart Quotes  
+
+The example below demonstrates how to use the TitleCaser with smart quotes.
+
+```js
+import "./path/to/@danielhaim/titlecaser";
+
+// Instantiate a new TitleCaser object with AP style formatting and smart quotes enabled
+const titleCaser = new TitleCaser({ 
+  style: 'ap',
+  smartQuotes: true
+});
+
+// Set the input string to be tested
+const input = '"Never underestimate the power O\' persistence,"';
+
+// Set the expected output
+const expectedOutput = '“Never Underestimate the Power O’ Persistence,”';
 
 // Call the toTitleCase method and store the result in actualOutput
 const actualOutput = titleCaser.toTitleCase(input);
