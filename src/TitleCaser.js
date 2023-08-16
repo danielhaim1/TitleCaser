@@ -28,15 +28,19 @@ export class TitleCaser {
 			const {
 				style = "ap",
 				neverCapitalize = [],
-				replaceTermList = wordReplacementsList
+				replaceTermList = wordReplacementsList,
+			    smartQuotes = false  // Set to false by default
 			} = this.options;
+
+
 			const ignoreList = [ "nl2br", ...neverCapitalize ];
 			const {
 				articlesList,
 				shortConjunctionsList,
 				shortPrepositionsList,
 				neverCapitalizedList,
-				replaceTerms
+				replaceTerms,
+	            smartQuotes: mergedSmartQuotes  // Rename for clarity
 			} = TitleCaserUtils.getTitleCaseOptions ( this.options, commonAbbreviationList, wordReplacementsList );
 			
 			// Prerocess the replaceTerms array to make it easier to search for.
@@ -50,21 +54,20 @@ export class TitleCaser {
 				'&': '&amp;',
 				'<': '&lt;',
 				'>': '&gt;',
+		        // '\u2018': '\u2019', // Smart single quote
+			    // '\u201C': '\u201D', // Smart double quote
 				'"': '&quot;',
 				"'": '&#039;'
 			};
 			
 			// Remove extra spaces and replace <br> tags with a placeholder.
 			let inputString = str.trim ();
-			
+
 			// Replace <br> and <br /> tags with a placeholder.
 			inputString = inputString.replace(/<\s*br\s*\/?\s*>/gi, " nl2br ");
 
 			// Remove extra spaces and replace <br> tags with a placeholder.
 			inputString = inputString.replace ( / {2,}/g, ( match ) => match.slice ( 0, 1 ) );
-			
-
-			// console.log(inputString);
 
 
 			// Split the string into an array of words.
@@ -143,10 +146,13 @@ export class TitleCaser {
 			
 			// Replace the nl2br placeholder with <br> tags.
 			inputString = inputString.replace(/nl2br/gi, "<br />");
-			
-			// BEFORE WE RETURN THE STRING
-			// CHECK THE LAST WORD AND IF IT IS INTENTIONALLY UPPERCASED, IF IT IS, RETURN THE STRING.
 
+			// Convert quotation marks to smart quotes if enabled
+			// Refer to: https://github.com/danielhaim1/TitleCaser/issues/4
+			if (smartQuotes) {
+				inputString = TitleCaserUtils.convertQuotesToCurly(inputString);
+		    }
+			
 			// Return the string.
 			return inputString;
 		} catch ( error ) {

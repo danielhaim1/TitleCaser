@@ -71,12 +71,12 @@ export class TitleCaserUtils {
 			return TitleCaserUtils.titleCaseOptionsCache.get ( cacheKey );
 		}
 		
-		// Merge the default options with the user-provided options
 		const mergedOptions = {
-			...titleCaseDefaultOptionsList[options.style || "ap"],
-			...options
+		    ...titleCaseDefaultOptionsList[options.style || "ap"],
+		    ...options,
+		    smartQuotes: options.hasOwnProperty('smartQuotes') ? options.smartQuotes : false
 		};
-		
+
 		// Merge the default articles with user-provided articles and lowercase words
 		const mergedArticles = mergedOptions.articlesList.concat ( lowercaseWords )
 			.filter ( ( word, index, array ) => array.indexOf ( word ) === index );
@@ -97,14 +97,15 @@ export class TitleCaserUtils {
 		];
 		
 		// Return the merged options
-		const result = {
+	    const result = {
 			articlesList: mergedArticles,
 			shortConjunctionsList: mergedShortConjunctions,
 			shortPrepositionsList: mergedShortPrepositions,
-			neverCapitalizedList: [ ...mergedOptions.neverCapitalizedList ],
+			neverCapitalizedList: [...mergedOptions.neverCapitalizedList],
 			replaceTerms: mergedReplaceTerms,
+			smartQuotes: mergedOptions.smartQuotes  // Add smartQuotes option to result
 		};
-		
+
 		// Add the merged options to the cache and return them
 		TitleCaserUtils.titleCaseOptionsCache.set ( cacheKey, result );
 		return result;
@@ -387,7 +388,42 @@ export class TitleCaserUtils {
 		// Check if the targetWord is in the wordList
 		return wordList.some ( ( word ) => word.toLowerCase () === targetWord.toLowerCase () );
 	}
-	
+
+	static convertQuotesToCurly(input) {
+	    const curlyQuotes = {
+	        "'": ['\u2018', '\u2019'],
+	        '"': ['\u201C', '\u201D'],
+	    };
+
+	    let replacedText = '';
+
+	    for (let i = 0; i < input.length; i++) {
+	        const char = input[i];
+	        const curlyQuotePair = curlyQuotes[char];
+
+	        if (curlyQuotePair) {
+	            const prevChar = input[i - 1];
+	            const nextChar = input[i + 1];
+	            
+	            // Determine whether to use left or right curly quote
+	            const isLeftAligned = (!prevChar || prevChar === ' ' || prevChar === '\n');
+	            const curlyQuote = isLeftAligned ? curlyQuotePair[0] : curlyQuotePair[1];
+	            replacedText += curlyQuote;
+
+	            // Handle cases where right curly quote is followed by punctuation or space
+	            if (curlyQuote === curlyQuotePair[1] && /[.,;!?()\[\]{}:]/.test(nextChar)) {
+	                replacedText += nextChar;
+	                i++; // Skip the next character
+	            }
+	        } else {
+	            replacedText += char;
+	        }
+	    }
+
+	    return replacedText;
+	}
+
+
 	// This function is used to replace a word with a term in the replaceTerms object
 	static replaceTerm ( word, replaceTermObj ) {
 		// Validate input

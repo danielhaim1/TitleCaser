@@ -126,12 +126,26 @@ describe ( `
 			style: "chicago"
 		};
 		const titleCaser = new TitleCaser ( options );
-		const input = "I love connecting with my online friends, but sometimes I prefer to hang out with my friends IRL";
+		const input = "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL";
 		const expectedOutput = "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL";
 		const actualOutput = titleCaser.toTitleCase ( input );
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	} );
+
+	test ( "Test Smart Quotes", () => {
+	    const options = {
+	        style: "chicago",
+	        smartQuotes: true
+	    };
+	    const titleCaser = new TitleCaser(options);
+	    const input = '"Never underestimate the power O\' persistence,"'; // Use consistent smart quotes
+		const expectedOutput = "“Never Underestimate the Power O’ Persistence,”"; // Use consistent smart quotes
+
+		const actualOutput = titleCaser.toTitleCase ( input );
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	});
 
 	test ( "Replaces X with ×", () => {
 		const options = {
