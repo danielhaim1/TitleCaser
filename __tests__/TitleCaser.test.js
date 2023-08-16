@@ -132,7 +132,6 @@ describe ( `
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	} );
-
 	test ( "Test Smart Quotes", () => {
 	    const options = {
 	        style: "chicago",
@@ -146,7 +145,6 @@ describe ( `
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	});
-
 	test ( "Replaces X with ×", () => {
 		const options = {
 			style: "chicago"
