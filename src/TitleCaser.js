@@ -122,7 +122,7 @@ export class TitleCaser {
 					case TitleCaserUtils.hasNumbers ( word ):
 						// If the word has numbers, return the correct casing.
 						return word;
-					default:
+								default:
 						// Default to returning the word with the correct casing.
 						return word.charAt ( 0 )
 							.toUpperCase () + word.slice ( 1 )
@@ -144,6 +144,9 @@ export class TitleCaser {
 			// Replace the nl2br placeholder with <br> tags.
 			inputString = inputString.replace(/nl2br/gi, "<br />");
 			
+			// BEFORE WE RETURN THE STRING
+			// CHECK THE LAST WORD AND IF IT IS INTENTIONALLY UPPERCASED, IF IT IS, RETURN THE STRING.
+
 			// Return the string.
 			return inputString;
 		} catch ( error ) {

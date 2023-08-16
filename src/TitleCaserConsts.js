@@ -135,7 +135,7 @@ export const correctTitleCasingList = [
 	'Ltd.', 'Co.', 'Inc.', 'St.', 'Ave.', 'Bldg.', 'No.',
 
 	// Other
-	'×', 'x', 'TV'
+	'×', 'x', 'TV', 'IRL', 'UK'
 ];
 
 export const wordReplacementsList = [

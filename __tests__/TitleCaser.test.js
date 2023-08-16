@@ -115,12 +115,24 @@ describe ( `
 			style: "chicago"
 		};
 		const titleCaser = new TitleCaser ( options );
-		const input = "Technology Trends in the us, usa, and uk";
+		const input = "Technology Trends in the US, USA, and UK";
 		const expectedOutput = "Technology Trends in the US, USA, and UK";
 		const actualOutput = titleCaser.toTitleCase ( input );
 		expect ( actualOutput )
 			.toEqual ( expectedOutput );
 	} );
+	test ( "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL", () => {
+		const options = {
+			style: "chicago"
+		};
+		const titleCaser = new TitleCaser ( options );
+		const input = "I love connecting with my online friends, but sometimes I prefer to hang out with my friends IRL";
+		const expectedOutput = "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL";
+		const actualOutput = titleCaser.toTitleCase ( input );
+		expect ( actualOutput )
+			.toEqual ( expectedOutput );
+	} );
+
 	test ( "Replaces X with ×", () => {
 		const options = {
 			style: "chicago"
