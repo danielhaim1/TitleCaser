@@ -342,10 +342,19 @@ export class TitleCaserUtils {
       throw new TypeError("Invalid input: word must be a non-empty string.");
     }
 
+    // Check if the word contains an apostrophe
+    const hasApostrophe = word.includes("'");
+
+    // If the word has an apostrophe, split it
+    const wordParts = hasApostrophe ? word.split("'") : [word];
+
     // Define a regular expression that matches a roman numeral
     const romanNumeralRegex = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i;
-    // Check if the input word matches the regular expression
-    return romanNumeralRegex.test(word);
+
+    // Check each part of the word
+    const isRomanNumeral = wordParts.every((part) => romanNumeralRegex.test(part));
+
+    return isRomanNumeral;
   }
 
   // Check if a word is a hyphenated Roman numeral
@@ -656,14 +665,41 @@ export class TitleCaserUtils {
 
     // Process each word
     const processedWords = hyphenatedWords.map((word, i) => {
+      let correctedWord = word;
+
+      const romanNumeralApostropheSRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'s$/i;
+      if (romanNumeralApostropheSRegex.test(word)) {
+        const updatedWord = correctedWord.toUpperCase().replace(/'S$/, "'s");
+        // Uppercase the Roman numeral part and concatenate back with 's
+        return updatedWord;
+      }
+
       // Check if the word is a Roman numeral
       const romanNumeralRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i;
       if (romanNumeralRegex.test(word)) {
+        console.log("Processed word is --", word.toUpperCase());
         return word.toUpperCase();
       }
 
       // Preserve the original word
-      let correctedWord = word;
+
+      // Check if the word contains an apostrophe
+      const hasApostrophe = word.includes("'");
+      if (hasApostrophe) {
+        // Split the word at the apostrophe
+        const wordParts = word.split("'");
+        // Check each part for Roman numerals
+        const isRomanNumeral = wordParts.every((part) => romanNumeralRegex.test(part));
+        if (isRomanNumeral) {
+          // Uppercase each Roman numeral part and join back with apostrophe
+          correctedWord = wordParts.map((part) => part.toUpperCase()).join("'");
+          console.log("Processed word is --", correctedWord);
+          return correctedWord;
+        } else {
+          console.log("Processed word is --", correctedWord);
+          return processWord(correctedWord, i, hyphenatedWords.length);
+        }
+      }
 
       // Check if the word is in the list of words to preserve
       const lowerCaseWord = word.toLowerCase();

@@ -11,58 +11,46 @@ const createTest = (description, input, expected) => {
 };
 
 describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
-    // Test 1
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'Discussing the US policies.',
         'Discussing the US Policies.');
 
-    // Test 2
     createTest('Does not capitalize "us" when used as a pronoun',
         'It’s up to us to decide.',
         'It’s up to Us to Decide.');
 
-    // Test 3
     createTest('Capitalizes country code "UK" with preceding indicator and trailing comma',
         'The UK, despite its size, has a significant impact.',
         'The UK, Despite Its Size, Has a Significant Impact.');
 
-    // Test 4
     createTest('Handles multiple instances of country codes and pronouns',
         'We visited the UK and the US, and both were memorable.',
         'We Visited the UK and the US, and Both Were Memorable.');
 
-    // Test 5
     createTest('Does not capitalize "us" when used in common phrases',
         'It has a varied landscape, and us, the citizens, appreciate it.',
         'It Has a Varied Landscape, and Us, the Citizens, Appreciate It.');
 
-    // Test 6
     createTest('Capitalizes "USA" in a formal context',
         'The USA has a varied landscape.',
         'The USA Has a Varied Landscape.');
 
-    // Additional tests with government-related words
-    // Test 7
     createTest('Capitalizes "US" before a government-related word',
         'Discussing the US government policies.',
         'Discussing the US Government Policies.');
 
-    // Test 8
     createTest('Does not capitalize "us" before a government-related word',
         'It’s up to us in government to decide.',
         'It’s up to Us in Government to Decide.');
 
-    // Test 9
     createTest('Capitalizes "UK" with preceding indicator before a government-related word',
         'The UK, with its strong government, leads the way.',
         'The UK, With Its Strong Government, Leads the Way.');
 
-    // Test 10
     createTest('Handles multiple instances of country codes and pronouns before government-related words',
         'We visited the UK and the US, and both have strong military forces.',
         'We Visited the UK and the US, and Both Have Strong Military Forces.');
 
-    // Additional tests with military, territory, and talks-related words
     createTest('Capitalizes "US" before a military-related word',
         'Discussing the US military strategies.',
         'Discussing the US Military Strategies.');
@@ -298,7 +286,6 @@ describe(`Test Variation Stability`, () => {
     );
 
 });
-
 
 describe(`
     Test Reserved Words`, () => {

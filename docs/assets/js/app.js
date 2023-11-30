@@ -253,18 +253,43 @@ function initializeTitleCaser () {
 	titleShuffleBtn.click ();
 }
 
-const titles = [
+const titleArray = [
+	"discussing the us policies.",
+	"it’s up to us to decide.",
+	"the uk, despite its size, has a significant impact.",
+	"we visited the uk and the us, and both were memorable.",
+	"it has a varied landscape, and us, the citizens, appreciate it.",
+	"the usa has a varied landscape.",
+	"discussing the us government policies.",
+	"it’s up to us in government to decide.",
+	"the uk, with its strong government, leads the way.",
+	"we visited the uk and the us, and both have strong military forces.",
+	"discussing the us military strategies.",
+	"it’s up to us in military to decide.",
+	"the uk, with its vast territory, has diverse landscapes.",
+	"we visited the uk and the us, and both engage in diplomatic talks.",
+	"it’s important for us to participate in international talks.",
+	"the usa introduces a new bill for economic reform.",
+	"we visited the uk and the us, and both consider a bill for environmental protection.",
+	"the book of life",
+	"node.js development on aws: an in-depth tutorial on server-side javascript deployment",
+	"louis-iv Extravaganza: A Culinary Journey with kellogss Delights",
+	"what's to say about this?",
+	"google tensorflow",
+	"the iphone\'s impact on modern communication: a sociolinguistic analysis",
+	"backend and frontend",
+	"vmware vs. virtualbox: a comparative study of virtualization software",
+	"the science of nutrition: debunking myths and fads",
+	"backend web development: building scalable apis with node.js",
 	"nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
 	"the iphone's impact on modern communication: a sociolinguistic analysis",
 	"back-end and front-end",
-	"VMware vs. VirtualBox: a comparative study of virtualization software",
 	"the art of negotiation: strategies for successful business deals",
 	"Back-End Web Development: Building Scalable APIs with nodejs",
 	"revolutionizing the publishing industry: insights from a cto on ebook development and innovation",
 	"the future of ai: how iot and machine learning will change the world",
 	"the impact of social media on mental health: a study of instagram, Tiktok, and SnapChat",
 	"the future of devops: how to prepare for the next era of software development",
-	"GooGlE vs. VirtualBox: a comparative study of virtualization software",
 	"the business of ransomware: a study of raas marketplaces and their impact on cybersecurity",
 	"ransomware attack patterns and detection techniques: a comparative analysis of machine learning and statistical approaches",
 	"ransomware mitigation strategies in critical infrastructure: a framework for securing public and private sectors against cyber attacks",
@@ -293,5 +318,6 @@ const titles = [
 	"cmos unleashed: leveraging the power of marketing in the digital age on aws",
 	"devops and agile on aws: synergies and challenges for software development processes using github"
 ];
+const titles = Array.from(new Set(titleArray));
 
 initializeTitleCaser ();

@@ -88,12 +88,11 @@ export class TitleCaser {
           case TitleCaserUtils.isWordInArray(word, correctTitleCasingList):
             // If the word is in the correctTitleCasingList array, return the correct casing.
             return TitleCaserUtils.correctTerm(word, correctTitleCasingList);
+          case TitleCaserUtils.hasHyphen(word):
+            return TitleCaserUtils.correctTermHyphenated(word, style);
           case TitleCaserUtils.hasSuffix(word, style):
             // If the word has a suffix, return the correct casing.
             return TitleCaserUtils.correctSuffix(word, correctTitleCasingList);
-          case TitleCaserUtils.hasHyphen(word):
-            // If the word has a hyphen, return the correct casing.
-            return TitleCaserUtils.correctTermHyphenated(word, style);
           case TitleCaserUtils.hasUppercaseIntentional(word):
             // If the word has an intentional uppercase letter, return the correct casing.
             return word;
