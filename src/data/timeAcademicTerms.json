@@ -1,0 +1,10 @@
+{
+    "timeRelated": [
+        "a.m.", "p.m.", "ca.", "cc.", "fig.", "pl.", "pt.", "rev.", "sr.", "v.",
+        "vol.", "et al.", "pp.", "p."
+    ],
+    "academic": [
+        "adj.", "adv.", "cf.", "cm.", "co.", "corp.", "dept.", "dist.", "ed.",
+        "edn.", "esp.", "etc.", "ex.", "i.e.", "e.g.", "op. cit.", "vs."
+    ]
+}

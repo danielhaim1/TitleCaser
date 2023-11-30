@@ -1,0 +1,19 @@
+{
+    "advertising": [
+        "AdWords", "AdSense", "AdMob", "DoubleClick", "SpotX"
+    ],
+    "digitalMarketing": [
+        "DSP", "SSP", "CTR", "CPA", "CPC", "CPL", "CPM", "CRM", "SEO", "SEM", 
+        "SMM", "A/B", "CTOR", "KPI", "SERP", "FAQ", "PR"
+    ],
+    "general": [
+        "B2B", "B2C", "CMO", "USP", "PWA", "SMO", "T&C", "TOS", "PP", 
+        "UI", "UX", "UI/UX"
+    ],
+    "blockchain": [
+        "PoE", "PoW", "PoC"
+    ],
+    "accessibility": [
+        "A11Y"
+    ]
+}

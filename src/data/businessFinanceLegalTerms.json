@@ -1,0 +1,28 @@
+{
+    "commercial": [
+        "Ltd.", "LLC", "PLC", "Co.", "Inc.", "St.", "Ave.", "Bldg.", "No.",
+        "GmbH"
+    ],
+    "titles": [
+        "CEO", "CEOs", "CFO", "CFOs", "CIO", "CIOs", "CMO", "CMOs", "COO",
+        "COOs", "CPO", "CPOs", "CRO", "CROs", "CSO", "CSOs", "CTO", "CTOs",
+        "EVP", "EVPs", "HR", "HRs", "SVP", "SVPs", "VP", "VPs", "CMTO",
+        "CDO"
+    ],
+    "accounting": [
+        "AP", "COGS", "EBIT", "EPS", "FIFO", "GAAP", "LIFO", "P&L", "ROI",
+        "SOX", "TCO", "VAT", "EBITDA", "NPV", "WACC", "AR"
+    ],
+    "finance": [
+        "CAGR", "DCF", "ETF", "IPO", "IRR", "M&A", "NAV", "PE", "PEG",
+        "PPE", "ROE", "S&P", "TVM", "VC", "FOMC", "FX", "ETF"
+    ],
+    "legal": [
+        "AFA", "ADR", "CCPA", "CFAA", "CISG", "DMCA", "EULA", "GDPR",
+        "HIPAA", "NDA", "SOW", "TOS", "LLM", "JD", "Esq.", "AG", "SARL",
+        "KYC", "AML", "ph.d.", "m.d.", "d.d.s.", "d.m.d.", "d.o.", "d.c.",
+        "d.v.m.", "d.n.p.", "d.p.m.", "d.s.w.", "d.s.n.", "d.n.sc.",
+        "d.n.a.", "d.n.t.", "d.n.p.t.", "d.n.o.", "d.n.m.", "d.n.e.",
+        "d.n.s.", "d.n.p.s."
+    ]
+}
