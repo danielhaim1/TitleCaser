@@ -145,9 +145,10 @@ The `{options}` parameter is an object that contains the settings for the conver
 
 ## Methods
 
-- `setReplaceTerms(terms: object)`: Sets word replacement terms to be used during title casing. Multiple calls can be made to add or update multiple word replacements.
-- `removeReplaceTerm(term: string)`: Removes a replaced term from the `wordReplacementsList` array in the option object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the option object.
-- `addReplaceTerm(term: string, replacement: string)`: Adds a new term to the `wordReplacementsList` array in the options object of the TitleCaser instance. The method takes two string arguments: term specifies the word to be replaced, and replacement specifies the replacement for the word. If the term already exists in the array, the method updates its replacement value. Otherwise, it adds a new object with the term and replacement to the array. The method then updates the wordReplacementsList property in the object.
+- `setReplaceTerms(terms)`: Updates the `wordReplacementsList` with new term-replacement pairs. It accepts an array of objects, each containing a single key-value pair representing the term and its replacement.
+- `removeReplaceTerm(term)`: Removes a replaced term from the `wordReplacementsList` array in the option object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the option object.
+- `addReplaceTerm(term, replacement)`: Adds a single term-replacement pair to the `wordReplacementsList`. If the term already exists, it updates the replacement value.
+- `addExactPhraseReplacements(newPhrases)` - This method allows adding an array of exact phrase replacements to the `TitleCaser` class. Each item in the array should be an object with a single key-value pair, where the key is the phrase to be replaced and the value is the desired replacement.
 - `setStyle(style: string)`: Sets the style option in the object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the object.
 - `smartQuotes(smartQuotes: boolean)`: Specifies whether to replace straight quotes with smart quotes during title casing. Provide a boolean argument smartQuotes to enable or disable this feature.
 

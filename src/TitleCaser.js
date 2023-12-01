@@ -11,6 +11,7 @@ export class TitleCaser {
   constructor(options = {}) {
     this.options = options;
     this.wordReplacementsList = wordReplacementsList;
+    this.correctPhraseCasingList = correctPhraseCasingList;
   }
 
   toTitleCase(str) {
@@ -48,6 +49,9 @@ export class TitleCaser {
       const replaceTermObj = Object.fromEntries(
         replaceTermList.map((term) => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]),
       );
+
+      // console.log(replaceTermsArray);
+      // console.log(this.wordReplacementsList);
 
       const map = {
         "&": "&amp;",
@@ -89,7 +93,28 @@ export class TitleCaser {
             // If the word is in the correctTitleCasingList array, return the correct casing.
             return TitleCaserUtils.correctTerm(word, correctTitleCasingList);
           case TitleCaserUtils.hasHyphen(word):
-            return TitleCaserUtils.correctTermHyphenated(word, style);
+            // Separate the base word from any trailing punctuation
+            const baseWord = word.replace(/[\W_]+$/, "");
+            const trailingPunctuation = word.slice(baseWord.length);
+
+            // Split the base word at the hyphen and process each part
+            const parts = baseWord.split("-");
+            const replacedParts = parts.map((part) => {
+              const lowerCasePart = part.toLowerCase();
+              if (replaceTermsArray.includes(lowerCasePart)) {
+                return replaceTermObj[lowerCasePart];
+              }
+              return part;
+            });
+
+            // Determine if any part was replaced
+            const isReplaced = !replacedParts.every((part, index) => part === parts[index]);
+
+            // Reassemble the word with the hyphen, reattach trailing punctuation, and return
+            return (
+              (isReplaced ? replacedParts.join("-") : TitleCaserUtils.correctTermHyphenated(word, style)) +
+              trailingPunctuation
+            );
           case TitleCaserUtils.hasSuffix(word, style):
             // If the word has a suffix, return the correct casing.
             return TitleCaserUtils.correctSuffix(word, correctTitleCasingList);
@@ -102,18 +127,29 @@ export class TitleCaser {
               ? word.charAt(0).toUpperCase() + word.slice(1)
               : word.toLowerCase();
           case TitleCaserUtils.endsWithSymbol(word):
+            // console.log("ends with symbol: ", word);
             // If the word ends with a symbol, return the correct casing.
-            const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()])/g);
-            const processedWords = splitWord.map((splitWord, j) => {
-              // If the word is in the correctTitleCasingList array, return the correct casing.
-              if (TitleCaserUtils.isWordInArray(splitWord, correctTitleCasingList))
-                return TitleCaserUtils.correctTerm(splitWord, correctTitleCasingList);
-              // Else return the word with the correct casing.
-              else
-                return j > 0 && TitleCaserUtils.endsWithSymbol(splitWord)
-                  ? splitWord.charAt(0).toUpperCase() + splitWord.slice(1)
-                  : splitWord.charAt(0).toUpperCase() + splitWord.slice(1);
+            const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()?])/g);
+            // console.log(splitWord);
+            // Process each part for correct casing
+            const processedWords = splitWord.map((part) => {
+              // Check if part is a symbol
+              if (TitleCaserUtils.endsWithSymbol(part)) {
+                // console.log(part);
+                return part;
+              } else {
+                // If it's a word, process it for correct casing
+                if (TitleCaserUtils.isWordInArray(part, correctTitleCasingList)) {
+                  return TitleCaserUtils.correctTerm(part, correctTitleCasingList);
+                } else if (replaceTermsArray.includes(part)) {
+                  return replaceTermObj[part];
+                } else {
+                  // Apply the correct casing for words not in the list
+                  return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+                }
+              }
             });
+
             // Join the processed words and return them.
             return processedWords.join("");
           case TitleCaserUtils.startsWithSymbol(word):
@@ -136,11 +172,12 @@ export class TitleCaser {
       // Join the words in the array into a string.
       inputString = wordsInTitleCase.join(" ");
 
-      for (const phrase of correctPhraseCasingList) {
-        // If the phrase is in the input string, replace it with the correct casing.
-        if (inputString.toLowerCase().includes(phrase.toLowerCase())) {
-          inputString = inputString.replace(new RegExp(phrase, "gi"), phrase);
-        }
+      for (const [phrase, replacement] of Object.entries(this.correctPhraseCasingList)) {
+        // Create a regular expression for case-insensitive matching of the phrase
+        const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+
+        // Replace the phrase in the input string with its corresponding replacement
+        inputString = inputString.replace(regex, replacement);
       }
 
       // Replace the nl2br placeholder with <br> tags.
@@ -197,35 +234,37 @@ export class TitleCaser {
   }
 
   setReplaceTerms(terms) {
-    if (typeof terms !== "object") {
-      throw new TypeError("Invalid argument: replace terms must be an object.");
+    if (!Array.isArray(terms)) {
+      throw new TypeError("Invalid argument: setReplaceTerms must be an array of objects.");
     }
-
-    // Add the new replace terms to the wordReplacementsList array
-    Object.entries(terms).forEach(([term, replacement]) => {
-      const index = wordReplacementsList.findIndex((obj) => obj[term]);
-      if (index !== -1) {
-        // If the term already exists in the array, update the replacement value
-        wordReplacementsList[index][term] = replacement;
+    // Iterate over each term-replacement object in the array
+    terms.forEach((termObject) => {
+      if (termObject && typeof termObject === "object") {
+        const [term, replacement] = Object.entries(termObject)[0];
+        const index = this.wordReplacementsList.findIndex((obj) => obj.hasOwnProperty(term));
+        if (index !== -1) {
+          // Update the existing term
+          this.wordReplacementsList[index][term] = replacement;
+        } else {
+          // Add the new term
+          this.wordReplacementsList.push({ [term]: replacement });
+        }
       } else {
-        // If the term doesn't exist in the array, add a new object with the term and replacement
-        wordReplacementsList.push({ [term]: replacement });
+        // Handle non-object entries in the array, if required
+        console.warn("Invalid entry in terms array:", termObject);
       }
     });
 
-    // Log the updated wordReplacementsList array
-    // console.log(wordReplacementsList);
+    this.options.wordReplacementsList = this.wordReplacementsList;
 
-    // Update the replace terms option
-    this.options.wordReplacementsList = wordReplacementsList;
+    // Log the updated wordReplacementsList array
+    // console.log(this.wordReplacementsList);
   }
 
   addReplaceTerm(term, replacement) {
     if (typeof term !== "string" || typeof replacement !== "string") {
       throw new TypeError("Invalid argument: term and replacement must be strings.");
     }
-
-    const index = this.wordReplacementsList.findIndex((obj) => obj[term]);
 
     if (index !== -1) {
       // If the term already exists in the array, update the replacement value
@@ -255,11 +294,46 @@ export class TitleCaser {
     // Remove the term from the array
     this.wordReplacementsList.splice(index, 1);
 
-    // Log the updated wordReplacementsList array
-    // console.log(this.wordReplacementsList);
-
     // Update the replace terms option
     this.options.wordReplacementsList = this.wordReplacementsList;
+
+    // Log the updated wordReplacementsList array
+    // console.log(this.wordReplacementsList);
+  }
+
+  addExactPhraseReplacements(newPhrases) {
+    if (!Array.isArray(newPhrases)) {
+      throw new TypeError("Invalid argument: newPhrases must be an array.");
+    }
+
+    newPhrases.forEach((item) => {
+      // If the item is an object with a single key-value pair
+      if (typeof item === "object" && !Array.isArray(item) && Object.keys(item).length === 1) {
+        const key = Object.keys(item)[0];
+        const value = item[key];
+        if (typeof key === "string" && typeof value === "string") {
+          this.correctPhraseCasingList[key] = value;
+        } else {
+          throw new TypeError("Invalid argument: Each key-value pair must contain strings.");
+        }
+      }
+      // If the item is already a key-value pair
+      else if (typeof item === "object" && !Array.isArray(item)) {
+        Object.entries(item).forEach(([key, value]) => {
+          if (typeof key === "string" && typeof value === "string") {
+            this.correctPhraseCasingList[key] = value;
+          } else {
+            throw new TypeError("Invalid argument: Each key-value pair must contain strings.");
+          }
+        });
+      }
+      // Invalid format
+      else {
+        throw new TypeError("Invalid argument: Each item must be an object with a single key-value pair.");
+      }
+    });
+
+    // console.log(this.correctPhraseCasingList);
   }
 
   setStyle(style) {

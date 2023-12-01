@@ -145,4 +145,8 @@ export const titleCaseDefaultOptionsList = Object.freeze({
 });
 
 export const ignoredWordList = [];
-export const correctPhraseCasingList = ["The Cybersmile Foundation", "CO. by Colgate", "The Simpsons"];
+export const correctPhraseCasingList = {
+  'the cybersmile foundation': 'The Cybersmile Foundation',
+  'co. by colgate': 'CO. by Colgate'
+};
+

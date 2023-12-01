@@ -119,45 +119,60 @@ describe(`
 
 describe(`
     Test Methods`, () => {
-    test("removeReplaceTerm", () => {
-        const titleCaser = new TitleCaser({
-            style: 'apa'
-        });
-
-        // Set multiple replacement terms using setReplaceTerms()
-        titleCaser.setReplaceTerms({
-            'hello world': 'Hello World',
-            'replace me': 'Replace Me'
-        });
-        titleCaser.setReplaceTerms({
-            'apa': 'APA'
-        });
-
-        // Use removeReplaceTerm() to remove a replace term
-        titleCaser.removeReplaceTerm('hello world');
-
-        // Use descriptive variable names for the input and expected output
-        const inputString = "hello world, replace me!";
-        const expectedOutput = "Hello World, Replace Me!";
-
-        // Call toTitleCase() to convert the input string to title case
-        const outputString = titleCaser.toTitleCase(inputString);
-        // Check that the output matches the expected output
-        expect(outputString).toEqual(expectedOutput);
-    });
     test("setReplaceTerms", () => {
         const titleCaser = new TitleCaser({
             style: 'ap'
         });
         const replaceTerms = [
-            { 'hello world': 'Hello World' },
-            { 'replace me': 'Replace Me' }
+            { 'hi': 'Hello' },
+            { 'globe': 'World' },
+            { 'two': 'One' },
         ];
         titleCaser.setReplaceTerms(replaceTerms);
-        const input = "hello world, replace me!";
-        const expectedOutput = "Hello World, Replace Me!";
+        const input = "hi globe, two";
+        const expectedOutput = "Hello World, One";
         const actualOutput = titleCaser.toTitleCase(input);
         expect(actualOutput).toEqual(expectedOutput);
+    });
+
+    test("addExactPhraseReplacements", () => {
+        const titleCaser = new TitleCaser({
+            style: 'ap'
+        });
+
+        const newPhrase = [
+            { 'the correct phrase': 'ThE CoRrEcT Way' }
+        ];
+        titleCaser.addExactPhraseReplacements(newPhrase);
+        const input = "this is the correct phrase";
+        const expectedOutput = "This Is ThE CoRrEcT Way";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
+    test("removeReplaceTerm", () => {
+        const titleCaser = new TitleCaser({
+            style: 'apa'
+        });
+
+        const replaceTerms = [
+            { 'x': 'Y' },
+            { 'y': 'X' }
+        ];
+
+        // Set multiple replacement terms using setReplaceTerms()
+        titleCaser.setReplaceTerms(replaceTerms);
+
+        // Use removeReplaceTerm() to remove a replace term
+        titleCaser.removeReplaceTerm('x');
+
+        // Use descriptive variable names for the input and expected output
+        const inputString = "x should be y";
+        const expectedOutput = "X Should Be X";
+
+        // Call toTitleCase() to convert the input string to title case
+        const outputString = titleCaser.toTitleCase(inputString);
+        // Check that the output matches the expected output
+        expect(outputString).toEqual(expectedOutput);
     });
 });
 
@@ -174,8 +189,8 @@ describe(`
     createTest(
         "Capitalization and word replacements",
         { style: "ap" },
-        "GOOgle and VMWARE",
-        "Google and VMware"
+        "GOOgle and VMWARE and Kellogs",
+        "Google and VMware and Kellogg's"
     );
 
     createTest(
