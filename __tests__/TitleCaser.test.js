@@ -82,7 +82,8 @@ describe(`
         'We Visited the UK and the US, and Both Consider a Bill for Environmental Protection.');
 });
 
-describe(`Test Basic Options`, () => {
+describe(`
+    Test Basic Options`, () => {
     const createTest = (description, input, expected) => {
         test(description, () => {
             const titleCaser = new TitleCaser();
