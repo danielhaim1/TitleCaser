@@ -151,38 +151,44 @@ export class TitleCaser {
       if (smartQuotes) {
         inputString = TitleCaserUtils.convertQuotesToCurly(inputString);
       }
-      const commonShortWords = [
-        "the",
-        "in",
-        "by",
-        "to",
-        "from",
-        "of",
-        "for",
-        "at",
-        "with",
-        "and",
-        "on",
-        "as",
-        "an",
-        "or",
-        "a",
-      ];
-      const lastLap = inputString.split(" ");
 
-      for (let i = 0; i < lastLap.length - 1; i++) {
-        const prevWord = i > 0 ? lastLap[i - 1] : null;
-        const currentWord = lastLap[i];
-        const nextWord = lastLap[i + 1];
+      const newWords = inputString.split(" ");
 
-        if (commonShortWords.includes(currentWord.toLowerCase())) {
-          if (TitleCaserUtils.checkIfWordIsAlpha2(currentWord, prevWord, nextWord)) {
-            lastLap[i] = currentWord.toUpperCase();
+      for (let i = 0; i < newWords.length; i++) {
+        const prevWord = i > 0 ? newWords[i - 1] : null;
+        let currentWord = newWords[i];
+        const nextWord = i < newWords.length - 1 ? newWords[i + 1] : null;
+
+        // Capture punctuation at the end of the word
+        const punctuationMatch = currentWord.match(/[.,!?;:]+$/);
+        let punctuation = "";
+
+        if (punctuationMatch) {
+          punctuation = punctuationMatch[0];
+          currentWord = currentWord.replace(/[.,!?;:]+$/, ""); // Remove punctuation at the end
+        }
+
+        let cleanCurrentWord = currentWord.replace(/[.,!?;:]/g, "");
+        let cleanNextWord = nextWord ? nextWord.replace(/[.,!?;:]/g, "") : nextWord;
+
+        if (cleanCurrentWord === "Us") {
+          if (TitleCaserUtils.isAcronym(currentWord, prevWord, nextWord)) {
+            if (punctuation === "") {
+              newWords[i] = "US";
+            } else {
+              newWords[i] = "US" + punctuation;
+            }
+          } else {
+            if (punctuation === "") {
+              newWords[i] = "Us";
+            } else {
+              newWords[i] = "Us" + punctuation;
+            }
           }
         }
       }
 
-      inputString = lastLap.join(" ");
+      inputString = newWords.join(" ");
 
       return inputString;
     } catch (error) {

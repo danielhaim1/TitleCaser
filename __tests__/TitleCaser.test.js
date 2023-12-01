@@ -1,4 +1,5 @@
 import { TitleCaser } from '../index.js';
+import { AcronymManager } from '../src/TitleCaserUtils';
 
 const createTest = (description, input, expected) => {
     test(description, () => {
@@ -10,9 +11,10 @@ const createTest = (description, input, expected) => {
     });
 };
 
-describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
+describe(`
+    Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
-        'Discussing the US policies.',
+        'Discussing the us policies.',
         'Discussing the US Policies.');
 
     createTest('Does not capitalize "us" when used as a pronoun',
@@ -20,11 +22,11 @@ describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
         'It’s up to Us to Decide.');
 
     createTest('Capitalizes country code "UK" with preceding indicator and trailing comma',
-        'The UK, despite its size, has a significant impact.',
+        'The uk, despite its size, has a significant impact.',
         'The UK, Despite Its Size, Has a Significant Impact.');
 
     createTest('Handles multiple instances of country codes and pronouns',
-        'We visited the UK and the US, and both were memorable.',
+        'We visited the uk and the US, and both were memorable.',
         'We Visited the UK and the US, and Both Were Memorable.');
 
     createTest('Does not capitalize "us" when used in common phrases',
@@ -32,11 +34,11 @@ describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
         'It Has a Varied Landscape, and Us, the Citizens, Appreciate It.');
 
     createTest('Capitalizes "USA" in a formal context',
-        'The USA has a varied landscape.',
+        'The usa has a varied landscape.',
         'The USA Has a Varied Landscape.');
 
     createTest('Capitalizes "US" before a government-related word',
-        'Discussing the US government policies.',
+        'Discussing the us government policies.',
         'Discussing the US Government Policies.');
 
     createTest('Does not capitalize "us" before a government-related word',
@@ -44,15 +46,15 @@ describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
         'It’s up to Us in Government to Decide.');
 
     createTest('Capitalizes "UK" with preceding indicator before a government-related word',
-        'The UK, with its strong government, leads the way.',
+        'The uk, with its strong government, leads the way.',
         'The UK, With Its Strong Government, Leads the Way.');
 
     createTest('Handles multiple instances of country codes and pronouns before government-related words',
-        'We visited the UK and the US, and both have strong military forces.',
+        'We visited the uk and the US, and both have strong military forces.',
         'We Visited the UK and the US, and Both Have Strong Military Forces.');
 
     createTest('Capitalizes "US" before a military-related word',
-        'Discussing the US military strategies.',
+        'Discussing the us military strategies.',
         'Discussing the US Military Strategies.');
 
     createTest('Does not capitalize "us" before a military-related word',
@@ -64,7 +66,7 @@ describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
         'The UK, With Its Vast Territory, Has Diverse Landscapes.');
 
     createTest('Handles multiple instances of country codes and pronouns before talks-related words',
-        'We visited the UK and the US, and both engage in diplomatic talks.',
+        'We visited the uk and the US, and both engage in diplomatic talks.',
         'We Visited the UK and the US, and Both Engage in Diplomatic Talks.');
 
     createTest('Does not capitalize "us" before a talks-related word',
@@ -72,14 +74,13 @@ describe(`Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
         'It’s Important for Us to Participate in International Talks.');
 
     createTest('Capitalizes "USA" in a formal context before a bill-related word',
-        'The USA introduces a new bill for economic reform.',
+        'The usa introduces a new bill for economic reform.',
         'The USA Introduces a New Bill for Economic Reform.');
 
     createTest('Handles multiple instances of country codes and pronouns before a bill-related word',
-        'We visited the UK and the US, and both consider a bill for environmental protection.',
+        'We visited the uk and the US, and both consider a bill for environmental protection.',
         'We Visited the UK and the US, and Both Consider a Bill for Environmental Protection.');
 });
-
 
 describe(`Test Basic Options`, () => {
     const createTest = (description, input, expected) => {
@@ -90,81 +91,77 @@ describe(`Test Basic Options`, () => {
         });
     };
 
-    // Test 1
     createTest('Default title case conversion',
         'hello world',
         'Hello World');
 
-    // Test 2
     createTest('Customized title case conversion',
         'the book   of     life',
         'The Book of Life');
 
-    // Test 3
     createTest('AP-style title case conversion with replacements',
         'nodejs development on aws: an in-depth tutorial on server-side javascript deployment',
         'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment');
 
-    // Test 4
     createTest('Testing Word Replacement (Kellogs -> Kellogg\'s)',
         'Kellogs',
         'Kellogg\'s');
 
-    // Test 5
     createTest('AP-style title case conversion with replacements',
         'louis-iv',
         'Louis-IV');
 
-    // Test 6
     createTest('Capitalize suffix word in sentence',
         "what's to say about this?",
         "What's to Say About This?");
 });
 
-describe(`Test Methods`, () => {
-	test("removeReplaceTerm", () => {
-		const titleCaser = new TitleCaser({
-			style: 'apa'
-		});
+describe(`
+    Test Methods`, () => {
+    test("removeReplaceTerm", () => {
+        const titleCaser = new TitleCaser({
+            style: 'apa'
+        });
 
-		// Set multiple replacement terms using setReplaceTerms()
-		titleCaser.setReplaceTerms({
-			'hello world': 'Hello World',
-			'replace me': 'Replace Me'
-		});
-		titleCaser.setReplaceTerms({
-			'apa': 'APA'
-		});
+        // Set multiple replacement terms using setReplaceTerms()
+        titleCaser.setReplaceTerms({
+            'hello world': 'Hello World',
+            'replace me': 'Replace Me'
+        });
+        titleCaser.setReplaceTerms({
+            'apa': 'APA'
+        });
 
-		// Use removeReplaceTerm() to remove a replace term
-		titleCaser.removeReplaceTerm('hello world');
+        // Use removeReplaceTerm() to remove a replace term
+        titleCaser.removeReplaceTerm('hello world');
 
-		// Use descriptive variable names for the input and expected output
-		const inputString = "hello world, replace me!";
-		const expectedOutput = "Hello World, Replace Me!";
+        // Use descriptive variable names for the input and expected output
+        const inputString = "hello world, replace me!";
+        const expectedOutput = "Hello World, Replace Me!";
 
-		// Call toTitleCase() to convert the input string to title case
-		const outputString = titleCaser.toTitleCase(inputString);
-		// Check that the output matches the expected output
-		expect(outputString).toEqual(expectedOutput);
-	});
-	test("setReplaceTerms", () => {
-		const titleCaser = new TitleCaser({
-			style: 'ap'
-		});
-		const replaceTerms = [
-			{ 'hello world': 'Hello World' },
-			{ 'replace me': 'Replace Me' }
-		];
-		titleCaser.setReplaceTerms(replaceTerms);
-		const input = "hello world, replace me!";
-		const expectedOutput = "Hello World, Replace Me!";
-		const actualOutput = titleCaser.toTitleCase(input);
-		expect(actualOutput).toEqual(expectedOutput);
-	});
+        // Call toTitleCase() to convert the input string to title case
+        const outputString = titleCaser.toTitleCase(inputString);
+        // Check that the output matches the expected output
+        expect(outputString).toEqual(expectedOutput);
+    });
+    test("setReplaceTerms", () => {
+        const titleCaser = new TitleCaser({
+            style: 'ap'
+        });
+        const replaceTerms = [
+            { 'hello world': 'Hello World' },
+            { 'replace me': 'Replace Me' }
+        ];
+        titleCaser.setReplaceTerms(replaceTerms);
+        const input = "hello world, replace me!";
+        const expectedOutput = "Hello World, Replace Me!";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 });
 
-describe(`Test Variation Stability`, () => {
+describe(`
+    Test Variation Stability`, () => {
     const createTest = (description, options, input, expectedOutput) => {
         test(description, () => {
             const titleCaser = new TitleCaser(options);
@@ -290,125 +287,125 @@ describe(`Test Variation Stability`, () => {
 describe(`
     Test Reserved Words`, () => {
 
-	test("Title case transformation for a single reserved word", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "GOOGle tensorflow";
-	    const expectedOutput = "Google TensorFlow";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a single reserved word", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "GOOGle tensorflow";
+        const expectedOutput = "Google TensorFlow";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for a sentence with a reserved word and colon", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "GooGlE vs. VirtualBox: a comparative study of virtualization software";
-	    const expectedOutput = "Google vs. VirtualBox: A Comparative Study of Virtualization Software";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a sentence with a reserved word and colon", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "GooGlE vs. VirtualBox: a comparative study of virtualization software";
+        const expectedOutput = "Google vs. VirtualBox: A Comparative Study of Virtualization Software";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for a reserved word with a possessive form", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "GOOGle's tensorflow";
-	    const expectedOutput = "Google's TensorFlow";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a reserved word with a possessive form", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "GOOGle's tensorflow";
+        const expectedOutput = "Google's TensorFlow";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for specific brand names", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
+    test("Title case transformation for specific brand names", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
 
-	    // Test data with brand names and their expected title-cased versions
-	    const testData = [
-	        { input: "cyber-security", expectedOutput: "Cybersecurity" },
-	        { input: "skoda", expectedOutput: "Škoda" },
-	        { input: "mcdonalds", expectedOutput: "McDonald's" },
-	        { input: "sainsburys", expectedOutput: "Sainsbury's" },
-	        { input: "hersheys", expectedOutput: "Hershey's" },
-	        { input: "kellogs", expectedOutput: "Kellogg's" },
-	    ];
+        // Test data with brand names and their expected title-cased versions
+        const testData = [
+            { input: "cyber-security", expectedOutput: "Cybersecurity" },
+            { input: "skoda", expectedOutput: "Škoda" },
+            { input: "mcdonalds", expectedOutput: "McDonald's" },
+            { input: "sainsburys", expectedOutput: "Sainsbury's" },
+            { input: "hersheys", expectedOutput: "Hershey's" },
+            { input: "kellogs", expectedOutput: "Kellogg's" },
+        ];
 
-	    testData.forEach(({ input, expectedOutput }) => {
-	        const actualOutput = titleCaser.toTitleCase(input);
-	        expect(actualOutput).toEqual(expectedOutput);
-	    });
-	});
+        testData.forEach(({ input, expectedOutput }) => {
+            const actualOutput = titleCaser.toTitleCase(input);
+            expect(actualOutput).toEqual(expectedOutput);
+        });
+    });
 
-	test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "Exploring the future of devops:<br>Preparing for the next era of software development";
-	    const expectedOutput = "Exploring the Future of DevOps: <br> Preparing for the Next Era of Software Development";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "Exploring the future of devops:<br>Preparing for the next era of software development";
+        const expectedOutput = "Exploring the Future of DevOps: <br> Preparing for the Next Era of Software Development";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for a sentence with untrimmed white spaces", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = `      This    string   has   too   many  spaces  `;
-	    const expectedOutput = "This String Has Too Many Spaces";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a sentence with untrimmed white spaces", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = `      This    string   has   too   many  spaces  `;
+        const expectedOutput = "This String Has Too Many Spaces";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "Exploring the Future of DevOps:<br>Guidelines for Preparing for the Next Era in Software Development";
-	    const expectedOutput = "Exploring the Future of DevOps: <br> Guidelines for Preparing for the Next Era in Software Development";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "Exploring the Future of DevOps:<br>Guidelines for Preparing for the Next Era in Software Development";
+        const expectedOutput = "Exploring the Future of DevOps: <br> Guidelines for Preparing for the Next Era in Software Development";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Title case transformation for a sentence with HTML line break (nl2br) without space after colon using <br> tag", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "The future of DevOps:<br>How to prepare for the next era of software development";
-	    const expectedOutput = "The Future of DevOps: <br> How to Prepare for the Next Era of Software Development";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Title case transformation for a sentence with HTML line break (nl2br) without space after colon using <br> tag", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "The future of DevOps:<br>How to prepare for the next era of software development";
+        const expectedOutput = "The Future of DevOps: <br> How to Prepare for the Next Era of Software Development";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Ampersand in a sentence should return & and not &Amp;", () => {
-	    const options = {
-	        style: "chicago"
-	    };
-	    const titleCaser = new TitleCaser(options);
-	    const input = "This & That";
-	    const expectedOutput = "This & That";
-	    const actualOutput = titleCaser.toTitleCase(input);
-	    expect(actualOutput).toEqual(expectedOutput);
-	});
+    test("Ampersand in a sentence should return & and not &Amp;", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = "This & That";
+        const expectedOutput = "This & That";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput).toEqual(expectedOutput);
+    });
 
-	test("Untrimmed white spaces", () => {
-		const options = {
-			style: "chicago"
-		};
-		const titleCaser = new TitleCaser(options);
-		const input = `      This    string   has   too   many  spaces  `;
-		const expectedOutput = "This String Has Too Many Spaces";
-		const actualOutput = titleCaser.toTitleCase(input);
-		expect(actualOutput)
-			.toEqual(expectedOutput);
-	});
+    test("Untrimmed white spaces", () => {
+        const options = {
+            style: "chicago"
+        };
+        const titleCaser = new TitleCaser(options);
+        const input = `      This    string   has   too   many  spaces  `;
+        const expectedOutput = "This String Has Too Many Spaces";
+        const actualOutput = titleCaser.toTitleCase(input);
+        expect(actualOutput)
+            .toEqual(expectedOutput);
+    });
 });

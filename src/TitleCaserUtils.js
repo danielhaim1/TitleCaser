@@ -222,9 +222,127 @@ export class TitleCaserUtils {
     return /[A-Z]/.test(word.slice(1)) && /[a-z]/.test(word.slice(0, -1));
   }
 
-  static checkIfWordIsAlpha2(word, prevWord, nextWord) {
-    // List of country codes or acronyms to check
-    const countryCodes = ["us", "usa", "uk"];
+  static isAcronym(word, prevWord, nextWord) {
+    try {
+      if (typeof word !== "string") {
+        throw new Error("Input word must be a string.");
+      }
+
+      const countryCodes = new Set(["us", "usa"]);
+      const commonShortWords = new Set([
+        "the",
+        "in",
+        "to",
+        "from",
+        "against",
+        "with",
+        "within",
+        "towards",
+        "into",
+        "at",
+      ]);
+      const directFollowingIndicators = new Set([
+        "policies",
+        "government",
+        "military",
+        "embassy",
+        "administration",
+        "senate",
+        "congress",
+        "parliament",
+        "cabinet",
+        "federation",
+        "republic",
+        "democracy",
+        "law",
+        "act",
+        "treaty",
+        "court",
+        "legislation",
+        "statute",
+        "bill",
+        "agency",
+        "department",
+        "bureau",
+        "service",
+        "office",
+        "council",
+        "commission",
+        "division",
+        "alliance",
+        "union",
+        "confederation",
+        "bloc",
+        "zone",
+        "territory",
+        "province",
+        "state",
+        "army",
+        "navy",
+        "forces",
+        "marines",
+        "airforce",
+        "defense",
+        "intelligence",
+        "security",
+        "economy",
+        "budget",
+        "finance",
+        "treasury",
+        "trade",
+        "sanctions",
+        "aid",
+        "strategy",
+        "plan",
+        "policy",
+        "program",
+        "initiative",
+        "project",
+        "reform",
+        "relations",
+        "ambassador",
+        "diplomacy",
+        "summit",
+        "conference",
+        "talks",
+        "negotiations",
+      ]);
+
+      const removePunctuation = (word) => word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+
+      // Remove trailing punctuation from the word
+      const removeTrailingPunctuation = (word) => {
+        const match = word.match(/^(.*?)([.,\/#!$%\^&\*;:{}=\-_`~()]+)$/);
+        if (match && match[1]) {
+          return match[1];
+        }
+        return word;
+      };
+
+      word = word ? removePunctuation(word.toLowerCase()) : "";
+      word = removeTrailingPunctuation(word);
+
+      prevWord = prevWord ? removePunctuation(prevWord.toLowerCase()) : "";
+      nextWord = nextWord ? removePunctuation(nextWord.toLowerCase()) : "";
+
+      // Check if it's an acronym with direct following indicators
+      const isDirectAcronym =
+        countryCodes.has(word) &&
+        (!prevWord || commonShortWords.has(prevWord)) &&
+        (!nextWord || directFollowingIndicators.has(nextWord));
+
+      // Check if it's an acronym based on the previous word
+      const isPreviousAcronym = countryCodes.has(prevWord) && (!nextWord || directFollowingIndicators.has(nextWord));
+
+      return isDirectAcronym || isPreviousAcronym;
+    } catch (error) {
+      console.error(`An error occurred: ${error.message}`);
+      return false; // Return false in case of errors to indicate failure.
+    }
+  }
+
+  static checkIfWordIsAcronym(commonShortWords, prevWord, currentWord, nextWord) {
+    const countryCodes = ["us", "usa"];
     const directPrecedingIndicators = ["the", "in", "to", "from", "against", "with", "within", "towards", "into", "at"];
     const directFollowingIndicators = [
       "policies",
@@ -293,27 +411,21 @@ export class TitleCaserUtils {
       "negotiations",
     ];
 
-    // Convert to lowercase to ensure case-insensitive comparison
-    word = word ? word.toLowerCase() : "";
-    prevWord = prevWord ? prevWord.toLowerCase() : "";
-    nextWord = nextWord ? nextWord.toLowerCase() : "";
+    const removePunctuation = (word) => word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 
-    // Remove trailing comma for comparison
-    const nextWordForComparison = nextWord.endsWith(",") ? nextWord.slice(0, -1) : nextWord;
+    currentWord = currentWord ? removePunctuation(currentWord.toLowerCase()) : "";
+    prevWord = prevWord ? removePunctuation(prevWord.toLowerCase()) : "";
+    nextWord = nextWord ? removePunctuation(nextWord.toLowerCase()) : "";
 
-    // Check if the word is one of the country codes
-    if (countryCodes.includes(word)) {
-      // Apply contextual checks
-      if (
-        (directPrecedingIndicators.includes(prevWord) || prevWord === null) &&
-        directFollowingIndicators.includes(nextWord)
-      ) {
-        console.log(prevWord, nextWord);
-        return true; // It's an acronym
-      }
+    if (
+      countryCodes.includes(currentWord.toLowerCase()) &&
+      (prevWord === null || commonShortWords.includes(prevWord.toLowerCase())) &&
+      (nextWord === null || directFollowingIndicators.includes(nextWord.toLowerCase()))
+    ) {
+      return true;
     }
 
-    return false; // Default to not an acronym
+    return false;
   }
 
   // Check if a word has a suffix
@@ -677,7 +789,6 @@ export class TitleCaserUtils {
       // Check if the word is a Roman numeral
       const romanNumeralRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i;
       if (romanNumeralRegex.test(word)) {
-        console.log("Processed word is --", word.toUpperCase());
         return word.toUpperCase();
       }
 
@@ -693,10 +804,8 @@ export class TitleCaserUtils {
         if (isRomanNumeral) {
           // Uppercase each Roman numeral part and join back with apostrophe
           correctedWord = wordParts.map((part) => part.toUpperCase()).join("'");
-          console.log("Processed word is --", correctedWord);
           return correctedWord;
         } else {
-          console.log("Processed word is --", correctedWord);
           return processWord(correctedWord, i, hyphenatedWords.length);
         }
       }

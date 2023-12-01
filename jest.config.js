@@ -3,4 +3,5 @@ module.exports = {
 		'^.+\\.js$': 'esbuild-jest'
 	},
 	testEnvironment: 'jsdom',
+    verbose: true,
 };
