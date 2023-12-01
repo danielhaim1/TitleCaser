@@ -104,10 +104,6 @@ describe(`
         'nodejs development on aws: an in-depth tutorial on server-side javascript deployment',
         'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment');
 
-    createTest('Testing Word Replacement (Kellogs -> Kellogg\'s)',
-        'Kellogs',
-        'Kellogg\'s');
-
     createTest('AP-style title case conversion with replacements',
         'louis-iv',
         'Louis-IV');
@@ -134,7 +130,6 @@ describe(`
         const actualOutput = titleCaser.toTitleCase(input);
         expect(actualOutput).toEqual(expectedOutput);
     });
-
     test("addExactPhraseReplacements", () => {
         const titleCaser = new TitleCaser({
             style: 'ap'
@@ -189,8 +184,8 @@ describe(`
     createTest(
         "Capitalization and word replacements",
         { style: "ap" },
-        "GOOgle and VMWARE and Kellogs",
-        "Google and VMware and Kellogg's"
+        "GOOgle and VMWARE",
+        "Google and VMware"
     );
 
     createTest(
@@ -340,16 +335,19 @@ describe(`
         const options = {
             style: "chicago"
         };
+        const replaceTerms = [
+            { 'mcdonalds': 'McDonald\'s' },
+            { 'skoda': 'Škoda' },
+            { 'cyber-security': 'Cybersecurity' },
+        ];
         const titleCaser = new TitleCaser(options);
+        titleCaser.setReplaceTerms(replaceTerms);
 
         // Test data with brand names and their expected title-cased versions
         const testData = [
             { input: "cyber-security", expectedOutput: "Cybersecurity" },
             { input: "skoda", expectedOutput: "Škoda" },
             { input: "mcdonalds", expectedOutput: "McDonald's" },
-            { input: "sainsburys", expectedOutput: "Sainsbury's" },
-            { input: "hersheys", expectedOutput: "Hershey's" },
-            { input: "kellogs", expectedOutput: "Kellogg's" },
         ];
 
         testData.forEach(({ input, expectedOutput }) => {

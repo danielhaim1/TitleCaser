@@ -64,36 +64,23 @@ const mergedArray = mergeArrays(
 export const correctTitleCasingList = mergedArray;
 
 export const wordReplacementsList = [
-  { "e-book": "eBook" },
-  { "e-books": "eBooks" },
-  { "e-commerce": "eCommerce" },
-  { ecom: "eCommerce" },
-  { ecommerce: "eCommerce" },
   { "a.k.a": "AKA" },
   { "a.s.a.p": "ASAP" },
   { "f.a.q": "FAQ" },
-  { "f.a.q.a": "FAQs" },
   { "f.a.q.s": "FAQs" },
   { "f.y.i": "FYI" },
   { "d.i.y": "DIY" },
   { "t.b.d": "TBD" },
-  { phd: "Ph.D." },
   { "back-end": "Backend" },
   { "front-end": "Frontend" },
   { "full-stack": "Fullstack" },
-  { angularjs: "Angular.js" },
-  { nextjs: "Next.js" },
-  { nodejs: "Node.js" },
-  { nuxtjs: "Nuxt.js" },
-  { reactjs: "React.js" },
-  { vuejs: "Vue.js" },
+  { "nodejs" : "Node.js" },
+  { "nextjs": "Next.js" },
+  { "nuxtjs": "Nuxt.js" },
+  { "reactjs": "React" },
+  { "react.js": "React" },
   { "cyber-security": "Cybersecurity" },
-  { skoda: "Škoda" },
-  { mcdonalds: "McDonald's" },
-  { sainsburys: "Sainsbury's" },
-  { hersheys: "Hershey's" },
-  { kellogs: "Kellogg's" },
-  { dominos: "Domino's" },
+  // { 'twitter': '𝕏' }
 ];
 
 export const titleCaseStylesList = Object.freeze({
