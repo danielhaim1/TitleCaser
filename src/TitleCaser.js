@@ -111,10 +111,8 @@ export class TitleCaser {
             const isReplaced = !replacedParts.every((part, index) => part === parts[index]);
 
             // Reassemble the word with the hyphen, reattach trailing punctuation, and return
-            return (
-              (isReplaced ? replacedParts.join("-") : TitleCaserUtils.correctTermHyphenated(word, style)) +
-              trailingPunctuation
-            );
+            const processedWord = isReplaced ? replacedParts.join("-") : TitleCaserUtils.correctTermHyphenated(word, style);
+            return processedWord.endsWith(trailingPunctuation) ? processedWord : processedWord + trailingPunctuation;
           case TitleCaserUtils.hasSuffix(word, style):
             // If the word has a suffix, return the correct casing.
             return TitleCaserUtils.correctSuffix(word, correctTitleCasingList);

@@ -11,6 +11,15 @@ const createTest = (description, input, expected) => {
     });
 };
 
+
+describe(`
+    Testing Combined Words that End with Symbol`, () => {
+    createTest('Capitalizes country code "US" correctly in a geopolitical context',
+        'Championing Self-Acceptance: Landmark Initiative',
+        'Championing Self-Acceptance: Landmark Initiative');
+});
+
+
 describe(`
     Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
