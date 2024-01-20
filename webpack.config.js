@@ -1,20 +1,39 @@
-const path = require ( "path" ),
-	isDevelopment = "development" === process.env.NODE_ENV,
-	nodeExternals = require ( "webpack-node-externals" ),
-	TerserPlugin = require ( "terser-webpack-plugin" );
+const path = require("path");
+const webpack = require('webpack');
+const nodeExternals = require("webpack-node-externals");
+const TerserPlugin = require("terser-webpack-plugin");
+
+const package = require('./package.json');
+
+const banner =
+    `/*!
+ * ${package.name} - v${package.version} - ${new Date().toISOString().split('T')[0]}
+ * ${package.repository.url}
+ * Copyright (c) ${new Date().getFullYear()} ${package.author.name}, Licensed ${package.license}
+ */`;
+
+const terserOptions = {
+    extractComments: false,
+};
 
 module.exports = [ {
 	mode: "production",
 	target: "web",
 	entry: "./index.js",
 	output: {
-		filename: "titlecaser.amd.js",
+		filename: "TitleCaser.amd.js",
 		path: path.resolve ( __dirname, "dist" )
 	},
 	optimization: {
-		minimize: !0,
-		minimizer: [ new TerserPlugin ]
-	},
+        minimize: true,
+        minimizer: [new TerserPlugin(terserOptions)],
+    },
+    plugins: [
+        new webpack.BannerPlugin({
+            banner: banner,
+            raw: true
+        })
+    ],
 	module: {
 		rules: [ {
 			test: /\.js$/,
@@ -37,14 +56,20 @@ module.exports = [ {
 	target: "node",
 	entry: "./index.js",
 	output: {
-		filename: "titlecaser.js",
+		filename: "TitleCaser.js",
 		path: path.resolve ( __dirname, "dist" ),
 		libraryTarget: "commonjs2"
 	},
 	optimization: {
-		minimize: !0,
-		minimizer: [ new TerserPlugin ]
-	},
+        minimize: true,
+        minimizer: [new TerserPlugin(terserOptions)],
+    },
+    plugins: [
+        new webpack.BannerPlugin({
+            banner: banner,
+            raw: true
+        })
+    ],
 	module: {
 		rules: [ {
 			test: /\.js$/,

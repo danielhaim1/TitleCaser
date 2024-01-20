@@ -24,6 +24,14 @@ describe(`
         'Discussing the us policies.',
         'Discussing the US Policies.');
 
+    createTest('Capitalizes country code "US" correctly in a geopolitical context',
+        'Partner with us',
+        'Partner With Us');
+
+    createTest('Capitalizes country code "US" correctly in a geopolitical context',
+        'Partnering with the US Military',
+        'Partnering With the US Military');
+    
     createTest('Does not capitalize "us" when used as a pronoun',
         'It’s up to us to decide.',
         'It’s up to Us to Decide.');

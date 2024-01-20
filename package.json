@@ -44,11 +44,11 @@
   ],
   "scripts": {
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
-    "build-package": "webpack --mode production && terser dist/titlecaser.js -o dist/titlecaser.min.js",
+    "build": "npx webpack --mode production",
     "copy-package-to-docs": "cp -R dist/ docs/assets/js",
-    "release": "npm version patch && npm run build-package && npm run copy-package-to-docs && git add package.json package-lock.json dist/ docs/assets/js && git commit -m 'Bump version and build package for release' && git push",
+    "release": "npm version patch && npm run build && git add -A && git commit -m 'Release: v$(node -p \"require('./package.json').version\")' && git push && npm publish",
     "test": "jest",
-    "tree": "tree -I 'node_modules'"
+    "tree": "tree -a -I 'node_modules|.git'"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.5",
