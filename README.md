@@ -88,7 +88,7 @@ The function can also be used in a browser environment by including the `titleca
 Here's an example of how to use the modulate function:
 
 ```html
-<script src="./path/to/titlecaser.amd.js"></script>
+<script src="./path/to/TitleCaser.amd.js"></script>
 ```
 
 After that, the `toTitleCase()` function can be accessed in your JavaScript code like this:
