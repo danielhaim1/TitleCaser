@@ -83,7 +83,7 @@ console.log(output); // 'The Book of Life'
 
 ## Usage in the Browser
 
-The function can also be used in a browser environment by including the `titlecaser.amd.js` script in your HTML file:
+The function can also be used in a browser environment by including the `TitleCaser.amd.js` script in your HTML file:
 
 Here's an example of how to use the modulate function:
 
