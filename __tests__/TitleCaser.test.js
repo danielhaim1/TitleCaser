@@ -32,9 +32,17 @@ describe(`
         'Partnering with the US Military',
         'Partnering With the US Military');
     
-    createTest('Does not capitalize "us" when used as a pronoun',
+    createTest('1. Does not capitalize "us" when used as a pronoun',
         'It’s up to us to decide.',
         'It’s up to Us to Decide.');
+
+    createTest('2. Does not capitalize "us" when used as a pronoun',
+        'You can partner with us.',
+        'You Can Partner With Us.');
+
+    createTest('3. Does not capitalize "us" when used as a pronoun',
+        'partner with us',
+        'Partner With Us');
 
     createTest('Capitalizes country code "UK" with preceding indicator and trailing comma',
         'The uk, despite its size, has a significant impact.',

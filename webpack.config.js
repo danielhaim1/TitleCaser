@@ -21,7 +21,7 @@ module.exports = [ {
 	target: "web",
 	entry: "./index.js",
 	output: {
-		filename: "TitleCaser.amd.js",
+		filename: "titlecaser.amd.js",
 		path: path.resolve ( __dirname, "dist" )
 	},
 	optimization: {
@@ -56,7 +56,7 @@ module.exports = [ {
 	target: "node",
 	entry: "./index.js",
 	output: {
-		filename: "TitleCaser.js",
+		filename: "titlecaser.module.js",
 		path: path.resolve ( __dirname, "dist" ),
 		libraryTarget: "commonjs2"
 	},

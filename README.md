@@ -1,4 +1,5 @@
-# TitleCaser
+TitleCaser
+==========
 
 [![npm version](https://img.shields.io/npm/v/@danielhaim/titlecaser)](https://www.npmjs.com/package/@danielhaim/titlecaser)
 [![Downloads](https://img.shields.io/npm/dt/@danielhaim/titlecaser.svg)](https://www.npmjs.com/package/@danielhaim/titlecaser)
@@ -6,11 +7,7 @@
 
 Transform any text to proper title case format using popular style guides such as APA, AP, Chicago, NYT, Wikipedia, and British. Customize options to achieve greater flexibility and consistency.
 
-## Demo
-
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://raw.githubusercontent.com/danielhaim1/TitleCaser/main/docs/assets/demo.png" width="100%" height="auto" alt="TitleCaser Demo"></a>
-
-## Table of Contents
 
 - [TitleCaser](#titlecaser)
   * [Demo](https://danielhaim1.github.io/TitleCaser/)
@@ -35,7 +32,8 @@ Transform any text to proper title case format using popular style guides such a
   * [Resources](#resources)
   * [Report Bugs](#report-bugs)
 
-## Introduction
+Overview
+--------
 
 The comprehensive Language Conventions and Style Library is specifically designed to assist web content developers in adhering to the latest style guides and English language conventions. This all-inclusive library has various features, including support for numerous style guides such as AP, APA, Chicago, NY Times, Wikipedia, and British styles and customizable preferences to tailor to individual needs. TitleCaser is a component of this library, and LCSL is set to be open-sourced by the end of 2023
 
@@ -45,7 +43,7 @@ The module has been designed to handle various capitalization scenarios, includi
 
 Whether you're developing web content for a major news organization or simply looking to improve your writing skills, this module is an essential tool that can help ensure your work is accurate, consistent, and conforms to the latest style guidelines.
 
-## Key Features:
+### Key Features: ###
 
 - Support for popular style guides and customizable preferences
 - Advanced capitalization handling for suffixes, prefixes, hyphenated words, and reserved words
@@ -55,14 +53,16 @@ Command-line interface for building, testing, and minimizing the module
 - Pre-defined word lists for articles, conjunctions, prepositions, and non-capitalized words in titles
 - Exclusion of common phrases from title capitalization
 
-## Installation
+Get Started
+-----------
+
 You can install this module via npm:
 
 ```bash
-$ npm i @danielhaim/titlecaser
+npm i @danielhaim/titlecaser
 ```
 
-## Usage
+### Usage ###
 
 The package can be imported and used in both Node.js and browser environments using the following syntax:
 
@@ -81,7 +81,7 @@ const output = titleCaser.toTitleCase(input);
 console.log(output); // 'The Book of Life'
 ```
 
-## Usage in the Browser
+### Usage in the Browser ###
 
 The function can also be used in a browser environment by including the `TitleCaser.amd.js` script in your HTML file:
 
@@ -103,7 +103,7 @@ const output = input.toTitleCase(options);
 console.log(output); // The Future of DevOps: The Next Era
 ```
 
-### Example 2
+### Example 2 ###
 
 ```html
 <h2>nodejs development on aws: an in-depth tutorial on server-side javascript deployment</h2>
@@ -131,7 +131,8 @@ function applyTitleCaseToH2Elements(options = { style: "apa" }) {
 applyTitleCaseToH2Elements();
 ```
 
-## Options
+Options
+-------
 
 The `{options}` parameter is an object that contains the settings for the conversion process.
 
@@ -143,7 +144,8 @@ The `{options}` parameter is an object that contains the settings for the conver
 - `wordReplacementsList` is a map of terms that will be replaced during the title case conversion process.
 - `smartQuotes` boolean value that determines whether quotes should be replaced with smart quotes.
 
-## Methods
+Methods
+-------
 
 - `setReplaceTerms(terms)`: Updates the `wordReplacementsList` with new term-replacement pairs. It accepts an array of objects, each containing a single key-value pair representing the term and its replacement.
 - `removeReplaceTerm(term)`: Removes a replaced term from the `wordReplacementsList` array in the option object of the `TitleCaser` instance. Throws an error if the term is not found in the array, otherwise removes it from the array and updates the option object.
@@ -152,11 +154,12 @@ The `{options}` parameter is an object that contains the settings for the conver
 - `setStyle(style: string)`: Sets the style option in the object of the TitleCaser instance. The method takes a string argument style that specifies the style to use for the title casing. If the argument is not a string, the method throws a TypeError. Otherwise, it updates the style option in the object.
 - `smartQuotes(smartQuotes: boolean)`: Specifies whether to replace straight quotes with smart quotes during title casing. Provide a boolean argument smartQuotes to enable or disable this feature.
 
-## Examples
+Examples
+--------
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with custom options.
 
-### Customizing Word Replacements Method
+### Customizing Word Replacements Method ###
 
 In the example below, we create a new instance of the `TitleCaser` class with the `APA` style option. We then set multiple replacement terms using two separate calls to the `setReplaceTerms()` method. Descriptive variable names are used for the input string and expected output. We call `toTitleCase()` to convert the input string to a title case.
 
@@ -184,7 +187,7 @@ const expectedOutput = "Hello World, Replace Me!";
 const outputString = titleCaser.toTitleCase(inputString);
 ```
 
-### Customizing TitleCaser
+### Customizing TitleCaser ###
 
 The example below demonstrates how to use the TitleCaser class to convert a string to a title case with specific settings.
 
@@ -214,7 +217,7 @@ const expectedOutput = "The Basics of Node.js Development with MongoDB";
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-### TitleCaser with Default Word Replacement  
+### TitleCaser with Default Word Replacement ###
 
 The example below demonstrates how to use the TitleCaser class to convert a string to a title case with AP style formatting, including hyphenated words and word/brand replacement.
 
@@ -234,7 +237,7 @@ const expectedOutput = 'Node.js Development on AWS: An In-depth Tutorial on Serv
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-### TitleCaser with Possessive Noun and a Colon 
+### TitleCaser with Possessive Noun and a Colon ###
 
 The example below demonstrates how to use the TitleCaser class to convert a string to title case with AP style formatting, including a possessive noun and a colon.
 
@@ -254,7 +257,7 @@ const expectedOutput = "The iPhone's Impact on Modern Communication: A Socioling
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-### TitleCaser with Smart Quotes  
+### TitleCaser with Smart Quotes ### 
 
 The example below demonstrates how to use the TitleCaser with smart quotes.
 
@@ -277,19 +280,21 @@ const expectedOutput = '“Never Underestimate the Power O’ Persistence,”';
 const actualOutput = titleCaser.toTitleCase(input);
 ```
 
-## Build Process
+Build Process
+-------------
 
 ```bash
-$ npm run build-package
-$ npm run build-docs
-$ npm run copy-package-to-docs
-$ npm run test
+npm run build-package
+npm run build-docs
+npm run copy-package-to-docs
+npm run test
 ```
 
-## Test
+Test
+----
 
 ```bash
-$ npm run test
+npm run test
 ```
 
 ```bash  
@@ -355,7 +360,8 @@ Test Reserved Words
 ✓ Untrimmed white spaces
 ```
 
-## Resources
+Resources
+---------
 
 Useful materials for improving your knowledge of writing and language style guides. These resources include various books and manuals, such as the Publication Manual of the American Psychological Association, the Chicago Manual of Style, and the AP Stylebook, which are widely recognized as authoritative sources on grammar, punctuation, and capitalization rules.
 
@@ -368,7 +374,8 @@ Useful materials for improving your knowledge of writing and language style guid
 - [Wikipedia: Letter case](https://chat.openai.com/chat/643828ec-d4b5-4f21-b035-62946dd2cec3#:~:text=Wikipedia%3A%20Letter%20case)
 - [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
 
-## Report Bugs
+Report Bugs
+-----------
 
 If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. 
 
