@@ -134,6 +134,8 @@ export const titleCaseDefaultOptionsList = Object.freeze({
 export const ignoredWordList = [];
 export const correctPhraseCasingList = {
   'the cybersmile foundation': 'The Cybersmile Foundation',
-  'co. by colgate': 'CO. by Colgate'
+  'co. by colgate': 'CO. by Colgate',
+  "on & off": 'On & Off',
+  "on and off": 'On and Off'
 };
 

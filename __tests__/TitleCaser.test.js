@@ -28,6 +28,14 @@ describe(`
         'Partner with us',
         'Partner With Us');
 
+    createTest('Test phrases "On & Off"',
+        'We Are On & Off The Field',
+        'We Are On & Off the Field');
+
+    createTest('Test phrases "On & Off"',
+        'We Are On and Off The Field',
+        'We Are On and Off the Field');
+
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'Partnering with the US Military',
         'Partnering With the US Military');
