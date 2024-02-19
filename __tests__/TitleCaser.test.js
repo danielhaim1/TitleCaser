@@ -323,7 +323,6 @@ describe(`
         "announcing a new collaboration with the cybersmile foundation: how to combat cyberbullying",
         "Announcing a New Collaboration With The Cybersmile Foundation: How to Combat Cyberbullying"
     );
-
 });
 
 describe(`
@@ -452,5 +451,46 @@ describe(`
         const actualOutput = titleCaser.toTitleCase(input);
         expect(actualOutput)
             .toEqual(expectedOutput);
+    });
+});
+
+describe('Test addReplaceTerm Method', () => {
+    let titleCaser;
+
+    // Setup a new TitleCaser instance before each test
+    beforeEach(() => {
+        titleCaser = new TitleCaser({ style: 'ap' });
+    });
+
+    test('adds a new replacement term correctly', () => {
+        const term = 'js';
+        const replacement = 'JavaScript';
+
+        // Initially, ensure the term does not exist in the replacement list
+        expect(titleCaser.wordReplacementsList.some((obj) => obj.hasOwnProperty(term))).toBeFalsy();
+
+        // Add the new replacement term
+        titleCaser.addReplaceTerm(term, replacement);
+
+        // Verify the term now exists in the replacement list with the correct replacement value
+        expect(titleCaser.wordReplacementsList.some((obj) => obj[term] === replacement)).toBeTruthy();
+    });
+
+    test('updates an existing replacement term correctly', () => {
+        const initialTerm = 'js';
+        const initialReplacement = 'JavaScript';
+        const newReplacement = 'JS';
+
+        // Add an initial replacement term
+        titleCaser.addReplaceTerm(initialTerm, initialReplacement);
+
+        // Verify the term exists with the initial replacement value
+        expect(titleCaser.wordReplacementsList.some((obj) => obj[initialTerm] === initialReplacement)).toBeTruthy();
+
+        // Update the replacement term
+        titleCaser.addReplaceTerm(initialTerm, newReplacement);
+
+        // Verify the term now exists with the new replacement value
+        expect(titleCaser.wordReplacementsList.some((obj) => obj[initialTerm] === newReplacement)).toBeTruthy();
     });
 });

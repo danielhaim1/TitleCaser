@@ -278,15 +278,14 @@ export class TitleCaser {
       throw new TypeError("Invalid argument: term and replacement must be strings.");
     }
 
+    const index = this.wordReplacementsList.findIndex((obj) => Object.keys(obj)[0] === term);
+
     if (index !== -1) {
-      // If the term already exists in the array, update the replacement value
       this.wordReplacementsList[index][term] = replacement;
     } else {
-      // If the term doesn't exist in the array, add a new object with the term and replacement
       this.wordReplacementsList.push({ [term]: replacement });
     }
 
-    // Update the replace terms option
     this.options.wordReplacementsList = this.wordReplacementsList;
   }
 
