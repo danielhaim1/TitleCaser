@@ -31,6 +31,6 @@
         "Redux", "Vue.js", "VueX", "SCSS", "AJAX", "GraphQL", "HTML",
         "HTML5", "MySQL", "MongoDB", "PostgresQL", "SQLite", "ASP", "ASPX",
         "Elasticsearch", "Nginx", "OpenSSL", "Webpack", "Unity3D",
-        "Kubernetes", "TensorFlow", "NPM"
+        "Kubernetes", "TensorFlow", "NPM", "cURL"
     ]
 }
