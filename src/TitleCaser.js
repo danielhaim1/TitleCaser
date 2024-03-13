@@ -15,12 +15,11 @@ export class TitleCaser {
     this.correctPhraseCasingList = correctPhraseCasingList;
   }
 
-  log_warning(message) {
+  logWarning(message) {
     if (this.debug) {
       console.warn(`Warning: ${message}`);
     }
   }
-
 
   toTitleCase(str) {
     try {
@@ -58,8 +57,8 @@ export class TitleCaser {
         replaceTermList.map((term) => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]),
       );
 
-      this.log_warning(`replaceTermsArray: ${replaceTermsArray}`);
-      this.log_warning(`this.wordReplacementsList: ${this.wordReplacementsList}`);
+      this.logWarning(`replaceTermsArray: ${replaceTermsArray}`);
+      this.logWarning(`this.wordReplacementsList: ${this.wordReplacementsList}`);
 
       const map = {
         "&": "&amp;",
@@ -133,31 +132,31 @@ export class TitleCaser {
               ? word.charAt(0).toUpperCase() + word.slice(1)
               : word.toLowerCase();
           case TitleCaserUtils.endsWithSymbol(word):
-            this.log_warning(`Check if the word ends with a symbol: ${word}`);
+            this.logWarning(`Check if the word ends with a symbol: ${word}`);
             // If the word ends with a symbol, return the correct casing.
             const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()?])/g);
-            this.log_warning(`Splitting word at symbols, result: ${splitWord}`);
+            this.logWarning(`Splitting word at symbols, result: ${splitWord}`);
             // Process each part for correct casing
             const processedWords = splitWord.map((part) => {
-              this.log_warning(`Processing part: ${part}`);
+              this.logWarning(`Processing part: ${part}`);
               // Check if part is a symbol
               if (TitleCaserUtils.endsWithSymbol(part)) {
-                this.log_warning(`Part is a symbol: ${part}`);
+                this.logWarning(`Part is a symbol: ${part}`);
                 return part;
               } else {
-                this.log_warning(`Part is a word: ${part}`);
+                this.logWarning(`Part is a word: ${part}`);
                 // If it's a word, process it for correct casing
                 if (TitleCaserUtils.isWordInArray(part, correctTitleCasingList)) {
                   const correctedTerm = TitleCaserUtils.correctTerm(part, correctTitleCasingList);
-                  this.log_warning(`Word is in correctTitleCasingList, corrected term: ${correctedTerm}`);
+                  this.logWarning(`Word is in correctTitleCasingList, corrected term: ${correctedTerm}`);
                   return correctedTerm;
                 } else if (replaceTermsArray.includes(part)) {
                   const replacement = replaceTermObj[part];
-                  this.log_warning(`Word is in replaceTermsArray, replacement: ${replacement}`);
+                  this.logWarning(`Word is in replaceTermsArray, replacement: ${replacement}`);
                   return replacement;
                 } else {
                   const titledWord = part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-                  this.log_warning(`Applying title casing to word: ${titledWord}`);
+                  this.logWarning(`Applying title casing to word: ${titledWord}`);
                   return titledWord;
                 }
               }
@@ -270,7 +269,7 @@ export class TitleCaser {
 
     this.options.wordReplacementsList = this.wordReplacementsList;
 
-    this.log_warning(`Log the updated this.wordReplacementsList: ${this.wordReplacementsList}`);
+    this.logWarning(`Log the updated this.wordReplacementsList: ${this.wordReplacementsList}`);
   }
 
   addReplaceTerm(term, replacement) {
@@ -308,7 +307,7 @@ export class TitleCaser {
     // Update the replace terms option
     this.options.wordReplacementsList = this.wordReplacementsList;
 
-    this.log_warning(`Log the updated this.wordReplacementsList: ${this.wordReplacementsList}`);
+    this.logWarning(`Log the updated this.wordReplacementsList: ${this.wordReplacementsList}`);
   }
 
   addExactPhraseReplacements(newPhrases) {
@@ -343,7 +342,7 @@ export class TitleCaser {
       }
     });
 
-    this.log_warning(`Log the this.correctPhraseCasingList: ${this.correctPhraseCasingList}`);
+    this.logWarning(`Log the this.correctPhraseCasingList: ${this.correctPhraseCasingList}`);
   }
 
   setStyle(style) {
