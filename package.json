@@ -43,8 +43,8 @@
     "package.json"
   ],
   "scripts": {
-    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
     "build": "npx webpack --mode production && cp -R dist/ docs/assets/js",
+    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
     "release": "npm version patch && npm run build && git add -A && git commit -m 'Release: v$(node -p \"require('./package.json').version\")' && git push && npm publish",
     "release-major": "npm version major && npm run build && git add -A && git commit -m 'Major Release: v$(node -p \"require('./package.json').version\")' && git push && npm publish",
     "release-minor": "npm version minor && npm run build && git add -A && git commit -m 'Minor Release: v$(node -p \"require('./package.json').version\")' && git push && npm publish",
