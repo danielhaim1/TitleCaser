@@ -68,6 +68,7 @@ export const wordReplacementsList = [
   { "a.s.a.p": "ASAP" },
   { "f.a.q": "FAQ" },
   { "f.a.q.s": "FAQs" },
+  { "FAQS": "FAQs" },
   { "f.y.i": "FYI" },
   { "d.i.y": "DIY" },
   { "t.b.d": "TBD" },
@@ -80,7 +81,7 @@ export const wordReplacementsList = [
   { "reactjs": "React" },
   { "react.js": "React" },
   { "cyber-security": "Cybersecurity" },
-  // { 'twitter': '𝕏' }
+  // { 'twitter': 'Twitter, formerly known as 𝕏' }
 ];
 
 export const titleCaseStylesList = Object.freeze({
