@@ -220,6 +220,13 @@ describe(`
     );
 
     createTest(
+        "Brand Capitalization and word replacements",
+        { style: "ap" },
+        "NERDs Candy",
+        "NERDs Candy"
+    );
+
+    createTest(
         "AP-style title case with possessive and colon",
         { style: "ap" },
         "the iphone's impact on modern communication: a sociolinguistic analysis",

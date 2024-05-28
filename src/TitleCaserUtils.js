@@ -219,9 +219,14 @@ export class TitleCaserUtils {
       return /[A-Z]/.test(word.slice(1));
     }
 
-    return /[A-Z]/.test(word.slice(1)) && /[a-z]/.test(word.slice(0, -1));
+    const hasUppercase = /[A-Z]/.test(word.slice(1));
+    const hasLowercase = /[a-z]/.test(word.slice(1));
+
+    return hasUppercase && hasLowercase;
   }
 
+  // Check if a word is an acronym
+  // (i.e. 'the', 'to', 'within')
   static isAcronym(word, prevWord, nextWord) {
     try {
       if (typeof word !== "string") {
@@ -539,6 +544,7 @@ export class TitleCaserUtils {
     });
   }
 
+  // Check if there's an unescaped special character
   static unescapeSpecialCharacters(str) {
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#x27;/g, function (match) {
       switch (match) {
