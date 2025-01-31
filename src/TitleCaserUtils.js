@@ -733,12 +733,15 @@ export class TitleCaserUtils {
     const parts = word.split(delimiters);
     const numParts = parts.length;
 
-    // For each part, replace it with the correct term if found
+    // For each part, replace it with the correct term if found or title-case it if not found
     for (let i = 0; i < numParts; i++) {
       const lowercasedPart = parts[i].toLowerCase();
       const index = correctTerms.findIndex((t) => t.toLowerCase() === lowercasedPart);
       if (index >= 0) {
         parts[i] = correctTerms[index];
+      } else {
+        // Capitalize first letter and lowercase the rest if no replacement is found
+        parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
       }
     }
 
