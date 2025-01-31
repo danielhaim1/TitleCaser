@@ -113,6 +113,24 @@ describe(`
         'We Visited the UK and the US, and Both Consider a Bill for Environmental Protection.');
 });
 
+describe('Testing Hyphen and Apostrophe Bug Fix', () => {
+    createTest('Correctly formats hyphenated word "t-mobile"',
+        't-mobile',
+        'T-Mobile');
+
+    createTest('Correctly formats hyphenated word "coca-cola"',
+        'coca-cola',
+        'Coca-Cola');
+
+    createTest('Correctly formats hyphenated word "e-commerce"',
+        'e-commerce',
+        'E-Commerce');
+
+    createTest('Correctly formats word with apostrophe "o\'connor"',
+        "o'connor",
+        "O'connor");
+});
+
 describe(`
     Test Basic Options`, () => {
     const createTest = (description, input, expected) => {
@@ -318,7 +336,7 @@ describe(`
     );
 
     createTest(
-        "APA style capitalization test with short conjunction terms and colon",
+        "APA style title case with short conjunction terms and colon",
         { style: "apa" },
         "the impact of social media on mental health: a study of instagram, TIKTOK, and SnapChat",
         "The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat"
