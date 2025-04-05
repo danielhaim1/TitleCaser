@@ -1,4 +1,4 @@
-export const commonAbbreviationList = [
+export const minorWords = [
   "a",
   "an",
   "the",
@@ -103,7 +103,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
   apa: {
     shortConjunctionsList: ["and", "as", "but", "by", "for", "in", "nor", "of", "on", "or", "so", "to", "yet"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "for", "in", "of", "on", "to", "up", "via"],
+    shortPrepositionsList: ["as", "at", "by", "for", "in", "into", "of", "off", "on", "out", "to", "up", "via"],
     neverCapitalizedList: [],
   },
   british: {
@@ -115,7 +115,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
   chicago: {
     shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "for", "in", "of", "on", "to", "up", "with", "via"],
+    shortPrepositionsList: ["as", "at", "by", "for", "in", "of", "on", "to", "up", "via"],
     neverCapitalizedList: ["etc."],
   },
   nyt: {
@@ -125,11 +125,11 @@ export const titleCaseDefaultOptionsList = Object.freeze({
     neverCapitalizedList: [],
   },
   wikipedia: {
-    shortConjunctionsList: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet"],
+    shortConjunctionsList: ["and", "as", "but", "for", "nor", "or", "so", "yet"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: ["as", "at", "by", "in", "of", "on", "to", "up", "via"],
     neverCapitalizedList: [],
-  },
+  }
 });
 
 export const ignoredWordList = [];
