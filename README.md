@@ -31,6 +31,8 @@ Transform any text to proper title case format using popular style guides such a
   * [Test](#test)
   * [Resources](#resources)
   * [Report Bugs](#report-bugs)
+  * [Contributing](CONTRIBUTING.md)
+  * [Changelog](CHANGELOG.md)
 
 Overview
 --------
