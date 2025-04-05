@@ -270,26 +270,30 @@ export class TitleCaser {
       for (let i = 0; i < newSplit2.length; i++) {
         let currentWord = newSplit2[i];
         let nextWord = newSplit2[i + 1];
-        if (nextWord !== null && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord)) {
+        let prevWord = newSplit2[i - 1];
+        if (nextWord !== null && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
           newSplit2[i] = currentWord.toUpperCase();
         }
       }
 
-      if (TitleCaserUtils.isRegionalAcronym(firstWord)) {
-        console.log("firstWord is a regional acronym, proof: ", firstWord);
-        newSplit2[0] = firstWord.toUpperCase();
-      }
+
 
       let finalWord = newSplit2[newSplit2.length - 1];
       let wordBeforeFinal = newSplit2[newSplit2.length - 2];
       let twoWordsBeforeFinal = newSplit2[newSplit2.length - 3];
       
+      if (TitleCaserUtils.isRegionalAcronym(firstWord)) {
+        console.log("firstWord is a regional acronym, proof: ", firstWord);
+        newSplit2[0] = firstWord.toUpperCase();
+      }
+
+      if (TitleCaserUtils.isRegionalAcronymNoDot(firstWord, secondWord)) {
+        newSplit2[0] = firstWord.toUpperCase();
+      }
+
       if (TitleCaserUtils.isFinalWordRegionalAcronym(finalWord, wordBeforeFinal, twoWordsBeforeFinal)) {
         newSplit2[newSplit2.length - 1] = finalWord.toUpperCase();
       }
-      
-      
-      if (TitleCaserUtils.isRegionalAcronymNoDot(firstWord, secondWord)) { }
 
       inputString = newSplit2.join(" ");
 
@@ -301,8 +305,8 @@ export class TitleCaser {
         inputString = inputString.replace(regex, replacement);
       }
 
-
       return inputString;
+
     } catch (error) {
       throw new Error(error);
     }

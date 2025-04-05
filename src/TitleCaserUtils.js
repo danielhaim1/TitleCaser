@@ -255,20 +255,30 @@ export class TitleCaserUtils {
     return regionalAcronymList.includes(lowercasedWord);
   }
 
-  static isRegionalAcronymNoDot(word, nextWord) {
+  static isRegionalAcronymNoDot(word, nextWord, prevWord = null) {
     if (typeof word !== 'string' || typeof nextWord !== 'string') {
       return false;
     }
 
-    const lowercasedWord = word.toLowerCase();
+    const firstWordStripped = word.toLowerCase().replace(/[^\w\s]/g, "");
     const nextWordStripped = nextWord.toLowerCase().replace(/[^\w\s]/g, "");
 
+    const smallDirectPrecedingIndicators = [
+      "the",
+    ];
+
+    if (prevWord && 
+      regionalAcronymList.includes(firstWordStripped) &&
+      smallDirectPrecedingIndicators.includes(prevWord.toLowerCase())) {
+      
+        return true;
+    }
+
     return (
-      regionalAcronymList.includes(lowercasedWord) &&
+      regionalAcronymList.includes(firstWordStripped) &&
       directFollowingIndicatorsRegionalAcronym.includes(nextWordStripped)
     );
   }
-
 
   static isFinalWordRegionalAcronym(word, prevWord, prevPrevWord = null) {
     if (typeof word !== "string" || typeof prevWord !== "string") return false;
