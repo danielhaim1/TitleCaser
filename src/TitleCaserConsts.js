@@ -1,4 +1,4 @@
-export const minorWords = [
+export const commonAbbreviationList = [
   "a",
   "an",
   "the",
