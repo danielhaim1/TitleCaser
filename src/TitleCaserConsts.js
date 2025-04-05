@@ -111,6 +111,9 @@ export const titleCaseDefaultOptionsList = Object.freeze({
   apa: {
     shortConjunctionsList: ["and", "but", "by", "for", "in", "nor", "of", "on", "or", "so", "to", "yet"],
     articlesList: ["a", "an", "the"],
+<<<<<<< HEAD
+    shortPrepositionsList: ["as", "at", "by", "for", "in", "into", "of", "off", "on", "out", "to", "up", "via"],
+=======
     shortPrepositionsList: [
       "about", "above", "across", "after", "against", "along", "among", "around",
       "as", "at", "before", "behind", "below", "beneath", "beside", "between",
@@ -119,6 +122,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
       "over", "past", "since", "through", "throughout", "till", "to", "toward",
       "under", "underneath", "until", "up", "upon", "via", "with", "within", "without"
     ],    
+>>>>>>> main
     neverCapitalizedList: [],
   },
   british: {
@@ -144,7 +148,7 @@ export const titleCaseDefaultOptionsList = Object.freeze({
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
     neverCapitalizedList: [],
-  },
+  }
 });
 
 // * ! ===============================================
