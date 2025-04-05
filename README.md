@@ -459,3 +459,68 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
+
+## Tests
+
+```bash
+Testing Acronym/Pronoun of Alpha2/3 Country Codes
+✓ Capitalizes country code "US" correctly in a geopolitical context (4 ms)
+✓ Does not capitalize "us" when used as a pronoun (2 ms)
+✓ Capitalizes country code "UK" with preceding indicator and trailing comma (2 ms)
+✓ Handles multiple instances of country codes and pronouns (2 ms)
+✓ Does not capitalize "us" when used in common phrases (2 ms)
+✓ Capitalizes "USA" in a formal context (1 ms)
+✓ Capitalizes "US" before a government-related word (1 ms)
+✓ Does not capitalize "us" before a government-related word (1 ms)
+✓ Capitalizes "UK" with preceding indicator before a government-related word (2 ms)
+✓ Handles multiple instances of country codes and pronouns before government-related words (1 ms)
+✓ Capitalizes "US" before a military-related word (1 ms)
+✓ Does not capitalize "us" before a military-related word (1 ms)
+✓ Capitalizes "UK" with preceding indicator before a territory-related word (2 ms)
+✓ Handles multiple instances of country codes and pronouns before talks-related words (3 ms)
+✓ Does not capitalize "us" before a talks-related word (1 ms)
+✓ Capitalizes "USA" in a formal context before a bill-related word (1 ms)
+✓ Handles multiple instances of country codes and pronouns before a bill-related word (2 ms)
+
+Test Basic Options
+✓ Default title case conversion
+✓ Customized title case conversion (1 ms)
+✓ AP-style title case conversion with replacements (3 ms)
+✓ Testing Word Replacement (Kellogs -> Kellogg\'s)
+✓ AP-style title case conversion with replacements (1 ms)
+✓ Capitalize suffix word in sentence (1 ms)
+
+Test Methods
+✓ removeReplaceTerm (1 ms)
+✓ setReplaceTerms (1 ms)
+
+Test Variation Stability
+✓ Capitalization and word replacements
+✓ AP-style title case with possessive and colon (1 ms)
+✓ AP-style title case with lowercase back/front-end terms
+✓ Chicago style title case with comparison and colon (1 ms)
+✓ APA style title case with colon (2 ms)
+✓ Wikipedia style title case with acronym and hyphen (1 ms)
+✓ Hyphenated, colon, and short word replacements (2 ms)
+✓ I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL (2 ms)
+✓ Test Smart Quotes (1 ms)
+✓ Wikipedia style capitalization test with special term and colon (1 ms)
+✓ APA style title case with colon and apostrophe (2 ms)
+✓ Chicago style title case with custom term replacements
+✓ AP-style capitalization test with special terms and colon (1 ms)
+✓ NYT-style capitalization test with special terms and colon (1 ms)
+✓ APA style capitalization test with short conjunction terms and colon (2 ms)
+✓ Correct phrase casing list testing (1 ms)
+
+Test Reserved Words
+✓ Title case transformation for a single reserved word
+✓ Title case transformation for a sentence with a reserved word and colon (1 ms)
+✓ Title case transformation for a reserved word with a possessive form (1 ms)
+✓ Title case transformation for specific brand names
+✓ Title case transformation for a sentence with HTML line break (nl2br) using <br> tag (1 ms)
+✓ Title case transformation for a sentence with untrimmed white spaces
+✓ Title case transformation for a sentence with HTML line break (nl2br) using <br> tag (1 ms)
+✓ Title case transformation for a sentence with HTML line break (nl2br) without space after colon using <br> tag (1 ms)
+✓ Ampersand in a sentence should return & and not &Amp; (1 ms)
+✓ Untrimmed white spaces
+```
