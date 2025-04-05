@@ -3,5 +3,7 @@ module.exports = {
 		'^.+\\.js$': require.resolve('esbuild-jest')
 	},
 	testEnvironment: 'jsdom',
-	verbose: true
+	verbose: true,
+	noStackTrace: false,
+	collectCoverage: true,
 };
