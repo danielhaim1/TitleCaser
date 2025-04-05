@@ -4,6 +4,10 @@ import {
   wordReplacementsList,
   correctTitleCasingList,
   ignoredWordList,
+  commonShortWords,
+  regionalAcronymList,
+  regionalAcronymPrecedingWords,
+  directFollowingIndicatorsRegionalAcronym
 } from "./TitleCaserConsts.js";
 
 export class TitleCaserUtils {
@@ -113,6 +117,10 @@ export class TitleCaserUtils {
 
   static isNeverCapitalizedCache = new Map();
 
+  static capitalizeFirstLetter(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
   // Check if the word is a short conjunction
   static isShortConjunction(word, style) {
     // Get the list of short conjunctions from the TitleCaseHelper
@@ -142,6 +150,7 @@ export class TitleCaserUtils {
   // Check if the word is a short preposition
   static isShortPreposition(word, style) {
     // Get the list of short prepositions from the Title Case Helper.
+    // CONSOLE LOG THE WORD BEFORE CHECKING IF IT IS IN THE LIST
     const { shortPrepositionsList } = TitleCaserUtils.getTitleCaseOptions({
       style: style,
     });
@@ -183,6 +192,7 @@ export class TitleCaserUtils {
 
     // If the word is a short conjunction, article, preposition, or is in the never-capitalized list, return true.
     // Otherwise, return false.
+
     return (
       TitleCaserUtils.isShortConjunction(word, style) ||
       TitleCaserUtils.isArticle(word, style) ||
@@ -225,209 +235,104 @@ export class TitleCaserUtils {
     return hasUppercase && hasLowercase;
   }
 
-  // Check if a word is an acronym
-  // (i.e. 'the', 'to', 'within')
-  static isAcronym(word, prevWord, nextWord) {
-    try {
-      if (typeof word !== "string") {
-        throw new Error("Input word must be a string.");
-      }
-
-      const countryCodes = new Set(["us", "usa"]);
-      const commonShortWords = new Set([
-        "the",
-        "in",
-        "to",
-        "within",
-        "towards",
-        "into",
-        "at",
-      ]);
-      const directFollowingIndicators = new Set([
-        "policies",
-        "government",
-        "military",
-        "embassy",
-        "administration",
-        "senate",
-        "congress",
-        "parliament",
-        "cabinet",
-        "federation",
-        "republic",
-        "democracy",
-        "law",
-        "act",
-        "treaty",
-        "court",
-        "legislation",
-        "statute",
-        "bill",
-        "agency",
-        "department",
-        "bureau",
-        "service",
-        "office",
-        "council",
-        "commission",
-        "division",
-        "alliance",
-        "union",
-        "confederation",
-        "bloc",
-        "zone",
-        "territory",
-        "province",
-        "state",
-        "army",
-        "navy",
-        "forces",
-        "marines",
-        "airforce",
-        "defense",
-        "intelligence",
-        "security",
-        "economy",
-        "budget",
-        "finance",
-        "treasury",
-        "trade",
-        "sanctions",
-        "aid",
-        "strategy",
-        "plan",
-        "policy",
-        "program",
-        "initiative",
-        "project",
-        "reform",
-        "relations",
-        "ambassador",
-        "diplomacy",
-        "summit",
-        "conference",
-        "talks",
-        "negotiations",
-      ]);
-
-      const removePunctuation = (word) => word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-
-      // Remove trailing punctuation from the word
-      const removeTrailingPunctuation = (word) => {
-        const match = word.match(/^(.*?)([.,\/#!$%\^&\*;:{}=\-_`~()]+)$/);
-        if (match && match[1]) {
-          return match[1];
-        }
-        return word;
-      };
-
-      word = word ? removePunctuation(word.toLowerCase()) : "";
-      word = removeTrailingPunctuation(word);
-
-      prevWord = prevWord ? removePunctuation(prevWord.toLowerCase()) : "";
-      nextWord = nextWord ? removePunctuation(nextWord.toLowerCase()) : "";
-
-      // Check if it's an acronym with direct following indicators
-      const isDirectAcronym =
-        countryCodes.has(word) &&
-        (!prevWord || commonShortWords.has(prevWord)) &&
-        (!nextWord || directFollowingIndicators.has(nextWord));
-
-      // Check if it's an acronym based on the previous word
-      const isPreviousAcronym = countryCodes.has(prevWord) && (!nextWord || directFollowingIndicators.has(nextWord));
-
-      return isDirectAcronym || isPreviousAcronym;
-    } catch (error) {
-      console.error(`An error occurred: ${error.message}`);
-      return false; // Return false in case of errors to indicate failure.
-    }
+  // Check if the entire input string is uppercase
+  static isEntirelyUppercase(str) {
+    return str === str.toUpperCase() &&
+      str !== str.toLowerCase() &&
+      str.length > 1;
   }
 
-  static checkIfWordIsAcronym(commonShortWords, prevWord, currentWord, nextWord) {
-    const countryCodes = ["us", "usa"];
-    const directPrecedingIndicators = ["the", "in", "to", "from", "against", "with", "within", "towards", "into", "at"];
-    const directFollowingIndicators = [
-      "policies",
-      "government",
-      "military",
-      "embassy",
-      "administration",
-      "senate",
-      "congress",
-      "parliament",
-      "cabinet",
-      "federation",
-      "republic",
-      "democracy",
-      "law",
-      "act",
-      "treaty",
-      "court",
-      "legislation",
-      "statute",
-      "bill",
-      "agency",
-      "department",
-      "bureau",
-      "service",
-      "office",
-      "council",
-      "commission",
-      "division",
-      "alliance",
-      "union",
-      "confederation",
-      "bloc",
-      "zone",
-      "territory",
-      "province",
-      "state",
-      "army",
-      "navy",
-      "forces",
-      "marines",
-      "airforce",
-      "defense",
-      "intelligence",
-      "security",
-      "economy",
-      "budget",
-      "finance",
-      "treasury",
-      "trade",
-      "sanctions",
-      "aid",
-      "strategy",
-      "plan",
-      "policy",
-      "program",
-      "initiative",
-      "project",
-      "reform",
-      "relations",
-      "ambassador",
-      "diplomacy",
-      "summit",
-      "conference",
-      "talks",
-      "negotiations",
+  static isRegionalAcronym(word) {
+    if (typeof word !== "string") {
+      throw new TypeError("Invalid input: word must be a string.");
+    }
+
+    if (word.length < 2) {
+      return false;
+    }
+
+    const lowercasedWord = word.toLowerCase();
+    return regionalAcronymList.includes(lowercasedWord);
+  }
+
+  static isRegionalAcronymNoDot(word, nextWord, prevWord = null) {
+    if (typeof word !== 'string' || typeof nextWord !== 'string') {
+      return false;
+    }
+
+    const firstWordStripped = word.toLowerCase().replace(/[^\w\s]/g, "");
+    const nextWordStripped = nextWord.toLowerCase().replace(/[^\w\s]/g, "");
+
+    const smallDirectPrecedingIndicators = [
+      "the",
     ];
 
-    const removePunctuation = (word) => word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+    if (prevWord && 
+      regionalAcronymList.includes(firstWordStripped) &&
+      smallDirectPrecedingIndicators.includes(prevWord.toLowerCase())) {
+      
+        return true;
+    }
 
-    currentWord = currentWord ? removePunctuation(currentWord.toLowerCase()) : "";
-    prevWord = prevWord ? removePunctuation(prevWord.toLowerCase()) : "";
-    nextWord = nextWord ? removePunctuation(nextWord.toLowerCase()) : "";
+    return (
+      regionalAcronymList.includes(firstWordStripped) &&
+      directFollowingIndicatorsRegionalAcronym.includes(nextWordStripped)
+    );
+  }
 
-    if (
-      countryCodes.includes(currentWord.toLowerCase()) &&
-      (prevWord === null || commonShortWords.includes(prevWord.toLowerCase())) &&
-      (nextWord === null || directFollowingIndicators.includes(nextWord.toLowerCase()))
-    ) {
+  static isFinalWordRegionalAcronym(word, prevWord, prevPrevWord = null) {
+    if (typeof word !== "string" || typeof prevWord !== "string") return false;
+
+    const current = word.toLowerCase().replace(/[^\w]/g, "");
+    const prev = prevWord.toLowerCase().replace(/[^\w]/g, "");
+    const prevPrev = typeof prevPrevWord === "string"
+      ? prevPrevWord.toLowerCase().replace(/[^\w]/g, "")
+      : null;
+
+    if (!regionalAcronymList.includes(current)) return false;
+
+    // Direct 100% safe word before the acronym
+    if (regionalAcronymPrecedingWords.includes(prev)) return true;
+
+    // Extended pattern: e.g., "from the US"
+    if (prev === "the" && prevPrev && regionalAcronymPrecedingWords.includes(prevPrev)) {
       return true;
     }
 
     return false;
+  }
+
+  static normalizeRegionalAcronym(word) {
+    if (typeof word !== "string") {
+      throw new TypeError("Invalid input: word must be a string.");
+    }
+
+    return word.toUpperCase();
+  }
+
+  static normalizeAcronymKey(word) {
+    return word.toLowerCase().replace(/\./g, ""); // "U.S." → "us"
+  }
+
+  static normalizeCasingForWordByStyle(word, style) {
+    if (!word || !style || !titleCaseDefaultOptionsList[style]) return false;
+
+    const lowerWord = word.toLowerCase();
+    const {
+      shortConjunctionsList,
+      articlesList,
+      shortPrepositionsList,
+      neverCapitalizedList
+    } = titleCaseDefaultOptionsList[style];
+
+    const combinedList = [
+      ...shortConjunctionsList,
+      ...articlesList,
+      ...shortPrepositionsList,
+      ...neverCapitalizedList
+    ];
+
+    return combinedList.includes(lowerWord) ? word : false;
   }
 
   // Check if a word has a suffix
@@ -671,6 +576,57 @@ export class TitleCaserUtils {
     return word;
   }
 
+  // This function is used to check if a word is an elided word
+  static isElidedWord(word) {
+    if (typeof word !== "string" || word.trim() === "") {
+      throw new TypeError("Invalid input: word must be a non-empty string.");
+    }
+
+    const knownElidedPrefixes = new Set([
+      "o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"
+    ]);
+
+    const normalized = word.trim().toLowerCase().replace(/'/g, "’");
+
+    for (const prefix of knownElidedPrefixes) {
+      if (normalized.startsWith(prefix)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // This function is used to normalize an elided word
+  static normalizeElidedWord(word) {
+    if (typeof word !== "string" || word.trim() === "") {
+      throw new TypeError("Invalid input: word must be a non-empty string.");
+    }
+
+    const knownElidedPrefixes = new Set([
+      "o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"
+    ]);
+
+    const original = word.trim();
+    const normalized = original.replace(/'/g, "’").toLowerCase();
+
+    for (const prefix of knownElidedPrefixes) {
+      if (normalized.startsWith(prefix)) {
+        const prefixLength = prefix.length;
+        const rest = original.slice(prefixLength);
+
+        const fixedPrefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+        const fixedRest = rest.length > 0
+          ? rest.charAt(0).toUpperCase() + rest.slice(1)
+          : "";
+
+        return fixedPrefix + fixedRest;
+      }
+    }
+
+    return false;
+  }
+
   // This function is used to check if a suffix is present in a word that is in the correct terms list
   static correctSuffix(word, correctTerms) {
     // Validate input
@@ -841,4 +797,6 @@ export class TitleCaserUtils {
     // Rejoin the words
     return processedWords.join("-");
   }
+
+
 }

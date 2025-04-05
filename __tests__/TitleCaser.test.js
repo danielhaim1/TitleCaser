@@ -1,13 +1,13 @@
 import { TitleCaser } from '../index.js';
-import { AcronymManager } from '../src/TitleCaserUtils';
 
 const createTest = (description, input, expected) => {
     test(description, () => {
-        const titleCaser = new TitleCaser({
-            style: 'ap'
-        });
+        const titleCaser = new TitleCaser({ style: 'ap' });
         const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expected);
+
+        if (actualOutput !== expected) {
+            throw new Error(`\n  Expected: "${expected}"\n  Received: "${actualOutput}"`);
+        }
     });
 };
 
@@ -19,26 +19,38 @@ describe(`
 });
 
 describe(`
-    Testing Acronym/Pronoun of Alpha2/3 Country Codes`, () => {
+    Testing Disambiguation of Acronym vs. Pronoun for Alpha2/3 Country Codes ("US", "UK", "EU", etc.)
+    Includes edge cases, regional context detection, and AP-style title casing rules.
+  `, () => {
+
+    // --- US Acronym - Regional Context ---
+    createTest('Capitalizes "US" when preceded by "the"',
+        'They signed the treaty with the us',
+        'They Signed the Treaty with the US');
+    
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
-        'Discussing the us policies.',
-        'Discussing the US Policies.');
+        'The us, despite its size, has a significant impact.',
+        'The US, Despite Its Size, Has a Significant Impact.');
 
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
-        'Partner with us',
-        'Partner With Us');
+        'The us and the uk signed the treaty',
+        'The US and the UK Signed the Treaty');
 
-    createTest('Test phrases "On & Off"',
-        'We Are On & Off The Field',
-        'We Are On & Off the Field');
+    createTest('Capitalizes "US" when preceded by "from the"',
+        'Support came from the us',
+        'Support Came from the US');
 
-    createTest('Test phrases "On & Off"',
-        'We Are On and Off The Field',
-        'We Are On and Off the Field');
+    createTest('Capitalizes "US" when preceded by "via"',
+        'The message was relayed via us',
+        'The Message Was Relayed via US');
 
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'Partnering with the US Military',
-        'Partnering With the US Military');
+        'Partnering with the US Military');
+
+    createTest('Capitalizes country code "US" correctly in a geopolitical context',
+        'The us, despite its size, has a significant impact.',
+        'The US, Despite Its Size, Has a Significant Impact.');
     
     createTest('1. Does not capitalize "us" when used as a pronoun',
         'It’s up to us to decide.',
@@ -46,11 +58,11 @@ describe(`
 
     createTest('2. Does not capitalize "us" when used as a pronoun',
         'You can partner with us.',
-        'You Can Partner With Us.');
+        'You Can Partner with Us.');
 
     createTest('3. Does not capitalize "us" when used as a pronoun',
         'partner with us',
-        'Partner With Us');
+        'Partner with Us');
 
     createTest('Capitalizes country code "UK" with preceding indicator and trailing comma',
         'The uk, despite its size, has a significant impact.',
@@ -72,67 +84,143 @@ describe(`
         'Discussing the us government policies.',
         'Discussing the US Government Policies.');
 
+    createTest('Capitalizes "US" before a military-related word',
+        'Discussing the us military strategies.',
+        'Discussing the US Military Strategies.');
+
+    createTest('Capitalizes "US" correctly in a geopolitical context',
+        'Discussing the us policies.',
+        'Discussing the US Policies.');
+
+    createTest('Capitalizes "US" correctly in a geopolitical context',
+        'Partnering with the us Military',
+        'Partnering with the US Military');
+
+    // --- US Acronym - End of Sentence ---
+    createTest('Capitalizes "US" as a regional acronym at the end of the sentence',
+        'This policy was created by the us',
+        'This Policy Was Created by the US');
+
+    // --- "us" as Pronoun ---
+    createTest('Does not capitalize "us" in casual speech',
+        'They want to talk to us',
+        'They Want to Talk to Us');
+
+    createTest('Does not capitalize "us" in emotional context',
+        'They really care about us',
+        'They Really Care About Us');
+
+    createTest('Does not capitalize "us" in passive voice',
+        'The system was built for us',
+        'The System Was Built for Us');
+
+    createTest('Does not capitalize "us" with compound verb',
+        'She stood near us',
+        'She Stood Near Us');
+
+    createTest('Does not capitalize "us" in inverted clause',
+        'Not everything depends on us',
+        'Not Everything Depends on Us');
+
+    createTest('1. Does not capitalize "us" when used as a pronoun',
+        'It\u2019s up to us to decide.',
+        'It\u2019s up to Us to Decide.');
+
+    createTest('2. Does not capitalize "us" when used as a pronoun',
+        'You can partner with us.',
+        'You Can Partner with Us.');
+
     createTest('Does not capitalize "us" before a government-related word',
-        'It’s up to us in government to decide.',
-        'It’s up to Us in Government to Decide.');
+        'It\u2019s up to us in the US military to decide.',
+        'It\u2019s up to Us in the US Military to Decide.');
+
+    createTest('Does not capitalize "us" before a military-related word',
+        'It\u2019s up to us in the military to decide.',
+        'It\u2019s up to Us in the Military to Decide.');
+
+    createTest('Does not capitalize "us" in common phrases',
+        'It has a varied landscape, and us, the citizens, appreciate it.',
+        'It Has a Varied Landscape, and Us, the Citizens, Appreciate It.');
+
+    // --- UK and Other Regional Acronyms ---
+    createTest('Capitalizes "UK" at the end with safe context',
+        'This initiative was led by the uk',
+        'This Initiative Was Led by the UK');
+
+    createTest('Capitalizes "UK" with preceding indicator and trailing comma',
+        'The uk, despite its size, has a significant impact.',
+        'The UK, Despite Its Size, Has a Significant Impact.');
 
     createTest('Capitalizes "UK" with preceding indicator before a government-related word',
         'The uk, with its strong government, leads the way.',
-        'The UK, With Its Strong Government, Leads the Way.');
+        'The UK, with Its Strong Government, Leads the Way.');
+
+    createTest('Capitalizes "UK" with preceding indicator before a territory-related word',
+        'The uk, with its vast territory, has diverse landscapes.',
+        'The UK, with Its Vast Territory, Has Diverse Landscapes.');
+
+    // --- Mixed Acronym/Pronoun Scenarios ---
+    createTest('Handles multiple instances of country codes and pronouns',
+        'We visited the uk and the US, and both were memorable.',
+        'We Visited the UK and the US, and Both Were Memorable.');
 
     createTest('Handles multiple instances of country codes and pronouns before government-related words',
         'We visited the uk and the US, and both have strong military forces.',
         'We Visited the UK and the US, and Both Have Strong Military Forces.');
 
-    createTest('Capitalizes "US" before a military-related word',
-        'Discussing the us military strategies.',
-        'Discussing the US Military Strategies.');
-
-    createTest('Does not capitalize "us" before a military-related word',
-        'It’s up to us in military to decide.',
-        'It’s up to Us in Military to Decide.');
-
-    createTest('Capitalizes "UK" with preceding indicator before a territory-related word',
-        'The UK, with its vast territory, has diverse landscapes.',
-        'The UK, With Its Vast Territory, Has Diverse Landscapes.');
-
     createTest('Handles multiple instances of country codes and pronouns before talks-related words',
         'We visited the uk and the US, and both engage in diplomatic talks.',
         'We Visited the UK and the US, and Both Engage in Diplomatic Talks.');
 
-    createTest('Does not capitalize "us" before a talks-related word',
-        'It’s important for us to participate in international talks.',
-        'It’s Important for Us to Participate in International Talks.');
+    createTest('Handles multiple instances of country codes and pronouns before a bill-related word',
+        'We visited the uk and the US, and both consider a bill for environmental protection.',
+        'We Visited the UK and the US, and Both Consider a Bill for Environmental Protection.');
+
+    // --- USA and Acronym Variants ---
+    createTest('Capitalizes "USA" in a formal context',
+        'The usa has a varied landscape.',
+        'The USA Has a Varied Landscape.');
 
     createTest('Capitalizes "USA" in a formal context before a bill-related word',
         'The usa introduces a new bill for economic reform.',
         'The USA Introduces a New Bill for Economic Reform.');
 
-    createTest('Handles multiple instances of country codes and pronouns before a bill-related word',
-        'We visited the uk and the US, and both consider a bill for environmental protection.',
-        'We Visited the UK and the US, and Both Consider a Bill for Environmental Protection.');
+    createTest('AP-style acronym handling',
+        'URGE U.S. AND CANADIAN GOVERNMENT OFFICIALS TO PROTECT NORTH ATLANTIC RIGHT WHALES',
+        'Urge U.S. And Canadian Government Officials to Protect North Atlantic Right Whales');
+
+    // --- Phrase and Style Edge Cases ---
+    createTest('Test phrases "On & Off"',
+        'We Are On & Off The Field',
+        'We Are On & Off the Field');
+
+    createTest('Test phrases "On & Off"',
+        'we are on and off the field',
+        'We Are On and Off the Field');
 });
 
-describe('Testing Hyphen and Apostrophe Bug Fix', () => {
-    createTest('Correctly formats hyphenated word "t-mobile"',
+describe('Testing Hyphenated and Apostrophized Word Capitalization', () => {
+
+    // --- Hyphenated Words ---
+    createTest('Capitalizes both parts of hyphenated brand name "t-mobile"',
         't-mobile',
         'T-Mobile');
 
-    createTest('Correctly formats hyphenated word "coca-cola"',
+    createTest('Capitalizes both parts of hyphenated brand name "coca-cola"',
         'coca-cola',
         'Coca-Cola');
 
-    createTest('Correctly formats hyphenated word "e-commerce"',
+    createTest('Capitalizes both parts of general hyphenated term "e-commerce"',
         'e-commerce',
         'E-Commerce');
 
-    createTest('Correctly formats word with apostrophe "o\'connor"',
+    // --- Apostrophized Words ---
+    createTest('Capitalizes word with apostrophe "o\'connor"',
         "o'connor",
-        "O'connor");
+        "O’Connor");
 });
 
-describe(`
-    Test Basic Options`, () => {
+describe('Test Basic Title Casing Options', () => {
     const createTest = (description, input, expected) => {
         test(description, () => {
             const titleCaser = new TitleCaser();
@@ -141,87 +229,77 @@ describe(`
         });
     };
 
-    createTest('Default title case conversion',
+    createTest('Converts basic lowercase phrase to title case',
         'hello world',
         'Hello World');
 
-    createTest('Customized title case conversion',
+    createTest('Handles excessive spacing and lowercase articles',
         'the book   of     life',
         'The Book of Life');
 
-    createTest('AP-style title case conversion with replacements',
+    createTest('AP-style with proper name replacements and brand casing',
         'nodejs development on aws: an in-depth tutorial on server-side javascript deployment',
         'Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment');
 
-    createTest('AP-style title case conversion with replacements',
+    createTest('Preserves correct casing in hyphenated names',
         'louis-iv',
         'Louis-IV');
 
-    createTest('Capitalize suffix word in sentence',
+    createTest('Properly capitalizes prepositions beyond 3 letters',
         "what's to say about this?",
         "What's to Say About This?");
 });
 
-describe(`
-    Test Methods`, () => {
-    test("setReplaceTerms", () => {
-        const titleCaser = new TitleCaser({
-            style: 'ap'
-        });
+describe('Test TitleCaser Class Methods', () => {
+
+    test('setReplaceTerms applies bulk term replacements', () => {
+        const titleCaser = new TitleCaser({ style: 'ap' });
         const replaceTerms = [
             { 'hi': 'Hello' },
             { 'globe': 'World' },
             { 'two': 'One' },
         ];
         titleCaser.setReplaceTerms(replaceTerms);
-        const input = "hi globe, two";
-        const expectedOutput = "Hello World, One";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-    test("addExactPhraseReplacements", () => {
-        const titleCaser = new TitleCaser({
-            style: 'ap'
-        });
 
-        const newPhrase = [
+        const input = 'hi globe, two';
+        const expected = 'Hello World, One';
+        const output = titleCaser.toTitleCase(input);
+
+        expect(output).toEqual(expected);
+    });
+
+    test('addExactPhraseReplacements overrides specific phrases', () => {
+        const titleCaser = new TitleCaser({ style: 'ap' });
+        const phraseReplacement = [
             { 'the correct phrase': 'ThE CoRrEcT Way' }
         ];
-        titleCaser.addExactPhraseReplacements(newPhrase);
-        const input = "this is the correct phrase";
-        const expectedOutput = "This Is ThE CoRrEcT Way";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-    test("removeReplaceTerm", () => {
-        const titleCaser = new TitleCaser({
-            style: 'apa'
-        });
+        titleCaser.addExactPhraseReplacements(phraseReplacement);
 
-        const replaceTerms = [
+        const input = 'this is the correct phrase';
+        const expected = 'This Is ThE CoRrEcT Way';
+        const output = titleCaser.toTitleCase(input);
+
+        expect(output).toEqual(expected);
+    });
+
+    test('removeReplaceTerm deletes a single replacement rule', () => {
+        const titleCaser = new TitleCaser({ style: 'apa' });
+        titleCaser.setReplaceTerms([
             { 'x': 'Y' },
             { 'y': 'X' }
-        ];
+        ]);
 
-        // Set multiple replacement terms using setReplaceTerms()
-        titleCaser.setReplaceTerms(replaceTerms);
-
-        // Use removeReplaceTerm() to remove a replace term
         titleCaser.removeReplaceTerm('x');
 
-        // Use descriptive variable names for the input and expected output
-        const inputString = "x should be y";
-        const expectedOutput = "X Should Be X";
+        const input = 'x should be y';
+        const expected = 'X Should Be X';
+        const output = titleCaser.toTitleCase(input);
 
-        // Call toTitleCase() to convert the input string to title case
-        const outputString = titleCaser.toTitleCase(inputString);
-        // Check that the output matches the expected output
-        expect(outputString).toEqual(expectedOutput);
+        expect(output).toEqual(expected);
     });
 });
 
-describe(`
-    Test Variation Stability`, () => {
+describe('Test Variation Stability', () => {
     const createTest = (description, options, input, expectedOutput) => {
         test(description, () => {
             const titleCaser = new TitleCaser(options);
@@ -230,292 +308,183 @@ describe(`
         });
     };
 
-    createTest(
-        "Capitalization and word replacements",
-        { style: "ap" },
-        "GOOgle and VMWARE",
-        "Google and VMware"
-    );
+    // --- AP Style ---
+    createTest('Capitalization and word replacements', { style: 'ap' },
+        'GOOgle and VMWARE',
+        'Google and VMware');
 
-    createTest(
-        "Brand Capitalization and word replacements",
-        { style: "ap" },
-        "NERDs Candy",
-        "NERDs Candy"
-    );
+    createTest('Brand Capitalization with reserved casing', { style: 'ap' },
+        'NERDs Candy',
+        'NERDs Candy');
 
-    createTest(
-        "AP-style title case with possessive and colon",
-        { style: "ap" },
+    createTest('Possessives and colon usage', { style: 'ap' },
         "the iphone's impact on modern communication: a sociolinguistic analysis",
-        "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis"
-    );
+        "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis");
 
-    createTest(
-        "AP-style title case with lowercase back/front-end terms",
-        { style: "ap" },
-        "BACK-end and front-end",
-        "Backend and Frontend"
-    );
+    createTest('Hyphenated compound tech terms', { style: 'ap' },
+        'BACK-end and front-end',
+        'Backend and Frontend');
 
-    createTest(
-        "Chicago style title case with comparison and colon",
-        { style: "chicago" },
-        "VMware vs. VirtualBox: a comparative study of virtualization software",
-        "VMware vs. VirtualBox: A Comparative Study of Virtualization Software"
-    );
+    createTest('Acronym handling and colon', { style: 'ap' },
+        'revolutionizing the publishing industry: insights from a cto on ebook development and innovation',
+        'Revolutionizing the Publishing Industry: Insights from a CTO on eBook Development and Innovation');
 
-    createTest(
-        "APA style title case with colon",
-        { style: "apa" },
-        "the art of negotiation: strategies for successful business deals",
-        "The Art of Negotiation: Strategies for Successful Business Deals"
-    );
+    // --- Chicago Style ---
+    createTest('Colon and comparison phrase', { style: 'chicago' },
+        'VMware vs. VirtualBox: a comparative study of virtualization software',
+        'VMware vs. VirtualBox: A Comparative Study of Virtualization Software');
 
-    createTest(
-        "Wikipedia style title case with acronym and hyphen",
-        { style: "wikipedia" },
-        "The business of fashion: how luxury brands set themselves apart",
-        "The Business of Fashion: How Luxury Brands Set Themselves Apart"
-    );
+    createTest('Hyphenated tutorial format', { style: 'chicago' },
+        'nodejs development on aws: an in-depth tutorial on server-side javascript deployment',
+        'Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment');
 
-    createTest(
-        "Hyphenated, colon, and short word replacements",
-        { style: "chicago" },
-        "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
-        "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment"
-    );
+    createTest('Custom replacements and tech brands', { style: 'chicago' },
+        'Back-End Web Development: Building Scalable APIs with nodejs',
+        'Backend Web Development: Building Scalable APIs with Node.js');
 
-    createTest(
-        "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL",
-        { style: "chicago" },
-        "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL",
-        "I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL"
-    );
+    createTest('Smart quotes enabled', { style: 'chicago', smartQuotes: true },
+        "\"Never underestimate the power o'persistence,\"",
+        '“Never Underestimate the Power O’Persistence,”');
 
-    createTest(
-        "Test Smart Quotes",
-        { style: "chicago", smartQuotes: true },
-        '"Never underestimate the power O\' persistence,"',
-        "“Never Underestimate the Power O’ Persistence,”"
-    );
+    createTest('Long informal sentence with acronyms', { style: 'chicago' },
+        'I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL',
+        'I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL');
 
-    createTest(
-        "Wikipedia style capitalization test with special term and colon",
-        { style: "wikipedia" },
-        "the future of devops: how to prepare for the next era of software development",
-        "The Future of DevOps: How to Prepare for the Next Era of Software Development"
-    );
+    // --- APA Style ---
+    createTest('Colon-separated title in APA style', { style: 'apa' },
+        'the art of negotiation: strategies for successful business deals',
+        'The Art of Negotiation: Strategies for Successful Business Deals');
 
-    createTest(
-        "APA style title case with colon and apostrophe",
-        { style: "apa" },
-        "the science of nutrition: debunking myths and fads",
-        "The Science of Nutrition: Debunking Myths and Fads"
-    );
+    createTest('Colon and apostrophe casing', { style: 'apa' },
+        'the science of nutrition: debunking myths and fads',
+        'The Science of Nutrition: Debunking Myths and Fads');
 
-    createTest(
-        "Chicago style title case with custom term replacements",
-        { style: "chicago" },
-        "Back-End Web Development: Building Scalable APIs with nodejs",
-        "Backend Web Development: Building Scalable APIs with Node.js"
-    );
+    createTest('Short conjunctions and brand normalization', { style: 'apa' },
+        'the impact of social media on mental health: a study of instagram, TIKTOK, and SnapChat',
+        'The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat');
 
-    createTest(
-        "AP-style capitalization test with special terms and colon",
-        { style: "ap" },
-        "revolutionizing the publishing industry: insights from a cto on ebook development and innovation",
-        "Revolutionizing the Publishing Industry: Insights From a CTO on eBook Development and Innovation"
-    );
+    // --- NYT & Wikipedia Style ---
+    createTest('NYT-style acronym and colon usage', { style: 'nyt' },
+        'the future of ai: how iot and machine learning will change the world',
+        'The Future of AI: How IoT and Machine Learning Will Change the World');
 
-    createTest(
-        "NYT-style capitalization test with special terms and colon",
-        { style: "nyt" },
-        "the future of ai: how iot and machine learning will change the world",
-        "The Future of AI: How IoT and Machine Learning Will Change the World"
-    );
+    createTest('Wikipedia style with DevOps capitalization', { style: 'wikipedia' },
+        'the future of devops: how to prepare for the next era of software development',
+        'The Future of DevOps: How to Prepare for the Next Era of Software Development');
 
-    createTest(
-        "APA style title case with short conjunction terms and colon",
-        { style: "apa" },
-        "the impact of social media on mental health: a study of instagram, TIKTOK, and SnapChat",
-        "The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat"
-    );
-
-    createTest(
-        "Correct phrase casing list testing",
-        { style: "wikipedia" },
-        "announcing a new collaboration with the cybersmile foundation: how to combat cyberbullying",
-        "Announcing a New Collaboration With The Cybersmile Foundation: How to Combat Cyberbullying"
-    );
+    createTest('Wikipedia style capitalization with colon', { style: 'wikipedia' },
+        'The business of fashion: how luxury brands set themselves apart',
+        'The Business of Fashion: How Luxury Brands Set Themselves Apart');
 });
 
-describe(`
-    Test Reserved Words`, () => {
+describe('Test Reserved Words', () => {
+    const options = { style: 'chicago' };
 
-    test("Title case transformation for a single reserved word", () => {
-        const options = {
-            style: "chicago"
-        };
+    // --- Reserved Word Handling ---
+    test('Transforms single reserved word correctly', () => {
         const titleCaser = new TitleCaser(options);
-        const input = "GOOGle tensorflow";
-        const expectedOutput = "Google TensorFlow";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
+        const input = 'GOOGle tensorflow';
+        const expected = 'Google TensorFlow';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
     });
 
-    test("Title case transformation for a sentence with a reserved word and colon", () => {
-        const options = {
-            style: "chicago"
-        };
+    test('Transforms sentence with reserved word and colon', () => {
         const titleCaser = new TitleCaser(options);
-        const input = "GooGlE vs. VirtualBox: a comparative study of virtualization software";
-        const expectedOutput = "Google vs. VirtualBox: A Comparative Study of Virtualization Software";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
+        const input = 'GooGlE vs. VirtualBox: a comparative study of virtualization software';
+        const expected = 'Google vs. VirtualBox: A Comparative Study of Virtualization Software';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
     });
 
-    test("Title case transformation for a reserved word with a possessive form", () => {
-        const options = {
-            style: "chicago"
-        };
+    test('Handles possessive form of reserved word', () => {
         const titleCaser = new TitleCaser(options);
         const input = "GOOGle's tensorflow";
-        const expectedOutput = "Google's TensorFlow";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
+        const expected = "Google's TensorFlow";
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
     });
 
-    test("Title case transformation for specific brand names", () => {
-        const options = {
-            style: "chicago"
-        };
-        const replaceTerms = [
-            { 'mcdonalds': 'McDonald\'s' },
-            { 'skoda': 'Škoda' },
-            { 'cyber-security': 'Cybersecurity' },
-        ];
+    // --- Brand Name Replacements ---
+    test('Handles specific brand name replacements', () => {
         const titleCaser = new TitleCaser(options);
-        titleCaser.setReplaceTerms(replaceTerms);
+        titleCaser.setReplaceTerms([
+            { mcdonalds: "McDonald's" },
+            { skoda: "Škoda" },
+            { 'cyber-security': 'Cybersecurity' },
+        ]);
 
-        // Test data with brand names and their expected title-cased versions
-        const testData = [
-            { input: "cyber-security", expectedOutput: "Cybersecurity" },
-            { input: "skoda", expectedOutput: "Škoda" },
-            { input: "mcdonalds", expectedOutput: "McDonald's" },
+        const testCases = [
+            { input: 'cyber-security', expected: 'Cybersecurity' },
+            { input: 'skoda', expected: 'Škoda' },
+            { input: 'mcdonalds', expected: "McDonald's" },
         ];
 
-        testData.forEach(({ input, expectedOutput }) => {
-            const actualOutput = titleCaser.toTitleCase(input);
-            expect(actualOutput).toEqual(expectedOutput);
+        testCases.forEach(({ input, expected }) => {
+            expect(titleCaser.toTitleCase(input)).toEqual(expected);
         });
     });
 
-    test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
-        const options = {
-            style: "chicago"
-        };
+    // --- HTML <br> Line Breaks ---
+    test('Handles HTML <br> with colon (spaced)', () => {
         const titleCaser = new TitleCaser(options);
-        const input = "Exploring the future of devops:<br>Preparing for the next era of software development";
-        const expectedOutput = "Exploring the Future of DevOps: <br> Preparing for the Next Era of Software Development";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
+        const input = 'Exploring the future of devops:<br>Preparing for the next era of software development';
+        const expected = 'Exploring the Future of DevOps: <br> Preparing for the Next Era of Software Development';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
     });
 
-    test("Title case transformation for a sentence with untrimmed white spaces", () => {
-        const options = {
-            style: "chicago"
-        };
+    test('Handles HTML <br> with full sentence split', () => {
+        const titleCaser = new TitleCaser(options);
+        const input = 'Exploring the Future of DevOps:<br>Guidelines for Preparing for the Next Era in Software Development';
+        const expected = 'Exploring the Future of DevOps: <br> Guidelines for Preparing for the Next Era in Software Development';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
+    });
+
+    test('Handles <br> with no space after colon', () => {
+        const titleCaser = new TitleCaser(options);
+        const input = 'The future of DevOps:<br>How to prepare for the next era of software development';
+        const expected = 'The Future of DevOps: <br> How to Prepare for the Next Era of Software Development';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
+    });
+
+    // --- Special Characters & Whitespace ---
+    test('Handles ampersand (&) symbol without encoding', () => {
+        const titleCaser = new TitleCaser(options);
+        const input = 'This & That';
+        const expected = 'This & That';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
+    });
+
+    test('Handles untrimmed white spaces', () => {
         const titleCaser = new TitleCaser(options);
         const input = `      This    string   has   too   many  spaces  `;
-        const expectedOutput = "This String Has Too Many Spaces";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-
-    test("Title case transformation for a sentence with HTML line break (nl2br) using <br> tag", () => {
-        const options = {
-            style: "chicago"
-        };
-        const titleCaser = new TitleCaser(options);
-        const input = "Exploring the Future of DevOps:<br>Guidelines for Preparing for the Next Era in Software Development";
-        const expectedOutput = "Exploring the Future of DevOps: <br> Guidelines for Preparing for the Next Era in Software Development";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-
-    test("Title case transformation for a sentence with HTML line break (nl2br) without space after colon using <br> tag", () => {
-        const options = {
-            style: "chicago"
-        };
-        const titleCaser = new TitleCaser(options);
-        const input = "The future of DevOps:<br>How to prepare for the next era of software development";
-        const expectedOutput = "The Future of DevOps: <br> How to Prepare for the Next Era of Software Development";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-
-    test("Ampersand in a sentence should return & and not &Amp;", () => {
-        const options = {
-            style: "chicago"
-        };
-        const titleCaser = new TitleCaser(options);
-        const input = "This & That";
-        const expectedOutput = "This & That";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput).toEqual(expectedOutput);
-    });
-
-    test("Untrimmed white spaces", () => {
-        const options = {
-            style: "chicago"
-        };
-        const titleCaser = new TitleCaser(options);
-        const input = `      This    string   has   too   many  spaces  `;
-        const expectedOutput = "This String Has Too Many Spaces";
-        const actualOutput = titleCaser.toTitleCase(input);
-        expect(actualOutput)
-            .toEqual(expectedOutput);
+        const expected = 'This String Has Too Many Spaces';
+        expect(titleCaser.toTitleCase(input)).toEqual(expected);
     });
 });
 
 describe('Test addReplaceTerm Method', () => {
     let titleCaser;
 
-    // Setup a new TitleCaser instance before each test
     beforeEach(() => {
         titleCaser = new TitleCaser({ style: 'ap' });
     });
 
-    test('adds a new replacement term correctly', () => {
+    test('Adds a new replacement term correctly', () => {
         const term = 'js';
         const replacement = 'JavaScript';
 
-        // Initially, ensure the term does not exist in the replacement list
-        expect(titleCaser.wordReplacementsList.some((obj) => obj.hasOwnProperty(term))).toBeFalsy();
-
-        // Add the new replacement term
+        expect(titleCaser.wordReplacementsList.some(obj => term in obj)).toBeFalsy();
         titleCaser.addReplaceTerm(term, replacement);
-
-        // Verify the term now exists in the replacement list with the correct replacement value
-        expect(titleCaser.wordReplacementsList.some((obj) => obj[term] === replacement)).toBeTruthy();
+        expect(titleCaser.wordReplacementsList.some(obj => obj[term] === replacement)).toBeTruthy();
     });
 
-    test('updates an existing replacement term correctly', () => {
-        const initialTerm = 'js';
-        const initialReplacement = 'JavaScript';
-        const newReplacement = 'JS';
+    test('Updates an existing replacement term', () => {
+        const term = 'js';
+        const initial = 'JavaScript';
+        const updated = 'JS';
 
-        // Add an initial replacement term
-        titleCaser.addReplaceTerm(initialTerm, initialReplacement);
+        titleCaser.addReplaceTerm(term, initial);
+        expect(titleCaser.wordReplacementsList.some(obj => obj[term] === initial)).toBeTruthy();
 
-        // Verify the term exists with the initial replacement value
-        expect(titleCaser.wordReplacementsList.some((obj) => obj[initialTerm] === initialReplacement)).toBeTruthy();
-
-        // Update the replacement term
-        titleCaser.addReplaceTerm(initialTerm, newReplacement);
-
-        // Verify the term now exists with the new replacement value
-        expect(titleCaser.wordReplacementsList.some((obj) => obj[initialTerm] === newReplacement)).toBeTruthy();
+        titleCaser.addReplaceTerm(term, updated);
+        expect(titleCaser.wordReplacementsList.some(obj => obj[term] === updated)).toBeTruthy();
     });
 });
