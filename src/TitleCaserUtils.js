@@ -731,24 +731,30 @@ export class TitleCaserUtils {
 
     // Split the word into parts delimited by the specified delimiters
     const parts = word.split(delimiters);
-    // Count the number of parts
     const numParts = parts.length;
 
-    // For each part
+    // For each part, replace it with the correct term if found or title-case it if not found
     for (let i = 0; i < numParts; i++) {
-      // Lowercase the part
       const lowercasedPart = parts[i].toLowerCase();
-      // Search for the part in the list of correct terms
       const index = correctTerms.findIndex((t) => t.toLowerCase() === lowercasedPart);
-      // If the part is found in the list of correct terms
       if (index >= 0) {
-        // Replace the part with the correct term
         parts[i] = correctTerms[index];
+      } else {
+        // Capitalize first letter and lowercase the rest if no replacement is found
+        parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
       }
     }
 
-    // Join the parts back together using the first delimiter as the default delimiter
-    return parts.join(delimiters.source.charAt(0));
+    // Determine the joiner based on the original word
+    let joiner = delimiters.source.charAt(0);
+    if (word.includes("-")) {
+      joiner = "-";
+    } else if (word.includes("'")) {
+      joiner = "'";
+    }
+
+    // Join the parts back together using the determined joiner
+    return parts.join(joiner);
   }
 
   // This function is used to check if a word is in the correct terms list
