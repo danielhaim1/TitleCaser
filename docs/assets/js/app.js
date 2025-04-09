@@ -45,26 +45,13 @@ function highlight ( beforeText, afterText, ignoreCase = false ) {
  * @param {string} inputString - The input string to convert to title case.
  * @returns {string} The converted string in title case.
  */
-function convertToTitleCase ( inputString ) {
-	// Get all the radio buttons with the name "styleSelect".
-	const radios = document.getElementsByName ( "styleSelect" );
-	let styleValue;
-	
-	// Loop through all the radio buttons and get the value of the checked one.
-	for ( let i = 0; i < radios.length; i++ ) {
-		if ( radios[i].checked ) {
-			styleValue = radios[i].value;
-			break;
-		}
-	}
-	
-	// Set the options for the toTitleCase method using the selected style.
-	const options = {
-		style: styleValue
-	};
-	
-	// Convert the input string to a title case using the options.
-	return inputString.toTitleCase ( options );
+function convertToTitleCase(inputString, options) {
+	console.log("[convertToTitleCase] Input:", inputString);
+	console.log("[convertToTitleCase] Options:", options);
+
+	const result = inputString.toTitleCase(options);
+	console.log("[convertToTitleCase] Result:", result);
+	return result;
 }
 
 /**
@@ -75,24 +62,22 @@ function convertToTitleCase ( inputString ) {
  * @param {HTMLElement} afterEl - The element where the processed string is displayed.
  * @throws {Error} Invalid input if any of the input parameters are missing.
  */
-function processInput ( inputString, styleSelect, beforeEl, afterEl ) {
-	// Check if any of the input parameters are missing
-	if ( !inputString || !styleSelect || !beforeEl || !afterEl ) {
-		throw new Error ( "Invalid input" );
+function processInput(inputString, styleValue, beforeEl, afterEl) {
+	console.log("[processInput] Input String:", inputString);
+	console.log("[processInput] Style Value:", styleValue);
+
+	if (!inputString || !styleValue || !beforeEl || !afterEl) {
+		console.error("[processInput] - Invalid input");
+		throw new Error("Invalid input");
 	}
-	
-	// Get the selected style from the select element
-	const options = {
-		style: styleSelect.value
-	};
-	
-	// Convert the input string to a title case and update the before element
-	let titleCasedString;
-	titleCasedString = convertToTitleCase ( inputString, options );
+
+	const options = { style: styleValue };
+	const titleCasedString = convertToTitleCase(inputString, options);
+
+	console.log("[processInput] Title Cased String:", titleCasedString);
+
 	beforeEl.textContent = inputString;
-	
-	// Update the after element with the processed string and highlighted changes
-	afterEl.innerHTML = highlight ( inputString, titleCasedString );
+	afterEl.innerHTML = highlight(inputString, titleCasedString);
 }
 
 /**
@@ -101,44 +86,31 @@ function processInput ( inputString, styleSelect, beforeEl, afterEl ) {
  * Updates the "Convert" button style if the textarea is empty.
  */
 function handleTitleCase () {
-	// Get the textarea element
-	const textField = document.getElementById ( "textField" );
-	
-	// If the textarea is empty, do nothing and return
-	if ( textField.value === "" ) {
+	const textField = document.getElementById("textField");
+	const beforeEl = document.querySelector("#before");
+	const afterEl = document.querySelector("#after");
+	const titleConvertBtn = document.getElementById("titleConvertBtn");
+
+	if (!textField || !beforeEl || !afterEl || !titleConvertBtn) return;
+
+	const inputString = textField.value.trim();
+
+	if (inputString === "") {
+		titleConvertBtn.classList.add("is-empty");
 		return;
 	}
-	
-	// Get the 'before' and 'after' elements to display the original and converted text
-	const beforeEl = document.querySelector ( "#before" );
-	const afterEl = document.querySelector ( "#after" );
-	
-	// Get the 'Convert' button
-	const titleConvertBtn = document.getElementById ( "titleConvertBtn" );
-	
-	// Add a click event listener to the 'Convert' button
-	titleConvertBtn.addEventListener ( "click", () => {
-		// If the textarea is empty, add the 'is-empty' class to the button and return
-		if ( textField.value === "" ) {
-			titleConvertBtn.classList.add ( "is-empty" );
-			return;
-		}
-		
-		// Remove the 'is-empty' class from the button
-		titleConvertBtn.classList.remove ( "is-empty" );
-		
-		// Get the input string from the textarea
-		const inputString = textField.value;
-		
-		// Get the selected style from the radio button group
-		const styleSelect = document.querySelector (
-			'input[name="styleSelect"]:checked'
-		).value;
-		
-		// Process the input string and update the 'before' and 'after' elements with the original and converted text
-		processInput ( inputString, styleSelect, beforeEl, afterEl );
-	} );
+
+	titleConvertBtn.classList.remove("is-empty");
+
+	const styleSelect = document.querySelector('input[name="styleSelect"]:checked');
+	if (!styleSelect) {
+		console.error("[handleTitleCase] - No style selected");
+		return;
+	}
+
+	processInput(inputString, styleSelect.value, beforeEl, afterEl);
 }
+
 
 /**
  * Sets up the title casing functionality on the input field.
@@ -204,56 +176,52 @@ function clearOutputIfEmpty () {
 }
 
 function shuffleTitles () {
-	// Shuffle the titles array
 	for ( let i = titles.length - 1; i > 0; i-- ) {
 		const j = Math.floor ( Math.random () * (i + 1) );
 		[ titles[i], titles[j] ] = [ titles[j], titles[i] ];
 	}
-	
-	// Set the value of the text field to the first title in the shuffled array
+
 	const title = titles[0];
 	const textField = document.getElementById ( "textField" );
 	textField.value = title;
-	
-	// Click the "Title Case" button to convert the shuffled title to title case
-	// and display it in the output
-	const titleConvertBtn = document.getElementById ( "titleConvertBtn" );
-	titleConvertBtn.click ();
 }
+
 
 /**
  * Initializes the title caser by adding event listeners to the appropriate elements
  * and calling the necessary functions.
  */
 function initializeTitleCaser () {
-	// Start title casing on input
-	startTitleCasing ();
-	
-	// Get elements
-	const titleConvertBtn = document.getElementById ( "titleConvertBtn" );
-	const titleShuffleBtn = document.getElementById ( "titleShuffleBtn" );
-	const titleField = document.getElementById ( "textField" );
-	
-	// Add event listeners
-	titleConvertBtn.addEventListener ( "click", handleTitleCase );
-	titleField.addEventListener ( "input", clearOutputIfEmpty );
-	titleShuffleBtn.addEventListener ( "click", () => {
-		// Shuffle titles
-		shuffleTitles ();
-		titleField.value = titles[0];
-		
-		// Click title convert button
-		titleConvertBtn.classList.remove ( "is-empty" );
-		titleConvertBtn.removeAttribute ( "disabled" );
-		titleConvertBtn.click ();
-	} );
-	
-	// Shuffle titles and click shuffle button
-	shuffleTitles ();
-	titleShuffleBtn.click ();
+	startTitleCasing();
+
+	const titleConvertBtn = document.getElementById("titleConvertBtn");
+	const titleShuffleBtn = document.getElementById("titleShuffleBtn");
+	const titleField = document.getElementById("textField");
+
+	// Replace convert button to prevent stacked listeners
+	const newConvertBtn = titleConvertBtn.cloneNode(true);
+	titleConvertBtn.parentNode.replaceChild(newConvertBtn, titleConvertBtn);
+	newConvertBtn.addEventListener("click", handleTitleCase);
+
+	titleField.addEventListener("input", clearOutputIfEmpty);
+
+	titleShuffleBtn.addEventListener("click", () => {
+		shuffleTitles(); // sets textField.value
+		newConvertBtn.classList.remove("is-empty");
+		newConvertBtn.removeAttribute("disabled");
+		handleTitleCase();
+	});
+
+	// Shuffle once and convert on load (no duplicate trigger)
+	shuffleTitles();
+	handleTitleCase();
 }
 
+
 const titleArray = [
+	"They signed the treaty with the us",
+	"PARTNERING with the us Military",
+	"It has a varied landscape, and us, the citizens, appreciate it.",
 	"discussing the us policies.",
 	"it’s up to us to decide.",
 	"the uk, despite its size, has a significant impact.",

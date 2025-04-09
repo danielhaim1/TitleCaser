@@ -1,7 +1,7 @@
 {
   "name": "@danielhaim/titlecaser",
   "version": "1.7.2",
-  "description": "Converts a string to title case with multiple style options, ability to ignore certain words, and handle acronyms",
+  "description": "A powerful utility for transforming text to title case with support for multiple style guides and extensive customization options.",
   "keywords": [
     "title case",
     "title casing",

@@ -2,7 +2,8 @@ import {
   commonShortWords,
   correctTitleCasingList,
   correctPhraseCasingList,
-  wordReplacementsList
+  wordReplacementsList,
+  titleCaseDefaultOptionsList,
 } from "./TitleCaserConsts.js";
 
 import { TitleCaserUtils } from "./TitleCaserUtils.js";
@@ -39,6 +40,8 @@ export class TitleCaser {
         replaceTermList = this.wordReplacementsList,
         smartQuotes = false, // Set to false by default
       } = this.options;
+
+      const styleConfig = titleCaseDefaultOptionsList[style] || {};
 
       const ignoreList = ["nl2br", ...neverCapitalize];
       const {
@@ -303,6 +306,48 @@ export class TitleCaser {
 
         // Replace the phrase in the input string with its corresponding replacement
         inputString = inputString.replace(regex, replacement);
+      }
+
+      function shouldKeepCasing(word) {
+        // If it's an acronym
+        if (TitleCaserUtils.isRegionalAcronym(word)) return true;
+        // If it has known “intentional uppercase” patterns
+        if (TitleCaserUtils.hasUppercaseIntentional(word)) return true;
+        // If it’s in the brand/correctTitleCasingList
+        if (TitleCaserUtils.isWordInArray(word, correctTitleCasingList)) return true;
+      
+        // Otherwise, no. It's safe to lowercase.
+        return false;
+      }
+      
+      // ! Handle sentence case
+      if (styleConfig.caseStyle === "sentence") {
+        const words = inputString.split(" ");
+        let firstWordFound = false;
+      
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+      
+          // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
+          if (!firstWordFound && /[A-Za-z]/.test(word)) {
+            // If you want to skip altering brand or acronym, do one more check:
+            if (!shouldKeepCasing(word)) {
+              // "Normal" first word
+              words[i] = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }
+            // Otherwise, it’s a brand/acronym, so leave it
+            firstWordFound = true;
+            continue;
+          }
+      
+          // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase
+          if (!shouldKeepCasing(word)) {
+            words[i] = word.toLowerCase();
+          }
+          // else, we keep it exactly as is
+        }
+      
+        inputString = words.join(" ");
       }
 
       return inputString;

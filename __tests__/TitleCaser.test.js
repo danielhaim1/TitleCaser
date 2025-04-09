@@ -26,7 +26,7 @@ describe(`
     // --- US Acronym - Regional Context ---
     createTest('Capitalizes "US" when preceded by "the"',
         'They signed the treaty with the us',
-        'They Signed the Treaty with the US');
+        'They Signed the Treaty With the US');
     
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'The us, despite its size, has a significant impact.',
@@ -38,7 +38,7 @@ describe(`
 
     createTest('Capitalizes "US" when preceded by "from the"',
         'Support came from the us',
-        'Support Came from the US');
+        'Support Came From the US');
 
     createTest('Capitalizes "US" when preceded by "via"',
         'The message was relayed via us',
@@ -46,7 +46,7 @@ describe(`
 
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'Partnering with the US Military',
-        'Partnering with the US Military');
+        'Partnering With the US Military');
 
     createTest('Capitalizes country code "US" correctly in a geopolitical context',
         'The us, despite its size, has a significant impact.',
@@ -58,11 +58,11 @@ describe(`
 
     createTest('2. Does not capitalize "us" when used as a pronoun',
         'You can partner with us.',
-        'You Can Partner with Us.');
+        'You Can Partner With Us.');
 
     createTest('3. Does not capitalize "us" when used as a pronoun',
         'partner with us',
-        'Partner with Us');
+        'Partner With Us');
 
     createTest('Capitalizes country code "UK" with preceding indicator and trailing comma',
         'The uk, despite its size, has a significant impact.',
@@ -94,7 +94,7 @@ describe(`
 
     createTest('Capitalizes "US" correctly in a geopolitical context',
         'Partnering with the us Military',
-        'Partnering with the US Military');
+        'Partnering With the US Military');
 
     // --- US Acronym - End of Sentence ---
     createTest('Capitalizes "US" as a regional acronym at the end of the sentence',
@@ -128,7 +128,7 @@ describe(`
 
     createTest('2. Does not capitalize "us" when used as a pronoun',
         'You can partner with us.',
-        'You Can Partner with Us.');
+        'You Can Partner With Us.');
 
     createTest('Does not capitalize "us" before a government-related word',
         'It\u2019s up to us in the US military to decide.',
@@ -153,11 +153,11 @@ describe(`
 
     createTest('Capitalizes "UK" with preceding indicator before a government-related word',
         'The uk, with its strong government, leads the way.',
-        'The UK, with Its Strong Government, Leads the Way.');
+        'The UK, With Its Strong Government, Leads the Way.');
 
     createTest('Capitalizes "UK" with preceding indicator before a territory-related word',
         'The uk, with its vast territory, has diverse landscapes.',
-        'The UK, with Its Vast Territory, Has Diverse Landscapes.');
+        'The UK, With Its Vast Territory, Has Diverse Landscapes.');
 
     // --- Mixed Acronym/Pronoun Scenarios ---
     createTest('Handles multiple instances of country codes and pronouns',
@@ -252,6 +252,15 @@ describe('Test Basic Title Casing Options', () => {
 
 describe('Test TitleCaser Class Methods', () => {
 
+    // Test Wikipedia style title:
+    test('Wikipedia style title casing', () => {
+        const titleCaser = new TitleCaser({ style: 'wikipedia' });
+        const input = 'Mitigating ddos attacks on aws: strategies for protecting your web infrastructure using github';
+        const expected = 'Mitigating DDoS attacks on AWS: strategies for protecting your web infrastructure using GitHub';
+        const output = titleCaser.toTitleCase(input);
+        expect(output).toEqual(expected);
+    });
+
     test('setReplaceTerms applies bulk term replacements', () => {
         const titleCaser = new TitleCaser({ style: 'ap' });
         const replaceTerms = [
@@ -327,7 +336,7 @@ describe('Test Variation Stability', () => {
 
     createTest('Acronym handling and colon', { style: 'ap' },
         'revolutionizing the publishing industry: insights from a cto on ebook development and innovation',
-        'Revolutionizing the Publishing Industry: Insights from a CTO on eBook Development and Innovation');
+        'Revolutionizing the Publishing Industry: Insights From a CTO on eBook Development and Innovation');
 
     // --- Chicago Style ---
     createTest('Colon and comparison phrase', { style: 'chicago' },
@@ -370,11 +379,11 @@ describe('Test Variation Stability', () => {
 
     createTest('Wikipedia style with DevOps capitalization', { style: 'wikipedia' },
         'the future of devops: how to prepare for the next era of software development',
-        'The Future of DevOps: How to Prepare for the Next Era of Software Development');
+        'The future of DevOps: how to prepare for the next era of software development');
 
     createTest('Wikipedia style capitalization with colon', { style: 'wikipedia' },
         'The business of fashion: how luxury brands set themselves apart',
-        'The Business of Fashion: How Luxury Brands Set Themselves Apart');
+        'The business of fashion: how luxury brands set themselves apart');
 });
 
 describe('Test Reserved Words', () => {

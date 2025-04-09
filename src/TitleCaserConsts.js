@@ -103,48 +103,71 @@ export const titleCaseStylesList = Object.freeze({
 export const allowedTitleCaseStylesList = Object.values(titleCaseStylesList);
 export const titleCaseDefaultOptionsList = Object.freeze({
   ap: {
-    shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
+    caseStyle: "title",
+    // Short Conjunctions (<=3 letters, + "nor")
+    shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon", "among"],
+    // Short Preps (<=3 letters)
+    // Common AP short prepositions: "at", "by", "in", "of", "off", "on", "out", "per", "to", "up", "via"
+    shortPrepositionsList: [
+      "as", "at", "by", "in", "of", "off", "on", "out",
+      "per", "to", "up", "via"
+    ],
     neverCapitalizedList: [],
   },
   apa: {
-    shortConjunctionsList: ["and", "but", "by", "for", "in", "nor", "of", "on", "or", "so", "to", "yet"],
+    caseStyle: "title",
+    // (In APA 7th, words of 4+ letters are "major words" and capitalized;
+    //  short words (3 letters or fewer) are "minor words." This excludes
+    //  longer preps like “about,” “across,” “through,” “within,” etc.)
+    shortConjunctionsList: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
-      "about", "above", "across", "after", "against", "along", "among", "around",
-      "as", "at", "before", "behind", "below", "beneath", "beside", "between",
-      "beyond", "by", "despite", "down", "during", "except", "for", "from", "in",
-      "inside", "into", "like", "near", "of", "off", "on", "onto", "out", "outside",
-      "over", "past", "since", "through", "throughout", "till", "to", "toward",
-      "under", "underneath", "until", "up", "upon", "via", "with", "within", "without"
-    ],    
+      "as", "at", "by", "for", "in", "of", "off",
+      "on", "per", "to", "up", "via"
+    ],
     neverCapitalizedList: [],
   },
   british: {
+    caseStyle: "title",
     shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
+    shortPrepositionsList: [
+      "as", "at", "by", "in", "of", "off",
+      "on", "out", "per", "to", "up", "via"
+    ],
     neverCapitalizedList: [],
   },
   chicago: {
+    caseStyle: "title",
+    // Typically mirrors AP for short words, but can differ
     shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
     neverCapitalizedList: ["etc."],
   },
   nyt: {
-    shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
+    caseStyle: "title",
+    // Often same as Chicago/AP
+    shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
+    shortPrepositionsList: [
+      "as", "at", "by", "in", "of", "off",
+      "on", "out", "per", "to", "up", "via"
+    ],
     neverCapitalizedList: [],
   },
   wikipedia: {
+    caseStyle: "sentence",
+    // Typically not used in sentence case logic, but included for completeness
     shortConjunctionsList: ["and", "as", "but", "for", "nor", "or", "so", "yet"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
+    shortPrepositionsList: [
+      "as", "at", "by", "in", "of", "off",
+      "on", "out", "per", "to", "up", "via"
+    ],
     neverCapitalizedList: [],
-  }
+  },
 });
 
 // * ! ===============================================
@@ -294,4 +317,3 @@ export const directFollowingIndicatorsRegionalAcronym = [
   "warships",
   "zone", "zones"
 ];
-

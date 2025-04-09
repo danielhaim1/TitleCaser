@@ -797,6 +797,4 @@ export class TitleCaserUtils {
     // Rejoin the words
     return processedWords.join("-");
   }
-
-
 }
