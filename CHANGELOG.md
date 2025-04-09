@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.6] - 2025-04-10
+
+### Fixed
+- Resolved security warnings related to dev dependencies (transitive vulnerabilities) through dependency updates and overrides.
+- Hotfix: Corrected an edge case in title casing where certain acronyms and smart quotes were not being transformed as expected.
+- Resolved an issue causing inconsistent capitalization in specific phrases.
+- Fixed minor bugs related to whitespace handling and punctuation in output.
+
 ## [1.7.5] - 2025-04-10
 
 ### Added
@@ -20,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corrected several test cases that mismatched titles vs. expected output
 - Addressed parentheses/bracket errors causing TypeError in some smart quotes tests
 - Resolved minor inconsistencies in brand-name replacements within the test suite
+
+*Note: This hotfix release addresses critical issues found after the 1.7.4 release without introducing breaking changes.*
 
 ## [1.7.4] - 2025-04-09
 
