@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.7.6] - 2025-04-10
+## [1.7.5] - 2025-04-10
 
 ### Added
 - New `caseStyle` property in `titleCaseDefaultOptionsList` to clearly distinguish sentence case vs. headline case
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Addressed parentheses/bracket errors causing TypeError in some smart quotes tests
 - Resolved minor inconsistencies in brand-name replacements within the test suite
 
-## [1.7.4-5] - 2025-04-09
+## [1.7.4] - 2025-04-09
 
 ### Changed
 - Unified logic across all styles for more consistent title casing
