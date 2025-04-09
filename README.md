@@ -463,98 +463,95 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
 ## Tests
 
 ```bash  
-Testing Combined Words that End with Symbol
-✓ Capitalizes country code "US" correctly in a geopolitical context (4 ms)
-
-Testing Disambiguation of Acronym vs. Pronoun for Alpha2/3 Country Codes ("US", "UK", "EU", etc.)
-Includes edge cases, regional context detection, and AP-style title casing rules.
-
-✓ Capitalizes "US" when preceded by "the" (1 ms)
-✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
-✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
-✓ Capitalizes "US" when preceded by "from the" (1 ms)
-✓ Capitalizes "US" when preceded by "via"
-✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
-✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
-✓ 1. Does not capitalize "us" when used as a pronoun
-✓ 2. Does not capitalize "us" when used as a pronoun (1 ms)
-✓ 3. Does not capitalize "us" when used as a pronoun
-✓ Capitalizes country code "UK" with preceding indicator and trailing comma (1 ms)
-✓ Handles multiple instances of country codes and pronouns
-✓ Does not capitalize "us" when used in common phrases (2 ms)
-✓ Capitalizes "USA" in a formal context
-✓ Capitalizes "US" before a government-related word (1 ms)
-✓ Capitalizes "US" before a military-related word
-✓ Capitalizes "US" correctly in a geopolitical context
-✓ Capitalizes "US" correctly in a geopolitical context (1 ms)
-✓ Capitalizes "US" as a regional acronym at the end of the sentence
-✓ Does not capitalize "us" in casual speech
-✓ Does not capitalize "us" in emotional context (1 ms)
-✓ Does not capitalize "us" in passive voice
-✓ Does not capitalize "us" with compound verb
-✓ Does not capitalize "us" in inverted clause
-✓ 1. Does not capitalize "us" when used as a pronoun (1 ms)
-✓ 2. Does not capitalize "us" when used as a pronoun
-✓ Does not capitalize "us" before a government-related word (1 ms)
-✓ Does not capitalize "us" before a military-related word
-✓ Does not capitalize "us" in common phrases (1 ms)
-✓ Capitalizes "UK" at the end with safe context
-✓ Capitalizes "UK" with preceding indicator and trailing comma (1 ms)
-✓ Capitalizes "UK" with preceding indicator before a government-related word
-✓ Capitalizes "UK" with preceding indicator before a territory-related word (1 ms)
-✓ Handles multiple instances of country codes and pronouns
-✓ Handles multiple instances of country codes and pronouns before government-related words (1 ms)
-✓ Handles multiple instances of country codes and pronouns before talks-related words (1 ms)
-✓ Handles multiple instances of country codes and pronouns before a bill-related word
-✓ Capitalizes "USA" in a formal context (1 ms)
-✓ Capitalizes "USA" in a formal context before a bill-related word
-✓ AP-style acronym handling (1 ms)
-✓ Test phrases "On & Off"
-✓ Test phrases "On & Off"
-Testing Hyphenated and Apostrophized Word Capitalization
-✓ Capitalizes both parts of hyphenated brand name "t-mobile" (1 ms)
-✓ Capitalizes both parts of hyphenated brand name "coca-cola"
-✓ Capitalizes both parts of general hyphenated term "e-commerce"
-✓ Capitalizes word with apostrophe "o'connor"
-Test Basic Title Casing Options
-✓ Converts basic lowercase phrase to title case (1 ms)
-✓ Handles excessive spacing and lowercase articles
-✓ AP-style with proper name replacements and brand casing (1 ms)
-✓ Preserves correct casing in hyphenated names
-✓ Properly capitalizes prepositions beyond 3 letters (1 ms)
-Test TitleCaser Class Methods
-✓ Wikipedia style title casing (1 ms)
-✓ setReplaceTerms applies bulk term replacements
-✓ addExactPhraseReplacements overrides specific phrases
-✓ removeReplaceTerm deletes a single replacement rule (1 ms)
-Test Variation Stability
-✓ Capitalization and word replacements
-✓ Brand Capitalization with reserved casing
-✓ Possessives and colon usage (1 ms)
-✓ Hyphenated compound tech terms
-✓ Acronym handling and colon (1 ms)
-✓ Colon and comparison phrase
-✓ Hyphenated tutorial format (1 ms)
-✓ Custom replacements and tech brands
-✓ Smart quotes enabled (1 ms)
-✓ Long informal sentence with acronyms
-✓ Colon-separated title in APA style
-✓ Colon and apostrophe casing
-✓ Short conjunctions and brand normalization (1 ms)
-✓ NYT-style acronym and colon usage (1 ms)
-✓ Wikipedia style with DevOps capitalization (1 ms)
-✓ Wikipedia style capitalization with colon
-Test Reserved Words
-✓ Transforms single reserved word correctly (1 ms)
-✓ Transforms sentence with reserved word and colon
-✓ Handles possessive form of reserved word
-✓ Handles specific brand name replacements (1 ms)
-✓ Handles HTML <br> with colon (spaced)
-✓ Handles HTML <br> with full sentence split (1 ms)
-✓ Handles <br> with no space after colon
-✓ Handles ampersand (&) symbol without encoding
-✓ Handles untrimmed white spaces
-Test addReplaceTerm Method
-✓ Adds a new replacement term correctly
-✓ Updates an existing replacement term
+TitleCaser – Combined Words Ending with Symbol
+  ✓ should preserve punctuation in "Championing Self-Acceptance: Landmark Initiative" (4 ms)
+TitleCaser – Disambiguation of Acronym vs. Pronoun (AP Style)
+  ✓ should capitalize "US" when preceded by "the" (1 ms)
+  ✓ should capitalize "US" in geopolitical context (with comma) (1 ms)
+  ✓ should capitalize "US" and "UK" together
+  ✓ should capitalize "US" after "from the" (1 ms)
+  ✓ should capitalize "US" after "via" (1 ms)
+  ✓ should capitalize "US" before "Military"
+  ✓ should capitalize "US" in geopolitical context (repeated case) (1 ms)
+  ✓ should capitalize pronoun "us" (case #1) (1 ms)
+  ✓ should capitalize pronoun "us" (case #2)
+  ✓ should capitalize pronoun "us" (case #3) (1 ms)
+  ✓ should capitalize "UK" in geopolitical context (with comma)
+  ✓ should handle multiple country codes in same sentence (1 ms)
+  ✓ should capitalize pronoun "us" in a parenthetical phrase (1 ms)
+  ✓ should capitalize "USA" in formal context
+  ✓ should capitalize "US" before "government" (AP style) (1 ms)
+  ✓ should capitalize "US" before "military" (AP style)
+  ✓ should capitalize "US" in geopolitical context (policy mention)
+  ✓ should capitalize "US" before "Military" (repeat case) (1 ms)
+  ✓ should capitalize "US" at the end of a sentence
+  ✓ should capitalize pronoun "us" in casual speech
+  ✓ should capitalize pronoun "us" in emotional context (1 ms)
+  ✓ should capitalize pronoun "us" in passive voice
+  ✓ should capitalize pronoun "us" with a compound verb
+  ✓ should capitalize pronoun "us" in an inverted clause (1 ms)
+  ✓ should capitalize pronoun "us" (repeat case #1)
+  ✓ should capitalize pronoun "us" (repeat case #2) (1 ms)
+  ✓ should capitalize pronoun "us" before "US Military"
+  ✓ should capitalize pronoun "us" before "military" (1 ms)
+  ✓ should capitalize pronoun "us" in a comma-separated clause
+  ✓ should capitalize "UK" at end of sentence (1 ms)
+  ✓ should capitalize "UK" in geopolitical context (repeat with comma)
+  ✓ should capitalize "UK" before government mention (1 ms)
+  ✓ should capitalize "UK" before territory mention
+  ✓ should handle multiple country codes and pronouns in one sentence (2 ms)
+  ✓ should handle multiple codes and pronouns with mention of military
+  ✓ should handle multiple codes and pronouns with mention of talks (1 ms)
+  ✓ should handle multiple codes and pronouns with mention of a bill (1 ms)
+  ✓ should capitalize "USA" in formal context (repeat case)
+  ✓ should capitalize "USA" before a bill mention (1 ms)
+  ✓ should handle AP-style acronym "U.S." in uppercase context
+  ✓ should handle "On & Off" phrases #1 (1 ms)
+  ✓ should handle "On & Off" phrases #2
+TitleCaser – Hyphenated & Apostrophized Words
+  ✓ should capitalize both parts of "t-mobile"
+  ✓ should capitalize "coca-cola"
+  ✓ should capitalize general hyphenated term "e-commerce" (1 ms)
+  ✓ should capitalize apostrophe word "o'connor"
+TitleCaser – Basic Title Casing Options (Default Style)
+  ✓ should convert a basic lowercase phrase to title case
+  ✓ should handle excessive spacing and lowercase articles
+  ✓ should handle brand casing with AP-style logic (1 ms)
+  ✓ should preserve correct casing in hyphenated names like "louis-iv"
+  ✓ should properly capitalize prepositions beyond 3 letters (1 ms)
+TitleCaser – Class Methods (setReplaceTerms, addExactPhraseReplacements, etc.)
+  ✓ should apply Wikipedia style to an entire sentence (1 ms)
+  ✓ should apply multiple term replacements via setReplaceTerms()
+  ✓ should apply exact phrase replacements (1 ms)
+  ✓ should remove a single replacement rule via removeReplaceTerm()
+TitleCaser – Variation Stability Tests (AP, Chicago, APA, NYT, Wikipedia)
+  ✓ should correctly handle brand names with "ap" style
+  ✓ should handle brand name "NERDs Candy" with AP style
+  ✓ should handle possessives and colons (AP style)
+  ✓ should handle hyphenated "BACK-end" with AP style
+  ✓ should handle acronym with colon (AP style) (1 ms)
+  ✓ should handle colon + comparison phrase (Chicago)
+  ✓ should capitalize hyphenated terms (Chicago) (1 ms)
+  ✓ should apply custom replacements for brand names (Chicago) (1 ms)
+  ✓ Smart quotes enabled
+  ✓ should keep acronyms in uppercase (Chicago)
+  ✓ should capitalize after colon (APA) (1 ms)
+  ✓ should handle colon and apostrophes (APA)
+  ✓ should handle short conjunctions and brand normalization (APA) (1 ms)
+  ✓ should handle acronym + colon usage (NYT) (1 ms)
+  ✓ should preserve sentence case for Wikipedia style (DevOps example) (1 ms)
+  ✓ should handle Wikipedia style with colon usage (1 ms)
+TitleCaser – Reserved Words & Special Handling
+  ✓ should transform a single reserved word correctly
+  ✓ should transform sentence with reserved word + colon
+  ✓ should handle possessive form of reserved word
+  ✓ should apply brand replacements (e.g., "mcdonalds" → "McDonald's") (1 ms)
+  ✓ should handle HTML <br> with colon (spaced)
+  ✓ should handle HTML <br> with full sentence split (1 ms)
+  ✓ should handle <br> with no space after colon
+  ✓ should handle ampersand "&" symbol (1 ms)
+  ✓ should handle excessive whitespace
+TitleCaser – addReplaceTerm Method
+  ✓ should add a new replacement term
+  ✓ should update an existing replacement term
 ```

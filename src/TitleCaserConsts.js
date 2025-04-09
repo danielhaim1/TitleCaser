@@ -101,74 +101,140 @@ export const titleCaseStylesList = Object.freeze({
 });
 
 export const allowedTitleCaseStylesList = Object.values(titleCaseStylesList);
+
 export const titleCaseDefaultOptionsList = Object.freeze({
   ap: {
     caseStyle: "title",
-    // Short Conjunctions (<=3 letters, + "nor")
+    // AP: Capitalize all words 4+ letters and all verbs/adverbs
     shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
     articlesList: ["a", "an", "the"],
-    // Short Preps (<=3 letters)
-    // Common AP short prepositions: "at", "by", "in", "of", "off", "on", "out", "per", "to", "up", "via"
     shortPrepositionsList: [
-      "as", "at", "by", "in", "of", "off", "on", "out",
-      "per", "to", "up", "via"
+      // Pure prepositions (2–3 letters) safe to lowercase in AP
+      "at",   // e.g., "Dinner at Eight"
+      "by",   // e.g., "Written by the Author"
+      "for",  // e.g., "A Gift for You"
+      "in",   // e.g., "Made in America"
+      "of",   // e.g., "State of Mind"
+      "off",  // e.g., "10% Off Everything"
+      "on",   // e.g., "The War on Drugs"
+      "out",  // e.g., "Out of Context"
+      "per",  // e.g., "As per Usual"
+      "to",   // e.g., "Back to the Future"
+      "via"   // e.g., "Sent via Email"
     ],
     neverCapitalizedList: [],
   },
+
   apa: {
     caseStyle: "title",
-    // (In APA 7th, words of 4+ letters are "major words" and capitalized;
-    //  short words (3 letters or fewer) are "minor words." This excludes
-    //  longer preps like “about,” “across,” “through,” “within,” etc.)
+    // APA: Minor words are ≤3 letters, regardless of function
     shortConjunctionsList: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
-      "as", "at", "by", "for", "in", "of", "off",
-      "on", "per", "to", "up", "via"
+      // Strictly ≤3-letter prepositions per APA 7th edition
+      "as",   // Subordinating conj. but included per APA convention
+      "at",
+      "by",
+      "for",
+      "in",
+      "of",
+      "off",
+      "on",
+      "per",
+      "to",
+      "via"
     ],
     neverCapitalizedList: [],
   },
+
   british: {
     caseStyle: "title",
+    // British English typically follows Chicago or APA rules
     shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
-      "as", "at", "by", "in", "of", "off",
-      "on", "out", "per", "to", "up", "via"
+      // Safe lowercasing set, similar to APA
+      "at",
+      "by",
+      "for",
+      "in",
+      "of",
+      "off",
+      "on",
+      "out",
+      "per",
+      "to",
+      "via"
     ],
     neverCapitalizedList: [],
   },
+
   chicago: {
     caseStyle: "title",
-    // Typically mirrors AP for short words, but can differ
+    // Chicago: Similar to AP, but may capitalize some longer preps
     shortConjunctionsList: ["and", "but", "or", "for", "nor", "yet", "so"],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: ["as", "at", "by", "in", "into", "of", "off", "on", "onto", "out", "over", "to", "up", "via", "with", "from", "under", "upon"],
+    shortPrepositionsList: [
+      // Filtered to exclude questionable entries like "up", "under", etc.
+      "at",
+      "by",
+      "for",
+      "in",
+      "of",
+      "off",
+      "on",
+      "out",
+      "per",
+      "to",
+      "via"
+    ],
     neverCapitalizedList: ["etc."],
   },
+
   nyt: {
     caseStyle: "title",
-    // Often same as Chicago/AP
+    // NYT style aligns closely with Chicago/AP
     shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
-      "as", "at", "by", "in", "of", "off",
-      "on", "out", "per", "to", "up", "via"
+      "at",
+      "by",
+      "for",
+      "in",
+      "of",
+      "off",
+      "on",
+      "out",
+      "per",
+      "to",
+      "via"
     ],
     neverCapitalizedList: [],
   },
+
   wikipedia: {
     caseStyle: "sentence",
-    // Typically not used in sentence case logic, but included for completeness
+    // Sentence case: first word + acronyms only, preps list for completeness
     shortConjunctionsList: ["and", "as", "but", "for", "nor", "or", "so", "yet"],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
-      "as", "at", "by", "in", "of", "off",
-      "on", "out", "per", "to", "up", "via"
+      // No impact unless sentence case logic is bypassed
+      "at",
+      "by",
+      "for",
+      "in",
+      "of",
+      "off",
+      "on",
+      "out",
+      "per",
+      "to",
+      "via"
     ],
     neverCapitalizedList: [],
-  },
+  }
 });
+
 
 // * ! ===============================================
 // * ! Ignored Words
