@@ -462,65 +462,99 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
 
 ## Tests
 
-```bash
-Testing Acronym/Pronoun of Alpha2/3 Country Codes
+```bash  
+Testing Combined Words that End with Symbol
 ✓ Capitalizes country code "US" correctly in a geopolitical context (4 ms)
-✓ Does not capitalize "us" when used as a pronoun (2 ms)
-✓ Capitalizes country code "UK" with preceding indicator and trailing comma (2 ms)
-✓ Handles multiple instances of country codes and pronouns (2 ms)
+
+Testing Disambiguation of Acronym vs. Pronoun for Alpha2/3 Country Codes ("US", "UK", "EU", etc.)
+Includes edge cases, regional context detection, and AP-style title casing rules.
+
+✓ Capitalizes "US" when preceded by "the" (1 ms)
+✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
+✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
+✓ Capitalizes "US" when preceded by "from the" (1 ms)
+✓ Capitalizes "US" when preceded by "via"
+✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
+✓ Capitalizes country code "US" correctly in a geopolitical context (1 ms)
+✓ 1. Does not capitalize "us" when used as a pronoun
+✓ 2. Does not capitalize "us" when used as a pronoun (1 ms)
+✓ 3. Does not capitalize "us" when used as a pronoun
+✓ Capitalizes country code "UK" with preceding indicator and trailing comma (1 ms)
+✓ Handles multiple instances of country codes and pronouns
 ✓ Does not capitalize "us" when used in common phrases (2 ms)
-✓ Capitalizes "USA" in a formal context (1 ms)
+✓ Capitalizes "USA" in a formal context
 ✓ Capitalizes "US" before a government-related word (1 ms)
+✓ Capitalizes "US" before a military-related word
+✓ Capitalizes "US" correctly in a geopolitical context
+✓ Capitalizes "US" correctly in a geopolitical context (1 ms)
+✓ Capitalizes "US" as a regional acronym at the end of the sentence
+✓ Does not capitalize "us" in casual speech
+✓ Does not capitalize "us" in emotional context (1 ms)
+✓ Does not capitalize "us" in passive voice
+✓ Does not capitalize "us" with compound verb
+✓ Does not capitalize "us" in inverted clause
+✓ 1. Does not capitalize "us" when used as a pronoun (1 ms)
+✓ 2. Does not capitalize "us" when used as a pronoun
 ✓ Does not capitalize "us" before a government-related word (1 ms)
-✓ Capitalizes "UK" with preceding indicator before a government-related word (2 ms)
+✓ Does not capitalize "us" before a military-related word
+✓ Does not capitalize "us" in common phrases (1 ms)
+✓ Capitalizes "UK" at the end with safe context
+✓ Capitalizes "UK" with preceding indicator and trailing comma (1 ms)
+✓ Capitalizes "UK" with preceding indicator before a government-related word
+✓ Capitalizes "UK" with preceding indicator before a territory-related word (1 ms)
+✓ Handles multiple instances of country codes and pronouns
 ✓ Handles multiple instances of country codes and pronouns before government-related words (1 ms)
-✓ Capitalizes "US" before a military-related word (1 ms)
-✓ Does not capitalize "us" before a military-related word (1 ms)
-✓ Capitalizes "UK" with preceding indicator before a territory-related word (2 ms)
-✓ Handles multiple instances of country codes and pronouns before talks-related words (3 ms)
-✓ Does not capitalize "us" before a talks-related word (1 ms)
-✓ Capitalizes "USA" in a formal context before a bill-related word (1 ms)
-✓ Handles multiple instances of country codes and pronouns before a bill-related word (2 ms)
-
-Test Basic Options
-✓ Default title case conversion
-✓ Customized title case conversion (1 ms)
-✓ AP-style title case conversion with replacements (3 ms)
-✓ Testing Word Replacement (Kellogs -> Kellogg\'s)
-✓ AP-style title case conversion with replacements (1 ms)
-✓ Capitalize suffix word in sentence (1 ms)
-
-Test Methods
-✓ removeReplaceTerm (1 ms)
-✓ setReplaceTerms (1 ms)
-
+✓ Handles multiple instances of country codes and pronouns before talks-related words (1 ms)
+✓ Handles multiple instances of country codes and pronouns before a bill-related word
+✓ Capitalizes "USA" in a formal context (1 ms)
+✓ Capitalizes "USA" in a formal context before a bill-related word
+✓ AP-style acronym handling (1 ms)
+✓ Test phrases "On & Off"
+✓ Test phrases "On & Off"
+Testing Hyphenated and Apostrophized Word Capitalization
+✓ Capitalizes both parts of hyphenated brand name "t-mobile" (1 ms)
+✓ Capitalizes both parts of hyphenated brand name "coca-cola"
+✓ Capitalizes both parts of general hyphenated term "e-commerce"
+✓ Capitalizes word with apostrophe "o'connor"
+Test Basic Title Casing Options
+✓ Converts basic lowercase phrase to title case (1 ms)
+✓ Handles excessive spacing and lowercase articles
+✓ AP-style with proper name replacements and brand casing (1 ms)
+✓ Preserves correct casing in hyphenated names
+✓ Properly capitalizes prepositions beyond 3 letters (1 ms)
+Test TitleCaser Class Methods
+✓ Wikipedia style title casing (1 ms)
+✓ setReplaceTerms applies bulk term replacements
+✓ addExactPhraseReplacements overrides specific phrases
+✓ removeReplaceTerm deletes a single replacement rule (1 ms)
 Test Variation Stability
 ✓ Capitalization and word replacements
-✓ AP-style title case with possessive and colon (1 ms)
-✓ AP-style title case with lowercase back/front-end terms
-✓ Chicago style title case with comparison and colon (1 ms)
-✓ APA style title case with colon (2 ms)
-✓ Wikipedia style title case with acronym and hyphen (1 ms)
-✓ Hyphenated, colon, and short word replacements (2 ms)
-✓ I Love Connecting with My Online Friends, but Sometimes I Prefer to Hang Out with My Friends IRL (2 ms)
-✓ Test Smart Quotes (1 ms)
-✓ Wikipedia style capitalization test with special term and colon (1 ms)
-✓ APA style title case with colon and apostrophe (2 ms)
-✓ Chicago style title case with custom term replacements
-✓ AP-style capitalization test with special terms and colon (1 ms)
-✓ NYT-style capitalization test with special terms and colon (1 ms)
-✓ APA style capitalization test with short conjunction terms and colon (2 ms)
-✓ Correct phrase casing list testing (1 ms)
-
+✓ Brand Capitalization with reserved casing
+✓ Possessives and colon usage (1 ms)
+✓ Hyphenated compound tech terms
+✓ Acronym handling and colon (1 ms)
+✓ Colon and comparison phrase
+✓ Hyphenated tutorial format (1 ms)
+✓ Custom replacements and tech brands
+✓ Smart quotes enabled (1 ms)
+✓ Long informal sentence with acronyms
+✓ Colon-separated title in APA style
+✓ Colon and apostrophe casing
+✓ Short conjunctions and brand normalization (1 ms)
+✓ NYT-style acronym and colon usage (1 ms)
+✓ Wikipedia style with DevOps capitalization (1 ms)
+✓ Wikipedia style capitalization with colon
 Test Reserved Words
-✓ Title case transformation for a single reserved word
-✓ Title case transformation for a sentence with a reserved word and colon (1 ms)
-✓ Title case transformation for a reserved word with a possessive form (1 ms)
-✓ Title case transformation for specific brand names
-✓ Title case transformation for a sentence with HTML line break (nl2br) using <br> tag (1 ms)
-✓ Title case transformation for a sentence with untrimmed white spaces
-✓ Title case transformation for a sentence with HTML line break (nl2br) using <br> tag (1 ms)
-✓ Title case transformation for a sentence with HTML line break (nl2br) without space after colon using <br> tag (1 ms)
-✓ Ampersand in a sentence should return & and not &Amp; (1 ms)
-✓ Untrimmed white spaces
+✓ Transforms single reserved word correctly (1 ms)
+✓ Transforms sentence with reserved word and colon
+✓ Handles possessive form of reserved word
+✓ Handles specific brand name replacements (1 ms)
+✓ Handles HTML <br> with colon (spaced)
+✓ Handles HTML <br> with full sentence split (1 ms)
+✓ Handles <br> with no space after colon
+✓ Handles ampersand (&) symbol without encoding
+✓ Handles untrimmed white spaces
+Test addReplaceTerm Method
+✓ Adds a new replacement term correctly
+✓ Updates an existing replacement term
 ```
