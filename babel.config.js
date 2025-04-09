@@ -1,18 +1,17 @@
 module.exports = {
-  presets: [ 
-    [ '@babel/preset-env', { 
-      targets: { node: 'current' }, 
-      modules: false
-    } ] 
-  ],
-  ignore: [ 'node_modules' ],
-  include: [
-    './src/**/**.js',
-    './index.js',
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: { node: 'current' },
+        modules: 'commonjs'
+      }
+    ]
   ],
   plugins: [
-    '@babel/plugin-proposal-object-rest-spread',
-    '@babel/plugin-proposal-class-properties'
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-object-rest-spread'
   ],
-  sourceMaps: false,
+  ignore: ['node_modules'],
+  sourceMaps: false
 };
