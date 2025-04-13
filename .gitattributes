@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+__tests__/ linguist-vendored
+docs/ linguist-vendored
