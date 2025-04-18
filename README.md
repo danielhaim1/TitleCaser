@@ -39,7 +39,7 @@ TitleCaser is a comprehensive solution for converting text to title case accordi
 
 ## Language Conventions and Style Library
 
-**The comprehensive Language Conventions and Style Library (LCSL)** is specifically designed to assist web content developers in adhering to the latest style guides and English language conventions. This all-inclusive library has various features, including support for numerous style guides such as **AP, APA, Chicago, NY Times, Wikipedia, and British styles** and customizable preferences to tailor to individual needs. **TitleCaser is a component of this library**, and LCSL is set to be open-sourced by the end of 2023.
+**The comprehensive Language Conventions and Style Library (LCSL)** is specifically designed to assist web content developers in adhering to the latest style guides and English language conventions. This all-inclusive library has various features, including support for numerous style guides such as **AP, APA, Chicago, NY Times, Wikipedia, and British styles** and customizable preferences to tailor to individual needs. **TitleCaser is a component of this library**, and LCSL is set to be open-sourced by the end of 2025.
 
 ### Streamlined Workflow
 To streamline workflow, modules are available in both **browser and node environment versions** and include a command-line interface for building, testing, and minimizing the module. Additionally, it features a **filter ability** that allows users to ignore certain phrases containing short words, preventing the module from mistakenly flagging instances where short words are used as part of a larger term or phrase.
