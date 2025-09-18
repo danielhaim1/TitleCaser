@@ -14,6 +14,8 @@ declare module '@danielhaim/titlecaser' {
     removeReplaceTerm(term: string): void;
     addExactPhraseReplacements(phrases: Array<{ [key: string]: string }>): void;
   }
+
+  export default TitleCaser;
 }
 
 declare global {
