@@ -35,10 +35,10 @@
     "url": "https://github.com/danielhaim1"
   },
   "main": "./index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/titlecaser.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
+      "import": "./dist/titlecaser.esm.js",
       "require": "./index.js"
     }
   },

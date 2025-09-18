@@ -88,4 +88,41 @@ module.exports = [ {
 		}, ]
 	},
 	externals: [ nodeExternals () ]
-}, ];
+}, 
+{
+  mode: "production",
+  target: "web",
+  entry: "./index.js",
+  output: {
+    filename: "titlecaser.esm.js",
+    path: path.resolve(__dirname, "dist"),
+    library: {
+      type: "module",
+    },
+  },
+  experiments: {
+    outputModule: true,
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin(terserOptions)],
+  },
+  plugins: [
+    new webpack.BannerPlugin({ banner, raw: true })
+  ],
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: "babel-loader",
+        options: {
+          presets: [["@babel/preset-env", { targets: { esmodules: true }, modules: false }]]
+        }
+      }
+    }]
+  }
+}
+
+
+];
