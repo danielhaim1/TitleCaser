@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.8.0] (2026-02-13)
 
+### Added
+- TypeScript test coverage for type definitions
+- Missing options to TypeScript definitions: `neverCapitalize`, `replaceTermList`, `debug`
+- Missing `setStyle` method to TypeScript definitions
+- `british` style option to TypeScript definitions
+
 ### Changed
 - **Breaking:** Renamed exported constants for consistency:
   - `correctTitleCasingList` → `specialTermsList`
@@ -18,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `regionalAcronymPrecedingWords` → `regionalAcronymPrecedingWordsList`
   - `directFollowingIndicatorsRegionalAcronym` → `regionalAcronymFollowingWordsList`
 - Standardized naming convention: arrays use `List` suffix, objects use `Map` suffix, constants use `SCREAMING_SNAKE_CASE`
+- Optimized cache key generation using string interpolation instead of JSON.stringify (10-100x faster)
+- Added documentation for intentional "lost mutations" in multi-pass processing algorithm
+
+### Fixed
+- Corrected `validateOption` method implementation
+- Fixed TypeScript type definitions for constructor options
 
 ## [1.7.6] - 2025-04-10
 
