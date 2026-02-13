@@ -62,11 +62,10 @@ export class TitleCaserUtils {
   static titleCaseOptionsCache = new Map();
 
   static getTitleCaseOptions(options = {}, lowercaseWords = []) {
-    // Create a unique key for the cache that combines the options and the lowercase words
-    const cacheKey = JSON.stringify({
-      options,
-      lowercaseWords,
-    });
+    // Create a unique key for the cache using a faster approach than JSON.stringify
+    const style = options.style || "ap";
+    const smartQuotes = options.hasOwnProperty("smartQuotes") ? options.smartQuotes : false;
+    const cacheKey = `${style}|${smartQuotes}|${lowercaseWords.length > 0 ? lowercaseWords.sort().join(',') : ''}`;
 
     // If the cache already has an entry for this key, return the cached options
     if (TitleCaserUtils.titleCaseOptionsCache.has(cacheKey)) {
@@ -80,19 +79,23 @@ export class TitleCaserUtils {
     };
 
     // Merge the default articles with user-provided articles and lowercase words
-    const mergedArticles = mergedOptions.articlesList
-      .concat(lowercaseWords)
-      .filter((word, index, array) => array.indexOf(word) === index);
+    // Using Set for O(n) deduplication instead of O(n²) filter+indexOf
+    const mergedArticles = [...new Set([
+      ...mergedOptions.articlesList,
+      ...lowercaseWords
+    ])];
 
     // Merge the default short conjunctions with user-provided conjunctions and lowercase words
-    const mergedShortConjunctions = mergedOptions.shortConjunctionsList
-      .concat(lowercaseWords)
-      .filter((word, index, array) => array.indexOf(word) === index);
+    const mergedShortConjunctions = [...new Set([
+      ...mergedOptions.shortConjunctionsList,
+      ...lowercaseWords
+    ])];
 
     // Merge the default short prepositions with user-provided prepositions and lowercase words
-    const mergedShortPrepositions = mergedOptions.shortPrepositionsList
-      .concat(lowercaseWords)
-      .filter((word, index, array) => array.indexOf(word) === index);
+    const mergedShortPrepositions = [...new Set([
+      ...mergedOptions.shortPrepositionsList,
+      ...lowercaseWords
+    ])];
 
     // Merge the default word replacements with the user-provided replacements
     const mergedReplaceTerms = [
