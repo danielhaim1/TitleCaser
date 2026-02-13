@@ -69,6 +69,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/runtime-corejs3": "^7.28.4",
     "@jest/expect": "^29.7.0",
+    "@types/jest": "30.0.0",
     "babel-jest": "29.7.0",
     "babel-loader": "^10.0.0",
     "exports-loader": "^5.0.0",
@@ -79,6 +80,7 @@
     "puppeteer": "^24.22.0",
     "puppeteer-core": "^24.22.0",
     "terser-webpack-plugin": "^5.3.14",
+    "ts-jest": "29.4.6",
     "webpack": "^5.101.3",
     "webpack-cli": "6.0.1",
     "webpack-node-externals": "^3.0.0"
