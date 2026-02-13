@@ -1,9 +1,10 @@
 import {
-  commonShortWords,
-  correctTitleCasingList,
-  correctPhraseCasingList,
+  shortWordsList,
+  specialTermsList,
+  phraseReplacementMap,
   wordReplacementsList,
-  titleCaseDefaultOptionsList,
+  styleConfigMap,
+  REGEX_PATTERNS,
 } from "./TitleCaserConsts.js";
 
 import { TitleCaserUtils } from "./TitleCaserUtils.js";
@@ -13,7 +14,7 @@ export class TitleCaser {
     this.options = options;
     this.debug = options.debug || false;
     this.wordReplacementsList = wordReplacementsList;
-    this.correctPhraseCasingList = correctPhraseCasingList;
+    this.phraseReplacementMap = phraseReplacementMap;
   }
 
   logWarning(message) {
@@ -30,6 +31,9 @@ export class TitleCaser {
       // ! If input is not a string, throw an error.
       if (typeof str !== "string") throw new TypeError("Invalid input: input must be a string.");
 
+      // ! Input sanitization: limit length to prevent performance issues
+      if (str.length > 100000) throw new TypeError("Invalid input: input exceeds maximum length of 100,000 characters.");
+
       // ! If options is not an object, throw an error.
       if (typeof this.options !== "undefined" && typeof this.options !== "object")
         throw new TypeError("Invalid options: options must be an object.");
@@ -41,7 +45,7 @@ export class TitleCaser {
         smartQuotes = false, // Set to false by default
       } = this.options;
 
-      const styleConfig = titleCaseDefaultOptionsList[style] || {};
+      const styleConfig = styleConfigMap[style] || {};
 
       const ignoreList = ["nl2br", ...neverCapitalize];
       const {
@@ -51,7 +55,7 @@ export class TitleCaser {
         neverCapitalizedList,
         replaceTerms,
         smartQuotes: mergedSmartQuotes,
-      } = TitleCaserUtils.getTitleCaseOptions(this.options, commonShortWords, wordReplacementsList);
+      } = TitleCaserUtils.getTitleCaseOptions(this.options, shortWordsList, wordReplacementsList);
 
       // Preprocess the replaceTerms array to make it easier to search for.
       const replaceTermsArray = replaceTermList.map((term) => Object.keys(term)[0].toLowerCase());
@@ -63,24 +67,14 @@ export class TitleCaser {
       this.logWarning(`replaceTermsArray: ${replaceTermsArray}`);
       this.logWarning(`this.wordReplacementsList: ${this.wordReplacementsList}`);
 
-      const map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        // '\u2018': '\u2019', // Smart single quote
-        // '\u201C': '\u201D', // Smart double quote
-        '"': "&quot;",
-        "'": "&#039;",
-      };
-
       // Remove extra spaces and replace <br> tags with a placeholder.
       let inputString = str.trim();
 
       // Replace <br> and <br /> tags with a placeholder.
-      inputString = inputString.replace(/<\s*br\s*\/?\s*>/gi, " nl2br ");
+      inputString = inputString.replace(REGEX_PATTERNS.HTML_BREAK, " nl2br ");
 
-      // Remove extra spaces and replace <br> tags with a placeholder.
-      inputString = inputString.replace(/ {2,}/g, ' ');
+      // Remove extra spaces
+      inputString = inputString.replace(REGEX_PATTERNS.MULTIPLE_SPACES, ' ');
 
       // Check if the entire input string is uppercase and normalize it to lowercase
       // before processing if it is. This ensures consistent handling for all-caps text.
@@ -107,9 +101,9 @@ export class TitleCaser {
           case replaceTermsArray.includes(word.toLowerCase()):
             // ! If the word is in the replaceTerms array, return the replacement.
             return replaceTermObj[word.toLowerCase()];
-          case TitleCaserUtils.isWordInArray(word, correctTitleCasingList):
-            // ! If the word is in the correctTitleCasingList array, return the correct casing.
-            return TitleCaserUtils.correctTerm(word, correctTitleCasingList);
+          case TitleCaserUtils.isWordInArray(word, specialTermsList):
+            // ! If the word is in the specialTermsList array, return the correct casing.
+            return TitleCaserUtils.correctTerm(word, specialTermsList);
           case TitleCaserUtils.isElidedWord(word):
             // ! If the word is an elided word, return the correct casing.
             return TitleCaserUtils.normalizeElidedWord(word);
@@ -136,7 +130,7 @@ export class TitleCaser {
             return processedWord.endsWith(trailingPunctuation) ? processedWord : processedWord + trailingPunctuation;
           case TitleCaserUtils.hasSuffix(word, style):
             // ! If the word has a suffix, return the correct casing.
-            return TitleCaserUtils.correctSuffix(word, correctTitleCasingList);
+            return TitleCaserUtils.correctSuffix(word, specialTermsList);
           case TitleCaserUtils.hasUppercaseIntentional(word):
             // ! If the word has an intentional uppercase letter, return the correct casing.
             return word;
@@ -152,7 +146,7 @@ export class TitleCaser {
           case TitleCaserUtils.endsWithSymbol(word):
             this.logWarning(`Check if the word ends with a symbol: ${word}`);
             // ! If the word ends with a symbol, return the correct casing.
-            const splitWord = word.split(/([.,\/#!$%\^&\*;:{}=\-_`~()?])/g);
+            const splitWord = word.split(REGEX_PATTERNS.SPLIT_AT_PUNCTUATION);
             this.logWarning(`Splitting word at symbols, result: ${splitWord}`);
             // Process each part for correct casing
             const processedWords = splitWord.map((part) => {
@@ -164,9 +158,9 @@ export class TitleCaser {
               } else {
                 this.logWarning(`Part is a word: ${part}`);
                 // ! If it's a word, process it for correct casing
-                if (TitleCaserUtils.isWordInArray(part, correctTitleCasingList)) {
-                  const correctedTerm = TitleCaserUtils.correctTerm(part, correctTitleCasingList);
-                  this.logWarning(`Word is in correctTitleCasingList, corrected term: ${correctedTerm}`);
+                if (TitleCaserUtils.isWordInArray(part, specialTermsList)) {
+                  const correctedTerm = TitleCaserUtils.correctTerm(part, specialTermsList);
+                  this.logWarning(`Word is in specialTermsList, corrected term: ${correctedTerm}`);
                   return correctedTerm;
                 } else if (replaceTermsArray.includes(part)) {
                   const replacement = replaceTermObj[part];
@@ -184,7 +178,7 @@ export class TitleCaser {
             return processedWords.join("");
           case TitleCaserUtils.startsWithSymbol(word):
             // ! If the word starts with a symbol, return the correct casing.
-            return !TitleCaserUtils.isWordInArray(word, correctTitleCasingList)
+            return !TitleCaserUtils.isWordInArray(word, specialTermsList)
               ? word
               : TitleCaserUtils.correctTerm(word);
           case TitleCaserUtils.hasRomanNumeral(word):
@@ -211,23 +205,22 @@ export class TitleCaser {
         inputString = TitleCaserUtils.convertQuotesToCurly(inputString);
       }
 
-      const newWords = inputString.split(" ");
-      let firstWord = newWords[0];
-      let secondWord = newWords[1] || null;
-      // let lastWord = newWords[newWords.length - 1];
+      const wordsForAcronyms = inputString.split(" ");
+      let firstWord = wordsForAcronyms[0];
+      let secondWord = wordsForAcronyms[1] || null;
       
-      for (let i = 0; i < newWords.length; i++) {
-        const prevWord = i > 0 ? newWords[i - 1] : null;
-        let currentWord = newWords[i];
-        const nextWord = i < newWords.length - 1 ? newWords[i + 1] : null;
+      for (let i = 0; i < wordsForAcronyms.length; i++) {
+        const prevWord = i > 0 ? wordsForAcronyms[i - 1] : null;
+        let currentWord = wordsForAcronyms[i];
+        const nextWord = i < wordsForAcronyms.length - 1 ? wordsForAcronyms[i + 1] : null;
 
         // Capture punctuation at the end of the word
-        const punctuationMatch = currentWord.match(/[.,!?;:]+$/);
+        const punctuationMatch = currentWord.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
         let punctuation = "";
 
         if (punctuationMatch) {
           punctuation = punctuationMatch[0];
-          currentWord = currentWord.replace(/[.,!?;:]+$/, ""); // Remove punctuation at the end
+          currentWord = currentWord.replace(REGEX_PATTERNS.TRAILING_PUNCTUATION, ""); // Remove punctuation at the end
         }
 
         if (TitleCaserUtils.isRegionalAcronym(currentWord)) {
@@ -242,15 +235,20 @@ export class TitleCaser {
         if (punctuation !== "") {
           currentWord = currentWord + punctuation;
         }
+        
+        // NOTE: Deliberately NOT writing back to wordsForAcronyms[i] here.
+        // This first pass does naive acronym detection that creates false positives
+        // (e.g., pronoun "us" detected as country "US"). Later loops use more  
+        // sophisticated context-aware logic to correctly identify regional acronyms.
       }
 
-      inputString = newWords.join(" ");
+      inputString = wordsForAcronyms.join(" ");
 
-      const newSplit = inputString.split(" ");
-      for (let i = 1; i < newSplit.length - 1; i++) {
-        const currentWord = newSplit[i];
-        const prevWord = newSplit[i - 1];
-        const nextWord = newSplit[i + 1];
+      const wordsForShortWords = inputString.split(" ");
+      for (let i = 1; i < wordsForShortWords.length - 1; i++) {
+        const currentWord = wordsForShortWords[i];
+        const prevWord = wordsForShortWords[i - 1];
+        const nextWord = wordsForShortWords[i + 1];
 
         if (
           currentWord === currentWord.toUpperCase() ||
@@ -259,65 +257,51 @@ export class TitleCaser {
           continue;
         }
 
-        if (TitleCaserUtils.isWordInArray(currentWord, commonShortWords)) {
-          newSplit[i] =
+        if (TitleCaserUtils.isWordInArray(currentWord, shortWordsList)) {
+          wordsForShortWords[i] =
             currentWord.length <= 3
               ? currentWord.toLowerCase()
               : currentWord;
         }
       }
 
-      inputString = newSplit.join(" ");
+      inputString = wordsForShortWords.join(" ");
 
-      const newSplit2 = inputString.split(" ");
-      for (let i = 0; i < newSplit2.length; i++) {
-        let currentWord = newSplit2[i];
-        let nextWord = newSplit2[i + 1];
-        let prevWord = newSplit2[i - 1];
+      const wordsForFinalPass = inputString.split(" ");
+      for (let i = 0; i < wordsForFinalPass.length; i++) {
+        let currentWord = wordsForFinalPass[i];
+        let nextWord = wordsForFinalPass[i + 1];
+        let prevWord = wordsForFinalPass[i - 1];
         if (nextWord && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
-          newSplit2[i] = currentWord.toUpperCase();
+          wordsForFinalPass[i] = currentWord.toUpperCase();
         }
       }
 
-
-
-      let finalWord = newSplit2[newSplit2.length - 1];
-      let wordBeforeFinal = newSplit2[newSplit2.length - 2];
-      let twoWordsBeforeFinal = newSplit2[newSplit2.length - 3];
+      let finalWord = wordsForFinalPass[wordsForFinalPass.length - 1];
+      let wordBeforeFinal = wordsForFinalPass[wordsForFinalPass.length - 2];
+      let twoWordsBeforeFinal = wordsForFinalPass[wordsForFinalPass.length - 3];
       
       if (TitleCaserUtils.isRegionalAcronym(firstWord)) {
         this.logWarning(`firstWord is a regional acronym: ${firstWord}`);
-        newSplit2[0] = firstWord.toUpperCase();
+        wordsForFinalPass[0] = firstWord.toUpperCase();
       }
 
       if (TitleCaserUtils.isRegionalAcronymNoDot(firstWord, secondWord)) {
-        newSplit2[0] = firstWord.toUpperCase();
+        wordsForFinalPass[0] = firstWord.toUpperCase();
       }
 
       if (TitleCaserUtils.isFinalWordRegionalAcronym(finalWord, wordBeforeFinal, twoWordsBeforeFinal)) {
-        newSplit2[newSplit2.length - 1] = finalWord.toUpperCase();
+        wordsForFinalPass[wordsForFinalPass.length - 1] = finalWord.toUpperCase();
       }
 
-      inputString = newSplit2.join(" ");
+      inputString = wordsForFinalPass.join(" ");
 
-      for (const [phrase, replacement] of Object.entries(this.correctPhraseCasingList)) {
+      for (const [phrase, replacement] of Object.entries(this.phraseReplacementMap)) {
         // Create a regular expression for case-insensitive matching of the phrase
-        const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+        const regex = new RegExp(phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&"), "gi");
 
         // Replace the phrase in the input string with its corresponding replacement
         inputString = inputString.replace(regex, replacement);
-      }
-
-      function shouldKeepCasing(word) {
-        // If it's an acronym
-        if (TitleCaserUtils.isRegionalAcronym(word)) return true;
-        // If it has known “intentional uppercase” patterns
-        if (TitleCaserUtils.hasUppercaseIntentional(word)) return true;
-        // If it’s in the brand/correctTitleCasingList
-        if (TitleCaserUtils.isWordInArray(word, correctTitleCasingList)) return true;
-      
-        // Otherwise, no. It's safe to lowercase.
-        return false;
       }
       
       // ! Handle sentence case
@@ -331,17 +315,17 @@ export class TitleCaser {
           // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
           if (!firstWordFound && /[A-Za-z]/.test(word)) {
             // If you want to skip altering brand or acronym, do one more check:
-            if (!shouldKeepCasing(word)) {
+            if (!TitleCaser.shouldKeepCasing(word, specialTermsList)) {
               // "Normal" first word
               words[i] = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }
-            // Otherwise, it’s a brand/acronym, so leave it
+            // Otherwise, it's a brand/acronym, so leave it
             firstWordFound = true;
             continue;
           }
       
           // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase
-          if (!shouldKeepCasing(word)) {
+          if (!TitleCaser.shouldKeepCasing(word, specialTermsList)) {
             words[i] = word.toLowerCase();
           }
           // else, we keep it exactly as is
@@ -438,7 +422,7 @@ export class TitleCaser {
         const key = Object.keys(item)[0];
         const value = item[key];
         if (typeof key === "string" && typeof value === "string") {
-          this.correctPhraseCasingList[key] = value;
+          this.phraseReplacementMap[key] = value;
         } else {
           throw new TypeError("Invalid argument: Each key-value pair must contain strings.");
         }
@@ -447,7 +431,7 @@ export class TitleCaser {
       else if (typeof item === "object" && !Array.isArray(item)) {
         Object.entries(item).forEach(([key, value]) => {
           if (typeof key === "string" && typeof value === "string") {
-            this.correctPhraseCasingList[key] = value;
+            this.phraseReplacementMap[key] = value;
           } else {
             throw new TypeError("Invalid argument: Each key-value pair must contain strings.");
           }
@@ -459,7 +443,7 @@ export class TitleCaser {
       }
     });
 
-    this.logWarning(`Log the this.correctPhraseCasingList: ${this.correctPhraseCasingList}`);
+    this.logWarning(`Log the this.phraseReplacementMap: ${this.phraseReplacementMap}`);
   }
 
   setStyle(style) {
@@ -468,5 +452,23 @@ export class TitleCaser {
     }
 
     this.options.style = style;
+  }
+
+  /**
+   * Determines if a word should keep its existing casing
+   * @param {string} word - The word to check
+   * @param {Array<string>} specialTermsList - List of terms to preserve
+   * @returns {boolean} True if word should keep its casing
+   */
+  static shouldKeepCasing(word, specialTermsList) {
+    // If it's an acronym
+    if (TitleCaserUtils.isRegionalAcronym(word)) return true;
+    // If it has known "intentional uppercase" patterns
+    if (TitleCaserUtils.hasUppercaseIntentional(word)) return true;
+    // If it's in the brand/specialTermsList
+    if (TitleCaserUtils.isWordInArray(word, specialTermsList)) return true;
+  
+    // Otherwise, no. It's safe to lowercase.
+    return false;
   }
 }

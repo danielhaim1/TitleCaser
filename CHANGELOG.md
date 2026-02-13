@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] (2026-02-13)
+
+### Changed
+- **Breaking:** Renamed exported constants for consistency:
+  - `correctTitleCasingList` → `specialTermsList`
+  - `commonShortWords` → `shortWordsList`
+  - `titleCaseStylesList` → `TITLE_CASE_STYLES`
+  - `allowedTitleCaseStylesList` → `allowedStylesList`
+  - `titleCaseDefaultOptionsList` → `styleConfigMap`
+  - `correctPhraseCasingList` → `phraseReplacementMap`
+  - `regionalAcronymPrecedingWords` → `regionalAcronymPrecedingWordsList`
+  - `directFollowingIndicatorsRegionalAcronym` → `regionalAcronymFollowingWordsList`
+- Standardized naming convention: arrays use `List` suffix, objects use `Map` suffix, constants use `SCREAMING_SNAKE_CASE`
+
 ## [1.7.6] - 2025-04-10
 
 ### Fixed

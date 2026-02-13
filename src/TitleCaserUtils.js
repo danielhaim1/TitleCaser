@@ -1,13 +1,13 @@
 import {
-  allowedTitleCaseStylesList,
-  titleCaseDefaultOptionsList,
+  allowedStylesList,
+  styleConfigMap,
   wordReplacementsList,
-  correctTitleCasingList,
+  specialTermsList,
   ignoredWordList,
-  commonShortWords,
+  shortWordsList,
   regionalAcronymList,
-  regionalAcronymPrecedingWords,
-  directFollowingIndicatorsRegionalAcronym
+  regionalAcronymPrecedingWordsList,
+  regionalAcronymFollowingWordsList
 } from "./TitleCaserConsts.js";
 
 export class TitleCaserUtils {
@@ -32,7 +32,7 @@ export class TitleCaserUtils {
       if (key === "style") {
         if (typeof options.style !== "string") {
           throw new TypeError(`Invalid option: ${key} must be a string`);
-        } else if (!allowedTitleCaseStylesList.includes(options.style)) {
+        } else if (!allowedStylesList.includes(options.style)) {
           throw new TypeError(`Invalid option: ${key} must be a string`);
         }
         continue;
@@ -51,7 +51,7 @@ export class TitleCaserUtils {
         continue;
       }
 
-      if (!titleCaseDefaultOptionsList.hasOwnProperty(key)) {
+      if (!styleConfigMap.hasOwnProperty(key)) {
         throw new TypeError(`Invalid option: ${key}`);
       }
 
@@ -73,7 +73,7 @@ export class TitleCaserUtils {
     }
 
     const mergedOptions = {
-      ...titleCaseDefaultOptionsList[options.style || "ap"],
+      ...styleConfigMap[options.style || "ap"],
       ...options,
       smartQuotes: options.hasOwnProperty("smartQuotes") ? options.smartQuotes : false,
     };
@@ -189,8 +189,8 @@ export class TitleCaserUtils {
     }
 
     // If the style is not one of the allowed styles, throw an Error.
-    if (!allowedTitleCaseStylesList.includes(style)) {
-      throw new Error(`Invalid option: style must be one of ${allowedTitleCaseStylesList.join(", ")}.`);
+    if (!allowedStylesList.includes(style)) {
+      throw new Error(`Invalid option: style must be one of ${allowedStylesList.join(", ")}.`);
     }
 
     // If the word is a short conjunction, article, preposition, or is in the never-capitalized list, return true.
@@ -279,7 +279,7 @@ export class TitleCaserUtils {
 
     return (
       regionalAcronymList.includes(firstWordStripped) &&
-      directFollowingIndicatorsRegionalAcronym.includes(nextWordStripped)
+      regionalAcronymFollowingWordsList.includes(nextWordStripped)
     );
   }
 
@@ -295,10 +295,10 @@ export class TitleCaserUtils {
     if (!regionalAcronymList.includes(current)) return false;
 
     // Direct 100% safe word before the acronym
-    if (regionalAcronymPrecedingWords.includes(prev)) return true;
+    if (regionalAcronymPrecedingWordsList.includes(prev)) return true;
 
     // Extended pattern: e.g., "from the US"
-    if (prev === "the" && prevPrev && regionalAcronymPrecedingWords.includes(prevPrev)) {
+    if (prev === "the" && prevPrev && regionalAcronymPrecedingWordsList.includes(prevPrev)) {
       return true;
     }
 
@@ -318,7 +318,7 @@ export class TitleCaserUtils {
   }
 
   static normalizeCasingForWordByStyle(word, style) {
-    if (!word || !style || !titleCaseDefaultOptionsList[style]) return false;
+    if (!word || !style || !styleConfigMap[style]) return false;
 
     const lowerWord = word.toLowerCase();
     const {
@@ -326,7 +326,7 @@ export class TitleCaserUtils {
       articlesList,
       shortPrepositionsList,
       neverCapitalizedList
-    } = titleCaseDefaultOptionsList[style];
+    } = styleConfigMap[style];
 
     const combinedList = [
       ...shortConjunctionsList,
@@ -780,16 +780,16 @@ export class TitleCaserUtils {
 
       // Check if the word is in the list of words to preserve
       const lowerCaseWord = word.toLowerCase();
-      const uniqueTermsIndex = correctTitleCasingList.findIndex((w) => w.toLowerCase() === lowerCaseWord);
+      const uniqueTermsIndex = specialTermsList.findIndex((w) => w.toLowerCase() === lowerCaseWord);
       if (uniqueTermsIndex >= 0) {
-        correctedWord = correctTitleCasingList[uniqueTermsIndex];
+        correctedWord = specialTermsList[uniqueTermsIndex];
       }
       // Check if the word is a possessive form
       else if (lowerCaseWord.endsWith("'s")) {
         const rootWord = lowerCaseWord.substring(0, lowerCaseWord.length - 2);
-        const rootWordIndex = correctTitleCasingList.findIndex((w) => w.toLowerCase() === rootWord);
+        const rootWordIndex = specialTermsList.findIndex((w) => w.toLowerCase() === rootWord);
         if (rootWordIndex >= 0) {
-          correctedWord = `${correctTitleCasingList[rootWordIndex]}'s`;
+          correctedWord = `${specialTermsList[rootWordIndex]}'s`;
         }
       }
 

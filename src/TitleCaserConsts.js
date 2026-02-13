@@ -42,9 +42,9 @@ const mergedArray = mergeArrays(
   militaryTerms,
 );
 
-export const correctTitleCasingList = mergedArray;
+export const specialTermsList = mergedArray;
 
-export const commonShortWords = [
+export const shortWordsList = [
   "the",
   "in",
   "to",
@@ -91,7 +91,7 @@ export const wordReplacementsList = [
 // * ! Title Case Styles
 // * ! ===============================================
 
-export const titleCaseStylesList = Object.freeze({
+export const TITLE_CASE_STYLES = Object.freeze({
   AP: "ap",
   APA: "apa",
   BRITISH: "british",
@@ -100,9 +100,9 @@ export const titleCaseStylesList = Object.freeze({
   WIKIPEDIA: "wikipedia",
 });
 
-export const allowedTitleCaseStylesList = Object.values(titleCaseStylesList);
+export const allowedStylesList = Object.values(TITLE_CASE_STYLES);
 
-export const titleCaseDefaultOptionsList = Object.freeze({
+export const styleConfigMap = Object.freeze({
   ap: {
     caseStyle: "title",
     // AP: Capitalize all words 4+ letters and all verbs/adverbs
@@ -246,12 +246,29 @@ export const ignoredWordList = [];
 // * ! Correct Phrase Casing
 // * ! ===============================================
 
-export const correctPhraseCasingList = {
+export const phraseReplacementMap = {
   'the cybersmile foundation': 'The Cybersmile Foundation',
   'co. by colgate': 'CO. by Colgate',
   "on & off": "On & Off",
   "on and off": "On and Off",
 };
+
+// * ! ===============================================
+// * ! Regex Patterns
+// * ! ===============================================
+
+export const REGEX_PATTERNS = Object.freeze({
+  // Punctuation at end of word
+  TRAILING_PUNCTUATION: /[.,!?;:]+$/,
+  // Split word at punctuation while preserving delimiters
+  SPLIT_AT_PUNCTUATION: /([.,\/#!$%\^&\*;:{}=\-_`~()?])/g,
+  // Match HTML break tags
+  HTML_BREAK: /<\s*br\s*\/?\s*>/gi,
+  // Multiple consecutive spaces
+  MULTIPLE_SPACES: / {2,}/g,
+  // Regex escape special characters
+  REGEX_ESCAPE: /[.*+?^${}()|[\]\\]/g,
+});
 
 // * ! ===============================================
 // * ! Acronym Replacements
@@ -272,12 +289,12 @@ export const regionalAcronymList = [
   "u.k",
 ];
 
-export const regionalAcronymPrecedingWords = [
+export const regionalAcronymPrecedingWordsList = [
   "the", "via", "among", "across", "beyond", "outside",
   "alongside", "throughout", "despite", "unlike", "upon"
 ];
 
-export const directFollowingIndicatorsRegionalAcronym = [
+export const regionalAcronymFollowingWordsList = [
   "act", "acts",
   "administration", "administrations",
   "agency", "agencies",
