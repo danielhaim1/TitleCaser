@@ -53,7 +53,7 @@ export class TitleCaser {
         smartQuotes: mergedSmartQuotes,
       } = TitleCaserUtils.getTitleCaseOptions(this.options, commonShortWords, wordReplacementsList);
 
-      // Prerocess the replaceTerms array to make it easier to search for.
+      // Preprocess the replaceTerms array to make it easier to search for.
       const replaceTermsArray = replaceTermList.map((term) => Object.keys(term)[0].toLowerCase());
       // Create an object from the replaceTerms array to make it easier to search for.
       const replaceTermObj = Object.fromEntries(
@@ -80,7 +80,7 @@ export class TitleCaser {
       inputString = inputString.replace(/<\s*br\s*\/?\s*>/gi, " nl2br ");
 
       // Remove extra spaces and replace <br> tags with a placeholder.
-      inputString = inputString.replace(/ {2,}/g, (match) => match.slice(0, 1));
+      inputString = inputString.replace(/ {2,}/g, ' ');
 
       // Check if the entire input string is uppercase and normalize it to lowercase
       // before processing if it is. This ensures consistent handling for all-caps text.
@@ -214,8 +214,8 @@ export class TitleCaser {
       const newWords = inputString.split(" ");
       let firstWord = newWords[0];
       let secondWord = newWords[1] || null;
-      let lastWord = newWords[newWords.length - 1];
-
+      // let lastWord = newWords[newWords.length - 1];
+      
       for (let i = 0; i < newWords.length; i++) {
         const prevWord = i > 0 ? newWords[i - 1] : null;
         let currentWord = newWords[i];
@@ -274,7 +274,7 @@ export class TitleCaser {
         let currentWord = newSplit2[i];
         let nextWord = newSplit2[i + 1];
         let prevWord = newSplit2[i - 1];
-        if (nextWord !== null && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
+        if (nextWord && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
           newSplit2[i] = currentWord.toUpperCase();
         }
       }
@@ -286,7 +286,7 @@ export class TitleCaser {
       let twoWordsBeforeFinal = newSplit2[newSplit2.length - 3];
       
       if (TitleCaserUtils.isRegionalAcronym(firstWord)) {
-        console.log("firstWord is a regional acronym, proof: ", firstWord);
+        this.logWarning(`firstWord is a regional acronym: ${firstWord}`);
         newSplit2[0] = firstWord.toUpperCase();
       }
 
@@ -353,7 +353,12 @@ export class TitleCaser {
       return inputString;
 
     } catch (error) {
-      throw new Error(error);
+      // Preserve original error information
+      if (error instanceof Error) {
+        throw error;
+      } else {
+        throw new Error(String(error));
+      }
     }
   }
 

@@ -55,7 +55,7 @@ export class TitleCaserUtils {
         throw new TypeError(`Invalid option: ${key}`);
       }
 
-      this.TitleCaseValidator.validateOption(key, options[key]);
+      TitleCaserUtils.validateOption(key, options[key]);
     }
   }
 
