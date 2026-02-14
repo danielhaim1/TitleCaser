@@ -721,6 +721,17 @@ export class TitleCaserUtils {
     // Split the word into an array of words
     const hyphenatedWords = word.split("-");
 
+    // Handle geopolitical adjective forms like "us-backed", "uk-led"
+    if (hyphenatedWords.length === 2) {
+      const [first, second] = hyphenatedWords;
+
+      const firstNormalized = first.toLowerCase().replace(/[^\w]/g, "");
+
+      if (regionalAcronymList.includes(firstNormalized)) {
+        return `${first.toUpperCase()}-${second.charAt(0).toUpperCase()}${second.slice(1).toLowerCase()}`;
+      }
+    }
+
     // Define functions to process words
     const capitalizeFirst = (word) => word.charAt(0).toUpperCase() + word.slice(1);
     const lowercaseRest = (word) => word.charAt(0) + word.slice(1).toLowerCase();

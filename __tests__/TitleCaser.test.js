@@ -67,6 +67,12 @@ describe('TitleCaser – Disambiguation of Acronym vs. Pronoun (AP Style)', () =
         'Partnering with the us Military',
         'Partnering With the US Military'
     );
+    // us-backed case
+    runTest(
+        'should capitalize "US" in "US-backed" phrase',
+        'The us-backed initiative aims to promote sustainability.',
+        'The US-Backed Initiative Aims to Promote Sustainability.'
+    );
     runTest(
         'should capitalize "US" in geopolitical context (repeated case)',
         'The us, despite its size, has a significant impact.',
