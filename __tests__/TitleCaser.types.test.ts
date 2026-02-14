@@ -9,13 +9,11 @@ describe('TitleCaser TypeScript Definitions', () => {
         style: 'ap',
         smartQuotes: true,
         neverCapitalize: ['iOS', 'macOS', 'jQuery'],
-        replaceTermList: [
+        wordReplacementsList: [
           { 'js': 'JavaScript' },
           { 'css': 'CSS' }
         ],
-        debug: true,
-        ignoreWords: ['test', 'demo'],
-        acronyms: ['API', 'URL', 'HTML']
+        debug: true
       };
 
       const titleCaser = new TitleCaser(options);
@@ -37,9 +35,9 @@ describe('TitleCaser TypeScript Definitions', () => {
       expect(result).toContain('macOS');
     });
 
-    test('should work with replaceTermList option', () => {
+    test('should work with wordReplacementsList option', () => {
       const titleCaser = new TitleCaser({
-        replaceTermList: [
+        wordReplacementsList: [
           { 'js': 'JavaScript' },
           { 'css': 'CSS' }
         ]
@@ -125,11 +123,9 @@ describe('TitleCaser TypeScript Definitions', () => {
     test('should properly type array options', () => {
       const options: TitleCaserOptions = {
         neverCapitalize: ['string', 'array'],
-        ignoreWords: ['ignore', 'these'],
-        acronyms: ['API', 'URL'],
-        replaceTermList: [{ key: 'value' }]
+        wordReplacementsList: [{ 'key': 'value' }]
       };
-      
+
       const titleCaser = new TitleCaser(options);
       expect(titleCaser).toBeInstanceOf(TitleCaser);
     });

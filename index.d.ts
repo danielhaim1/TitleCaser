@@ -2,10 +2,8 @@ export interface TitleCaserOptions {
   style?: 'ap' | 'apa' | 'chicago' | 'wikipedia' | 'nyt' | 'british';
   smartQuotes?: boolean;
   neverCapitalize?: string[];
-  replaceTermList?: Array<{ [key: string]: string }>;
+  wordReplacementsList?: Array<{ [key: string]: string }>;
   debug?: boolean;
-  ignoreWords?: string[];
-  acronyms?: string[];
 }
 
 export class TitleCaser {

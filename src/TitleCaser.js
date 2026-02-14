@@ -41,7 +41,7 @@ export class TitleCaser {
       const {
         style = "ap",
         neverCapitalize = [],
-        replaceTermList = this.wordReplacementsList,
+        wordReplacementsList = this.wordReplacementsList,
         smartQuotes = false, // Set to false by default
       } = this.options;
 
@@ -58,10 +58,10 @@ export class TitleCaser {
       } = TitleCaserUtils.getTitleCaseOptions(this.options, shortWordsList, wordReplacementsList);
 
       // Preprocess the replaceTerms array to make it easier to search for.
-      const replaceTermsArray = replaceTermList.map((term) => Object.keys(term)[0].toLowerCase());
+      const replaceTermsArray = wordReplacementsList.map((term) => Object.keys(term)[0].toLowerCase());
       // Create an object from the replaceTerms array to make it easier to search for.
       const replaceTermObj = Object.fromEntries(
-        replaceTermList.map((term) => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]),
+        wordReplacementsList.map((term) => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]),
       );
 
       this.logWarning(`replaceTermsArray: ${replaceTermsArray}`);

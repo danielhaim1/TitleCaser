@@ -5,11 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### [1.7.13] (2026-02-14)
+- **Breaking (TypeScript only):** Standardized option naming from `replaceTermList` to `wordReplacementsList` across all files for consistency
+  - Updated `index.d.ts` TypeScript definitions
+  - Updated `TitleCaser.js` constructor parameter destructuring
+  - Updated all internal references in source code
+  - Updated TypeScript test files
+- Removed non-existent options from TypeScript definitions:
+  - Removed `ignoreWords` (use `neverCapitalize` instead)
+  - Removed `acronyms` (acronym handling is built-in and not user-configurable)
+- Fixed option format documentation in README to show correct object structure: `{ 'term': 'replacement' }`
+
+### Changed
+- All references to `replaceTermList` now consistently use `wordReplacementsList` throughout the codebase
+
 ## [1.7.12] (2026-02-13)
 
 ### Added
 - TypeScript test coverage for type definitions
-- Missing options to TypeScript definitions: `neverCapitalize`, `replaceTermList`, `debug`
+- Missing options to TypeScript definitions: `neverCapitalize`, `wordReplacementsList`, `debug`
 - Missing `setStyle` method to TypeScript definitions
 - `british` style option to TypeScript definitions
 
