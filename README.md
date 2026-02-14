@@ -8,6 +8,8 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://raw.githubusercontent.com/danielhaim1/TitleCaser/main/docs/assets/demo.png" width="100%" height="auto" alt="TitleCaser Demo"></a>
 
+---
+
 ## Links
 
 - [Demo](https://danielhaim1.github.io/TitleCaser/)
@@ -17,11 +19,15 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 - [Changelog](CHANGELOG.md)
 - [License](LICENSE)
 
+---
+
 ## Introduction
 
 TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including acronym disambiguation, hyphenated compounds, possessives, punctuation sensitivity, and curated domain-specific term normalization across finance, marketing, academia, military, and technology.
 
 Its multi-pass processing architecture ensures consistent output while supporting custom word overrides, exact phrase preservation, brand enforcement, and controlled vocabulary rules. Designed for both Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated content workflows where precision and repeatability are required.
+
+---
 
 ## Key Features
 
