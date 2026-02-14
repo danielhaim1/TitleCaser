@@ -7,7 +7,7 @@ import {
   shortWordsList,
   regionalAcronymList,
   regionalAcronymPrecedingWordsList,
-  regionalAcronymFollowingWordsList
+  regionalAcronymFollowingWordsList,
 } from "./TitleCaserConsts.js";
 
 export class TitleCaserUtils {
@@ -65,7 +65,7 @@ export class TitleCaserUtils {
     // Create a unique key for the cache using a faster approach than JSON.stringify
     const style = options.style || "ap";
     const smartQuotes = options.hasOwnProperty("smartQuotes") ? options.smartQuotes : false;
-    const cacheKey = `${style}|${smartQuotes}|${lowercaseWords.length > 0 ? lowercaseWords.sort().join(',') : ''}`;
+    const cacheKey = `${style}|${smartQuotes}|${lowercaseWords.length > 0 ? lowercaseWords.sort().join(",") : ""}`;
 
     // If the cache already has an entry for this key, return the cached options
     if (TitleCaserUtils.titleCaseOptionsCache.has(cacheKey)) {
@@ -80,22 +80,13 @@ export class TitleCaserUtils {
 
     // Merge the default articles with user-provided articles and lowercase words
     // Using Set for O(n) deduplication instead of O(n²) filter+indexOf
-    const mergedArticles = [...new Set([
-      ...mergedOptions.articlesList,
-      ...lowercaseWords
-    ])];
+    const mergedArticles = [...new Set([...mergedOptions.articlesList, ...lowercaseWords])];
 
     // Merge the default short conjunctions with user-provided conjunctions and lowercase words
-    const mergedShortConjunctions = [...new Set([
-      ...mergedOptions.shortConjunctionsList,
-      ...lowercaseWords
-    ])];
+    const mergedShortConjunctions = [...new Set([...mergedOptions.shortConjunctionsList, ...lowercaseWords])];
 
     // Merge the default short prepositions with user-provided prepositions and lowercase words
-    const mergedShortPrepositions = [...new Set([
-      ...mergedOptions.shortPrepositionsList,
-      ...lowercaseWords
-    ])];
+    const mergedShortPrepositions = [...new Set([...mergedOptions.shortPrepositionsList, ...lowercaseWords])];
 
     // Merge the default word replacements with the user-provided replacements
     const mergedReplaceTerms = [
@@ -240,9 +231,7 @@ export class TitleCaserUtils {
 
   // Check if the entire input string is uppercase
   static isEntirelyUppercase(str) {
-    return str === str.toUpperCase() &&
-      str !== str.toLowerCase() &&
-      str.length > 1;
+    return str === str.toUpperCase() && str !== str.toLowerCase() && str.length > 1;
   }
 
   static isRegionalAcronym(word) {
@@ -259,27 +248,25 @@ export class TitleCaserUtils {
   }
 
   static isRegionalAcronymNoDot(word, nextWord, prevWord = null) {
-    if (typeof word !== 'string' || typeof nextWord !== 'string') {
+    if (typeof word !== "string" || typeof nextWord !== "string") {
       return false;
     }
 
     const firstWordStripped = word.toLowerCase().replace(/[^\w\s]/g, "");
     const nextWordStripped = nextWord.toLowerCase().replace(/[^\w\s]/g, "");
 
-    const smallDirectPrecedingIndicators = [
-      "the",
-    ];
+    const smallDirectPrecedingIndicators = ["the"];
 
-    if (prevWord && 
+    if (
+      prevWord &&
       regionalAcronymList.includes(firstWordStripped) &&
-      smallDirectPrecedingIndicators.includes(prevWord.toLowerCase())) {
-      
-        return true;
+      smallDirectPrecedingIndicators.includes(prevWord.toLowerCase())
+    ) {
+      return true;
     }
 
     return (
-      regionalAcronymList.includes(firstWordStripped) &&
-      regionalAcronymFollowingWordsList.includes(nextWordStripped)
+      regionalAcronymList.includes(firstWordStripped) && regionalAcronymFollowingWordsList.includes(nextWordStripped)
     );
   }
 
@@ -288,9 +275,7 @@ export class TitleCaserUtils {
 
     const current = word.toLowerCase().replace(/[^\w]/g, "");
     const prev = prevWord.toLowerCase().replace(/[^\w]/g, "");
-    const prevPrev = typeof prevPrevWord === "string"
-      ? prevPrevWord.toLowerCase().replace(/[^\w]/g, "")
-      : null;
+    const prevPrev = typeof prevPrevWord === "string" ? prevPrevWord.toLowerCase().replace(/[^\w]/g, "") : null;
 
     if (!regionalAcronymList.includes(current)) return false;
 
@@ -321,19 +306,9 @@ export class TitleCaserUtils {
     if (!word || !style || !styleConfigMap[style]) return false;
 
     const lowerWord = word.toLowerCase();
-    const {
-      shortConjunctionsList,
-      articlesList,
-      shortPrepositionsList,
-      neverCapitalizedList
-    } = styleConfigMap[style];
+    const { shortConjunctionsList, articlesList, shortPrepositionsList, neverCapitalizedList } = styleConfigMap[style];
 
-    const combinedList = [
-      ...shortConjunctionsList,
-      ...articlesList,
-      ...shortPrepositionsList,
-      ...neverCapitalizedList
-    ];
+    const combinedList = [...shortConjunctionsList, ...articlesList, ...shortPrepositionsList, ...neverCapitalizedList];
 
     return combinedList.includes(lowerWord) ? word : false;
   }
@@ -585,9 +560,7 @@ export class TitleCaserUtils {
       throw new TypeError("Invalid input: word must be a non-empty string.");
     }
 
-    const knownElidedPrefixes = new Set([
-      "o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"
-    ]);
+    const knownElidedPrefixes = new Set(["o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"]);
 
     const normalized = word.trim().toLowerCase().replace(/'/g, "’");
 
@@ -606,9 +579,7 @@ export class TitleCaserUtils {
       throw new TypeError("Invalid input: word must be a non-empty string.");
     }
 
-    const knownElidedPrefixes = new Set([
-      "o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"
-    ]);
+    const knownElidedPrefixes = new Set(["o’", "fo’", "ne’er", "e’er", "’tis", "’twas", "’n’"]);
 
     const original = word.trim();
     const normalized = original.replace(/'/g, "’").toLowerCase();
@@ -619,9 +590,7 @@ export class TitleCaserUtils {
         const rest = original.slice(prefixLength);
 
         const fixedPrefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
-        const fixedRest = rest.length > 0
-          ? rest.charAt(0).toUpperCase() + rest.slice(1)
-          : "";
+        const fixedRest = rest.length > 0 ? rest.charAt(0).toUpperCase() + rest.slice(1) : "";
 
         return fixedPrefix + fixedRest;
       }
@@ -716,99 +685,88 @@ export class TitleCaserUtils {
     return parts.join(joiner);
   }
 
-  // This function is used to check if a word is in the correct terms list
-  static correctTermHyphenated(word, style) {
-    // Split the word into an array of words
-    const hyphenatedWords = word.split("-");
+// This function is used to check if a word is in the correct terms list
+static correctTermHyphenated(word, style) {
+  // Split the word into an array of words (supports -, –, —)
+  const dashMatch = word.match(/[-–—]/);
+  if (!dashMatch) return word;
 
-    // Handle geopolitical adjective forms like "us-backed", "uk-led"
-    if (hyphenatedWords.length === 2) {
-      const [first, second] = hyphenatedWords;
+  const dash = dashMatch[0];
+  const hyphenatedWords = word.split(/[-–—]/);
 
-      const firstNormalized = first.toLowerCase().replace(/[^\w]/g, "");
+  // Detect if ANY segment is a regional acronym
+  const containsRegionalAcronym = hyphenatedWords.some((segment) =>
+    regionalAcronymList.includes(
+      segment.toLowerCase().replace(/[^\w]/g, "")
+    )
+  );
 
-      if (regionalAcronymList.includes(firstNormalized)) {
-        return `${first.toUpperCase()}-${second.charAt(0).toUpperCase()}${second.slice(1).toLowerCase()}`;
+  // Define functions to process words
+  const capitalizeFirst = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+  const lowercaseRest = (w) => w.charAt(0) + w.slice(1).toLowerCase();
+
+  // Define the style-specific processing functions
+  const styleFunctions = {
+    ap: (w, index) => {
+      // If compound contains acronym → headline-style compound
+      if (containsRegionalAcronym) {
+        return capitalizeFirst(w);
       }
+      return index === 0 ? capitalizeFirst(w) : lowercaseRest(w);
+    },
+    chicago: capitalizeFirst,
+    apa: (w, index, length) => {
+      if (
+        !containsRegionalAcronym &&
+        TitleCaserUtils.isShortWord(w, style) &&
+        index > 0 &&
+        index < length - 1
+      ) {
+        return w.toLowerCase();
+      }
+      return capitalizeFirst(w);
+    },
+    nyt: capitalizeFirst,
+    wikipedia: (w, index) =>
+      index === 0 ? capitalizeFirst(w) : lowercaseRest(w),
+  };
+
+  const processWord = styleFunctions[style] || lowercaseRest;
+
+  const processedWords = hyphenatedWords.map((segment, i) => {
+    let correctedWord = segment;
+
+    const normalizedSegment = segment
+      .toLowerCase()
+      .replace(/[^\w]/g, "");
+
+    // Normalize acronym casing
+    if (regionalAcronymList.includes(normalizedSegment)) {
+      return segment.toUpperCase();
     }
 
-    // Define functions to process words
-    const capitalizeFirst = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-    const lowercaseRest = (word) => word.charAt(0) + word.slice(1).toLowerCase();
+    // Roman numeral logic
+    const romanNumeralRegex =
+      /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i;
 
-    // Define the style-specific processing functions
-    const styleFunctions = {
-      ap: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
-      chicago: capitalizeFirst,
-      apa: (word, index, length) => {
-        if (TitleCaserUtils.isShortWord(word, style) && index > 0 && index < length - 1) {
-          return word.toLowerCase();
-        } else {
-          return capitalizeFirst(word);
-        }
-      },
-      nyt: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
-      wikipedia: (word, index) => (index === 0 ? capitalizeFirst(word) : lowercaseRest(word)),
-    };
+    if (romanNumeralRegex.test(segment)) {
+      return segment.toUpperCase();
+    }
 
-    // Get the style-specific processing function
-    const processWord = styleFunctions[style] || lowercaseRest;
+    // Preserve special terms
+    const lowerCaseWord = segment.toLowerCase();
+    const uniqueTermsIndex = specialTermsList.findIndex(
+      (w) => w.toLowerCase() === lowerCaseWord
+    );
 
-    // Process each word
-    const processedWords = hyphenatedWords.map((word, i) => {
-      let correctedWord = word;
+    if (uniqueTermsIndex >= 0) {
+      correctedWord = specialTermsList[uniqueTermsIndex];
+    }
 
-      const romanNumeralApostropheSRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})'s$/i;
-      if (romanNumeralApostropheSRegex.test(word)) {
-        const updatedWord = correctedWord.toUpperCase().replace(/'S$/, "'s");
-        // Uppercase the Roman numeral part and concatenate back with 's
-        return updatedWord;
-      }
+    return processWord(correctedWord, i, hyphenatedWords.length);
+  });
 
-      // Check if the word is a Roman numeral
-      const romanNumeralRegex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/i;
-      if (romanNumeralRegex.test(word)) {
-        return word.toUpperCase();
-      }
+  return processedWords.join(dash);
+}
 
-      // Preserve the original word
-
-      // Check if the word contains an apostrophe
-      const hasApostrophe = word.includes("'");
-      if (hasApostrophe) {
-        // Split the word at the apostrophe
-        const wordParts = word.split("'");
-        // Check each part for Roman numerals
-        const isRomanNumeral = wordParts.every((part) => romanNumeralRegex.test(part));
-        if (isRomanNumeral) {
-          // Uppercase each Roman numeral part and join back with apostrophe
-          correctedWord = wordParts.map((part) => part.toUpperCase()).join("'");
-          return correctedWord;
-        } else {
-          return processWord(correctedWord, i, hyphenatedWords.length);
-        }
-      }
-
-      // Check if the word is in the list of words to preserve
-      const lowerCaseWord = word.toLowerCase();
-      const uniqueTermsIndex = specialTermsList.findIndex((w) => w.toLowerCase() === lowerCaseWord);
-      if (uniqueTermsIndex >= 0) {
-        correctedWord = specialTermsList[uniqueTermsIndex];
-      }
-      // Check if the word is a possessive form
-      else if (lowerCaseWord.endsWith("'s")) {
-        const rootWord = lowerCaseWord.substring(0, lowerCaseWord.length - 2);
-        const rootWordIndex = specialTermsList.findIndex((w) => w.toLowerCase() === rootWord);
-        if (rootWordIndex >= 0) {
-          correctedWord = `${specialTermsList[rootWordIndex]}'s`;
-        }
-      }
-
-      // Process the word
-      return processWord(correctedWord, i, hyphenatedWords.length);
-    });
-
-    // Rejoin the words
-    return processedWords.join("-");
-  }
 }
