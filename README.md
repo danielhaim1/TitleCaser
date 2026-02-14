@@ -8,8 +8,6 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://raw.githubusercontent.com/danielhaim1/TitleCaser/main/docs/assets/demo.png" width="100%" height="auto" alt="TitleCaser Demo"></a>
 
----
-
 ## Links
 
 - [Demo](https://danielhaim1.github.io/TitleCaser/)
@@ -17,16 +15,13 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 - [CodePen Demo 2](https://codepen.io/danielhaim/pen/oNPGzKw)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
-
----
+- [License](LICENSE)
 
 ## Introduction
 
 TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including acronym disambiguation, hyphenated compounds, possessives, punctuation sensitivity, and curated domain-specific term normalization across finance, marketing, academia, military, and technology.
 
 Its multi-pass processing architecture ensures consistent output while supporting custom word overrides, exact phrase preservation, brand enforcement, and controlled vocabulary rules. Designed for both Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated content workflows where precision and repeatability are required.
-
----
 
 ## Key Features
 
@@ -99,8 +94,6 @@ The AMD/browser build extends `String.prototype.toTitleCase()` for direct string
 - Browser (prototype extension via AMD build)
 - AMD distribution build
 - CLI build and test scripts
-
----
 
 ## Quick Start
 
@@ -190,8 +183,6 @@ function applyTitleCaseToH2Elements(options = { style: "apa" }) {
 applyTitleCaseToH2Elements();
 ```
 
----
-
 ## API Reference
 ### Constructor
 ```javascript
@@ -207,8 +198,6 @@ new TitleCaser(options)
 | `neverCapitalize`      | string[]   | `[]`    | Additional words that should remain lowercase (merged with style defaults) |
 | `wordReplacementsList` | object[]   | internal defaults | Array of `{ 'term': 'replacement' }` objects used for term normalization |
 | `debug`                | boolean    | `false` | Enables internal warning logs during processing |
-
----
 
 ### Methods
 
@@ -246,9 +235,7 @@ titleCaser.addExactPhraseReplacements([
 #### setStyle(style)
 ```javascript
 titleCaser.setStyle('chicago');
-``` 
-
----
+```
 
 ## Architecture
 TitleCaser is structured into three main components:
@@ -268,8 +255,6 @@ Curated structured term libraries power normalization:
 - Defense and geopolitical terminology
 - Technology and computing concepts
 - Academic and temporal terminology
-
----
 
 ## Build Process
 
