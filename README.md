@@ -95,6 +95,8 @@ The AMD/browser build extends `String.prototype.toTitleCase()` for direct string
 - AMD distribution build
 - CLI build and test scripts
 
+---
+
 ## Quick Start
 
 ```bash
@@ -110,6 +112,8 @@ titleCaser.toTitleCase('the quick brown fox'); // → "The Quick Brown Fox"
 titleCaser.toTitleCase('nodejs development on aws'); // → "Node.js Development on AWS"
 titleCaser.toTitleCase('let us know about the us military'); // → "Let Us Know About the US Military"
 ```
+
+---
 
 ## Core Usage
 
@@ -183,6 +187,8 @@ function applyTitleCaseToH2Elements(options = { style: "apa" }) {
 applyTitleCaseToH2Elements();
 ```
 
+---
+
 ## API Reference
 ### Constructor
 ```javascript
@@ -237,33 +243,7 @@ titleCaser.addExactPhraseReplacements([
 titleCaser.setStyle('chicago');
 ```
 
-## Architecture
-TitleCaser is structured into three main components:
-
-- `TitleCaser.js` — Public API
-- `TitleCaserConsts.js` — Style rules and data sets
-- `TitleCaserUtils.js` — Processing and normalization engine
-
-## Data Sets
-Curated structured term libraries power normalization:
-
-- Brand and trademarks
-- Business, finance, and legal terminology
-- E-commerce and digital terms
-- Global geography
-- Marketing and media terms
-- Defense and geopolitical terminology
-- Technology and computing concepts
-- Academic and temporal terminology
-
-## Build Process
-
-```bash
-npm run build-package
-npm run build-docs
-npm run copy-package-to-docs
-npm run test
-```
+---
 
 ## Test Coverage
 
@@ -276,6 +256,8 @@ npm run test
 - Acronym disambiguation edge cases
 - Hyphenation edge cases
 - Brand normalization
+
+---
 
 ## Resources
 
@@ -290,19 +272,27 @@ Useful materials for improving your knowledge of writing and language style guid
 - [Wikipedia: Letter case](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Capital_letters)
 - [Wikipedia:Manual of Style/Titles of works](https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Titles_of_works#Capital_letters)
 
+---
+
 ## Report Bugs
 
 If you encounter any bugs or issues while using the library or the demo page, please report them by opening a new issue in the repository's issue tracker. 
 
 When reporting a bug, please provide as much detail as possible, including the steps to reproduce the issue and any error messages that you see. I appreciate any contribution to improving this library.
 
+---
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
+---
+
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## Changelog
 
