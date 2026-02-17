@@ -25,11 +25,11 @@ export class TitleCaser {
 
   toTitleCase(str) {
     try {
-      // ! If input is empty, throw an error.
-      if (str.trim().length === 0) throw new TypeError("Invalid input: input must not be empty.");
-
       // ! If input is not a string, throw an error.
       if (typeof str !== "string") throw new TypeError("Invalid input: input must be a string.");
+
+      // ! If input is empty, throw an error.
+      if (str.length === 0) throw new TypeError("Invalid input: input must not be empty.");
 
       // ! Input sanitization: limit length to prevent performance issues
       if (str.length > 100000) throw new TypeError("Invalid input: input exceeds maximum length of 100,000 characters.");
@@ -43,6 +43,7 @@ export class TitleCaser {
         neverCapitalize = [],
         wordReplacementsList = this.wordReplacementsList,
         smartQuotes = false, // Set to false by default
+        normalizeWhitespace = true,
       } = this.options;
 
       const styleConfig = styleConfigMap[style] || {};
@@ -67,14 +68,11 @@ export class TitleCaser {
       this.logWarning(`replaceTermsArray: ${replaceTermsArray}`);
       this.logWarning(`this.wordReplacementsList: ${this.wordReplacementsList}`);
 
-      // Remove extra spaces and replace <br> tags with a placeholder.
-      let inputString = str.trim();
+      // Normalize HTML breaks and optionally normalize whitespace (see normalizeWhitespace option).
+      let inputString = str;
 
       // Replace <br> and <br /> tags with a placeholder.
       inputString = inputString.replace(REGEX_PATTERNS.HTML_BREAK, " nl2br ");
-
-      // Remove extra spaces
-      inputString = inputString.replace(REGEX_PATTERNS.MULTIPLE_SPACES, ' ');
 
       // Check if the entire input string is uppercase and normalize it to lowercase
       // before processing if it is. This ensures consistent handling for all-caps text.
@@ -84,10 +82,14 @@ export class TitleCaser {
         inputString = inputString.toLowerCase();
       }
 
-      // Split the string into an array of words.
-      const words = inputString.split(" ");
+      // Tokenize preserving whitespace
+      const tokens = inputString.split(/(\s+)/);
 
-      const wordsInTitleCase = words.map((word, i) => {
+      const wordsInTitleCase = tokens.map((token, i) => {
+        if (!token || /^\s+$/.test(token)) return token;
+
+        const word = token;
+
         switch (true) {
           case TitleCaserUtils.isWordAmpersand(word):
             // ! if the word is an ampersand, return it as is.
@@ -135,8 +137,18 @@ export class TitleCaser {
             // ! If the word has an intentional uppercase letter, return the correct casing.
             return word;
           case TitleCaserUtils.isShortWord(word, style) && i !== 0:
-            // ! If the word is a short word, return the correct casing.
-            const isAtEndOfSentence = i > 0 && TitleCaserUtils.endsWithSymbol(words[i - 1], [":", "?", "!", "."]);
+            // Find previous non-whitespace token
+            let prevToken = null;
+            for (let j = i - 1; j >= 0; j--) {
+              if (!/^\s+$/.test(tokens[j])) {
+                prevToken = tokens[j];
+                break;
+              }
+            }
+
+            const isAtEndOfSentence =
+              prevToken && TitleCaserUtils.endsWithSymbol(prevToken, [":", "?", "!", "."]);
+
             if (isAtEndOfSentence) {
               return word.charAt(0).toUpperCase() + word.slice(1);
             }
@@ -194,7 +206,7 @@ export class TitleCaser {
       });
 
       // Join the words in the array into a string.
-      inputString = wordsInTitleCase.join(" ");
+      inputString = wordsInTitleCase.join("");
 
       // Replace the nl2br placeholder with <br> tags.
       inputString = inputString.replace(/nl2br/gi, "<br>");
@@ -205,46 +217,61 @@ export class TitleCaser {
         inputString = TitleCaserUtils.convertQuotesToCurly(inputString);
       }
 
-      const wordsForAcronyms = inputString.split(" ");
-      let firstWord = wordsForAcronyms[0];
-      let secondWord = wordsForAcronyms[1] || null;
-      
-      for (let i = 0; i < wordsForAcronyms.length; i++) {
-        const prevWord = i > 0 ? wordsForAcronyms[i - 1] : null;
-        let currentWord = wordsForAcronyms[i];
-        const nextWord = i < wordsForAcronyms.length - 1 ? wordsForAcronyms[i + 1] : null;
+      const wordsForAcronyms = inputString.split(/(\s+)/);
 
-        // Capture punctuation at the end of the word
+      // Extract non-whitespace words for first/second detection
+
+      // Extract non-whitespace words for first/second detection
+      const nonWhitespaceWords = wordsForAcronyms.filter(t => !/^\s+$/.test(t));
+      let firstWord = nonWhitespaceWords[0] || null;
+      let secondWord = nonWhitespaceWords[1] || null;
+
+      for (let i = 0; i < wordsForAcronyms.length; i++) {
+
+        if (/^\s+$/.test(wordsForAcronyms[i])) continue;
+
+        // Find previous non-whitespace word
+        let prevWord = null;
+        for (let j = i - 1; j >= 0; j--) {
+          if (!/^\s+$/.test(wordsForAcronyms[j])) {
+            prevWord = wordsForAcronyms[j];
+            break;
+          }
+        }
+
+        // Find next non-whitespace word
+        let nextWord = null;
+        for (let j = i + 1; j < wordsForAcronyms.length; j++) {
+          if (!/^\s+$/.test(wordsForAcronyms[j])) {
+            nextWord = wordsForAcronyms[j];
+            break;
+          }
+        }
+
+        let currentWord = wordsForAcronyms[i];
+
         const punctuationMatch = currentWord.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
         let punctuation = "";
 
         if (punctuationMatch) {
           punctuation = punctuationMatch[0];
-          currentWord = currentWord.replace(REGEX_PATTERNS.TRAILING_PUNCTUATION, ""); // Remove punctuation at the end
+          currentWord = currentWord.replace(REGEX_PATTERNS.TRAILING_PUNCTUATION, "");
         }
 
-        if (TitleCaserUtils.isRegionalAcronym(currentWord)) {
+        if (TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
           currentWord = TitleCaserUtils.normalizeRegionalAcronym(currentWord);
         }
 
-        if (TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord)) {
-          currentWord = TitleCaserUtils.normalizeRegionalAcronym(currentWord);
-        }
-
-        // if punctuation is not empty, add it to the end of the word
         if (punctuation !== "") {
           currentWord = currentWord + punctuation;
         }
-        
-        // NOTE: Deliberately NOT writing back to wordsForAcronyms[i] here.
-        // This first pass does naive acronym detection that creates false positives
-        // (e.g., pronoun "us" detected as country "US"). Later loops use more  
-        // sophisticated context-aware logic to correctly identify regional acronyms.
+
+        wordsForAcronyms[i] = currentWord;
       }
 
-      inputString = wordsForAcronyms.join(" ");
+      inputString = wordsForAcronyms.join("");
 
-      const wordsForShortWords = inputString.split(" ");
+      const wordsForShortWords = inputString.split(/(\s+)/);
       for (let i = 1; i < wordsForShortWords.length - 1; i++) {
         const currentWord = wordsForShortWords[i];
         const prevWord = wordsForShortWords[i - 1];
@@ -265,36 +292,62 @@ export class TitleCaser {
         }
       }
 
-      inputString = wordsForShortWords.join(" ");
+      inputString = wordsForShortWords.join("");
 
-      const wordsForFinalPass = inputString.split(" ");
+      const wordsForFinalPass = inputString.split(/(\s+)/);
       for (let i = 0; i < wordsForFinalPass.length; i++) {
+
+        if (/^\s+$/.test(wordsForFinalPass[i])) continue;
+
         let currentWord = wordsForFinalPass[i];
-        let nextWord = wordsForFinalPass[i + 1];
-        let prevWord = wordsForFinalPass[i - 1];
+
+        // Find previous non-whitespace word
+        let prevWord = null;
+        for (let j = i - 1; j >= 0; j--) {
+          if (!/^\s+$/.test(wordsForFinalPass[j])) {
+            prevWord = wordsForFinalPass[j];
+            break;
+          }
+        }
+
+        // Find next non-whitespace word
+        let nextWord = null;
+        for (let j = i + 1; j < wordsForFinalPass.length; j++) {
+          if (!/^\s+$/.test(wordsForFinalPass[j])) {
+            nextWord = wordsForFinalPass[j];
+            break;
+          }
+        }
+
         if (nextWord && TitleCaserUtils.isRegionalAcronymNoDot(currentWord, nextWord, prevWord)) {
           wordsForFinalPass[i] = currentWord.toUpperCase();
         }
       }
 
-      let finalWord = wordsForFinalPass[wordsForFinalPass.length - 1];
-      let wordBeforeFinal = wordsForFinalPass[wordsForFinalPass.length - 2];
-      let twoWordsBeforeFinal = wordsForFinalPass[wordsForFinalPass.length - 3];
-      
-      if (TitleCaserUtils.isRegionalAcronym(firstWord)) {
+      const nonWhitespaceFinal = wordsForFinalPass.filter(t => !/^\s+$/.test(t));
+
+      let finalWord = nonWhitespaceFinal[nonWhitespaceFinal.length - 1];
+      let wordBeforeFinal = nonWhitespaceFinal[nonWhitespaceFinal.length - 2];
+      let twoWordsBeforeFinal = nonWhitespaceFinal[nonWhitespaceFinal.length - 3];
+
+      if (firstWord && TitleCaserUtils.isRegionalAcronym(firstWord)) {
         this.logWarning(`firstWord is a regional acronym: ${firstWord}`);
         wordsForFinalPass[0] = firstWord.toUpperCase();
       }
 
-      if (TitleCaserUtils.isRegionalAcronymNoDot(firstWord, secondWord)) {
+      if (firstWord && secondWord && TitleCaserUtils.isRegionalAcronymNoDot(firstWord, secondWord)) {
         wordsForFinalPass[0] = firstWord.toUpperCase();
       }
 
-      if (TitleCaserUtils.isFinalWordRegionalAcronym(finalWord, wordBeforeFinal, twoWordsBeforeFinal)) {
+      if (
+        finalWord &&
+        wordBeforeFinal &&
+        TitleCaserUtils.isFinalWordRegionalAcronym(finalWord, wordBeforeFinal, twoWordsBeforeFinal)
+      ) {
         wordsForFinalPass[wordsForFinalPass.length - 1] = finalWord.toUpperCase();
       }
 
-      inputString = wordsForFinalPass.join(" ");
+      inputString = wordsForFinalPass.join("");
 
       for (const [phrase, replacement] of Object.entries(this.phraseReplacementMap)) {
         // Create a regular expression for case-insensitive matching of the phrase
@@ -303,15 +356,15 @@ export class TitleCaser {
         // Replace the phrase in the input string with its corresponding replacement
         inputString = inputString.replace(regex, replacement);
       }
-      
+
       // ! Handle sentence case
       if (styleConfig.caseStyle === "sentence") {
-        const words = inputString.split(" ");
+        const words = inputString.split(/(\s+)/);
         let firstWordFound = false;
-      
+
         for (let i = 0; i < words.length; i++) {
           let word = words[i];
-      
+
           // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
           if (!firstWordFound && /[A-Za-z]/.test(word)) {
             // If you want to skip altering brand or acronym, do one more check:
@@ -323,15 +376,21 @@ export class TitleCaser {
             firstWordFound = true;
             continue;
           }
-      
+
           // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase
           if (!TitleCaser.shouldKeepCasing(word, specialTermsList)) {
             words[i] = word.toLowerCase();
           }
           // else, we keep it exactly as is
         }
-      
-        inputString = words.join(" ");
+
+        inputString = words.join("");
+      }
+
+      if (normalizeWhitespace) {
+        inputString = inputString
+          .replace(/\s+/g, " ")
+          .trim();
       }
 
       return inputString;
@@ -467,7 +526,7 @@ export class TitleCaser {
     if (TitleCaserUtils.hasUppercaseIntentional(word)) return true;
     // If it's in the brand/specialTermsList
     if (TitleCaserUtils.isWordInArray(word, specialTermsList)) return true;
-  
+
     // Otherwise, no. It's safe to lowercase.
     return false;
   }

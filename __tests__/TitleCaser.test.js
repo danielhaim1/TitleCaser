@@ -369,6 +369,104 @@ describe("TitleCaser – Basic Title Casing Options (Default Style)", () => {
 });
 
 //
+// 4A. Whitespace Normalization
+//
+describe("TitleCaser – Whitespace Normalization", () => {
+
+  test("should collapse multiple internal spaces by default", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    const input = "the   quick     brown   fox";
+    const expected = "The Quick Brown Fox";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should trim leading and trailing whitespace by default", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    const input = "     hello world     ";
+    const expected = "Hello World";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should collapse mixed tabs and spaces", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    const input = "hello\t\tworld   again";
+    const expected = "Hello World Again";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should collapse newline spacing", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    const input = "hello\n\nworld";
+    const expected = "Hello World";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should preserve whitespace when normalizeWhitespace is false", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    const input = "the   book     of     life";
+    const expected = "The   Book     of     Life";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should preserve leading/trailing whitespace when normalizeWhitespace is false", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    const input = "   hello world   ";
+    const expected = "   Hello World   ";
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+
+  test("should return empty string for whitespace-only input by default", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    expect(titleCaser.toTitleCase("     ")).toBe("");
+  });
+
+  test("should preserve whitespace-only input when normalizeWhitespace is false", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(titleCaser.toTitleCase("     ")).toBe("     ");
+  });
+
+  test("whitespace-only string (default normalization)", () => {
+    const tc = new TitleCaser({ style: "ap" });
+    expect(tc.toTitleCase("     ")).toBe("");
+  });
+
+  test("whitespace-only string with normalizeWhitespace: false", () => {
+    const tc = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(tc.toTitleCase("     ")).toBe("     ");
+  });
+
+});
+
+describe("TitleCaser – normalizeWhitespace Option", () => {
+
+  test("default behavior collapses internal spacing", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    expect(titleCaser.toTitleCase("hello   world")).toBe("Hello World");
+  });
+
+  test("default behavior trims leading and trailing whitespace", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    expect(titleCaser.toTitleCase("   hello world   ")).toBe("Hello World");
+  });
+
+  test("normalizeWhitespace: false preserves internal spacing", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(titleCaser.toTitleCase("hello   world")).toBe("Hello   World");
+  });
+
+  test("normalizeWhitespace: false preserves leading/trailing whitespace", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(titleCaser.toTitleCase("   hello world   ")).toBe("   Hello World   ");
+  });
+
+  test("normalizeWhitespace: false preserves newlines", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(titleCaser.toTitleCase("hello\n\nworld")).toBe("Hello\n\nWorld");
+  });
+
+});
+
+//
 // 5. TitleCaser Class Methods
 //
 describe("TitleCaser – Class Methods (setReplaceTerms, addExactPhraseReplacements, etc.)", () => {

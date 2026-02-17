@@ -23,16 +23,16 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 
 ## Introduction
 
-TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including acronym disambiguation, hyphenated compounds, possessives, punctuation sensitivity, and curated domain-specific term normalization across finance, marketing, academia, military, and technology.
+TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including contextual acronym disambiguation, compound handling, possessive normalization, punctuation-aware processing, and curated domain vocabulary enforcement across marketing, academia, business, finance, geography, legal, defense, and technology.
 
-Its multi-pass processing architecture ensures consistent output while supporting custom word overrides, exact phrase preservation, brand enforcement, and controlled vocabulary rules. Designed for both Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated content workflows where precision and repeatability are required.
+Its multi-pass processing architecture ensures deterministic output while supporting custom overrides, exact phrase preservation, and controlled vocabulary enforcement. Designed for Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated editorial workflows where precision and repeatability are required.
 
 ---
 
 ## Key Features
 
 ### Multi-Style Editorial Engine
-Built-in rule systems for **AP**, **APA**, **Chicago**, **NYT**, **Wikipedia** (sentence case), and **British** styles. Each style applies its own logic for minor words, hyphenated compounds, possessives, colon capitalization, and acronym handling, producing deterministic and repeatable output.
+Built-in rule systems for **AP**, **APA**, **Chicago**, **NYT**, **Wikipedia** (sentence case), and **British** styles. Each style applies its own logic for minor words, hyphenated compounds, possessives, colon capitalization, and acronym handling, producing consistent, repeatable output.
 
 ### Contextual Acronym & Pronoun Disambiguation
 Distinguishes regional acronyms from identical lowercase words using positional and surrounding-word heuristics.
@@ -54,7 +54,7 @@ For example:
 - Avoids false positives inside longer words
 
 ### Structured Vocabulary Normalization
-Includes **1,000+ curated terms** across brands, technology, geography, business, marketing, defense, academia, finance, and legal domains.
+Includes **1,000+ curated normalization rules** across brands, technology, geography, business, marketing, defense, academia, finance, and legal domains.
 
 - Mixed-case normalization (`GOOGle → Google`)
 - Intentional lowercase brands (`iPhone`, `eBay`)
@@ -78,6 +78,7 @@ Intelligent processing of hyphenated compounds with style-specific rules:
 Layered multi-pass processing for stable handling of complex inputs:
 
 - Input normalization (spacing and `<br>` handling)
+- Token-based whitespace-preserving transformation pipeline
 - Style-aware casing pass
 - Acronym resolution pass
 - Short-word correction pass
@@ -86,12 +87,13 @@ Layered multi-pass processing for stable handling of complex inputs:
 - Exact phrase override pass
 
 ### HTML-Safe & CMS-Ready
-Designed for integration into publishing workflows, CMS pipelines, and automated content systems.
+Designed for integration into publishing workflows, CMS pipelines, and automated editorial systems.
 
 - Preserves `<br>` tags
 - Normalizes spacing around colon + `<br>`
 - Retains ampersands and symbols
 - Handles excessive whitespace safely
+- Optional whitespace preservation for editor-safe real-time usage
 
 ### Runtime & Build Support
 The AMD/browser build extends `String.prototype.toTitleCase()` for direct string usage in client environments.
@@ -161,6 +163,37 @@ const tc = new TitleCaser({
 tc.toTitleCase('"never underestimate the power o\' persistence,"'); // → “Never Underestimate the Power O’ Persistence,”
 ```
 
+### Whitespace Normalization
+
+Whitespace normalization is enabled by default.
+
+By default, TitleCaser collapses consecutive whitespace and trims leading and trailing spaces:
+
+```javascript
+const tc = new TitleCaser({ style: "ap" });
+
+tc.toTitleCase("   the   quick   brown   fox   "); // → "The Quick Brown Fox"
+```
+
+For real-time editors or environments where spacing must be preserved, disable normalization:
+
+```javascript
+const tc = new TitleCaser({
+  style: "ap",
+  normalizeWhitespace: false
+});
+
+tc.toTitleCase("   the   quick   brown   fox   "); // → "   The   Quick   Brown   Fox   "
+```
+
+When normalizeWhitespace is false:
+- Internal spacing is preserved
+- Leading/trailing whitespace is preserved
+- Newlines and tabs are preserved
+- Only letter casing is transformed
+
+This behavior allows safe integration into real-time editors without unexpected trimming or cursor instability when normalization is disabled (see [Issue #17](https://github.com/danielhaim1/TitleCaser/issues/17) for discussion).
+
 ### Browser Usage
 ```html
 <script src="./path/to/TitleCaser.amd.js"></script>
@@ -210,6 +243,7 @@ new TitleCaser(options)
 | `neverCapitalize`      | string[]   | `[]`    | Additional words that should remain lowercase (merged with style defaults) |
 | `wordReplacementsList` | object[]   | internal defaults | Array of `{ 'term': 'replacement' }` objects used for term normalization |
 | `debug`                | boolean    | `false` | Enables internal warning logs during processing |
+| `normalizeWhitespace`  | boolean    | `true`  | Collapses consecutive whitespace and trims leading/trailing whitespace. Set to `false` to preserve original spacing (editor-safe mode). |
 
 ### Methods
 
