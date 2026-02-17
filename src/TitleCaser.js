@@ -13,8 +13,8 @@ export class TitleCaser {
   constructor (options = {}) {
     this.options = options;
     this.debug = options.debug || false;
-    this.wordReplacementsList = wordReplacementsList;
-    this.phraseReplacementMap = phraseReplacementMap;
+    this.wordReplacementsList = JSON.parse(JSON.stringify(wordReplacementsList));
+    this.phraseReplacementMap = JSON.parse(JSON.stringify(phraseReplacementMap));
   }
 
   logWarning(message) {
@@ -427,6 +427,11 @@ export class TitleCaser {
       }
     });
 
+    // Added check to prevent excessive number of replacement rules which could lead to performance issues
+    if (this.wordReplacementsList.length > 2000) {
+      throw new Error("Too many replacement rules.");
+    }
+
     this.options.wordReplacementsList = this.wordReplacementsList;
 
     this.logWarning(`Log the updated this.wordReplacementsList: ${this.wordReplacementsList}`);
@@ -443,6 +448,10 @@ export class TitleCaser {
       this.wordReplacementsList[index][term] = replacement;
     } else {
       this.wordReplacementsList.push({ [term]: replacement });
+    }
+
+    if (this.wordReplacementsList.length > 2000) {
+      throw new Error("Too many replacement rules.");
     }
 
     this.options.wordReplacementsList = this.wordReplacementsList;
