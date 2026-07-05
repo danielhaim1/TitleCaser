@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [1.8.1] (2026-07-05)
+
+#### Fixed
+- Fixed capitalization after leading quotes and brackets so words such as `‘enough!’` are cased as if the opening punctuation was not present.
+- Preserved short-word behavior inside quotes, so `leader says ‘the’ today` remains `Leader Says ‘the’ Today`.
+- Separated spelling-only word replacements from canonical brand/acronym casing, so terms like `cyber security`, `back end`, and `full stack` normalize first and then follow the active style.
+- Preserved canonical replacement casing for terms such as `React`, `Node.js`, and related brand/acronym replacements in Wikipedia sentence case.
+
+#### Tests
+- Added regression coverage for opening quotes/brackets across title and Wikipedia sentence casing.
+- Added replacement-position tests for `full stack`, `reactjs`, and `node.js` at the beginning, middle, and end of titles.
+
 ### [1.8.0] (2026-07-05)
 
 #### Added
