@@ -27,7 +27,7 @@
   "bugs": "https://github.com/danielhaim1/titlecaser/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielhaim1/titlecaser.git"
+    "url": "git+https://github.com/danielhaim1/titlecaser.git"
   },
   "license": "Apache-2.0",
   "author": {
@@ -64,6 +64,7 @@
   ],
   "scripts": {
     "build": "npx webpack --mode production && rm -rf docs/assets/js/full docs/assets/js/lite docs/assets/js/titlecaser.amd.js docs/assets/js/titlecaser.esm.js docs/assets/js/titlecaser.module.js && mkdir -p docs/assets/js && cp -R dist/full dist/lite docs/assets/js/",
+    "release-current": "npm run build && git add -A && git commit -m \"Release: v$(node -p \"require('./package.json').version\")\" && git tag v$(node -p \"require('./package.json').version\") && git push --follow-tags && npm publish",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
     "release": "npm version patch --no-git-tag-version && npm run build && git add -A && git commit -m \"Release: v$(node -p \"require('./package.json').version\")\" && git tag v$(node -p \"require('./package.json').version\") && git push --follow-tags && npm publish",
     "release-major": "npm version major --no-git-tag-version && npm run build && git add -A && git commit -m \"Major Release: v$(node -p \"require('./package.json').version\")\" && git tag v$(node -p \"require('./package.json').version\") && git push --follow-tags && npm publish",
