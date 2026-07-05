@@ -51,6 +51,15 @@ describe("TitleCaser – Basic Title Casing Options (Default Style)", () => {
   );
 });
 
+describe("TitleCaser – Opening Quotes and Brackets", () => {
+  runTest("should capitalize a word after a leading curly single quote", "‘enough!’ says leader", "‘Enough!’ Says Leader");
+  runTest("should capitalize a word after a leading curly double quote", "“enough!” says leader", "“Enough!” Says Leader");
+  runTest("should capitalize a word after a leading straight quote", '"enough!" says leader', '"Enough!" Says Leader');
+  runTest("should capitalize a word after a leading bracket", "(enough!) says leader", "(Enough!) Says Leader");
+  runTest("should capitalize a quoted word after whitespace", "leader says ‘enough!’ today", "Leader Says ‘Enough!’ Today");
+  runTest("should preserve short-word casing inside opening quotes", "leader says ‘the’ today", "Leader Says ‘the’ Today");
+});
+
 //
 // 4A. Whitespace Normalization
 //

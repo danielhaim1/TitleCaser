@@ -76,12 +76,12 @@ describe("TitleCaser Chicago – Reserved Words and Special Handling", () => {
     expect(titleCaser.toTitleCase("GOOGle's tensorflow")).toBe("Google's TensorFlow");
   });
 
-  test('should apply brand replacements (e.g., "mcdonalds" -> "McDonald\'s")', () => {
+  test("should apply custom brand and spelling replacements", () => {
     const titleCaser = new TitleCaser({ style: "chicago" });
     titleCaser.setReplaceTerms([
       { mcdonalds: "McDonald's" },
       { skoda: "Škoda" },
-      { "cyber-security": "Cybersecurity" },
+      { "cyber-security": "cybersecurity" },
     ]);
 
     [

@@ -133,6 +133,34 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
       configurable: true,
     },
 
+    // Get opening quotes or brackets before a word
+    getLeadingOpeningPunctuation: {
+      value(word) {
+        if (typeof word !== "string") {
+          throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
+        }
+
+        const match = word.match(/^[("'“‘«‹„‚]+/);
+        return match ? match[0] : "";
+      },
+      writable: true,
+      configurable: true,
+    },
+
+    // Get closing quotes or brackets after a word
+    getTrailingClosingPunctuation: {
+      value(word) {
+        if (typeof word !== "string") {
+          throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
+        }
+
+        const match = word.match(/[)"'”’»›]+$/);
+        return match ? match[0] : "";
+      },
+      writable: true,
+      configurable: true,
+    },
+
     // Check if a word ends with a punctuation symbol
     endsWithSymbol: {
       value(word, symbols = [".", ",", ";", ":", "?", "!"]) {

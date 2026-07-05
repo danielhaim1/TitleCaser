@@ -77,13 +77,37 @@ export class TitleCaser {
       const ignoreList = ["nl2br", ...neverCapitalize];
       // Preprocess the replaceTerms array to make it easier to search for.
       const replaceTermsArray = activeWordReplacementsList.map((term) => Object.keys(term)[0].toLowerCase());
-      // Create an object from the replaceTerms array to make it easier to search for.
-      const replaceTermObj = Object.fromEntries(
-        activeWordReplacementsList.map((term) => [Object.keys(term)[0].toLowerCase(), Object.values(term)[0]]),
+      const replaceTermEntries = activeWordReplacementsList.map((term) => [
+        Object.keys(term)[0].toLowerCase(),
+        Object.values(term)[0],
+      ]);
+      const replacePhraseEntries = replaceTermEntries
+        .filter(([term]) => /\s/.test(term))
+        .sort(([termA], [termB]) => termB.length - termA.length);
+      const replacementCasingMap = Object.fromEntries(
+        replaceTermEntries
+          .map(([, replacement]) => replacement)
+          .filter((replacement) => replacement !== replacement.toLowerCase())
+          .map((replacement) => [replacement.toLowerCase(), replacement]),
       );
+      // Create an object from the replaceTerms array to make it easier to search for.
+      const replaceTermObj = Object.fromEntries(replaceTermEntries);
 
       this.logWarning(`replaceTermsArray: ${replaceTermsArray}`);
       this.logWarning(`this.wordReplacementsList: ${this.wordReplacementsList}`);
+
+      const applyWordReplacementPhrases = (value) => {
+        let replacedValue = value;
+
+        for (const [phrase, replacement] of replacePhraseEntries) {
+          const escapedPhrase = phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&");
+          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
+
+          replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
+        }
+
+        return replacedValue;
+      };
 
       // Normalize HTML breaks and optionally normalize whitespace (see normalizeWhitespace option).
       let inputString = str;
@@ -103,14 +127,27 @@ export class TitleCaser {
         inputString = inputString.toLowerCase();
       }
 
+      inputString = applyWordReplacementPhrases(inputString);
+
       // Tokenize preserving whitespace
       const tokens = inputString.split(/(\s+)/);
       const originalNonWhitespaceTokens = tokens.filter((token) => token && !/^\s+$/.test(token));
 
-      const wordsInTitleCase = tokens.map((token, i) => {
-        if (!token || /^\s+$/.test(token)) return token;
+      const transformToken = (word, i) => {
+        const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
+        if (leadingOpeningPunctuation) {
+          const innerWord = word.slice(leadingOpeningPunctuation.length);
+          const trailingClosingPunctuation = TitleCaserUtils.getTrailingClosingPunctuation(innerWord);
+          const innerWordWithoutClosingPunctuation = trailingClosingPunctuation
+            ? innerWord.slice(0, -trailingClosingPunctuation.length)
+            : innerWord;
 
-        const word = token;
+          if (/^[A-Za-z]/.test(innerWordWithoutClosingPunctuation)) {
+            return leadingOpeningPunctuation +
+              transformToken(innerWordWithoutClosingPunctuation, i) +
+              trailingClosingPunctuation;
+          }
+        }
 
         switch (true) {
           case TitleCaserUtils.isWordAmpersand(word):
@@ -124,7 +161,10 @@ export class TitleCaser {
             return word;
           case replaceTermsArray.includes(word.toLowerCase()):
             // ! If the word is in the replaceTerms array, return the replacement.
-            return replaceTermObj[word.toLowerCase()];
+            const replacement = replaceTermObj[word.toLowerCase()];
+            return replacement.toLowerCase() === word.toLowerCase()
+              ? replacement
+              : transformToken(replacement, i);
           case TitleCaserUtils.isWordInArray(word, specialTermsList):
             // ! If the word is in the specialTermsList array, return the correct casing.
             return TitleCaserUtils.correctTerm(word, specialTermsList);
@@ -150,7 +190,9 @@ export class TitleCaser {
             const isReplaced = !replacedParts.every((part, index) => part === parts[index]);
 
             // Reassemble the word with the hyphen, reattach trailing punctuation, and return
-            const processedWord = isReplaced ? replacedParts.join("-") : TitleCaserUtils.correctTermHyphenated(word, style);
+            const processedWord = isReplaced
+              ? transformToken(replacedParts.join("-"), i)
+              : TitleCaserUtils.correctTermHyphenated(word, style);
             return processedWord.endsWith(trailingPunctuation) ? processedWord : processedWord + trailingPunctuation;
           case TitleCaserUtils.hasSuffix(word, style):
             // ! If the word has a suffix, return the correct casing.
@@ -236,6 +278,11 @@ export class TitleCaser {
             }
             return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
         }
+      };
+
+      const wordsInTitleCase = tokens.map((token, i) => {
+        if (!token || /^\s+$/.test(token)) return token;
+        return transformToken(token, i);
       });
 
       // Join the words in the array into a string.
@@ -408,7 +455,7 @@ export class TitleCaser {
           const punctuationMatch = token.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
           const punctuation = punctuationMatch ? punctuationMatch[0] : "";
           const baseToken = punctuation ? token.slice(0, -punctuation.length) : token;
-          const matchingTerm = knownTermCasingMap[baseToken.toLowerCase()];
+          const matchingTerm = replacementCasingMap[baseToken.toLowerCase()] || knownTermCasingMap[baseToken.toLowerCase()];
 
           return matchingTerm ? `${matchingTerm}${punctuation}` : token;
         });
@@ -512,6 +559,14 @@ export class TitleCaser {
           let word = words[i];
           if (!word || /^\s+$/.test(word)) continue;
 
+          const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
+          const wordWithoutOpeningPunctuation = leadingOpeningPunctuation
+            ? word.slice(leadingOpeningPunctuation.length)
+            : word;
+          const trailingClosingPunctuation = TitleCaserUtils.getTrailingClosingPunctuation(wordWithoutOpeningPunctuation);
+          const wordForSentenceCasing = trailingClosingPunctuation
+            ? wordWithoutOpeningPunctuation.slice(0, -trailingClosingPunctuation.length)
+            : wordWithoutOpeningPunctuation;
           const originalWord = originalNonWhitespaceTokens[originalWordIndex] || "";
           const originalWordPosition = originalWordIndex;
           originalWordIndex++;
@@ -525,11 +580,14 @@ export class TitleCaser {
           });
 
           // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
-          if (!firstWordFound && /[A-Za-z]/.test(word)) {
+          if (!firstWordFound && /[A-Za-z]/.test(wordForSentenceCasing)) {
             // If you want to skip altering brand or acronym, do one more check:
-            if (!TitleCaser.shouldKeepCasing(word, specialTermsList)) {
+            if (!TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)) {
               // "Normal" first word
-              words[i] = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+              words[i] = leadingOpeningPunctuation +
+                wordForSentenceCasing.charAt(0).toUpperCase() +
+                wordForSentenceCasing.slice(1).toLowerCase() +
+                trailingClosingPunctuation;
             }
             // Otherwise, it's a brand/acronym, so leave it
             firstWordFound = true;
@@ -540,9 +598,9 @@ export class TitleCaser {
           if (
             !sentenceNameTokenIndexes.has(i) &&
             !wikipediaCasingDecision.shouldPreserve &&
-            !TitleCaser.shouldKeepCasing(word, specialTermsList)
+            !TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)
           ) {
-            words[i] = word.toLowerCase();
+            words[i] = leadingOpeningPunctuation + wordForSentenceCasing.toLowerCase() + trailingClosingPunctuation;
           }
           // else, we keep it exactly as is
         }
@@ -693,13 +751,15 @@ export class TitleCaser {
    * @param {Array<string>} specialTermsList - List of terms to preserve
    * @returns {boolean} True if word should keep its casing
    */
-  static shouldKeepCasing(word, specialTermsList) {
+  static shouldKeepCasing(word, replacementCasingMap = {}) {
     // If it's an acronym
     if (TitleCaserUtils.isRegionalAcronym(word)) return true;
     // If it has known "intentional uppercase" patterns
     if (TitleCaserUtils.hasUppercaseIntentional(word)) return true;
-    // If it's in the brand/specialTermsList
-    if (TitleCaserUtils.isWordInArray(word, specialTermsList)) return true;
+    // If it came from a canonical-cased replacement
+    if (replacementCasingMap[word.toLowerCase()]) return true;
+    // If it has known canonical casing
+    if (knownTermCasingMap[word.toLowerCase()]) return true;
 
     // Otherwise, no. It's safe to lowercase.
     return false;

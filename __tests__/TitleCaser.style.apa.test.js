@@ -25,6 +25,21 @@ describe("TitleCaser APA – Style Stability", () => {
     "the impact of social media on mental health: a study of instagram, TIKTOK, and SnapChat",
     "The Impact of Social Media on Mental Health: A Study of Instagram, TikTok, and Snapchat",
   );
+  runTest(
+    "should normalize spelling replacements and apply APA casing",
+    "blockchain technology and cyber security: opportunities and challenges for secure digital transactions",
+    "Blockchain Technology and Cybersecurity: Opportunities and Challenges for Secure Digital Transactions",
+  );
+  runTest(
+    "should normalize full stack by position and apply APA casing",
+    "full stack teams hire full-stack developers for full stack",
+    "Fullstack Teams Hire Fullstack Developers for Fullstack",
+  );
+  runTest(
+    "should preserve canonical replacement casing by position in APA style",
+    "reactjs teams build tools with node.js and reactjs",
+    "React Teams Build Tools With Node.js and React",
+  );
 });
 
 runNameHeuristicTitleCaseTests(TitleCaser, "apa");

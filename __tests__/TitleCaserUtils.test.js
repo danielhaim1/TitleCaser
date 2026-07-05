@@ -191,6 +191,14 @@ describe("TitleCaserUtils – Punctuation", () => {
     expect(TitleCaserUtils.startsWithSymbol("name")).toBe(false);
     expect(TitleCaserUtils.startsWithSymbol("")).toBe(false);
     expect(() => TitleCaserUtils.startsWithSymbol(1)).toThrow(Error);
+    expect(TitleCaserUtils.getLeadingOpeningPunctuation("‘enough!’")).toBe("‘");
+    expect(TitleCaserUtils.getLeadingOpeningPunctuation("(\"enough!\")")).toBe("(\"");
+    expect(TitleCaserUtils.getLeadingOpeningPunctuation("enough")).toBe("");
+    expect(() => TitleCaserUtils.getLeadingOpeningPunctuation(1)).toThrow(Error);
+    expect(TitleCaserUtils.getTrailingClosingPunctuation("enough!’")).toBe("’");
+    expect(TitleCaserUtils.getTrailingClosingPunctuation("enough!\")")).toBe("\")");
+    expect(TitleCaserUtils.getTrailingClosingPunctuation("enough")).toBe("");
+    expect(() => TitleCaserUtils.getTrailingClosingPunctuation(1)).toThrow(Error);
     expect(TitleCaserUtils.endsWithSymbol("hello!")).toBe(true);
     expect(TitleCaserUtils.endsWithSymbol("hello")).toBe(false);
     expect(() => TitleCaserUtils.endsWithSymbol("hello", "!")).toThrow(Error);

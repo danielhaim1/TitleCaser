@@ -72,6 +72,21 @@ describe("TitleCaser AP – Style Stability", () => {
   );
   runTest('should handle hyphenated "BACK-end" with AP style', "BACK-end and front-end", "Backend and Frontend");
   runTest(
+    "should normalize spelling replacements before applying AP casing",
+    "back end and full stack developers",
+    "Backend and Fullstack Developers",
+  );
+  runTest(
+    "should normalize full stack by position and apply AP casing",
+    "full stack teams hire full-stack developers for full stack",
+    "Fullstack Teams Hire Fullstack Developers for Fullstack",
+  );
+  runTest(
+    "should preserve canonical replacement casing by position in AP style",
+    "reactjs teams build tools with node.js and reactjs",
+    "React Teams Build Tools With Node.js and React",
+  );
+  runTest(
     "should handle acronym with colon (AP style)",
     "revolutionizing the publishing industry: insights from a cto on ebook development and innovation",
     "Revolutionizing the Publishing Industry: Insights From a CTO on eBook Development and Innovation",

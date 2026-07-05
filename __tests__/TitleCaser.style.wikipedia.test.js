@@ -24,6 +24,41 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "The business of fashion: how luxury brands set themselves apart",
     "The business of fashion: how luxury brands set themselves apart",
   );
+  runTest(
+    "should capitalize the first word after an opening quote",
+    "‘enough!’ says leader",
+    "‘Enough!’ says leader",
+  );
+  runTest(
+    "should normalize spelling replacements without forcing title-case capitalization",
+    "blockchain technology and cyber security: opportunities and challenges for secure digital transactions",
+    "Blockchain technology and cybersecurity: opportunities and challenges for secure digital transactions",
+  );
+  runTest(
+    "should preserve canonical brand casing from word replacements",
+    "the reactjs framework uses nodejs",
+    "The React framework uses Node.js",
+  );
+  runTest(
+    "should preserve canonical replacement casing at the start of a sentence",
+    "reactjs framework and nodejs tools",
+    "React framework and Node.js tools",
+  );
+  runTest(
+    "should preserve canonical replacement casing in the middle of a sentence",
+    "developers use reactjs in modern interfaces",
+    "Developers use React in modern interfaces",
+  );
+  runTest(
+    "should preserve canonical replacement casing at the end of a sentence",
+    "many teams build services with node.js",
+    "Many teams build services with Node.js",
+  );
+  runTest(
+    "should normalize full stack by position without preserving title casing",
+    "full stack teams hire full-stack developers for full stack",
+    "Fullstack teams hire fullstack developers for fullstack",
+  );
 });
 
 describe("TitleCaser Wikipedia – Dictionary Proper Phrases", () => {

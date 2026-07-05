@@ -1,5 +1,9 @@
 import regionalAcronyms from "./data/acronyms/list-regional-acronym-rules.json";
-import { curatedDataList } from "./data/terms/index.js";
+import {
+  brandNames,
+  curatedDataList,
+  geographyCodesAndNames,
+} from "./data/terms/index.js";
 
 function mergeArrays(...arraysOrObjects) {
   const merged = [];
@@ -43,6 +47,7 @@ function buildKnownTermCasingMap(...arraysOrObjects) {
 
   terms.forEach((term) => {
     if (typeof term !== "string") return;
+    if (!hasIntentionalCasing(term)) return;
 
     termMap[term.toLowerCase()] = term;
   });
@@ -50,10 +55,38 @@ function buildKnownTermCasingMap(...arraysOrObjects) {
   return termMap;
 }
 
+function buildSimpleTermCasingMap(...arraysOrObjects) {
+  const termMap = {};
+  const terms = mergeArrays(...arraysOrObjects);
+
+  terms.forEach((term) => {
+    if (typeof term !== "string") return;
+
+    termMap[term.toLowerCase()] = term;
+  });
+
+  return termMap;
+}
+
+function hasIntentionalCasing(term) {
+  const trimmedTerm = term.trim();
+
+  if (/\s/.test(trimmedTerm)) return true;
+  if (/[a-z][A-Z]/.test(trimmedTerm)) return true;
+  if (/[.+#]/.test(trimmedTerm)) return true;
+  if (/[^\x00-\x7F]/.test(trimmedTerm)) return true;
+
+  const lettersOnly = trimmedTerm.replace(/[^A-Za-z]/g, "");
+  return lettersOnly.length > 1 && lettersOnly === lettersOnly.toUpperCase();
+}
+
 const mergedArray = mergeArrays(curatedDataList);
 
 export const specialTermsList = mergedArray;
-export const knownTermCasingMap = buildKnownTermCasingMap(curatedDataList);
+export const knownTermCasingMap = {
+  ...buildKnownTermCasingMap(curatedDataList),
+  ...buildSimpleTermCasingMap(brandNames, geographyCodesAndNames),
+};
 
 export const shortWordsList = [
   "the",
@@ -86,15 +119,19 @@ export const wordReplacementsList = [
   { "f.y.i": "FYI" },
   { "d.i.y": "DIY" },
   { "t.b.d": "TBD" },
-  { "back-end": "Backend" },
-  { "front-end": "Frontend" },
-  { "full-stack": "Fullstack" },
+  { "back end": "backend" },
+  { "back-end": "backend" },
+  { "front end": "frontend" },
+  { "front-end": "frontend" },
+  { "full stack": "fullstack" },
+  { "full-stack": "fullstack" },
   { "nodejs": "Node.js" },
   { "nextjs": "Next.js" },
   { "nuxtjs": "Nuxt.js" },
   { "reactjs": "React" },
   { "react.js": "React" },
-  { "cyber-security": "Cybersecurity" },
+  { "cyber security": "cybersecurity" },
+  { "cyber-security": "cybersecurity" },
   // { 'twitter': 'Twitter, formerly known as 𝕏' }
 ];
 
