@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [1.8.0] (2026-07-05)
+
+#### Added
+- Added `TitleCaserConfig`, `createTitleCaserConfig`, and `TITLE_CASER_CONFIG_DEFAULTS` for reusable validated configuration.
+- Added runtime configuration options for `dictionaryProfile`, `normalizeQuotes`, `minTitleChars`, `maxTitleChars`, `allowEmojis`, `allowSpecialCharacters`, `phraseReplacementList`, and security policy controls.
+- Added defensive input validation for script tags, inline HTML event handlers, unsafe control characters, bidi controls, zero-width characters, emoji handling, special characters, and allowed HTML tags.
+- Added dictionary-backed support data for English profiles, including names, family names, curated brands/media entities, geography terms, acronyms, and WordNet-derived dictionary profiles.
+- Added Wikipedia sentence-case entity scoring to better distinguish ordinary article-led phrases from names, brands, media entities, and proper phrases.
+- Added dictionary-backed handling for Issue #20, preserving recognized or likely proper names such as `Donald Duck` while still lowercasing ordinary Wikipedia sentence-case words.
+- Added detector utilities for language/alphabet-aware text checks and UTF-8-oriented validation support.
+- Added new curated entities including `Apple Music`, `Snow Crash`, and `The Lincoln Project`.
+- Added profile-specific package entry points for `@danielhaim/titlecaser/lite` and `/full`.
+- Added profile-focused test helpers and coverage for comparing `lite` and `full` dictionary behavior.
+
+#### Changed
+- Reorganized source data into structured `src/data/*` folders for acronyms, dictionary profiles, geography, names, and domain terms.
+- Split the large utility surface into structured `src/utils/*` extension modules while preserving the existing `TitleCaserUtils` API.
+- Reorganized curated term data into clearer domain files for academic/time, business/finance/legal, ecommerce/digital, marketing/digital, military/defense, specialized/general, and technology/computing terms.
+- Updated Wikipedia mode to preserve known media brands and person-name phrases while still lowercasing ordinary words in sentence case.
+- Improved phrase replacement ordering and safer replacement boundaries for multi-word proper phrases.
+- Simplified dictionary profile handling to the two supported public profiles: `lite` and `full`.
+- Updated dictionary profile packaging so profile-specific imports compile with only the selected dictionary data instead of always bundling every profile.
+- Removed duplicate root `dist/titlecaser.*.js` bundle output; the root package export now points to the `full` dist build.
+
+#### Fixed
+- Fixed Wikipedia mode lowercasing of known person-name phrases such as `Donald Duck`, `John Smith`, and international/apostrophized names.
+- Fixed accidental capitalization preservation for ordinary Wikipedia sentence-case phrases such as `The Public Event`, `The Local Artist`, and `The Payment System`.
+- Fixed media brand handling for `Fox News`, `CNN International`, `BBC News`, `Sky News`, and related media entities.
+- Fixed regional acronym/pronoun stability regressions involving `US`, `UK`, `USA`, and pronoun `us`.
+- Fixed HTML `<br>` casing so tags remain lowercase and spacing remains normalized around colon breaks.
+- Fixed casing preservation for name tokens such as `McFly` without hardcoding single test scenarios.
+
+#### Tests
+- Split style coverage into dedicated AP, APA, Chicago, NYT, and Wikipedia test files.
+- Added utility-focused tests for options, words, casing, acronyms, punctuation, quotes, elisions, replacements, validation, detectors, and dictionary helpers.
+- Added hygiene tests for runtime config validation and security controls.
+- Added cross-style name heuristic tests.
+- Added rare noun trap tests across all supported styles to guard dictionary pruning and Wikipedia entity detection.
+- Added built-bundle profile parity tests to verify `lite` and `full` match outside Wikipedia and document expected Wikipedia-only divergence.
+- Expanded TypeScript definition coverage for the new configuration and runtime options.
+
 ### [1.7.13] (2026-02-14)
 - **Breaking (TypeScript only):** Standardized option naming from `replaceTermList` to `wordReplacementsList` across all files for consistency
   - Updated `index.d.ts` TypeScript definitions

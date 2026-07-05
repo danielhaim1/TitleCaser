@@ -1,4 +1,5 @@
 import { TitleCaser } from './src/TitleCaser.js';
+import { TitleCaserConfig, createTitleCaserConfig, TITLE_CASER_CONFIG_DEFAULTS } from './src/TitleCaserConfig.js';
 
 if (String.prototype.toTitleCase === undefined) {
   String.prototype.toTitleCase = function (options) {
@@ -13,5 +14,5 @@ if (typeof window !== 'undefined' && window.document) {
 }
 
 // ESM exports
-export { TitleCaser };
+export { TitleCaser, TitleCaserConfig, createTitleCaserConfig, TITLE_CASER_CONFIG_DEFAULTS };
 export default TitleCaser;

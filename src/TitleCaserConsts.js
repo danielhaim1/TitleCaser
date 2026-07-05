@@ -1,12 +1,5 @@
-import brandList from "./data/brandList.json";
-import businessFinanceLegalTerms from "./data/businessFinanceLegalTerms.json";
-import eCommerceDigitalTerms from "./data/eCommerceDigitalTerms.json";
-import globalGeography from "./data/globalGeography.json";
-import marketingMediaTerms from "./data/marketingMediaTerms.json";
-import miscSpecializedTerms from "./data/miscSpecializedTerms.json";
-import techComputingConcepts from "./data/techComputingConcepts.json";
-import timeAcademicTerms from "./data/timeAcademicTerms.json";
-import militaryTerms from "./data/militaryTerms.json";
+import regionalAcronyms from "./data/acronyms/list-regional-acronym-rules.json";
+import { curatedDataList } from "./data/terms/index.js";
 
 function mergeArrays(...arraysOrObjects) {
   const merged = [];
@@ -30,19 +23,37 @@ function mergeArrays(...arraysOrObjects) {
   return [...new Set(merged)];
 }
 
-const mergedArray = mergeArrays(
-  brandList,
-  businessFinanceLegalTerms,
-  eCommerceDigitalTerms,
-  globalGeography,
-  marketingMediaTerms,
-  miscSpecializedTerms,
-  techComputingConcepts,
-  timeAcademicTerms,
-  militaryTerms,
-);
+function buildPhraseReplacementMap(...arraysOrObjects) {
+  const phraseMap = {};
+  const terms = mergeArrays(...arraysOrObjects);
+
+  terms.forEach((term) => {
+    if (typeof term !== "string") return;
+    if (!/\s/.test(term.trim())) return;
+
+    phraseMap[term.toLowerCase()] = term;
+  });
+
+  return phraseMap;
+}
+
+function buildKnownTermCasingMap(...arraysOrObjects) {
+  const termMap = {};
+  const terms = mergeArrays(...arraysOrObjects);
+
+  terms.forEach((term) => {
+    if (typeof term !== "string") return;
+
+    termMap[term.toLowerCase()] = term;
+  });
+
+  return termMap;
+}
+
+const mergedArray = mergeArrays(curatedDataList);
 
 export const specialTermsList = mergedArray;
+export const knownTermCasingMap = buildKnownTermCasingMap(curatedDataList);
 
 export const shortWordsList = [
   "the",
@@ -235,7 +246,6 @@ export const styleConfigMap = Object.freeze({
   }
 });
 
-
 // * ! ===============================================
 // * ! Ignored Words
 // * ! ===============================================
@@ -247,6 +257,7 @@ export const ignoredWordList = [];
 // * ! ===============================================
 
 export const phraseReplacementMap = {
+  ...buildPhraseReplacementMap(curatedDataList),
   'the cybersmile foundation': 'The Cybersmile Foundation',
   'co. by colgate': 'CO. by Colgate',
   "on & off": "On & Off",
@@ -274,129 +285,6 @@ export const REGEX_PATTERNS = Object.freeze({
 // * ! Acronym Replacements
 // * ! ===============================================
 
-export const regionalAcronymList = [
-  "usa",
-  "us",
-  "u.s.a",
-  "u.s.",
-  "u.s",
-  "u.s.a.",
-  "eu",
-  "e.u.",
-  "e.u",
-  "uk",
-  "u.k.",
-  "u.k",
-];
-
-export const regionalAcronymPrecedingWordsList = [
-  "the", "via", "among", "across", "beyond", "outside",
-  "alongside", "throughout", "despite", "unlike", "upon"
-];
-
-export const regionalAcronymFollowingWordsList = [
-  "act", "acts",
-  "administration", "administrations",
-  "agency", "agencies",
-  "agreement", "agreements",
-  "airforce", "airforces",
-  "aid",
-  "alliance", "alliances",
-  "ambassador", "ambassadors",
-  "authority", "authorities",
-  "bill", "bills",
-  "bloc", "blocs",
-  "budget", "budgets",
-  "bureau", "bureaus",
-  "cabinet", "cabinets",
-  "charter", "charters",
-  "command", "commands",
-  "commission", "commissions",
-  "conference", "conferences",
-  "congress", "congresses",
-  "convention", "conventions",
-  "council", "councils",
-  "court", "courts",
-  "defense", "defences",
-  "defence", "defenses",
-  "delegation", "delegations",
-  "democracy", "democracies",
-  "department", "departments",
-  "development", "developments",
-  "directive", "directives",
-  "diplomacy",
-  "division", "divisions",
-  "economy", "economies",
-  "embassy", "embassies",
-  "engagement", "engagements",
-  "envoy", "envoys",
-  "exports",
-  "federation", "federations",
-  "finance", "finances",
-  "forces",
-  "framework", "frameworks",
-  "funding",
-  "government", "governments",
-  "hearing", "hearings",
-  "imports",
-  "initiative", "initiatives",
-  "intel",
-  "intelligence",
-  "intervention", "interventions",
-  "jurisdiction", "jurisdictions",
-  "law", "laws",
-  "leadership", "leaders",
-  "legislation",
-  "liaison", "liaisons",
-  "mandate", "mandates",
-  "markets",
-  "marines",
-  "military", "militaries",
-  "ministry", "ministries",
-  "mission", "missions",
-  "navy", "navies",
-  "negotiations",
-  "office", "offices",
-  "operations",
-  "oversight",
-  "parliament", "parliaments",
-  "plan", "plans",
-  "policies", "policy",
-  "policy-makers",
-  "precedent", "precedents",
-  "presence",
-  "program", "programme", "programmes", "programs",
-  "project", "projects",
-  "protocol", "protocols",
-  "province", "provinces",
-  "reform", "reforms",
-  "regulation", "regulations",
-  "regulator", "regulators",
-  "relations",
-  "representation", "representations",
-  "republic", "republics",
-  "resolution", "resolutions",
-  "ruling", "rulings",
-  "sanctions",
-  "security", "securities",
-  "senate", "senates",
-  "service", "services",
-  "state", "states",
-  "statute", "statutes",
-  "strategy", "strategies",
-  "summit", "summits",
-  "summitry",
-  "surveillance",
-  "talks",
-  "tariffs",
-  "territory", "territories",
-  "trade", "trades",
-  "treasury", "treasuries",
-  "treaty", "treaties",
-  "tribunal", "tribunals",
-  "troops",
-  "union", "unions",
-  "veterans",
-  "warships",
-  "zone", "zones"
-];
+export const regionalAcronymList = regionalAcronyms.regionalAcronymList;
+export const regionalAcronymPrecedingWordsList = regionalAcronyms.regionalAcronymPrecedingWordsList;
+export const regionalAcronymFollowingWordsList = regionalAcronyms.regionalAcronymFollowingWordsList;

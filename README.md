@@ -4,7 +4,7 @@
 [![Downloads](https://img.shields.io/npm/dt/@danielhaim/titlecaser.svg)](https://www.npmjs.com/package/@danielhaim/titlecaser)
 ![GitHub](https://img.shields.io/github/license/danielhaim1/titlecaser)
 
-A style-guide–aware title case engine for JavaScript that implements **AP**, **APA**, **Chicago**, **NYT**, **Wikipedia**, and **British** styles with contextual acronym disambiguation and 1,000+ curated domain terms.
+A style-guide–aware title case engine for JavaScript that implements **AP**, **APA**, **Chicago**, **NYT**, **Wikipedia**, and **British** styles with contextual acronym disambiguation, dictionary-backed entity detection, runtime validation, and curated domain terminology.
 
 <a target="_blank" href="https://danielhaim1.github.io/TitleCaser/"><img src="https://raw.githubusercontent.com/danielhaim1/TitleCaser/main/docs/assets/demo.png" width="100%" height="auto" alt="TitleCaser Demo"></a>
 
@@ -23,9 +23,9 @@ A style-guide–aware title case engine for JavaScript that implements **AP**, *
 
 ## Introduction
 
-TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including contextual acronym disambiguation, compound handling, possessive normalization, punctuation-aware processing, and curated domain vocabulary enforcement across marketing, academia, business, finance, geography, legal, defense, and technology.
+TitleCaser is a deterministic, style-guide–aware title casing engine built for production publishing systems. It implements major editorial standards with rule-driven capitalization logic, including contextual acronym disambiguation, compound handling, possessive normalization, punctuation-aware processing, dictionary-assisted entity detection, and curated domain vocabulary enforcement across marketing, academia, business, finance, geography, legal, defense, media, names, and technology.
 
-Its multi-pass processing architecture ensures deterministic output while supporting custom overrides, exact phrase preservation, and controlled vocabulary enforcement. Designed for Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated editorial workflows where precision and repeatability are required.
+Its multi-pass processing architecture ensures deterministic output while supporting custom overrides, exact phrase preservation, controlled vocabulary enforcement, and a defensive validation layer for runtime inputs. Designed for Node.js and browser environments, TitleCaser integrates cleanly into CMS pipelines, build systems, and automated editorial workflows where precision and repeatability are required.
 
 ---
 
@@ -54,15 +54,24 @@ For example:
 - Avoids false positives inside longer words
 
 ### Structured Vocabulary Normalization
-Includes **1,000+ curated normalization rules** across brands, technology, geography, business, marketing, defense, academia, finance, and legal domains.
+Includes curated normalization rules across brands, technology, geography, business, marketing, defense, academia, finance, legal, media, names, and entertainment domains.
 
-- Mixed-case normalization (`GOOGle → Google`)
-- Intentional lowercase brands (`iPhone`, `eBay`)
-- Roman numerals (`Louis-IV`)
-- Unicode names (`Škoda`)
-- Possessive handling (`GOOGle's tensorflow → Google's TensorFlow`)
+- Brand and product casing (`GOOgle`, `nodejs`, `iphone` → `Google`, `Node.js`, `iPhone`)
+- Media, entertainment, and platform names (`fox news`, `cnn international`, `apple music` → `Fox News`, `CNN International`, `Apple Music`)
+- Technology and developer terms (`aws`, `github`, `devops`, `ddos` → `AWS`, `GitHub`, `DevOps`, `DDoS`)
+- Names, possessives, and compounds (`donald duck`, `o'connor`, `louis-iv` → `Donald Duck`, `O’Connor`, `Louis-IV`)
+- Unicode and international brand casing (`skoda` → `Škoda`)
 - Runtime custom term overrides
 - Exact phrase replacements
+
+### Dictionary-Assisted Wikipedia Sentence Case
+Wikipedia mode uses dictionary-backed part-of-speech data, given-name and family-name lists, curated proper phrases, and contextual scoring to avoid overcorrecting user intent.
+
+- Preserves likely names (`Donald Duck`, `John Smith`, `Maeve O’Connor`)
+- Preserves known media and brand phrases (`BBC News`, `Sky News`, `The Lincoln Project`)
+- Lowercases ordinary article-led phrases (`The Public Event → the public event`)
+- Avoids treating every capitalized word as a proper noun
+- Provides profile-specific imports for `lite` and `full` dictionary builds
 
 ### Advanced Hyphenation & Compound Handling
 Intelligent processing of hyphenated compounds with style-specific rules:
@@ -94,14 +103,20 @@ Designed for integration into publishing workflows, CMS pipelines, and automated
 - Retains ampersands and symbols
 - Handles excessive whitespace safely
 - Optional whitespace preservation for editor-safe real-time usage
+- Defensive validation for script tags, unsafe controls, bidi controls, emoji, special characters, and allowed HTML tags
 
-### Runtime & Build Support
+TitleCaser is not an HTML sanitizer. Its validation layer is designed to reject or allow configured input patterns before casing, while still supporting editor workflows that intentionally pass safe tags such as `<br>`.
+
+### Runtime, Architecture & Build Support
 The AMD/browser build extends `String.prototype.toTitleCase()` for direct string usage in client environments.
 
 - Node.js (ES modules)
 - Browser (prototype extension via AMD build)
 - AMD distribution build
 - CLI build and test scripts
+- Structured utilities under `src/utils/*`
+- Structured data under `src/data/*`
+- Dedicated `TitleCaserConfig` API for reusable runtime configuration
 
 ---
 
@@ -194,9 +209,65 @@ When normalizeWhitespace is false:
 
 This behavior allows safe integration into real-time editors without unexpected trimming or cursor instability when normalization is disabled (see [Issue #17](https://github.com/danielhaim1/TitleCaser/issues/17) for discussion).
 
+### TitleCaserConfig
+
+Use `TitleCaserConfig` when you want to validate and reuse a full configuration object before passing it into `TitleCaser`.
+
+```javascript
+import { TitleCaser, TitleCaserConfig } from '@danielhaim/titlecaser';
+
+const config = new TitleCaserConfig({
+  style: 'wikipedia',
+  minTitleChars: 1,
+  maxTitleChars: 400,
+  dictionaryProfile: 'full',
+  allowEmojis: true,
+  allowSpecialCharacters: true,
+  normalizeQuotes: true,
+  normalizeWhitespace: true,
+  ignoreList: ['internal-code-name'],
+  phraseReplacementList: {
+    'open source initiative': 'Open Source Initiative'
+  },
+  security: {
+    allowHtml: true,
+    allowedHtmlTags: ['br'],
+    rejectScriptTags: true,
+    rejectEventHandlers: true,
+    rejectControlCharacters: true,
+    rejectBidiControls: true
+  }
+});
+
+const titleCaser = new TitleCaser(config.toTitleCaserOptions());
+
+titleCaser.toTitleCase('the report cited fox news after the public event');
+// → "The report cited Fox News after the public event"
+```
+
+`minTitleLength` and `maxTitleLength` are supported aliases for `minTitleChars` and `maxTitleChars`.
+
+### Dictionary Profiles
+
+Dictionary profiles control which dictionary data is used for dictionary-backed decisions. The default package import points to the `full` build for compatibility. To reduce compiled bundle size, import the `lite` entry point instead of relying only on the runtime `dictionaryProfile` option.
+
+```javascript
+import { TitleCaser as LiteTitleCaser } from '@danielhaim/titlecaser/lite';
+import { TitleCaser as FullTitleCaser } from '@danielhaim/titlecaser/full';
+```
+
+| Profile | Description |
+|---------|-------------|
+| `lite` | Smaller build with curated proper phrases, names, brands, media entities, acronyms, and domain terms. It does not include the WordNet-derived part-of-speech dictionary, so Wikipedia sentence-case detection is less aggressive. |
+| `full` | Full dictionary-assisted build with the complete WordNet-derived noun, verb, adjective, and adverb data; default. |
+
+The dictionary is bundled with the package and does not perform API calls. Runtime `dictionaryProfile` is still accepted for the default build, but runtime selection cannot remove data that has already been compiled into a bundle.
+
 ### Browser Usage
 ```html
-<script src="./path/to/TitleCaser.amd.js"></script>
+<script src="./path/to/dist/full/titlecaser.amd.js"></script>
+<!-- or -->
+<script src="./path/to/dist/lite/titlecaser.amd.js"></script>
 ```
 
 ```javascript
@@ -239,11 +310,32 @@ new TitleCaser(options)
 | Option                 | Type        | Default | Description |
 |------------------------|------------|---------|-------------|
 | `style`                | string     | `'ap'`  | Editorial style: `'ap' \| 'apa' \| 'chicago' \| 'nyt' \| 'wikipedia' \| 'british'` |
+| `dictionaryProfile`    | string     | `'full'` | Dictionary profile: `'lite' \| 'full'` |
 | `smartQuotes`          | boolean    | `false` | Converts straight quotes (`' "`) to typographic curly quotes |
+| `normalizeQuotes`      | boolean    | `false` | Normalizes left/right quote characters before processing |
+| `normalizeWhitespace`  | boolean    | `true`  | Collapses consecutive whitespace and trims leading/trailing whitespace. Set to `false` to preserve original spacing (editor-safe mode). |
+| `minTitleChars`        | number     | `1`     | Minimum accepted input length in characters |
+| `maxTitleChars`        | number     | `400`   | Maximum accepted input length in characters |
+| `allowEmojis`          | boolean    | `true`  | Allows emoji characters in input |
+| `allowSpecialCharacters` | boolean  | `true`  | Allows configured special characters in input |
 | `neverCapitalize`      | string[]   | `[]`    | Additional words that should remain lowercase (merged with style defaults) |
 | `wordReplacementsList` | object[]   | internal defaults | Array of `{ 'term': 'replacement' }` objects used for term normalization |
+| `phraseReplacementList` | object    | `{}`    | String-to-string phrase replacement map |
+| `replaceTerms`         | array      | `[]`    | Tuple-style replacement list used by `TitleCaserConfig` |
+| `security`             | object     | default security policy | Controls HTML, script tag, event-handler, control-character, bidi, and zero-width character validation |
 | `debug`                | boolean    | `false` | Enables internal warning logs during processing |
-| `normalizeWhitespace`  | boolean    | `true`  | Collapses consecutive whitespace and trims leading/trailing whitespace. Set to `false` to preserve original spacing (editor-safe mode). |
+
+### Security Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `allowHtml` | boolean | `false` | Allows HTML-looking input only when enabled |
+| `allowedHtmlTags` | string[] | `['br']` | Tags allowed when HTML is enabled |
+| `rejectScriptTags` | boolean | `true` | Rejects `<script>` tags |
+| `rejectEventHandlers` | boolean | `true` | Rejects inline handlers such as `onclick=` |
+| `rejectControlCharacters` | boolean | `true` | Rejects unsafe control characters |
+| `rejectBidiControls` | boolean | `true` | Rejects bidi override/control characters |
+| `rejectZeroWidthCharacters` | boolean | `false` | Optionally rejects zero-width characters |
 
 ### Methods
 
@@ -283,6 +375,18 @@ titleCaser.addExactPhraseReplacements([
 titleCaser.setStyle('chicago');
 ```
 
+#### createTitleCaserConfig(config)
+```javascript
+import { createTitleCaserConfig } from '@danielhaim/titlecaser';
+
+const config = createTitleCaserConfig({
+  style: 'ap',
+  maxTitleChars: 300
+});
+
+const titleCaser = new TitleCaser(config.toTitleCaserOptions());
+```
+
 ---
 
 ## Test Coverage
@@ -292,10 +396,27 @@ npm run test
 ```
 
 - Extensive unit test coverage
-- Cross-style validation (AP, Chicago, APA, NYT, Wikipedia)
+- Split style validation for AP, APA, Chicago, NYT, and Wikipedia
+- Utility-level tests for individual helpers
+- Hygiene and runtime validation tests
+- TypeScript definition tests
 - Acronym disambiguation edge cases
 - Hyphenation edge cases
 - Brand normalization
+- Wikipedia dictionary/entity contradiction tests
+- Cross-style name heuristic and rare noun trap coverage
+
+Focused test commands:
+
+```bash
+npm run test-ap
+npm run test-apa
+npm run test-chicago
+npm run test-nyt
+npm run test-wikipedia
+npm run test-utils
+npm run test-hygiene
+```
 
 ---
 
