@@ -1,5 +1,5 @@
 /*!
- * @danielhaim/titlecaser - v1.8.1 - 2026-07-05
+ * @danielhaim/titlecaser - v1.8.2 - 2026-07-06
  * git+https://github.com/danielhaim1/titlecaser.git
  * Copyright (c) 2026 Daniel Haim, Licensed Apache-2.0
  */
