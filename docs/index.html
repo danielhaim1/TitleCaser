@@ -2,94 +2,153 @@
 
 layout: default
 
-title: TitleCaser 
+title: TitleCaser
 description: A powerful utility for transforming text to title case with support for multiple style guides and extensive customization options.
 
 ---
 
-<form>
-    <div class="form-wrapper">
-        <h1 class="form-title">TitleCaser</h1>
-        <div class="github-buttons">
-            <div class="github-buttons">
-                <a href="https://github.com/danielhaim1/titlecaser"
-                    class="gh-btn" title="Star this repo on GitHub"
-                    rel="noopener noreferrer">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="12pt"
-                        height="12pt" viewBox="0 0 12 12" version="1.1">
-                        <path fill="currentColor"
-                            d="M 1.875 1.5 C 1.3125 2.25 1.5 3.46875 1.777344 3.828125 C 1.144531 4.492188 0.757812 5.390625 0.757812 6.550781 C 0.75 8.90625 2.609375 10.5 6.003906 10.5 C 9.398438 10.5 11.25 8.90625 11.25 6.550781 C 11.25 5.351562 10.882812 4.453125 10.277344 3.804688 C 10.5 3.46875 10.6875 2.25 10.125 1.5 C 8.71875 1.5 7.875 2.53125 7.875 2.53125 C 7.875 2.53125 7.21875 2.25 6 2.25 C 4.78125 2.25 4.121094 2.550781 4.121094 2.550781 C 4.121094 2.550781 3.28125 1.5 1.875 1.5 Z M 3.9375 5.625 C 4.847656 5.625 4.882812 5.984375 5.9375 5.996094 C 5.960938 5.996094 5.984375 5.996094 6.011719 5.996094 C 6.054688 5.996094 6.113281 5.996094 6.160156 5.996094 C 7.117188 5.957031 7.179688 5.625 8.0625 5.625 C 8.996094 5.625 9.75 6.382812 9.75 7.3125 C 9.75 7.902344 9.75 9.75 6 9.75 C 2.25 9.75 2.25 7.949219 2.25 7.3125 C 2.25 6.382812 3.007812 5.625 3.9375 5.625 Z M 4.125 6.75 C 3.917969 6.75 3.75 7.085938 3.75 7.5 C 3.75 7.914062 3.917969 8.25 4.125 8.25 C 4.332031 8.25 4.5 7.914062 4.5 7.5 C 4.5 7.085938 4.332031 6.75 4.125 6.75 Z M 7.875 6.75 C 7.667969 6.75 7.5 7.085938 7.5 7.5 C 7.5 7.914062 7.667969 8.25 7.875 8.25 C 8.082031 8.25 8.25 7.914062 8.25 7.5 C 8.25 7.085938 8.082031 6.75 7.875 6.75 Z M 7.875 6.75 " />
-                    </svg>
-                    <span>Star</span>
+<main class="demo-page">
+    <section class="demo-shell" aria-labelledby="demo-title">
+        <header class="demo-header">
+            <div class="demo-header-content">
+                <div class="demo-kicker-row" aria-label="Project status">
+                    <span>Open Source</span>
+                </div>
+                <h1 id="demo-title">TitleCaser</h1>
+                <p class="demo-description">
+                    Convert headlines across AP, APA, Chicago, NYT, and Wikipedia styles with dictionary-backed names, brands, acronyms, quotes, and punctuation handling.
+                </p>
+            </div>
+
+            <div class="demo-actions" aria-label="Project links">
+                <a href="https://github.com/danielhaim1/titlecaser" class="demo-link demo-link-primary" target="_blank" rel="noopener noreferrer">
+                    GitHub
                 </a>
-                <a
-                    href="https://github.com/danielhaim1/titlecaser/fork"
-                    class="gh-btn"
-                    title="Fork this repo on GitHub"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <?xml version="1.0" encoding="UTF-8"?>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="12pt"
-                        height="12pt" viewBox="0 0 12 12" version="1.1">
-                        <path fill="currentColor"
-                            d="M 6 0.722656 L 5.65625 1.542969 L 4.464844 4.367188 L 0.746094 4.769531 L 3.527344 7.394531 L 2.738281 11.269531 L 6 9.28125 L 9.261719 11.269531 L 8.472656 7.394531 L 11.253906 4.769531 L 7.535156 4.367188 Z M 6 2.652344 L 7.015625 5.0625 L 9.558594 5.339844 L 7.65625 7.136719 L 8.183594 9.734375 L 6 8.402344 L 3.816406 9.734375 L 4.34375 7.136719 L 2.445312 5.339844 L 4.984375 5.0625 Z M 6 2.652344 " />
-                    </svg>
-                    <span>Fork</span>
+                <a href="https://github.com/danielhaim1/titlecaser#readme" class="demo-link" target="_blank" rel="noopener noreferrer">
+                    Documentation
                 </a>
             </div>
+        </header>
 
-        </div>
-
-        <p class="form-description">
-            This is an open source text transformation tool that can convert any
-            text to the proper title case format, following established style
-            guides like APA, AP, Chicago, NYT, Wikipedia, and British.
-        </p>
-        <br />
-        <p class="form-doc-link">
-            <a target="_blank"
-                href="https://github.com/danielhaim1/titlecaser">View
-                Documentation →</a>
-        </p>
-        
-
-        <div class="form-grid">
-            <div class="form-textarea-group">
-                <textarea id="textField" name="textField" rows="3"></textarea>
+        <details class="example-panel">
+            <summary class="example-panel-summary">
+                <span>
+                    <strong>Try an Example</strong>
+                    <small>Load sample titles that demonstrate common casing edge cases.</small>
+                </span>
+            </summary>
+            <div class="demo-toolbar" aria-label="Example titles">
+                <button type="button" id="titleShuffleBtn" class="example-chip example-chip-strong">Random Example</button>
+                <button type="button" class="example-chip" data-example="ap">AP Style</button>
+                <button type="button" class="example-chip" data-example="apa">APA Style</button>
+                <button type="button" class="example-chip" data-example="nyt">NYT Style</button>
+                <button type="button" class="example-chip" data-example="quotes">Quotes</button>
+                <button type="button" class="example-chip" data-example="brands">Brands</button>
+                <button type="button" class="example-chip" data-example="acronyms">Acronyms</button>
+                <button type="button" class="example-chip" data-example="wikipedia">Wikipedia Names</button>
             </div>
-            <div class="form-button-group">
-                <button type="button" id="titleShuffleBtn">Randomize</button>
-                <button type="button" id="titleConvertBtn">Convert</button>
-            </div>
-        </div>
+        </details>
 
-        <div class="form-style-selector">
-            <label>
-                <input type="radio" name="styleSelect" value="apa" checked> APA
-            </label>
-            <label>
-                <input type="radio" name="styleSelect" value="ap"> AP
-            </label>
-            <label>
-                <input type="radio" name="styleSelect" value="chicago"> Chicago
-            </label>
-            <label>
-                <input type="radio" name="styleSelect" value="nyt"> NYT
-            </label>
-            <label>
-                <input type="radio" name="styleSelect" value="wikipedia">
-                Wikipedia
-            </label>
-        </div>
+        <form class="demo-form">
+            <fieldset class="style-selector" aria-label="Title case style">
+                <label>
+                    <input type="radio" name="styleSelect" value="apa" checked>
+                    <span>APA</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="ap">
+                    <span>AP</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="chicago">
+                    <span>Chicago</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="nyt">
+                    <span>NYT</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="wikipedia">
+                    <span>Wikipedia</span>
+                </label>
+            </fieldset>
 
-        <div class="form-output">
-            <label for="textField">After</label>
-            <div id="output">
-                <p id="before"></p>
-                <p id="after" class="output-text"></p>
+            <div class="converter-grid">
+                <section class="converter-panel" aria-labelledby="before-title">
+                    <div class="panel-header">
+                        <h2 id="before-title">Before</h2>
+                        <button type="button" id="titleConvertBtn" class="primary-button">Convert</button>
+                    </div>
+                    <textarea
+                        id="textField"
+                        name="textField"
+                        rows="8"
+                        spellcheck="false"
+                        placeholder="Paste or type a title here"></textarea>
+                </section>
+
+                <section class="converter-panel" aria-labelledby="after-title">
+                    <div class="panel-header">
+                        <h2 id="after-title">After</h2>
+                        <button type="button" id="copyOutputBtn" class="secondary-button">Copy</button>
+                    </div>
+                    <div id="output" class="output-box" aria-live="polite">
+                        <p id="before" hidden></p>
+                        <p id="after" class="output-text"></p>
+                    </div>
+                </section>
             </div>
-        </div>
-    </div>
-</form>
+        </form>
+
+        <section class="docs-preview" aria-labelledby="docs-preview-title">
+            <div class="docs-preview-header">
+                <h2 id="docs-preview-title">Get started</h2>
+                <p>
+                    Install the package, choose a build profile, then pass a style and optional runtime settings into the title casing engine.
+                </p>
+                <a href="https://github.com/danielhaim1/titlecaser#readme" class="docs-preview-link" target="_blank" rel="noopener noreferrer">
+                    Read Full Documentation
+                </a>
+            </div>
+
+            <div class="docs-grid">
+                <article class="docs-card">
+                    <h3>Install</h3>
+                    <pre><code>npm install @danielhaim/titlecaser</code></pre>
+                    <p>Use the default full build for dictionary-assisted Wikipedia mode and broader entity detection.</p>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Node Usage</h3>
+                    <pre><code>import { TitleCaser } from '@danielhaim/titlecaser';
+
+const tc = new TitleCaser({ style: 'ap' });
+
+tc.toTitleCase('nodejs development on aws');</code></pre>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Browser Usage</h3>
+                    <pre><code>&lt;script src="./dist/full/titlecaser.amd.js"&gt;&lt;/script&gt;
+
+"the future of devops"
+  .toTitleCase({ style: 'apa' });</code></pre>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Build Profiles</h3>
+                    <div class="docs-pill-row">
+                        <span>full</span>
+                        <span>lite</span>
+                    </div>
+                    <p>Import the lite build when bundle size matters, or the full build when dictionary-backed detection is more important.</p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="demo-footer">
+            <span>Full Build Demo</span>
+            <span>v1.8.1</span>
+        </footer>
+    </section>
+</main>

@@ -1,222 +1,67 @@
-/**
- * Highlight the characters that are different between two strings.
- *
- * @param {string} beforeText - The original string.
- * @param {string} afterText - The updated string.
- * @param {boolean} ignoreCase - Whether to ignore case when comparing characters.
- *
- * @returns {string} A new string with the changed characters wrapped in a <span class="highlight"> element.
- */
-function highlight ( beforeText, afterText, ignoreCase = false ) {
-	const textArr = []; // create an empty array to store the characters
-	const minLength = Math.min ( beforeText.length, afterText.length ); // get the length of the shorter string
-	
-	// loop through each character in the shorter string
-	for ( let i = 0; i < minLength; i++ ) {
-		const beforeChar = ignoreCase
-			? beforeText.charAt ( i ).toLowerCase ()
-			: beforeText.charAt ( i ); // get the character at the current index of the original string
-		const afterChar = ignoreCase
-			? afterText.charAt ( i ).toLowerCase ()
-			: afterText.charAt ( i ); // get the character at the current index of the updated string
-		
-		// check if the characters are different and not a dash
-		if ( beforeChar !== afterChar && beforeChar !== "-" && afterChar !== "-" ) {
-			// wrap the changed character in a <span class="highlight"> an element and add it to the array
-			textArr.push ( `<span class="highlight">${ afterChar }</span>` );
-		} else {
-			textArr.push ( afterChar ); // add the unchanged character to the array
-		}
-	}
-	
-	// check if the updated string is longer than the original string
-	if ( afterText.length > beforeText.length ) {
-		textArr.push (
-			`<span class="highlight">${ afterText.slice ( beforeText.length ) }</span>`
-		); // wrap the added characters in a <span class="highlight"> an element and add them to the array
-	}
-	
-	return textArr.join ( "" ); // join the characters in the array into a string and return it
-}
-
-/**
- * Converts the input string to title case using the selected style from radio buttons.
- *
- * @param {string} inputString - The input string to convert to title case.
- * @returns {string} The converted string in title case.
- */
-function convertToTitleCase(inputString, options) {
-	console.log("[convertToTitleCase] Input:", inputString);
-	console.log("[convertToTitleCase] Options:", options);
-
-	const result = inputString.toTitleCase(options);
-	console.log("[convertToTitleCase] Result:", result);
-	return result;
-}
-
-/**
- * Processes the input string and updates the before and after elements.
- * @param {string} inputString - The input string to be processed.
- * @param {HTMLElement} styleSelect - The select element containing the style option.
- * @param {HTMLElement} beforeEl - The element where the input string is displayed.
- * @param {HTMLElement} afterEl - The element where the processed string is displayed.
- * @throws {Error} Invalid input if any of the input parameters are missing.
- */
-function processInput(inputString, styleValue, beforeEl, afterEl) {
-	console.log("[processInput] Input String:", inputString);
-	console.log("[processInput] Style Value:", styleValue);
-
-	if (!inputString || !styleValue || !beforeEl || !afterEl) {
-		console.error("[processInput] - Invalid input");
-		throw new Error("Invalid input");
-	}
-
-	const options = { style: styleValue };
-	const titleCasedString = convertToTitleCase(inputString, options);
-
-	console.log("[processInput] Title Cased String:", titleCasedString);
-
-	beforeEl.textContent = inputString;
-	afterEl.innerHTML = highlight(inputString, titleCasedString);
-}
-
-/**
- * Handles the "Convert" button click event by retrieving the input text from the textarea,
- * getting the selected title case style from the radio buttons, and passing them to the processInput function.
- * Updates the "Convert" button style if the textarea is empty.
- */
-function handleTitleCase () {
-	const textField = document.getElementById("textField");
-	const beforeEl = document.querySelector("#before");
-	const afterEl = document.querySelector("#after");
-	const titleConvertBtn = document.getElementById("titleConvertBtn");
-
-	if (!textField || !beforeEl || !afterEl || !titleConvertBtn) return;
-
-	const inputString = textField.value.trim();
-
-	if (inputString === "") {
-		titleConvertBtn.classList.add("is-empty");
-		return;
-	}
-
-	titleConvertBtn.classList.remove("is-empty");
-
-	const styleSelect = document.querySelector('input[name="styleSelect"]:checked');
-	if (!styleSelect) {
-		console.error("[handleTitleCase] - No style selected");
-		return;
-	}
-
-	processInput(inputString, styleSelect.value, beforeEl, afterEl);
-}
-
-
-/**
- * Sets up the title casing functionality on the input field.
- */
-function startTitleCasing () {
-	const textField = document.getElementById ( "textField" );
-	// Check if text field is empty
-	if ( textField.value === "" ) return;
-	
-	const beforeEl = document.getElementById ( "before" );
-	const afterEl = document.getElementById ( "after" );
-	let intervalId = null;
-	
-	// Define debounce function to limit the frequency of title casing
-	function debounce ( func, delay ) {
-		let timerId;
-		return function ( ...args ) {
-			clearTimeout ( timerId );
-			timerId = setTimeout ( () => func.apply ( this, args ), delay );
-		};
-	}
-	
-	// Apply debounce to the title casing function to prevent it from running too often
-	const debouncedTitleCase = debounce ( () => {
-		const inputString = textField.value;
-		afterEl.innerHTML = "";
-		// Check if input is empty before processing
-		if ( inputString === "" ) return;
-		
-		const titleCasedString = convertToTitleCase ( inputString );
-		beforeEl.textContent = inputString;
-		afterEl.textContent = titleCasedString;
-		
-		afterEl.innerHTML = highlight ( beforeEl.textContent, afterEl.textContent );
-	}, 1000 );
-	
-	// Attach event listener to text field to trigger title casing
-	textField.addEventListener ( "input", debouncedTitleCase );
-}
-
-/**
- * Clear the output element if the input field is empty.
- * Toggle the 'is-empty' class and the 'disabled' attribute of the 'titleConvertBtn'.
- * @throws {Error} If there is an error while executing the function.
- * @returns {void}
- */
-function clearOutputIfEmpty () {
-	try {
-		const { value } = document.getElementById ( "textField" );
-		const afterEl = document.getElementById ( "after" );
-		const titleConvertBtn = document.getElementById ( "titleConvertBtn" );
-		
-		titleConvertBtn.classList.toggle ( "is-empty", value === "" );
-		titleConvertBtn.toggleAttribute ( "disabled", value === "" );
-		
-		if ( document.activeElement === textField && value === "" ) {
-			afterEl.innerHTML = "";
-		}
-	} catch ( err ) {
-		console.error ( "Error in clearOutputIfEmpty function:", err );
-		throw err;
-	}
-}
-
-function shuffleTitles () {
-	for ( let i = titles.length - 1; i > 0; i-- ) {
-		const j = Math.floor ( Math.random () * (i + 1) );
-		[ titles[i], titles[j] ] = [ titles[j], titles[i] ];
-	}
-
-	const title = titles[0];
-	const textField = document.getElementById ( "textField" );
-	textField.value = title;
-}
-
-
-/**
- * Initializes the title caser by adding event listeners to the appropriate elements
- * and calling the necessary functions.
- */
-function initializeTitleCaser () {
-	startTitleCasing();
-
-	const titleConvertBtn = document.getElementById("titleConvertBtn");
-	const titleShuffleBtn = document.getElementById("titleShuffleBtn");
-	const titleField = document.getElementById("textField");
-
-	// Replace convert button to prevent stacked listeners
-	const newConvertBtn = titleConvertBtn.cloneNode(true);
-	titleConvertBtn.parentNode.replaceChild(newConvertBtn, titleConvertBtn);
-	newConvertBtn.addEventListener("click", handleTitleCase);
-
-	titleField.addEventListener("input", clearOutputIfEmpty);
-
-	titleShuffleBtn.addEventListener("click", () => {
-		shuffleTitles(); // sets textField.value
-		newConvertBtn.classList.remove("is-empty");
-		newConvertBtn.removeAttribute("disabled");
-		handleTitleCase();
-	});
-
-	// Shuffle once and convert on load (no duplicate trigger)
-	shuffleTitles();
-	handleTitleCase();
-}
-
+const titleExamples = {
+	ap: [
+		"nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
+		"the us military and uk officials discuss ai policy",
+		"inside a high-profile, long-term plan for e-commerce growth",
+		"what to know about front-end and back-end engineering teams",
+		"it’s up to us to decide how the us responds",
+		"on and off again: lessons from a start-up ceo",
+	],
+	apa: [
+		"blockchain technology and cyber security: opportunities and challenges for secure digital transactions",
+		"the role of human error in cyber attacks and mitigation strategies",
+		"machine learning in cloud computing: a comparative analysis of public and private systems",
+		"understanding social media effects on mental health among young adults",
+		"how github actions improves a/b testing workflows for ecommerce teams",
+		"designing secure node.js applications for server-side javascript deployment",
+	],
+	nyt: [
+		"inside the race to build safer ai tools for public schools",
+		"how small businesses are adapting to rising cloud costs",
+		"why open source maintainers are rethinking software security",
+		"the people behind a new wave of climate technology startups",
+		"what a us-uk agreement could mean for digital trade",
+		"when social media platforms become search engines",
+	],
+	quotes: [
+		"‘enough!’ says leader after the vote",
+		"“the future is open,” says github founder",
+		"'this changes everything,' says the ceo",
+		"(inside the aws migration) lessons from devops teams",
+		"“why now?” asks the editor after the cnn interview",
+		"‘the best ideas travel fast,’ says open source maintainer",
+		"«bonjour from paris,» says the github contributor",
+	],
+	wikipedia: [
+		"the report cited BBC News, Sky News, Al Jazeera, and the local artist",
+		"The surprise guest Donald Trump jr. was a Fox News favorite!",
+		"john smith wrote about the surprise guest after the public event",
+		"cnn australia and cnn international covered the public event",
+		"maeve o'connor discussed apple music on fox business",
+		"the article mentioned The Lincoln Project and the local artist",
+		"nbc, msnbc, and cnbc covered the technology hearing",
+	],
+	brands: [
+		"reactjs teams build full stack tools with node.js",
+		"nextjs developers compare google tensorflow and apple music",
+		"the iphone's impact on ebay sellers using github actions",
+		"nodejs development on aws with react.js and full stack teams",
+		"shopify merchants compare tiktok, snapchat, and instagram campaigns",
+		"mcdonalds, coca-cola, and t-mobile launch an ecommerce campaign",
+		"vmware teams compare virtualbox and github actions",
+		"skoda engineers publish a devops case study on aws",
+	],
+	acronyms: [
+		"mitigating ddos attacks on aws: strategies using github and faqs",
+		"from faqs to wow: lessons from ceos and cmos using aws",
+		"the future of ai, iot, and saas on aws",
+		"a/b testing with github actions for ctos and cmos",
+		"us-uk-led talks focus on ai, eu policy, and cloud security",
+		"the uk and the us debate iaas rules for government agencies",
+		"asap guide to diy node.js deployments on aws",
+		"tbd roadmap for apis, faqs, and ddos response teams",
+	],
+};
 
 const titleArray = [
 	"They signed the treaty with the us",
@@ -241,11 +86,12 @@ const titleArray = [
 	"we visited the uk and the US, and both consider a bill for environmental protection.",
 	"the book of life",
 	"node.js development on aws: an in-depth tutorial on server-side javascript deployment",
-	"louis-iv Extravaganza: A Culinary Journey with kellogss Delights",
+	"louis-iv extravaganza: a culinary journey with kellogss delights",
 	"what's to say about this?",
 	"google tensorflow",
-	"the iphone\'s impact on modern communication: a sociolinguistic analysis",
+	"the iphone's impact on modern communication: a sociolinguistic analysis",
 	"backend and frontend",
+	"back end and full stack developers",
 	"vmware vs. virtualbox: a comparative study of virtualization software",
 	"the science of nutrition: debunking myths and fads",
 	"backend web development: building scalable apis with node.js",
@@ -263,11 +109,10 @@ const titleArray = [
 	"ransomware mitigation strategies in critical infrastructure: a framework for securing public and private sectors against cyber attacks",
 	"cybersecurity threats and countermeasures: an overview of modern techniques and best practices",
 	"the economics of cybersecurity: a study of the market forces driving information security strategies",
-	"blockchain technology and cybersecurity: opportunities and challenges for secure digital transactions",
+	"blockchain technology and cyber security: opportunities and challenges for secure digital transactions",
 	"assessing cybersecurity risks in cloud computing environments: a comparative study of public and private clouds",
 	"cybersecurity and human factors: understanding the role of human error in cyber attacks and mitigation strategies",
 	"a comprehensive guide to a/b testing with github actions: best practices for optimizing your website!",
-	"nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
 	"demystifying devops with aws and github: best practices for front-end and back-end development processes",
 	"from faqs to wow: techniques for crafting effective customer support articles using github and aws",
 	"the rise of saas on aws: exploring the future of cloud computing in business environments",
@@ -284,8 +129,223 @@ const titleArray = [
 	"the ultimate guide to iaas on aws: an in-depth examination of infrastructure as a service",
 	"successful saas with aws: strategies for ctos",
 	"cmos unleashed: leveraging the power of marketing in the digital age on aws",
-	"devops and agile on aws: synergies and challenges for software development processes using github"
+	"devops and agile on aws: synergies and challenges for software development processes using github",
 ];
-const titles = Array.from(new Set(titleArray));
 
-initializeTitleCaser ();
+const titles = Array.from(new Set(titleArray));
+const previousExamples = {};
+
+function escapeHtml(value) {
+	return value
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function splitComparableWords(value) {
+	return value.match(/\s+|[^\s]+/g) || [];
+}
+
+function getComparableTokenIndexes(parts) {
+	return parts.reduce((indexes, part, index) => {
+		if (!/^\s+$/.test(part)) {
+			indexes.push(index);
+		}
+
+		return indexes;
+	}, []);
+}
+
+function createTokenAlignment(beforeParts, afterParts) {
+	const beforeIndexes = getComparableTokenIndexes(beforeParts);
+	const afterIndexes = getComparableTokenIndexes(afterParts);
+	const beforeTokens = beforeIndexes.map((index) => beforeParts[index].toLowerCase());
+	const afterTokens = afterIndexes.map((index) => afterParts[index].toLowerCase());
+	const table = Array.from({ length: beforeTokens.length + 1 }, () => (
+		Array(afterTokens.length + 1).fill(0)
+	));
+
+	for (let beforeIndex = beforeTokens.length - 1; beforeIndex >= 0; beforeIndex -= 1) {
+		for (let afterIndex = afterTokens.length - 1; afterIndex >= 0; afterIndex -= 1) {
+			table[beforeIndex][afterIndex] = beforeTokens[beforeIndex] === afterTokens[afterIndex]
+				? table[beforeIndex + 1][afterIndex + 1] + 1
+				: Math.max(table[beforeIndex + 1][afterIndex], table[beforeIndex][afterIndex + 1]);
+		}
+	}
+
+	const alignment = new Map();
+	let beforeIndex = 0;
+	let afterIndex = 0;
+
+	while (beforeIndex < beforeTokens.length && afterIndex < afterTokens.length) {
+		if (beforeTokens[beforeIndex] === afterTokens[afterIndex]) {
+			alignment.set(afterIndexes[afterIndex], beforeIndexes[beforeIndex]);
+			beforeIndex += 1;
+			afterIndex += 1;
+		} else if (table[beforeIndex + 1][afterIndex] >= table[beforeIndex][afterIndex + 1]) {
+			beforeIndex += 1;
+		} else {
+			afterIndex += 1;
+		}
+	}
+
+	return alignment;
+}
+
+function highlight(beforeText, afterText) {
+	const beforeParts = splitComparableWords(beforeText);
+	const afterParts = splitComparableWords(afterText);
+	const alignment = createTokenAlignment(beforeParts, afterParts);
+
+	return afterParts.map((part, index) => {
+		const escapedPart = escapeHtml(part);
+
+		if (/^\s+$/.test(part)) {
+			return escapedPart;
+		}
+
+		const beforeIndex = alignment.get(index);
+		const beforePart = beforeIndex === undefined ? "" : beforeParts[beforeIndex];
+
+		return beforePart === part
+			? escapedPart
+			: `<span class="highlight">${escapedPart}</span>`;
+	}).join("");
+}
+
+function getSelectedStyle() {
+	const selectedStyle = document.querySelector('input[name="styleSelect"]:checked');
+	return selectedStyle ? selectedStyle.value : "apa";
+}
+
+function convertToTitleCase(inputString, styleValue) {
+	return inputString.toTitleCase({ style: styleValue });
+}
+
+function processInput() {
+	const textField = document.getElementById("textField");
+	const beforeEl = document.getElementById("before");
+	const afterEl = document.getElementById("after");
+	const titleConvertBtn = document.getElementById("titleConvertBtn");
+
+	if (!textField || !beforeEl || !afterEl || !titleConvertBtn) return;
+
+	const inputString = textField.value.trim();
+	titleConvertBtn.toggleAttribute("disabled", inputString === "");
+
+	if (inputString === "") {
+		beforeEl.textContent = "";
+		afterEl.textContent = "";
+		return;
+	}
+
+	const titleCasedString = convertToTitleCase(inputString, getSelectedStyle());
+	beforeEl.textContent = inputString;
+	afterEl.dataset.value = titleCasedString;
+	afterEl.innerHTML = highlight(inputString, titleCasedString);
+}
+
+function setExample(value, style) {
+	const textField = document.getElementById("textField");
+	if (!textField) return;
+
+	textField.value = value;
+
+	if (style) {
+		const styleInput = document.querySelector(`input[name="styleSelect"][value="${style}"]`);
+		if (styleInput) {
+			styleInput.checked = true;
+		}
+	}
+
+	processInput();
+}
+
+function getExampleValue(key) {
+	const examples = titleExamples[key];
+
+	if (!Array.isArray(examples)) {
+		return examples;
+	}
+
+	const availableExamples = examples.filter((example) => example !== previousExamples[key]);
+	const pool = availableExamples.length > 0 ? availableExamples : examples;
+	const value = pool[Math.floor(Math.random() * pool.length)];
+	previousExamples[key] = value;
+
+	return value;
+}
+
+function shuffleTitles() {
+	const title = titles[Math.floor(Math.random() * titles.length)];
+	setExample(title);
+}
+
+async function copyOutput() {
+	const afterEl = document.getElementById("after");
+	const copyOutputBtn = document.getElementById("copyOutputBtn");
+	if (!afterEl || !copyOutputBtn) return;
+
+	const value = afterEl.dataset.value || afterEl.textContent;
+	if (!value) return;
+
+	try {
+		await navigator.clipboard.writeText(value);
+	} catch (error) {
+		const fallback = document.createElement("textarea");
+		fallback.value = value;
+		fallback.setAttribute("readonly", "");
+		fallback.style.position = "absolute";
+		fallback.style.left = "-9999px";
+		document.body.appendChild(fallback);
+		fallback.select();
+		document.execCommand("copy");
+		document.body.removeChild(fallback);
+	}
+
+	copyOutputBtn.textContent = "Copied";
+	copyOutputBtn.classList.add("is-copied");
+
+	window.setTimeout(() => {
+		copyOutputBtn.textContent = "Copy";
+		copyOutputBtn.classList.remove("is-copied");
+	}, 1400);
+}
+
+function initializeTitleCaser() {
+	const textField = document.getElementById("textField");
+	const titleConvertBtn = document.getElementById("titleConvertBtn");
+	const titleShuffleBtn = document.getElementById("titleShuffleBtn");
+	const copyOutputBtn = document.getElementById("copyOutputBtn");
+
+	if (!textField || !titleConvertBtn || !titleShuffleBtn || !copyOutputBtn) return;
+
+	textField.addEventListener("input", processInput);
+	titleConvertBtn.addEventListener("click", processInput);
+	titleShuffleBtn.addEventListener("click", shuffleTitles);
+	copyOutputBtn.addEventListener("click", copyOutput);
+
+	document.querySelectorAll('input[name="styleSelect"]').forEach((input) => {
+		input.addEventListener("change", processInput);
+	});
+
+	document.querySelectorAll(".example-chip[data-example]").forEach((button) => {
+		button.addEventListener("click", () => {
+			const key = button.dataset.example;
+			const preferredStyleByExample = {
+				ap: "ap",
+				apa: "apa",
+				nyt: "nyt",
+				wikipedia: "wikipedia",
+			};
+			const preferredStyle = preferredStyleByExample[key] || null;
+			setExample(getExampleValue(key), preferredStyle);
+		});
+	});
+
+	setExample(getExampleValue("brands"), "apa");
+}
+
+initializeTitleCaser();
