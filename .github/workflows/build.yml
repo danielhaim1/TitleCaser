@@ -10,33 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Install Node.js and dependencies
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
-        node-version: '14.x'
+        node-version: '22'
     - run: npm install
 
     - name: Build and bundle JavaScript code
-      run: npm run build-docs
+      run: npm run build
 
     - name: Install Ruby and Jekyll
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.1'
-    - name: Install Bundler
-      run: |
-        sudo gem install bundler
-    - name: Install Jekyll dependencies
-      run: |
-        cd docs
-        bundle config set path 'vendor/bundle'
-        bundle install
+        bundler-cache: true
+        working-directory: docs
+
     - name: Build Jekyll site
-      run: |
-        cd docs
-        bundle exec jekyll build
+      run: bundle exec jekyll build
+      working-directory: docs
   
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
