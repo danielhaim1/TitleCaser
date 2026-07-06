@@ -8,9 +8,14 @@ export interface TitleCaserSecurityOptions {
   rejectZeroWidthCharacters?: boolean;
 }
 
+export type TitleCaserStyle = 'ap' | 'apa' | 'chicago' | 'wikipedia' | 'nyt' | 'british';
+export type TitleCaserDictionaryProfile = 'lite' | 'full';
+export type TitleCaserReplacementMap = { [key: string]: string };
+export type TitleCaserReplacementPair = [string, string];
+
 export interface TitleCaserOptions {
-  style?: 'ap' | 'apa' | 'chicago' | 'wikipedia' | 'nyt' | 'british';
-  dictionaryProfile?: 'lite' | 'full';
+  style?: TitleCaserStyle;
+  dictionaryProfile?: TitleCaserDictionaryProfile;
   smartQuotes?: boolean;
   normalizeQuotes?: boolean;
   normalizeWhitespace?: boolean;
@@ -21,9 +26,9 @@ export interface TitleCaserOptions {
   allowEmojis?: boolean;
   allowSpecialCharacters?: boolean;
   neverCapitalize?: string[];
-  wordReplacementsList?: Array<{ [key: string]: string }>;
-  replaceTerms?: Array<[string, string]>;
-  phraseReplacementList?: { [key: string]: string };
+  wordReplacementsList?: TitleCaserReplacementMap[];
+  replaceTerms?: TitleCaserReplacementPair[];
+  phraseReplacementList?: TitleCaserReplacementMap;
   security?: TitleCaserSecurityOptions;
   debug?: boolean;
 }
@@ -35,11 +40,11 @@ export interface TitleCaserConfigOptions extends TitleCaserOptions {
 export class TitleCaser {
   constructor(options?: TitleCaserOptions);
   toTitleCase(text: string): string;
-  setReplaceTerms(terms: Array<{ [key: string]: string }>): void;
+  setReplaceTerms(terms: TitleCaserReplacementMap[]): void;
   addReplaceTerm(term: string, replacement: string): void;
   removeReplaceTerm(term: string): void;
-  addExactPhraseReplacements(phrases: Array<{ [key: string]: string }>): void;
-  setStyle(style: string): void;
+  addExactPhraseReplacements(phrases: TitleCaserReplacementMap[]): void;
+  setStyle(style: TitleCaserStyle): void;
 }
 
 export const TITLE_CASER_CONFIG_DEFAULTS: Required<TitleCaserConfigOptions>;
@@ -50,8 +55,8 @@ export class TitleCaserConfig {
   maxTitleChars: number;
   minTitleLength: number;
   maxTitleLength: number;
-  style: NonNullable<TitleCaserOptions['style']>;
-  dictionaryProfile: NonNullable<TitleCaserOptions['dictionaryProfile']>;
+  style: TitleCaserStyle;
+  dictionaryProfile: TitleCaserDictionaryProfile;
   smartQuotes: boolean;
   normalizeQuotes: boolean;
   normalizeWhitespace: boolean;
@@ -60,9 +65,9 @@ export class TitleCaserConfig {
   allowSpecialCharacters: boolean;
   ignoreList: string[];
   neverCapitalize: string[];
-  phraseReplacementList: { [key: string]: string };
-  wordReplacementsList: Array<{ [key: string]: string }>;
-  replaceTerms: Array<[string, string]>;
+  phraseReplacementList: TitleCaserReplacementMap;
+  wordReplacementsList: TitleCaserReplacementMap[];
+  replaceTerms: TitleCaserReplacementPair[];
   security: Required<TitleCaserSecurityOptions>;
   static validate(config: TitleCaserConfigOptions): void;
   isTitleLengthValid(title: string): boolean;

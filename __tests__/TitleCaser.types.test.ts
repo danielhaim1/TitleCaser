@@ -1,4 +1,14 @@
-import { TitleCaser, TitleCaserOptions } from '../index.js';
+import {
+  createTitleCaserConfig,
+  TitleCaser,
+  TitleCaserConfig,
+  TitleCaserConfigOptions,
+  TitleCaserDictionaryProfile,
+  TitleCaserOptions,
+  TitleCaserReplacementMap,
+  TitleCaserReplacementPair,
+  TitleCaserStyle
+} from '../index.js';
 
 describe('TitleCaser TypeScript Definitions', () => {
   
@@ -7,12 +17,34 @@ describe('TitleCaser TypeScript Definitions', () => {
       // Test all the fields that were missing in the original type definitions
       const options: TitleCaserOptions = {
         style: 'ap',
+        dictionaryProfile: 'full',
         smartQuotes: true,
+        normalizeQuotes: true,
+        normalizeWhitespace: true,
+        minTitleChars: 1,
+        maxTitleChars: 400,
+        minTitleLength: 1,
+        maxTitleLength: 400,
+        allowEmojis: true,
+        allowSpecialCharacters: true,
         neverCapitalize: ['iOS', 'macOS', 'jQuery'],
         wordReplacementsList: [
           { 'js': 'JavaScript' },
           { 'css': 'CSS' }
         ],
+        replaceTerms: [['api', 'API']],
+        phraseReplacementList: {
+          'open source': 'Open Source'
+        },
+        security: {
+          allowHtml: true,
+          allowedHtmlTags: ['br'],
+          rejectScriptTags: true,
+          rejectEventHandlers: true,
+          rejectControlCharacters: true,
+          rejectBidiControls: true,
+          rejectZeroWidthCharacters: false
+        },
         debug: true
       };
 
@@ -22,6 +54,22 @@ describe('TitleCaser TypeScript Definitions', () => {
 
     test('should accept british style (newly added)', () => {
       const titleCaser = new TitleCaser({ style: 'british' });
+      expect(titleCaser).toBeInstanceOf(TitleCaser);
+    });
+
+    test('should accept exported helper type aliases', () => {
+      const style: TitleCaserStyle = 'nyt';
+      const dictionaryProfile: TitleCaserDictionaryProfile = 'lite';
+      const replacementMap: TitleCaserReplacementMap = { nodejs: 'Node.js' };
+      const replacementPair: TitleCaserReplacementPair = ['api', 'API'];
+
+      const titleCaser = new TitleCaser({
+        style,
+        dictionaryProfile,
+        wordReplacementsList: [replacementMap],
+        replaceTerms: [replacementPair]
+      });
+
       expect(titleCaser).toBeInstanceOf(TitleCaser);
     });
 
@@ -70,6 +118,33 @@ describe('TitleCaser TypeScript Definitions', () => {
       
       const result = titleCaser.toTitleCase('a test of the system');
       expect(typeof result).toBe('string');
+    });
+
+    test('TitleCaserConfig should expose validated reusable options', () => {
+      const configOptions: TitleCaserConfigOptions = {
+        style: 'wikipedia',
+        dictionaryProfile: 'full',
+        minTitleLength: 2,
+        maxTitleLength: 300,
+        ignoreList: ['internal-code'],
+        phraseReplacementList: {
+          'fox news': 'Fox News'
+        },
+        security: {
+          allowHtml: true,
+          allowedHtmlTags: ['br']
+        }
+      };
+
+      const config = new TitleCaserConfig(configOptions);
+      const createdConfig = createTitleCaserConfig(configOptions);
+      const titleCaserOptions: TitleCaserOptions = config.toTitleCaserOptions();
+
+      expect(config).toBeInstanceOf(TitleCaserConfig);
+      expect(createdConfig).toBeInstanceOf(TitleCaserConfig);
+      expect(config.isTitleLengthValid('valid title')).toBe(true);
+      expect(titleCaserOptions.style).toBe('wikipedia');
+      expect(titleCaserOptions.dictionaryProfile).toBe('full');
     });
 
     test('should properly type replacement methods', () => {
