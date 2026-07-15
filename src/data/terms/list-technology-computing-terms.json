@@ -19,7 +19,6 @@
         "M2M",
         "MQTT",
         "OOP",
-        "REST",
         "SSH",
         "SSL",
         "TCP",
@@ -74,7 +73,6 @@
         "GPU",
         "SSD",
         "HDD",
-        "RAM",
         "Frontend",
         "Backend",
         "Fullstack"
@@ -84,7 +82,6 @@
         "GDPR",
         "HIPAA",
         "NDA",
-        "SOW",
         "TOS"
     ],
     "languages": [
@@ -104,7 +101,6 @@
         "RDS",
         "Python",
         "Ruby",
-        "Go",
         "Swift",
         "Kotlin",
         "Perl"

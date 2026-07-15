@@ -96,6 +96,11 @@ describe("TitleCaser AP – Style Stability", () => {
     "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
     "Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment",
   );
+  runTest(
+    'should not force ordinary "plan" to military acronym casing',
+    "inside a high-profile, long-term plan for e-commerce growth",
+    "Inside a High-profile, Long-term Plan for E-Commerce Growth",
+  );
 });
 
 runNameHeuristicTitleCaseTests(TitleCaser, "ap");
