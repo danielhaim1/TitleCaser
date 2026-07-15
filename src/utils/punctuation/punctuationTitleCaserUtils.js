@@ -186,6 +186,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
               return "&quot;";
             case "'":
               return "&#x27;";
+            /* istanbul ignore next -- fallback for future regex alternatives */
             default:
               return match;
           }
@@ -210,6 +211,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
               return '"';
             case "&#x27;":
               return "'";
+            /* istanbul ignore next -- fallback for future regex alternatives */
             default:
               return match;
           }

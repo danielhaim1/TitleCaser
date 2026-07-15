@@ -131,13 +131,19 @@ export function replacementsExtendTitleCaserUtils(TitleCaserUtils) {
             segment.toLowerCase().replace(/[^\w]/g, "")
           )
         );
+        const containsAllCapsKnownTerm = hyphenatedWords.some((segment) => {
+          const normalizedSegment = segment.toLowerCase().replace(/[^\w]/g, "");
+          const matchingTerm = specialTermsList.find((term) => term.toLowerCase() === normalizedSegment);
+
+          return matchingTerm && /^[A-Z0-9&/+.]+$/.test(matchingTerm.replace(/[^\w&/+.]/g, ""));
+        });
 
         const capitalizeFirst = (w) => w.charAt(0).toUpperCase() + w.slice(1);
         const lowercaseRest = (w) => w.charAt(0) + w.slice(1).toLowerCase();
 
         const styleFunctions = {
           ap: (w, index) => {
-            if (containsRegionalAcronym) {
+            if (containsRegionalAcronym || containsAllCapsKnownTerm) {
               return capitalizeFirst(w);
             }
             return index === 0 ? capitalizeFirst(w) : lowercaseRest(w);

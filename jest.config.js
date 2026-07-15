@@ -7,6 +7,10 @@ module.exports = {
 	verbose: true,
 	noStackTrace: false,
 	collectCoverage: true,
+	coveragePathIgnorePatterns: [
+	  '<rootDir>/dist/',
+	  '<rootDir>/docs/'
+	],
 	modulePathIgnorePatterns: [
 	  '<rootDir>/docs/_data'
 	],
