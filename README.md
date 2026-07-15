@@ -131,9 +131,9 @@ import { TitleCaser } from '@danielhaim/titlecaser';
 
 const titleCaser = new TitleCaser({ style: 'ap' });
 
-titleCaser.toTitleCase('the quick brown fox'); // → "The Quick Brown Fox"
-titleCaser.toTitleCase('nodejs development on aws'); // → "Node.js Development on AWS"
-titleCaser.toTitleCase('let us know about the us military'); // → "Let Us Know About the US Military"
+titleCaser.toTitleCase('inside the race to secure ai systems before the next cyberattack'); // → "Inside the Race to Secure AI Systems Before the Next Cyberattack"
+titleCaser.toTitleCase('how hospitals prepare for ddos attacks on aws'); // → "How Hospitals Prepare for DDoS Attacks on AWS"
+titleCaser.toTitleCase('what the us military learned from nato drills'); // → "What the US Military Learned From NATO Drills"
 ```
 
 ---
@@ -149,23 +149,23 @@ import { TitleCaser } from '@danielhaim/titlecaser';
 const titleCaser = new TitleCaser({ style: 'ap' });
 
 titleCaser.toTitleCase(
-  "nodejs development on aws: an in-depth tutorial on server-side javascript deployment"
-); // → "Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment"
+  "inside a high-profile, long-term plan for e-commerce growth"
+); // → "Inside a High-profile, Long-term Plan for E-Commerce Growth"
 ```
 
 ### Custom Term Normalization
 ```javascript
-titleCaser.addReplaceTerm('js', 'JavaScript');
-titleCaser.toTitleCase('js development'); // → "JavaScript Development"
+titleCaser.addReplaceTerm('cms', 'CMS');
+titleCaser.toTitleCase('cms audit after hospital breach'); // → "CMS Audit After Hospital Breach"
 ```
 
 ### Exact Phrase Replacement
 ```javascript
 titleCaser.addExactPhraseReplacements([
-  { 'the correct phrase': 'The Correct Phrase' }
+  { 'public records request': 'Public Records Request' }
 ]);
 
-titleCaser.toTitleCase('this is the correct phrase'); // → "This Is The Correct Phrase"
+titleCaser.toTitleCase('inside the public records request that changed city hall'); // → "Inside the Public Records Request That Changed City Hall"
 ```
 
 ### Smart Quotes
@@ -175,7 +175,7 @@ const tc = new TitleCaser({
   smartQuotes: true
 });
 
-tc.toTitleCase('"never underestimate the power o\' persistence,"'); // → “Never Underestimate the Power O’ Persistence,”
+tc.toTitleCase('"we are not ready," says former nato commander'); // → “We Are Not Ready,” Says Former NATO Commander
 ```
 
 ### Whitespace Normalization
@@ -271,19 +271,19 @@ The dictionary is bundled with the package and does not perform API calls. Runti
 ```
 
 ```javascript
-const output = "the future of devops: the next era"
+const output = "inside the race to secure ai systems before the next cyberattack"
   .toTitleCase({ style: 'apa' });
 
-console.log(output); // → "The Future of DevOps: The Next Era"
+console.log(output); // → "Inside the Race to Secure AI Systems Before the Next Cyberattack"
 ```
 
 ### Real-World DOM Example
 Automatically normalize editorial headings in a publishing workflow:
 
 ```html
-<h2>nodejs development on aws: an in-depth tutorial on server-side javascript deployment</h2>
-<h2>the iphone's impact on modern communication: a sociolinguistic analysis</h2>
-<h2>back-end and front-end</h2>
+<h2>how nato logistics depend on rail lines, ports, and fuel depots</h2>
+<h2>inside the race to secure ai systems before the next cyberattack</h2>
+<h2>why local newspapers are turning to nonprofit ownership</h2>
 ```
 ```javascript
 function applyTitleCaseToH2Elements(options = { style: "apa" }) {
@@ -341,23 +341,23 @@ new TitleCaser(options)
 
 #### toTitleCase(text)
 ```javascript
-titleCaser.toTitleCase('hello world'); // → "Hello World"
+titleCaser.toTitleCase('inside the heat wave response'); // → "Inside the Heat Wave Response"
 ```
 
 #### addReplaceTerm(term, replacement)
 ```javascript
-titleCaser.addReplaceTerm('js', 'JavaScript');
+titleCaser.addReplaceTerm('cms', 'CMS');
 ```
 
 #### removeReplaceTerm(term)
 ```javascript
-titleCaser.removeReplaceTerm('js');
+titleCaser.removeReplaceTerm('cms');
 ```
 
 #### setReplaceTerms(terms)
 ```javascript
 titleCaser.setReplaceTerms([
-  { 'js': 'JavaScript' },
+  { 'cms': 'CMS' },
   { 'aws': 'AWS' }
 ]);
 ```
@@ -365,8 +365,8 @@ titleCaser.setReplaceTerms([
 #### addExactPhraseReplacements(phrases)
 ```javascript
 titleCaser.addExactPhraseReplacements([
-  { 'the correct phrase': 'The Correct Phrase' },
-  { 'another phrase': 'Another Phrase' }
+  { 'public records request': 'Public Records Request' },
+  { 'city hall': 'City Hall' }
 ]);
 ```
 
