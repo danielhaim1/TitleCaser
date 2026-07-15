@@ -59,6 +59,31 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "full stack teams hire full-stack developers for full stack",
     "Fullstack teams hire fullstack developers for fullstack",
   );
+  runTest(
+    "should preserve demonyms and proper adjectives in Wikipedia style",
+    "why many americans still cannot access a primary care doctor",
+    "Why many Americans still cannot access a primary care doctor",
+  );
+  runTest(
+    "should preserve ethnic and religious identity terms in Wikipedia style",
+    "why many latinas, jews, muslims, and sikhs distrust the new policy",
+    "Why many Latinas, Jews, Muslims, and Sikhs distrust the new policy",
+  );
+  runTest(
+    "should preserve common demonyms without title-casing ordinary words in Wikipedia style",
+    "how mexican, canadian, japanese, and russian voters viewed the debate",
+    "How Mexican, Canadian, Japanese, and Russian voters viewed the debate",
+  );
+  runTest(
+    "should preserve a broader demonym set in Wikipedia style",
+    "what filipinos, palestinians, ukrainians, senegalese, and new zealanders said next",
+    "What Filipinos, Palestinians, Ukrainians, Senegalese, and New Zealanders said next",
+  );
+  runTest(
+    "should preserve religious group terms in Wikipedia style",
+    "how christians, hindus, buddhists, catholics, and mormons responded",
+    "How Christians, Hindus, Buddhists, Catholics, and Mormons responded",
+  );
 });
 
 describe("TitleCaser Wikipedia – Dictionary Proper Phrases", () => {
@@ -97,6 +122,11 @@ describe("TitleCaser Wikipedia – Dictionary Proper Phrases", () => {
     "should preserve generated dictionary phrases in Wikipedia style",
     "Abstract Expressionism shaped The surprise Guest",
     "Abstract Expressionism shaped the surprise guest",
+  );
+  runTest(
+    "should preserve military operation and conflict names in Wikipedia style",
+    "the article compared operation desert storm with the gulf war air campaign",
+    "The article compared Operation Desert Storm with the Gulf War air campaign",
   );
 });
 
