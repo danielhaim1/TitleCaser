@@ -94,12 +94,12 @@ describe("TitleCaser AP – Style Stability", () => {
   runTest(
     "should handle brand casing with AP-style logic",
     "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
-    "Node.js Development on AWS: An In-depth Tutorial on Server-side JavaScript Deployment",
+    "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment",
   );
   runTest(
     'should not force ordinary "plan" to military acronym casing',
     "inside a high-profile, long-term plan for e-commerce growth",
-    "Inside a High-profile, Long-term Plan for E-Commerce Growth",
+    "Inside a High-Profile, Long-Term Plan for E-Commerce Growth",
   );
 });
 

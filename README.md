@@ -150,7 +150,7 @@ const titleCaser = new TitleCaser({ style: 'ap' });
 
 titleCaser.toTitleCase(
   "inside a high-profile, long-term plan for e-commerce growth"
-); // → "Inside a High-profile, Long-term Plan for E-Commerce Growth"
+); // → "Inside a High-Profile, Long-Term Plan for E-Commerce Growth"
 ```
 
 ### Custom Term Normalization

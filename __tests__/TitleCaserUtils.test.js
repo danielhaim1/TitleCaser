@@ -262,7 +262,7 @@ describe("TitleCaserUtils – Replacements", () => {
 
   test("should correct hyphenated terms by style", () => {
     expect(TitleCaserUtils.correctTermHyphenated("server-side", "chicago")).toBe("Server-Side");
-    expect(TitleCaserUtils.correctTermHyphenated("server-side", "ap")).toBe("Server-side");
+    expect(TitleCaserUtils.correctTermHyphenated("server-side", "ap")).toBe("Server-Side");
     expect(TitleCaserUtils.correctTermHyphenated("server-side", "apa")).toBe("Server-Side");
     expect(TitleCaserUtils.correctTermHyphenated("state-of-art", "apa")).toBe("State-of-Art");
     expect(TitleCaserUtils.correctTermHyphenated("server-side", "wikipedia")).toBe("Server-side");
