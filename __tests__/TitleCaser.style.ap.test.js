@@ -62,20 +62,172 @@ describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
   });
 });
 
+describe("TitleCaser AP – Final Regional Acronyms After The", () => {
+  const finalRegionalAcronymCases = [
+    // Basic
+    ["from the uk", "From the UK"],
+    ["from the us", "From the US"],
+    ["from the eu", "From the EU"],
+    ["in the uk", "In the UK"],
+    ["in the us", "In the US"],
+    ["in the eu", "In the EU"],
+    ["across the uk", "Across the UK"],
+    ["across the us", "Across the US"],
+    ["across the eu", "Across the EU"],
+
+    // End of title
+    ["support came from the uk", "Support Came From the UK"],
+    ["support came from the us", "Support Came From the US"],
+    ["support came from the eu", "Support Came From the EU"],
+    ["investment rose in the uk", "Investment Rose in the UK"],
+    ["investment rose in the us", "Investment Rose in the US"],
+    ["investment rose in the eu", "Investment Rose in the EU"],
+    ["policy shifted across the uk", "Policy Shifted Across the UK"],
+    ["policy shifted across the us", "Policy Shifted Across the US"],
+    ["policy shifted across the eu", "Policy Shifted Across the EU"],
+    ["trade expanded from the uk", "Trade Expanded From the UK"],
+    ["trade expanded from the us", "Trade Expanded From the US"],
+    ["trade expanded from the eu", "Trade Expanded From the EU"],
+    ["talks resumed in the uk", "Talks Resumed in the UK"],
+    ["talks resumed in the us", "Talks Resumed in the US"],
+    ["talks resumed in the eu", "Talks Resumed in the EU"],
+    ["security rules changed across the uk", "Security Rules Changed Across the UK"],
+    ["security rules changed across the us", "Security Rules Changed Across the US"],
+    ["security rules changed across the eu", "Security Rules Changed Across the EU"],
+    ["new sanctions came from the uk", "New Sanctions Came From the UK"],
+    ["new sanctions came from the us", "New Sanctions Came From the US"],
+    ["new sanctions came from the eu", "New Sanctions Came From the EU"],
+
+    // Longer real-world headlines
+    ["apple expands manufacturing in the us", "Apple Expands Manufacturing in the US"],
+    ["microsoft invests across the eu", "Microsoft Invests Across the EU"],
+    ["tesla imports batteries from the uk", "Tesla Imports Batteries From the UK"],
+    ["google launches ai services in the eu", "Google Launches AI Services in the EU"],
+    ["amazon hires thousands across the us", "Amazon Hires Thousands Across the US"],
+    ["nvidia opens research centre in the uk", "NVIDIA Opens Research Centre in the UK"],
+    ["meta faces new privacy rules in the eu", "Meta Faces New Privacy Rules in the EU"],
+    ["intel expands chip production in the us", "Intel Expands Chip Production in the US"],
+    ["spotify grows subscriptions across the eu", "Spotify Grows Subscriptions Across the EU"],
+    ["openai signs partnership in the uk", "OpenAI Signs Partnership in the UK"],
+
+    // Multiple occurrences
+    ["trade between the us and the eu", "Trade Between the US and the EU"],
+    ["relations between the uk and the us", "Relations Between the UK and the US"],
+    ["exports from the eu to the us", "Exports From the EU to the US"],
+    ["imports from the uk into the eu", "Imports From the UK Into the EU"],
+    ["leaders from the us met officials from the eu", "Leaders From the US Met Officials From the EU"],
+    ["companies in the uk expanded into the us", "Companies in the UK Expanded Into the US"],
+
+    // Mixed punctuation
+    ["what happened in the us?", "What Happened in the US?"],
+    ["breaking: elections in the uk", "Breaking: Elections in the UK"],
+    ["report: inflation across the eu", "Report: Inflation Across the EU"],
+    ["live updates from the us:", "Live Updates From the US:"],
+    ["analysis — growth in the eu", "Analysis — Growth in the EU"],
+
+    // Quotes
+    ['"made in the us"', '"Made in the US"'],
+    ["'built in the uk'", "'Built in the UK'"],
+    ['officials called it "the future of the eu"', 'Officials Called It "The Future of the EU"'],
+
+    // Parentheses
+    ["new regulations (from the eu)", "New Regulations (From the EU)"],
+    ["expansion plans (in the us)", "Expansion Plans (in the US)"],
+    ["investment (across the uk)", "Investment (Across the UK)"],
+
+    // Hyphenated phrases
+    ["uk-based firms expanded in the us", "UK-Based Firms Expanded in the US"],
+    ["eu-funded projects in the uk", "EU-Funded Projects in the UK"],
+    ["us-backed investment across the eu", "US-Backed Investment Across the EU"],
+
+    // Numbers
+    ["10 factories opened in the us", "10 Factories Opened in the US"],
+    ["5 new offices across the eu", "5 New Offices Across the EU"],
+    ["2026 elections in the uk", "2026 Elections in the UK"],
+
+    // Acronym not at end
+    ["investment in the us surged again", "Investment in the US Surged Again"],
+    ["companies across the eu reported profits", "Companies Across the EU Reported Profits"],
+    ["growth from the uk exceeded forecasts", "Growth From the UK Exceeded Forecasts"],
+
+    // All three in one title
+    [
+      "leaders from the uk met officials in the eu before travelling to the us",
+      "Leaders From the UK Met Officials in the EU Before Travelling to the US",
+    ],
+    [
+      "trade across the eu, the uk and the us increased",
+      "Trade Across the EU, the UK and the US Increased",
+    ],
+  ];
+
+  test.each(finalRegionalAcronymCases)("%s -> %s", (input, expected) => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+});
+
 describe("TitleCaser AP – Style Stability", () => {
-  runTest('should correctly handle brand names with "ap" style', "GOOgle and VMWARE", "Google and VMware");
+  // Brand normalization
+  runTest('should normalize mixed-case brand names with "ap" style', "GOOgle and VMWARE", "Google and VMware");
+  runTest('should preserve canonical brand casing regardless of input casing', "gOoGlE, vmware and MICROSOFT", "Google, VMware and Microsoft");
+  runTest('should normalize brands at the beginning, middle and end of a title', "GOOGLE compares VMWARE with microsoft", "Google Compares VMware With Microsoft");
+  runTest('should normalize possessive brand names', "GOOGLE's response to VMWARE's announcement", "Google's Response to VMware's Announcement");
+  runTest('should normalize brand names adjacent to punctuation', "GOOGLE: VMWARE, microsoft and apple", "Google: VMware, Microsoft and Apple");
+
+  // Case-sensitive names
   runTest('should handle brand name "NERDs Candy" with AP style', "NERDs Candy", "NERDs Candy");
+  runTest('should preserve canonical internal capitals in names', "NERDS candy and nerds candy", "NERDs Candy and NERDs Candy");
   runTest('should preserve international brand casing with "ap" style', "skoda", "Škoda");
+  runTest('should normalize uppercase international brand casing', "SKODA expands in europe", "Škoda Expands in Europe");
+  runTest('should preserve international characters in possessives', "skoda's new strategy", "Škoda's New Strategy");
+  runTest('should preserve international brand casing after punctuation', "automakers: skoda, saab and volvo", "Automakers: Škoda, Saab and Volvo");
+
+  // Possessives and punctuation
   runTest(
-    "should handle possessives and colons (AP style)",
+    "should handle possessives and colons in AP style",
     "the iphone's impact on modern communication: a sociolinguistic analysis",
     "The iPhone's Impact on Modern Communication: A Sociolinguistic Analysis",
   );
+  runTest(
+    "should preserve possessive apostrophes while normalizing brand casing",
+    "apple's iphone and google's android strategy",
+    "Apple's iPhone and Google's Android Strategy",
+  );
+  runTest(
+    "should capitalize the first word after a colon",
+    "software architecture: a practical guide to scalable systems",
+    "Software Architecture: A Practical Guide to Scalable Systems",
+  );
+  runTest(
+    "should capitalize a normally lowercase word after a colon",
+    "the final decision: to build or to buy",
+    "The Final Decision: To Build or To Buy",
+  );
+  runTest(
+    "should handle multiple punctuation boundaries",
+    "apple's strategy: hardware, software and services: a complete analysis",
+    "Apple's Strategy: Hardware, Software and Services: A Complete Analysis",
+  );
+
+  // Compound normalization
   runTest('should handle hyphenated "BACK-end" with AP style', "BACK-end and front-end", "Backend and Frontend");
+  runTest('should normalize inconsistent backend spelling and casing', "BACK END, back-end and backend", "Backend, Backend and Backend");
+  runTest('should normalize inconsistent frontend spelling and casing', "FRONT END, front-end and frontend", "Frontend, Frontend and Frontend");
   runTest(
     "should normalize spelling replacements before applying AP casing",
     "back end and full stack developers",
     "Backend and Fullstack Developers",
+  );
+  runTest(
+    "should normalize replacements adjacent to punctuation",
+    "back-end, front end and full-stack: a developer guide",
+    "Backend, Frontend and Fullstack: A Developer Guide",
+  );
+  runTest(
+    "should normalize replacement terms in possessive form",
+    "the back end's performance and the full stack's complexity",
+    "The Backend's Performance and the Fullstack's Complexity",
   );
   runTest(
     "should normalize full stack by position and apply AP casing",
@@ -83,34 +235,228 @@ describe("TitleCaser AP – Style Stability", () => {
     "Fullstack Teams Hire Fullstack Developers for Fullstack",
   );
   runTest(
+    "should normalize every supported full stack variant",
+    "FULL STACK, full-stack, Full Stack and fullstack",
+    "Fullstack, Fullstack, Fullstack and Fullstack",
+  );
+  runTest(
+    "should not partially normalize unrelated compound words",
+    "the stack overflow backend discussion",
+    "The Stack Overflow Backend Discussion",
+  );
+
+  // Canonical technology replacements
+  runTest(
     "should preserve canonical replacement casing by position in AP style",
     "reactjs teams build tools with node.js and reactjs",
     "React Teams Build Tools With Node.js and React",
   );
   runTest(
-    "should handle acronym with colon (AP style)",
+    "should normalize multiple React aliases",
+    "REACTJS, react.js and reactjs applications",
+    "React, React and React Applications",
+  );
+  runTest(
+    "should normalize multiple Node.js aliases",
+    "NODEJS, nodejs and node.js services",
+    "Node.js, Node.js and Node.js Services",
+  );
+  runTest(
+    "should preserve canonical technology casing next to punctuation",
+    "tools include reactjs; nodejs; javascript; and typescript",
+    "Tools Include React; Node.js; JavaScript; and TypeScript",
+  );
+  runTest(
+    "should preserve canonical technology casing in possessives",
+    "nodejs's runtime model and reactjs's component model",
+    "Node.js's Runtime Model and React's Component Model",
+  );
+  runTest(
+    "should not replace technology names inside larger words",
+    "the nodejson parser and prereactjs package",
+    "The Nodejson Parser and Prereactjs Package",
+  );
+
+  // Acronyms
+  runTest(
+    "should handle acronym with colon in AP style",
     "revolutionizing the publishing industry: insights from a cto on ebook development and innovation",
     "Revolutionizing the Publishing Industry: Insights From a CTO on eBook Development and Innovation",
   );
+  runTest(
+    "should normalize acronyms regardless of input casing",
+    "a ceo, cto and cio discuss ai",
+    "A CEO, CTO and CIO Discuss AI",
+  );
+  runTest(
+    "should normalize plural acronyms",
+    "cios and ctos discuss apis",
+    "CIOs and CTOs Discuss APIs",
+  );
+  runTest(
+    "should normalize possessive acronyms",
+    "the ceo's response to the cto's proposal",
+    "The CEO's Response to the CTO's Proposal",
+  );
+  runTest(
+    "should preserve acronym casing at punctuation boundaries",
+    "leadership changes: ceo, cto, cio and cfo",
+    "Leadership Changes: CEO, CTO, CIO and CFO",
+  );
+  runTest(
+    "should distinguish canonical acronyms from ordinary lowercase words",
+    "the radio host met the cio",
+    "The Radio Host Met the CIO",
+  );
+
+  // Technology and platform casing
   runTest(
     "should handle brand casing with AP-style logic",
     "nodejs development on aws: an in-depth tutorial on server-side javascript deployment",
     "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment",
   );
   runTest(
+    "should normalize technology casing in a dense technical title",
+    "javascript, typescript, nodejs and aws for api development",
+    "JavaScript, TypeScript, Node.js and AWS for API Development",
+  );
+  runTest(
+    "should preserve canonical casing after hyphens",
+    "aws-based nodejs deployment for javascript applications",
+    "AWS-Based Node.js Deployment for JavaScript Applications",
+  );
+  runTest(
+    "should preserve eBook casing in singular and plural forms",
+    "ebook development and ebooks for schools",
+    "eBook Development and eBooks for Schools",
+  );
+  runTest(
+    "should preserve e-commerce casing across input variants",
+    "ECOMMERCE, eCommerce and e-commerce growth",
+    "E-Commerce, E-Commerce and E-Commerce Growth",
+  );
+
+  // False-positive acronym protection
+  runTest(
     'should not force ordinary "plan" to military acronym casing',
     "inside a high-profile, long-term plan for e-commerce growth",
     "Inside a High-Profile, Long-Term Plan for E-Commerce Growth",
   );
+  runTest(
+    'should preserve ordinary words that contain known acronym sequences',
+    "a company plans to expand its apiary",
+    "A Company Plans To Expand Its Apiary",
+  );
+  runTest(
+    'should not convert "us" to an acronym when used as a pronoun',
+    "what technology can teach us about work",
+    "What Technology Can Teach Us About Work",
+  );
+  runTest(
+    'should convert "us" when context identifies the country',
+    "technology investment in the us",
+    "Technology Investment in the US",
+  );
+  runTest(
+    'should not convert "it" to an acronym when used as a pronoun',
+    "how it works and why it matters",
+    "How It Works and Why It Matters",
+  );
+  runTest(
+    'should convert "IT" when used as the technology discipline',
+    "careers in it and cybersecurity",
+    "Careers in IT and Cybersecurity",
+  );
+
+  // Infinitive and prepositional "to"
   runTest(
     'should capitalize "to" in AP infinitives',
     "how to succeed in business without trying",
     "How To Succeed in Business Without Trying",
   );
   runTest(
+    'should capitalize consecutive infinitive uses of "to"',
+    "how to plan, to build and to launch",
+    "How To Plan, To Build and To Launch",
+  );
+  runTest(
+    'should capitalize infinitive "to" after punctuation',
+    "the objective: to reduce costs",
+    "The Objective: To Reduce Costs",
+  );
+  runTest(
+    'should capitalize infinitive "to" before a phrasal verb',
+    "how to scale up without burning out",
+    "How To Scale Up Without Burning Out",
+  );
+  runTest(
     'should keep prepositional "to" lowercase in AP style',
     "back to the future",
     "Back to the Future",
+  );
+  runTest(
+    'should keep directional "to" lowercase',
+    "from london to paris",
+    "From London to Paris",
+  );
+  runTest(
+    'should keep recipient "to" lowercase',
+    "a letter to the editor",
+    "A Letter to the Editor",
+  );
+  runTest(
+    'should distinguish prepositional and infinitive uses of "to" in one title',
+    "a guide to learning how to code",
+    "A Guide to Learning How To Code",
+  );
+  runTest(
+    'should distinguish directional and infinitive uses of "to" in one title',
+    "from idea to execution: how to launch",
+    "From Idea to Execution: How To Launch",
+  );
+
+  // AP small-word stability
+  runTest(
+    "should keep coordinating conjunctions lowercase",
+    "hardware and software or services but not support",
+    "Hardware and Software or Services but Not Support",
+  );
+  runTest(
+    "should keep short prepositions lowercase",
+    "a guide for teams with tools from experts",
+    "A Guide for Teams With Tools From Experts",
+  );
+  runTest(
+    "should capitalize small words at the beginning",
+    "and then there were none",
+    "And Then There Were None",
+  );
+  runTest(
+    "should capitalize small words at the end",
+    "what are we waiting for",
+    "What Are We Waiting For",
+  );
+  runTest(
+    "should capitalize small words after a colon",
+    "the missing feature: and why it matters",
+    "The Missing Feature: And Why It Matters",
+  );
+
+  // Idempotence and already-correct input
+  runTest(
+    "should preserve an already correctly cased AP title",
+    "Node.js Development on AWS: An In-Depth Tutorial",
+    "Node.js Development on AWS: An In-Depth Tutorial",
+  );
+  runTest(
+    "should preserve canonical brands and acronyms in correct input",
+    "Google and VMware Expand AI Operations in the US",
+    "Google and VMware Expand AI Operations in the US",
+  );
+  runTest(
+    "should stabilize aggressively inconsistent casing",
+    "gOOGLE BUILDS a NODEJS BACK-end FOR the US MARKET",
+    "Google Builds a Node.js Backend for the US Market",
   );
 });
 
