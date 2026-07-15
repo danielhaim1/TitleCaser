@@ -41,7 +41,7 @@ For example:
 
 ```javascript
 "It’s up to us in the US military to decide."
-→ "It’s Up to Us in the US Military to Decide."
+→ "It’s Up to Us in the US Military To Decide."
 
 "us-uk-led coalition"
 → "US-UK-Led Coalition"
@@ -131,7 +131,7 @@ import { TitleCaser } from '@danielhaim/titlecaser';
 
 const titleCaser = new TitleCaser({ style: 'ap' });
 
-titleCaser.toTitleCase('inside the race to secure ai systems before the next cyberattack'); // → "Inside the Race to Secure AI Systems Before the Next Cyberattack"
+titleCaser.toTitleCase('inside the race to secure ai systems before the next cyberattack'); // → "Inside the Race To Secure AI Systems Before the Next Cyberattack"
 titleCaser.toTitleCase('how hospitals prepare for ddos attacks on aws'); // → "How Hospitals Prepare for DDoS Attacks on AWS"
 titleCaser.toTitleCase('what the us military learned from nato drills'); // → "What the US Military Learned From NATO Drills"
 ```

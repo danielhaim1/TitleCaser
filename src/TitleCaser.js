@@ -109,6 +109,49 @@ export class TitleCaser {
         return replacedValue;
       };
 
+      const getNextNonWhitespaceToken = (tokenList, currentIndex) => {
+        for (let j = currentIndex + 1; j < tokenList.length; j++) {
+          if (!/^\s+$/.test(tokenList[j])) {
+            return tokenList[j];
+          }
+        }
+
+        return "";
+      };
+
+      const getPreviousNonWhitespaceToken = (tokenList, currentIndex) => {
+        for (let j = currentIndex - 1; j >= 0; j--) {
+          if (!/^\s+$/.test(tokenList[j])) {
+            return tokenList[j];
+          }
+        }
+
+        return "";
+      };
+
+      const normalizeTokenForDictionaryLookup = (token) =>
+        token
+          .replace(/^[^A-Za-z]+/, "")
+          .replace(/[^A-Za-z]+$/, "")
+          .toLowerCase();
+
+      const isApInfinitiveTo = (word, tokenList, currentIndex) => {
+        if (style !== "ap" || word.toLowerCase() !== "to") return false;
+
+        const previousWord = normalizeTokenForDictionaryLookup(
+          getPreviousNonWhitespaceToken(tokenList, currentIndex)
+        );
+        const nextWord = normalizeTokenForDictionaryLookup(
+          getNextNonWhitespaceToken(tokenList, currentIndex)
+        );
+
+        return (
+          nextWord !== "" &&
+          !/['\u2019]s$/i.test(previousWord) &&
+          TitleCaserUtils.dictionaryIsVerb(nextWord, dictionaryProfile)
+        );
+      };
+
       // Normalize HTML breaks and optionally normalize whitespace (see normalizeWhitespace option).
       let inputString = str;
 
@@ -147,6 +190,10 @@ export class TitleCaser {
               transformToken(innerWordWithoutClosingPunctuation, i) +
               trailingClosingPunctuation;
           }
+        }
+
+        if (isApInfinitiveTo(word, tokens, i)) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
         }
 
         switch (true) {
@@ -361,6 +408,11 @@ export class TitleCaser {
           currentWord === currentWord.toUpperCase() ||
           TitleCaserUtils.hasUppercaseIntentional(currentWord)
         ) {
+          continue;
+        }
+
+        if (isApInfinitiveTo(currentWord, wordsForShortWords, i)) {
+          wordsForShortWords[i] = currentWord.charAt(0).toUpperCase() + currentWord.slice(1);
           continue;
         }
 

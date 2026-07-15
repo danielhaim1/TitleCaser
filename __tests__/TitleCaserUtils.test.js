@@ -328,6 +328,9 @@ describe("TitleCaserUtils – Dictionary", () => {
     expect(TitleCaserUtils.dictionaryIsWord("notawordnetword")).toBe(false);
     expect(TitleCaserUtils.dictionaryIsNoun("duck")).toBe(true);
     expect(TitleCaserUtils.dictionaryIsVerb("run")).toBe(true);
+    expect(TitleCaserUtils.dictionaryIsVerb("promote")).toBe(true);
+    expect(TitleCaserUtils.dictionaryIsVerb("decide")).toBe(true);
+    expect(TitleCaserUtils.dictionaryIsVerb("succeed")).toBe(true);
     expect(TitleCaserUtils.dictionaryIsAdjective("beautiful")).toBe(true);
     expect(TitleCaserUtils.dictionaryIsAdverb("quickly")).toBe(true);
     expect(TitleCaserUtils.dictionaryGetPartOfSpeech("duck")).toContain("n");

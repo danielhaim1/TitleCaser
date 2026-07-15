@@ -17,9 +17,9 @@ describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
     ['should capitalize "US" after "from the"', "Support came from the us", "Support Came From the US"],
     ['should capitalize "US" after "via"', "The message was relayed via us", "The Message Was Relayed via US"],
     ['should capitalize "US" before "Military"', "Partnering with the us Military", "Partnering With the US Military"],
-    ['should capitalize "US" in "US-backed" phrase', "The us-backed initiative aims to promote sustainability.", "The US-Backed Initiative Aims to Promote Sustainability."],
+    ['should capitalize "US" in "US-backed" phrase', "The us-backed initiative aims to promote sustainability.", "The US-Backed Initiative Aims To Promote Sustainability."],
     ['should capitalize "US" in geopolitical context (repeated case)', "The us, despite its size, has a significant impact.", "The US, Despite Its Size, Has a Significant Impact."],
-    ['should capitalize pronoun "us" (case #1)', "It’s up to us to decide.", "It’s Up to Us to Decide."],
+    ['should capitalize pronoun "us" (case #1)', "It’s up to us to decide.", "It’s Up to Us To Decide."],
     ['should capitalize pronoun "us" (case #2)', "You can partner with us.", "You Can Partner With Us."],
     ['should capitalize pronoun "us" (case #3)', "partner with us", "Partner With Us"],
     ['should capitalize "UK" in geopolitical context (with comma)', "The uk, despite its size, has a significant impact.", "The UK, Despite Its Size, Has a Significant Impact."],
@@ -31,15 +31,15 @@ describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
     ['should capitalize "US" in geopolitical context (policy mention)', "Discussing the us policies.", "Discussing the US Policies."],
     ['should capitalize "US" before "Military" (repeat case)', "Partnering with the us Military", "Partnering With the US Military"],
     ['should capitalize "US" at the end of a sentence', "This policy was created by the us", "This Policy Was Created by the US"],
-    ['should capitalize pronoun "us" in casual speech', "They want to talk to us", "They Want to Talk to Us"],
+    ['should capitalize pronoun "us" in casual speech', "They want to talk to us", "They Want To Talk to Us"],
     ['should capitalize pronoun "us" in emotional context', "They really care about us", "They Really Care About Us"],
     ['should capitalize pronoun "us" in passive voice', "The system was built for us", "The System Was Built for Us"],
     ['should capitalize pronoun "us" with a compound verb', "She stood near us", "She Stood Near Us"],
     ['should capitalize pronoun "us" in an inverted clause', "Not everything depends on us", "Not Everything Depends on Us"],
-    ['should capitalize pronoun "us" (repeat case #1)', "It\u2019s up to us to decide.", "It\u2019s Up to Us to Decide."],
+    ['should capitalize pronoun "us" (repeat case #1)', "It\u2019s up to us to decide.", "It\u2019s Up to Us To Decide."],
     ['should capitalize pronoun "us" (repeat case #2)', "You can partner with us.", "You Can Partner With Us."],
-    ['should capitalize pronoun "us" before "US Military"', "It\u2019s up to us in the US military to decide.", "It\u2019s Up to Us in the US Military to Decide."],
-    ['should capitalize pronoun "us" before "military"', "It\u2019s up to us in the military to decide.", "It\u2019s Up to Us in the Military to Decide."],
+    ['should capitalize pronoun "us" before "US Military"', "It\u2019s up to us in the US military to decide.", "It\u2019s Up to Us in the US Military To Decide."],
+    ['should capitalize pronoun "us" before "military"', "It\u2019s up to us in the military to decide.", "It\u2019s Up to Us in the Military To Decide."],
     ['should capitalize pronoun "us" in a comma-separated clause', "It has a varied landscape, and us, the citizens, appreciate it.", "It Has a Varied Landscape, and Us, the Citizens, Appreciate It."],
     ['should capitalize "UK" at end of sentence', "This initiative was led by the uk", "This Initiative Was Led by the UK"],
     ['should capitalize "UK" in geopolitical context (repeat with comma)', "The uk, despite its size, has a significant impact.", "The UK, Despite Its Size, Has a Significant Impact."],
@@ -51,7 +51,7 @@ describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
     ["should handle multiple codes and pronouns with mention of a bill", "We visited the uk and the US, and both consider a bill for environmental protection.", "We Visited the UK and the US, and Both Consider a Bill for Environmental Protection."],
     ['should capitalize "USA" in formal context (repeat case)', "The usa has a varied landscape.", "The USA Has a Varied Landscape."],
     ['should capitalize "USA" before a bill mention', "The usa introduces a new bill for economic reform.", "The USA Introduces a New Bill for Economic Reform."],
-    ['should handle AP-style acronym "U.S." in uppercase context', "URGE U.S. AND CANADIAN GOVERNMENT OFFICIALS TO PROTECT NORTH ATLANTIC RIGHT WHALES", "Urge U.S. And Canadian Government Officials to Protect North Atlantic Right Whales"],
+    ['should handle AP-style acronym "U.S." in uppercase context', "URGE U.S. AND CANADIAN GOVERNMENT OFFICIALS TO PROTECT NORTH ATLANTIC RIGHT WHALES", "Urge U.S. And Canadian Government Officials To Protect North Atlantic Right Whales"],
     ['should handle "On & Off" phrases #1', "We Are On & Off The Field", "We Are On & Off the Field"],
     ['should handle "On & Off" phrases #2', "we are on and off the field", "We Are On and Off the Field"],
   ];
@@ -100,6 +100,16 @@ describe("TitleCaser AP – Style Stability", () => {
     'should not force ordinary "plan" to military acronym casing',
     "inside a high-profile, long-term plan for e-commerce growth",
     "Inside a High-Profile, Long-Term Plan for E-Commerce Growth",
+  );
+  runTest(
+    'should capitalize "to" in AP infinitives',
+    "how to succeed in business without trying",
+    "How To Succeed in Business Without Trying",
+  );
+  runTest(
+    'should keep prepositional "to" lowercase in AP style',
+    "back to the future",
+    "Back to the Future",
   );
 });
 
