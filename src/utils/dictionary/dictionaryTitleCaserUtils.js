@@ -194,6 +194,27 @@ function dictionaryHasEntityBoundaryBefore(tokens, startIndex) {
   return !previousToken || /[,;:([{"']$/.test(previousToken);
 }
 
+export function buildDictionaryProperPhraseIndex(properPhrases) {
+  const phraseIndex = Object.entries(properPhrases)
+    .reduce((index, [phrase, replacement]) => {
+      const words = phrase.split(" ");
+      if (words.length < 2) return index;
+
+      const firstWord = words[0];
+
+      if (!index.has(firstWord)) index.set(firstWord, []);
+
+      index.get(firstWord).push({ words, replacement });
+      return index;
+    }, new Map());
+
+  for (const entries of phraseIndex.values()) {
+    entries.sort((a, b) => b.words.length - a.words.length);
+  }
+
+  return phraseIndex;
+}
+
 export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
   Object.defineProperties(TitleCaserUtils, {
     // Normalize a word for dictionary lookup
@@ -497,24 +518,10 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
 
         if (!TitleCaserUtils.dictionaryProperPhraseIndex.has(normalizedProfile)) {
           const properPhrases = dictionaryGetProperPhrases(normalizedProfile);
-          const phraseIndex = Object.entries(properPhrases)
-            .reduce((index, [phrase, replacement]) => {
-              const words = phrase.split(" ");
-              if (words.length < 2) return index;
-
-              const firstWord = words[0];
-
-              if (!index.has(firstWord)) index.set(firstWord, []);
-
-              index.get(firstWord).push({ words, replacement });
-              return index;
-            }, new Map());
-
-          for (const entries of phraseIndex.values()) {
-            entries.sort((a, b) => b.words.length - a.words.length);
-          }
-
-          TitleCaserUtils.dictionaryProperPhraseIndex.set(normalizedProfile, phraseIndex);
+          TitleCaserUtils.dictionaryProperPhraseIndex.set(
+            normalizedProfile,
+            buildDictionaryProperPhraseIndex(properPhrases),
+          );
         }
 
         return TitleCaserUtils.dictionaryProperPhraseIndex.get(normalizedProfile);

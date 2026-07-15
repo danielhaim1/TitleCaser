@@ -140,7 +140,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
           throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
         }
 
-        const match = word.match(/^[("'“‘«‹„‚]+/);
+        const match = word.match(/^[([{"'“‘«‹„‚]+/);
         return match ? match[0] : "";
       },
       writable: true,
@@ -154,7 +154,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
           throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
         }
 
-        const match = word.match(/[)"'”’»›]+$/);
+        const match = word.match(/[)\]}"'”’»›]+$/);
         return match ? match[0] : "";
       },
       writable: true,
@@ -186,9 +186,6 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
               return "&quot;";
             case "'":
               return "&#x27;";
-            /* istanbul ignore next -- fallback for future regex alternatives */
-            default:
-              return match;
           }
         });
       },
@@ -211,9 +208,6 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
               return '"';
             case "&#x27;":
               return "'";
-            /* istanbul ignore next -- fallback for future regex alternatives */
-            default:
-              return match;
           }
         });
       },

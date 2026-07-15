@@ -253,6 +253,9 @@ describe("TitleCaserUtils – Replacements", () => {
     expect(TitleCaserUtils.correctTerm("aws", ["AWS"])).toBe("AWS");
     expect(TitleCaserUtils.correctTerm("server-side", ["Server"])).toBe("Server-Side");
     expect(TitleCaserUtils.correctTerm("o'connor", ["O"])).toBe("O'Connor");
+    expect(TitleCaserUtils.correctTerm("mcdonald's", ["McDonald"])).toBe("McDonald's");
+    expect(TitleCaserUtils.correctTerm("mcdonald’s", ["McDonald"])).toBe("McDonald’s");
+    expect(TitleCaserUtils.correctTerm("mcdonald's", ["McDonald's"])).toBe("McDonald's");
     expect(TitleCaserUtils.correctTerm("node:js", ["Node"], ":")).toBe("Node[Js");
     expect(TitleCaserUtils.correctTerm("node/js", ["Node"], ["/"])).toBe("Node[Js");
     expect(() => TitleCaserUtils.correctTerm("", ["AWS"])).toThrow(TypeError);

@@ -9,6 +9,13 @@ function runTest(description, input, expected, style = "ap") {
   });
 }
 
+function createTest(description, options, input, expectedOutput) {
+  test(description, () => {
+    const titleCaser = new TitleCaser(options);
+    expect(titleCaser.toTitleCase(input)).toEqual(expectedOutput);
+  });
+}
+
 describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
   const cases = [
     ['should capitalize "US" when preceded by "the"', "They signed the treaty with the us", "They Signed the Treaty With the US"],
@@ -457,6 +464,385 @@ describe("TitleCaser AP – Style Stability", () => {
     "should stabilize aggressively inconsistent casing",
     "gOOGLE BUILDS a NODEJS BACK-end FOR the US MARKET",
     "Google Builds a Node.js Backend for the US Market",
+  );
+
+  // Gaming and platform brands
+  runTest(
+    "should preserve gaming platform brand casing",
+    "xbox game pass and playstation 5 compete with nintendo switch",
+    "Xbox Game Pass and PlayStation 5 Compete With Nintendo Switch",
+  );
+  runTest(
+    "should preserve major game title casing",
+    "call of duty and the last of us lead console sales",
+    "Call of Duty and The Last of Us Lead Console Sales",
+  );
+  runTest(
+    "should preserve game engine and store casing",
+    "unreal engine, steam deck and xbox game pass shape indie games",
+    "Unreal Engine, Steam Deck and Xbox Game Pass Shape Indie Games",
+  );
+  runTest(
+    "should preserve publisher and studio casing",
+    "activision blizzard, epic games and riot games expand esports",
+    "Activision Blizzard, Epic Games and Riot Games Expand Esports",
+  );
+  runTest(
+    "should preserve gaming punctuation and symbols",
+    "battle.net updates arrive for call of duty: warzone",
+    "Battle.net Updates Arrive for Call of Duty: Warzone",
+  );
+});
+
+describe("TitleCaser AP – Failed Chicago Regression Coverage", () => {
+  // Regional acronym compounds
+  runTest(
+    "should normalize uppercase suffix in regional compound",
+    "US-BACKED reforms",
+    "US-Backed Reforms",
+  );
+  runTest(
+    "should normalize lowercase acronym and uppercase suffix",
+    "us-BACKED reforms",
+    "US-Backed Reforms",
+  );
+  runTest(
+    "should normalize alternating casing in regional compound",
+    "uS-bAcKeD reforms",
+    "US-Backed Reforms",
+  );
+  runTest(
+    "should normalize multiple malformed regional compounds",
+    "US-BACKED, uk-FuNdEd and eU-LED projects",
+    "US-Backed, UK-Funded and EU-Led Projects",
+  );
+  runTest(
+    "should normalize mixed dash types in regional compound",
+    "us-uk–led coalition",
+    "US-UK-Led Coalition",
+  );
+  runTest(
+    "should normalize regional acronym compound using an en dash",
+    "us–backed coalition",
+    "US-Backed Coalition",
+  );
+  runTest(
+    "should normalize regional acronym compound using an em dash",
+    "eu—funded initiative",
+    "EU-Funded Initiative",
+  );
+
+  // Slash-separated acronyms and words
+  runTest(
+    "should capitalize an ordinary word after a slash",
+    "campus/usability-backed study",
+    "Campus/Usability-Backed Study",
+  );
+  runTest(
+    "should normalize slash-separated regional acronyms",
+    "us/uk partnership",
+    "US/UK Partnership",
+  );
+  runTest(
+    "should normalize three slash-separated regional acronyms",
+    "us/uk/eu agreement",
+    "US/UK/EU Agreement",
+  );
+  runTest(
+    "should normalize slash-separated regional acronyms followed by a compound",
+    "us/uk-led coalition",
+    "US/UK-Led Coalition",
+  );
+  runTest(
+    "should normalize dotted regional acronym before a slash",
+    "u.s./uk agreement",
+    "U.S./UK Agreement",
+  );
+  runTest(
+    "should normalize regional acronym after a slash",
+    "north america/us-led initiative",
+    "North America/US-Led Initiative",
+  );
+  runTest(
+    "should normalize reserved technology terms around a slash",
+    "nodejs/reactjs development",
+    "Node.js/React Development",
+  );
+  runTest(
+    "should capitalize slash-separated alternatives",
+    "input/output design",
+    "Input/Output Design",
+  );
+  runTest(
+    "should capitalize multiple slash-separated alternatives",
+    "input/output/read/write operations",
+    "Input/Output/Read/Write Operations",
+  );
+
+  // URL preservation
+  runTest(
+    "should preserve lowercase HTTPS protocol",
+    "visit https://example.com for more information",
+    "Visit https://example.com for More Information",
+  );
+  runTest(
+    "should preserve lowercase HTTP protocol",
+    "read http://example.com before continuing",
+    "Read http://example.com Before Continuing",
+  );
+  runTest(
+    "should preserve URL protocol and path casing",
+    "visit https://example.com/api/v2 for sdk documentation",
+    "Visit https://example.com/api/v2 for SDK Documentation",
+  );
+  runTest(
+    "should preserve a URL inside parentheses",
+    "documentation (https://example.com/api) for developers",
+    "Documentation (https://example.com/api) for Developers",
+  );
+  runTest(
+    "should preserve URL query parameters",
+    "visit https://example.com/search?q=nodejs for more information",
+    "Visit https://example.com/search?q=nodejs for More Information",
+  );
+  runTest(
+    "should preserve URL fragments",
+    "read https://example.com/docs#api before continuing",
+    "Read https://example.com/docs#api Before Continuing",
+  );
+
+  // Hyphenated compounds
+  runTest(
+    "should normalize uppercase compound elements",
+    "HIGH-speed LOW-latency networking",
+    "High-Speed Low-Latency Networking",
+  );
+  runTest(
+    "should normalize alternating-case compound elements",
+    "hIgH-sPeEd lOw-LaTeNcY networking",
+    "High-Speed Low-Latency Networking",
+  );
+  runTest(
+    "should normalize uppercase multi-hyphen compound",
+    "STATE-OF-THE-ART systems",
+    "State-of-the-Art Systems",
+  );
+  runTest(
+    "should lowercase minor elements inside multi-hyphen compounds",
+    "state-of-the-art systems",
+    "State-of-the-Art Systems",
+  );
+  runTest(
+    "should normalize multiple multi-hyphen compounds",
+    "state-of-the-art and one-of-a-kind systems",
+    "State-of-the-Art and One-of-a-Kind Systems",
+  );
+  runTest(
+    "should normalize a multi-hyphen phrase within a title",
+    "a state-of-the-art cloud-native system",
+    "A State-of-the-Art Cloud-Native System",
+  );
+  runTest(
+    "should normalize uppercase regional and ordinary compound elements together",
+    "US-GOVERNMENT-BACKED reforms",
+    "US-Government-Backed Reforms",
+  );
+  runTest(
+    "should preserve minor words inside a regional multi-hyphen compound",
+    "us-state-of-the-art technology",
+    "US-State-of-the-Art Technology",
+  );
+
+  // Technical acronyms
+  runTest(
+    "should normalize lowercase technical acronyms",
+    "api and sdk design",
+    "API and SDK Design",
+  );
+  runTest(
+    "should normalize plural technical acronyms",
+    "apis and sdks for developers",
+    "APIs and SDKs for Developers",
+  );
+  runTest(
+    "should normalize possessive technical acronyms",
+    "the api's response and sdk's output",
+    "The API's Response and SDK's Output",
+  );
+  runTest(
+    "should normalize curly possessive technical acronyms",
+    "the api’s response and sdk’s output",
+    "The API’s Response and SDK’s Output",
+  );
+  runTest(
+    "should normalize technical acronyms around punctuation",
+    "tools include api, sdk, css3 and html5",
+    "Tools Include API, SDK, CSS3 and HTML5",
+  );
+  runTest(
+    "should normalize technical acronyms around slashes",
+    "api/sdk development",
+    "API/SDK Development",
+  );
+  runTest(
+    "should preserve versioned technical acronyms",
+    "html5 and css3 development",
+    "HTML5 and CSS3 Development",
+  );
+
+  // Canonical brands and reserved terms
+  runTest(
+    "should preserve canonical PlayStation casing",
+    "iphone 16 and playstation 5",
+    "iPhone 16 and PlayStation 5",
+  );
+  runTest(
+    "should normalize mixed-case PlayStation",
+    "PLAYSTATION and IPHONE gaming",
+    "PlayStation and iPhone Gaming",
+  );
+  runTest(
+    "should normalize reserved words inside parentheses",
+    "machine learning (GOOGLE tensorflow)",
+    "Machine Learning (Google TensorFlow)",
+  );
+  runTest(
+    "should normalize reserved terms before trademark symbols",
+    "tensorflow™ platform",
+    "TensorFlow™ Platform",
+  );
+  runTest(
+    "should normalize multiple reserved terms beside symbols",
+    "tensorflow™ and google® cloud tools",
+    "TensorFlow™ and Google® Cloud Tools",
+  );
+  runTest(
+    "should normalize reserved terms inside brackets",
+    "machine learning [google tensorflow]",
+    "Machine Learning [Google TensorFlow]",
+  );
+  runTest(
+    "should normalize Node.js inside parentheses",
+    "development (nodejs and reactjs)",
+    "Development (Node.js and React)",
+  );
+
+  // Parenthetical and bracket boundaries
+  runTest(
+    "should capitalize the first word inside parentheses",
+    "software design (a practical guide)",
+    "Software Design (A Practical Guide)",
+  );
+  runTest(
+    "should capitalize an article inside parentheses",
+    "software design (the complete guide)",
+    "Software Design (The Complete Guide)",
+  );
+  runTest(
+    "should capitalize the first word inside brackets",
+    "software design [a practical guide]",
+    "Software Design [A Practical Guide]",
+  );
+  runTest(
+    "should capitalize a conjunction inside parentheses",
+    "software design (and why it matters)",
+    "Software Design (And Why It Matters)",
+  );
+  runTest(
+    "should capitalize a preposition inside brackets",
+    "software design [from concept to launch]",
+    "Software Design [From Concept to Launch]",
+  );
+  runTest(
+    "should handle nested quotes inside parentheses",
+    'software design ("a practical guide")',
+    'Software Design ("A Practical Guide")',
+  );
+
+  // HTML break boundaries
+  runTest(
+    "should capitalize a minor word after an HTML break",
+    "the first line<br>and the second line",
+    "The First Line <br> And the Second Line",
+  );
+  runTest(
+    "should capitalize a minor word after a self-closing HTML break",
+    "the first line<br/>and the second line",
+    "The First Line <br> And the Second Line",
+  );
+  runTest(
+    "should capitalize a minor word after an uppercase HTML break",
+    "the first line<BR>and the second line",
+    "The First Line <br> And the Second Line",
+  );
+  runTest(
+    "should capitalize text after an HTML break inside quotes",
+    '"the first line<br>the second line"',
+    '"The First Line <br> The Second Line"',
+  );
+  runTest(
+    "should preserve technical acronym casing around an HTML break",
+    "nodejs and aws<br>api and sdk development",
+    "Node.js and AWS <br> API and SDK Development",
+  );
+
+  // Whitespace around punctuation
+  runTest(
+    "should normalize whitespace around a colon",
+    "software   :   a practical guide",
+    "Software: A Practical Guide",
+  );
+  runTest(
+    "should normalize whitespace around a hyphen",
+    "cloud - native systems",
+    "Cloud-Native Systems",
+  );
+  runTest(
+    "should normalize whitespace around multiple hyphens",
+    "state - of - the - art systems",
+    "State-of-the-Art Systems",
+  );
+  runTest(
+    "should normalize whitespace around a slash",
+    "input / output design",
+    "Input/Output Design",
+  );
+  runTest(
+    "should normalize whitespace around punctuation and preserve acronyms",
+    "api   /   sdk   :   a practical guide",
+    "API/SDK: A Practical Guide",
+  );
+
+  // Smart quotes and apostrophes
+  createTest(
+    "should normalize Node.js inside smart single quotes",
+    { style: "ap", smartQuotes: true },
+    "'a guide to nodejs'",
+    "‘A Guide to Node.js’",
+  );
+  createTest(
+    "should convert a leading apostrophe to a closing smart apostrophe",
+    { style: "ap", smartQuotes: true },
+    "'tis the season for coding",
+    "’Tis the Season for Coding",
+  );
+  createTest(
+    "should distinguish a leading apostrophe from an opening quote",
+    { style: "ap", smartQuotes: true },
+    "'twas the night before deployment",
+    "’Twas the Night Before Deployment",
+  );
+  createTest(
+    "should preserve an actual single-quoted title",
+    { style: "ap", smartQuotes: true },
+    "'the future of software'",
+    "‘The Future of Software’",
+  );
+  createTest(
+    "should normalize reserved terms inside smart quotes",
+    { style: "ap", smartQuotes: true },
+    '"google tensorflow and nodejs"',
+    "“Google TensorFlow and Node.js”",
   );
 });
 

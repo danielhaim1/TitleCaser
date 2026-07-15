@@ -2,6 +2,7 @@ import { TitleCaser } from "../src/TitleCaser.js";
 import {
   TITLE_CASER_CONFIG_DEFAULTS,
   TitleCaserConfig,
+  createTitleCaserConfig,
 } from "../src/TitleCaserConfig.js";
 import { TitleCaserUtils } from "../src/TitleCaserUtils.js";
 import {
@@ -12,6 +13,12 @@ import {
   dictionaryIsVerb,
   dictionaryIsWord,
 } from "../src/data/dictionary/index.js";
+import { buildDictionaryProperPhraseIndex } from "../src/utils/dictionary/dictionaryTitleCaserUtils.js";
+import {
+  buildKnownTermCasingMap as buildKnownTermCasingMapFromConsts,
+  buildPhraseReplacementMap as buildPhraseReplacementMapFromConsts,
+  buildSimpleTermCasingMap as buildSimpleTermCasingMapFromConsts,
+} from "../src/TitleCaserConsts.js";
 
 const { createBundledProfileTitleCaser } = require("../testHelpers/profileTestHelper");
 
@@ -82,6 +89,30 @@ describe("Coverage – TitleCaser defensive and rare branches", () => {
     expect(titleCaser.toTitleCase("inside an ai-led plan")).toBe("Inside an AI-Led Plan");
   });
 
+  test("covers punctuation-sensitive editorial boundary helpers", () => {
+    expect(new TitleCaser({ style: "apa" }).toTitleCase('"u.k." and "e.u." policy')).toBe(
+      '"U.K." and "E.U." Policy',
+    );
+    expect(new TitleCaser({ style: "apa" }).toTitleCase("deployment at 10:30 am, then review")).toBe(
+      "Deployment at 10:30 AM, Then Review",
+    );
+    expect(new TitleCaser({ style: "apa" }).toTitleCase("latency at 5 ms, then recovery")).toBe(
+      "Latency at 5 ms, Then Recovery",
+    );
+    expect(new TitleCaser({ style: "ap" }).toTitleCase("analysis — growth in the eu")).toBe(
+      "Analysis — Growth in the EU",
+    );
+    expect(new TitleCaser({ style: "ap" }).toTitleCase("what this is in?")).toBe("What This Is In?");
+    expect(new TitleCaser({ style: "ap" }).toTitleCase("(123) and 456)")).toBe("(123) and 456)");
+  });
+
+  test("covers AP infinitive boundary helpers at start and end of input", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+
+    expect(titleCaser.toTitleCase("to decide")).toBe("To Decide");
+    expect(titleCaser.toTitleCase("where to")).toBe("Where To");
+  });
+
   test("preserves dictionary names before trailing punctuation and tokens with numbers", () => {
     const titleCaser = new TitleCaser({ style: "ap" });
 
@@ -136,6 +167,14 @@ describe("Coverage – TitleCaser defensive and rare branches", () => {
     warnSpy.mockRestore();
   });
 
+  test("covers static casing preservation helper outcomes", () => {
+    expect(TitleCaser.shouldKeepCasing("us")).toBe(true);
+    expect(TitleCaser.shouldKeepCasing("iPhone")).toBe(true);
+    expect(TitleCaser.shouldKeepCasing("nodejs", { nodejs: "Node.js" })).toBe(true);
+    expect(TitleCaser.shouldKeepCasing("github")).toBe(true);
+    expect(TitleCaser.shouldKeepCasing("plain")).toBe(false);
+  });
+
   test("validates exact phrase replacement and style mutation inputs", () => {
     const titleCaser = new TitleCaser();
 
@@ -159,10 +198,34 @@ describe("Coverage – config aliases and cloning", () => {
 
     config.replaceTerms[0][1] = "Mutated";
     expect(options.replaceTerms).toEqual([["api", "API"]]);
+
+    expect(createTitleCaserConfig({ style: "apa" })).toBeInstanceOf(TitleCaserConfig);
+    expect(createTitleCaserConfig()).toBeInstanceOf(TitleCaserConfig);
   });
 });
 
 describe("Coverage – dictionary data and entity helpers", () => {
+  test("builds term casing maps while skipping malformed curated entries", () => {
+    const curatedTerms = {
+      terms: ["open ai", "Node.js", "iPhone", "plain", null, 1],
+    };
+
+    expect(buildPhraseReplacementMapFromConsts(curatedTerms)).toEqual({
+      "open ai": "open ai",
+    });
+    expect(buildKnownTermCasingMapFromConsts(curatedTerms)).toEqual({
+      "open ai": "open ai",
+      "node.js": "Node.js",
+      iphone: "iPhone",
+    });
+    expect(buildSimpleTermCasingMapFromConsts(curatedTerms)).toEqual({
+      "open ai": "open ai",
+      "node.js": "Node.js",
+      iphone: "iPhone",
+      plain: "plain",
+    });
+  });
+
   test("exercises dictionary profile accessors and unknown profile fallback", () => {
     expect(dictionaryGetProfile("lite").nouns).toEqual([]);
     expect(dictionaryGetProperPhrases("unknown")).toEqual(expect.objectContaining({
@@ -200,10 +263,25 @@ describe("Coverage – dictionary data and entity helpers", () => {
     expect(TitleCaserUtils.dictionaryIsEntityBlocklistedWord("a")).toBe(true);
     expect(TitleCaserUtils.dictionaryIsGenericEntityHeadWord("project")).toBe(true);
     expect(TitleCaserUtils.dictionaryIsLikelyNameContinuation("Smith")).toBe(true);
+    expect(TitleCaserUtils.dictionaryCapitalizeNameToken(null)).toBe(null);
     expect(TitleCaserUtils.dictionaryGetProfile("lite").nouns).toEqual([]);
     expect(TitleCaserUtils.dictionaryGetLikelyEntityPhraseMatch(["!"], 0)).toBe(null);
     expect(TitleCaserUtils.dictionaryGetLikelyEntityPhraseMatch(["qelvorn", " ", "Project"], 0)).toBe(2);
     expect(TitleCaserUtils.dictionaryGetLikelyEntityPhraseMatch(["Qelvorn"], 0)).toBe(null);
+  });
+
+  test("builds proper phrase indexes and skips single-token phrase entries", () => {
+    const phraseIndex = buildDictionaryProperPhraseIndex({
+      academy: "Academy",
+      "academy award": "Academy Award",
+      "academy award winner": "Academy Award Winner",
+    });
+
+    expect(phraseIndex.has("academy")).toBe(true);
+    expect(phraseIndex.get("academy")).toEqual([
+      { words: ["academy", "award", "winner"], replacement: "Academy Award Winner" },
+      { words: ["academy", "award"], replacement: "Academy Award" },
+    ]);
   });
 });
 
@@ -219,6 +297,7 @@ describe("Coverage – detector edge cases", () => {
   });
 
   test("scores unsupported languages and text without letters", () => {
+    expect(TitleCaserUtils.detectorIsLanguageWord("hello", "unknown")).toBe(false);
     expect(TitleCaserUtils.detectorScoreLanguage("hello", "unknown")).toEqual({
       language: "unknown",
       score: 0,
@@ -235,6 +314,7 @@ describe("Coverage – detector edge cases", () => {
 
   test("detects final regional acronyms after small linking words", () => {
     expect(TitleCaserUtils.isFinalWordRegionalAcronym("uk", "the", "via")).toBe(true);
+    expect(TitleCaserUtils.isFinalWordRegionalAcronym("uk", "the", "from")).toBe(true);
   });
 });
 

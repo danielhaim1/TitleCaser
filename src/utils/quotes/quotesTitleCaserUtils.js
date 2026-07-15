@@ -19,7 +19,10 @@ export function quotesExtendTitleCaserUtils(TitleCaserUtils) {
             const nextChar = input[i + 1];
 
             const isLeftAligned = !prevChar || prevChar === " " || prevChar === "\n";
-            const curlyQuote = isLeftAligned ? curlyQuotePair[0] : curlyQuotePair[1];
+            const isLeadingContraction = char === "'" &&
+              isLeftAligned &&
+              /^(tis|twas)\b/i.test(input.slice(i + 1));
+            const curlyQuote = isLeftAligned && !isLeadingContraction ? curlyQuotePair[0] : curlyQuotePair[1];
             replacedText += curlyQuote;
 
             if (curlyQuote === curlyQuotePair[1] && /[.,;!?()\[\]{}:]/.test(nextChar)) {

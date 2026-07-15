@@ -382,10 +382,6 @@ export function validationExtendTitleCaserUtils(TitleCaserUtils) {
           }
         }
 
-        if (!TitleCaserUtils.validationIsPlainObject(runtimeConfig.security)) {
-          validationThrow("Invalid config: security must be an object.");
-        }
-
         Object.keys(runtimeConfig.security).forEach((key) => {
           if (!validationAllowedSecurityKeys.has(key)) {
             validationThrow(`Invalid config: security.${key} is not a supported option.`);

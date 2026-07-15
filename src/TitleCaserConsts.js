@@ -27,7 +27,7 @@ function mergeArrays(...arraysOrObjects) {
   return [...new Set(merged)];
 }
 
-function buildPhraseReplacementMap(...arraysOrObjects) {
+export function buildPhraseReplacementMap(...arraysOrObjects) {
   const phraseMap = {};
   const terms = mergeArrays(...arraysOrObjects);
 
@@ -41,7 +41,7 @@ function buildPhraseReplacementMap(...arraysOrObjects) {
   return phraseMap;
 }
 
-function buildKnownTermCasingMap(...arraysOrObjects) {
+export function buildKnownTermCasingMap(...arraysOrObjects) {
   const termMap = {};
   const terms = mergeArrays(...arraysOrObjects);
 
@@ -55,7 +55,7 @@ function buildKnownTermCasingMap(...arraysOrObjects) {
   return termMap;
 }
 
-function buildSimpleTermCasingMap(...arraysOrObjects) {
+export function buildSimpleTermCasingMap(...arraysOrObjects) {
   const termMap = {};
   const terms = mergeArrays(...arraysOrObjects);
 
@@ -131,6 +131,9 @@ export const wordReplacementsList = [
   { "reactjs": "React" },
   { "react.js": "React" },
   { "skoda": "Škoda" },
+  { "ecommerce": "E-Commerce" },
+  { "e-commerce": "E-Commerce" },
+  { "e commerce": "E-Commerce" },
   { "cyber security": "cybersecurity" },
   { "cyber-security": "cybersecurity" },
   // { 'twitter': 'Twitter, formerly known as 𝕏' }
@@ -189,6 +192,7 @@ export const styleConfigMap = Object.freeze({
       "of",
       "off",
       "on",
+      "out",
       "per",
       "to",
       "via"
@@ -210,7 +214,6 @@ export const styleConfigMap = Object.freeze({
       "of",
       "off",
       "on",
-      "out",
       "per",
       "to",
       "via"
@@ -232,7 +235,6 @@ export const styleConfigMap = Object.freeze({
       "of",
       "off",
       "on",
-      "out",
       "per",
       "to",
       "via"
@@ -296,6 +298,7 @@ export const ignoredWordList = [];
 
 export const phraseReplacementMap = {
   ...buildPhraseReplacementMap(curatedDataList),
+  ...buildPhraseReplacementMap(brandNames),
   'the cybersmile foundation': 'The Cybersmile Foundation',
   'co. by colgate': 'CO. by Colgate',
   "on & off": "On & Off",

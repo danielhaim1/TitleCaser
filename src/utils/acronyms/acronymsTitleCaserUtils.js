@@ -59,15 +59,10 @@ export function acronymsExtendTitleCaserUtils(TitleCaserUtils) {
 
         const current = word.toLowerCase().replace(/[^\w]/g, "");
         const prev = prevWord.toLowerCase().replace(/[^\w]/g, "");
-        const prevPrev = typeof prevPrevWord === "string" ? prevPrevWord.toLowerCase().replace(/[^\w]/g, "") : null;
 
         if (!regionalAcronymList.includes(current)) return false;
 
         if (regionalAcronymPrecedingWordsList.includes(prev)) return true;
-
-        if (prev === "the" && prevPrev && regionalAcronymPrecedingWordsList.includes(prevPrev)) {
-          return true;
-        }
 
         return false;
       },

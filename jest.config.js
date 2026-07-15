@@ -14,6 +14,14 @@ module.exports = {
 	modulePathIgnorePatterns: [
 	  '<rootDir>/docs/_data'
 	],
+	coverageThreshold: {
+	  global: {
+	    statements: 100,
+	    branches: 95,
+	    functions: 100,
+	    lines: 100
+	  }
+	},
 	testMatch: [
 	  '**/__tests__/**/*.(js|ts)',
 	  '**/*.(test|spec).(js|ts)'

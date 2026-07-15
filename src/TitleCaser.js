@@ -6,6 +6,7 @@ import {
   styleConfigMap,
   REGEX_PATTERNS,
   knownTermCasingMap,
+  regionalAcronymList,
 } from "./TitleCaserConsts.js";
 
 import { TitleCaserUtils } from "./TitleCaserUtils.js";
@@ -55,6 +56,10 @@ export class TitleCaser {
 
   toTitleCase(str) {
     try {
+      if (str === "") {
+        return "";
+      }
+
       const runtimeConfig = TitleCaserUtils.validationCreateRuntimeConfig(this.options);
       TitleCaserUtils.validationValidateInput(str, runtimeConfig);
 
@@ -101,9 +106,11 @@ export class TitleCaser {
 
         for (const [phrase, replacement] of replacePhraseEntries) {
           const escapedPhrase = phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&");
-          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
+          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(['\u2019]s)?(?=$|[^A-Za-z0-9'])`, "gi");
 
-          replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
+          replacedValue = replacedValue.replace(regex, (_, prefix, _phrase, possessiveSuffix = "") =>
+            `${prefix}${replacement}${possessiveSuffix}`
+          );
         }
 
         return replacedValue;
@@ -141,15 +148,186 @@ export class TitleCaser {
         const previousWord = normalizeTokenForDictionaryLookup(
           getPreviousNonWhitespaceToken(tokenList, currentIndex)
         );
+        let previousTwoWord = "";
+        let foundPreviousWord = false;
+        for (let j = currentIndex - 1; j >= 0; j--) {
+          if (/^\s+$/.test(tokenList[j])) continue;
+          if (!foundPreviousWord) {
+            foundPreviousWord = true;
+            continue;
+          }
+          previousTwoWord = normalizeTokenForDictionaryLookup(tokenList[j]);
+          break;
+        }
         const nextWord = normalizeTokenForDictionaryLookup(
           getNextNonWhitespaceToken(tokenList, currentIndex)
         );
 
         return (
           nextWord !== "" &&
+          previousTwoWord !== "from" &&
           !/['\u2019]s$/i.test(previousWord) &&
           TitleCaserUtils.dictionaryIsVerb(nextWord, dictionaryProfile)
         );
+      };
+
+      const toDisplayReplacement = (replacement) => {
+        if (replacement !== replacement.toLowerCase()) return replacement;
+        return replacement.charAt(0).toUpperCase() + replacement.slice(1).toLowerCase();
+      };
+
+      const getCanonicalTokenReplacement = (word) => {
+        const punctuationMatch = word.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
+        const punctuation = punctuationMatch ? punctuationMatch[0] : "";
+        const wordWithoutPunctuation = punctuation ? word.slice(0, -punctuation.length) : word;
+        const symbolMatch = wordWithoutPunctuation.match(/[™®©]+$/);
+        const symbolSuffix = symbolMatch ? symbolMatch[0] : "";
+        const wordWithoutSymbol = symbolSuffix
+          ? wordWithoutPunctuation.slice(0, -symbolSuffix.length)
+          : wordWithoutPunctuation;
+        const possessiveMatch = wordWithoutSymbol.match(/(['\u2019]s)$/i);
+        const possessiveSuffix = possessiveMatch ? possessiveMatch[0] : "";
+        const baseWord = possessiveSuffix
+          ? wordWithoutSymbol.slice(0, -possessiveSuffix.length)
+          : wordWithoutSymbol;
+        const normalizedBaseWord = baseWord.toLowerCase();
+        const replacement = replaceTermObj[normalizedBaseWord] || knownTermCasingMap[normalizedBaseWord];
+
+        return replacement
+          ? `${toDisplayReplacement(replacement)}${possessiveSuffix}${symbolSuffix}${punctuation}`
+          : null;
+      };
+
+      const capitalizeShortWordToken = (word) => {
+        const punctuationMatch = word.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
+        const punctuation = punctuationMatch ? punctuationMatch[0] : "";
+        const wordWithoutPunctuation = punctuation ? word.slice(0, -punctuation.length) : word;
+
+        return wordWithoutPunctuation.charAt(0).toUpperCase() +
+          wordWithoutPunctuation.slice(1).toLowerCase() +
+          punctuation;
+      };
+
+      const isTechnologyDisciplineIt = (word, tokenList, currentIndex) => {
+        if (word.toLowerCase() !== "it") return false;
+
+        const previousWord = normalizeTokenForDictionaryLookup(
+          getPreviousNonWhitespaceToken(tokenList, currentIndex)
+        );
+        let nextWord = "";
+
+        for (let j = currentIndex + 1; j < tokenList.length; j++) {
+          if (/^\s+$/.test(tokenList[j])) continue;
+
+          const normalizedToken = normalizeTokenForDictionaryLookup(tokenList[j]);
+          if (normalizedToken === "and") {
+            continue;
+          }
+
+          nextWord = normalizedToken;
+          break;
+        }
+
+        return ["in", "for", "of"].includes(previousWord) &&
+          ["cybersecurity", "technology", "tech", "software", "systems"].includes(nextWord);
+      };
+
+      const normalizeRegionalAcronymSegment = (segment) => {
+        const normalizedSegment = segment.toLowerCase();
+        if (regionalAcronymList.includes(normalizedSegment)) {
+          return segment.toUpperCase();
+        }
+        return null;
+      };
+
+      const isDottedAcronymToken = (token) => {
+        if (!token) return false;
+
+        const normalizedToken = token
+          .replace(/^[("'“‘[{]+/, "")
+          .replace(/["'”’)\]},;:!?]+$/, "");
+
+        return /^(?:[A-Za-z]\.){2,}$/.test(normalizedToken);
+      };
+
+      const isSubtitleBoundaryToken = (token) => {
+        if (!token) return false;
+        if (style !== "ap" && isDottedAcronymToken(token)) return false;
+
+        const boundarySymbols = style === "apa"
+          ? [":", ";", "?", "!", "."]
+          : [":", "?", "!", "."];
+
+        return (
+          TitleCaserUtils.endsWithSymbol(token, boundarySymbols) ||
+          token.toLowerCase() === "<br>" ||
+          TitleCaserUtils.hasHtmlBreak(token)
+        );
+      };
+
+      const isTimeMeridiemToken = (word, tokenList, currentIndex) => {
+        const punctuationMatch = word.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
+        const punctuation = punctuationMatch ? punctuationMatch[0] : "";
+        const baseWord = punctuation ? word.slice(0, -punctuation.length) : word;
+        if (!/^(am|pm)$/i.test(baseWord)) return null;
+
+        const previousToken = getPreviousNonWhitespaceToken(tokenList, currentIndex);
+        return /^\d{1,2}:\d{2}$/.test(previousToken)
+          ? `${baseWord.toUpperCase()}${punctuation}`
+          : null;
+      };
+
+      const isMillisecondMeasurementToken = (word, tokenList, currentIndex) => {
+        const punctuationMatch = word.match(REGEX_PATTERNS.TRAILING_PUNCTUATION);
+        const punctuation = punctuationMatch ? punctuationMatch[0] : "";
+        const baseWord = punctuation ? word.slice(0, -punctuation.length) : word;
+        if (baseWord.toLowerCase() !== "ms") return null;
+
+        const previousToken = getPreviousNonWhitespaceToken(tokenList, currentIndex);
+        return /^\d+(?:\.\d+)?$/.test(previousToken)
+          ? `ms${punctuation}`
+          : null;
+      };
+
+      const normalizeHyphenatedCanonicalSegments = (word) => {
+        if (!/[A-Za-z0-9]/.test(word)) return word;
+
+        const normalizedWord = word
+          .split(/([-–—])/)
+          .map((part, index) => {
+            if (index % 2 === 1) {
+              return style === "ap" ? "-" : part;
+            }
+
+            const canonicalReplacement = getCanonicalTokenReplacement(part);
+            return canonicalReplacement || part;
+          })
+          .join("");
+
+        return TitleCaserUtils.correctTermHyphenated(normalizedWord, style);
+      };
+
+      const normalizeSlashSeparatedToken = (word) => {
+        if (!word.includes("/") || /^[a-z]+:\/\//i.test(word)) return null;
+
+        return word
+          .split(/(\/)/)
+          .map((part) => {
+            if (part === "/") return part;
+
+            const regionalAcronym = normalizeRegionalAcronymSegment(part);
+            if (regionalAcronym) return regionalAcronym;
+
+            const canonicalReplacement = getCanonicalTokenReplacement(part);
+            if (canonicalReplacement) return canonicalReplacement;
+
+            if (TitleCaserUtils.hasHyphen(part)) {
+              return TitleCaserUtils.correctTermHyphenated(part, style);
+            }
+
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+          })
+          .join("");
       };
 
       // Normalize HTML breaks and optionally normalize whitespace (see normalizeWhitespace option).
@@ -177,6 +355,10 @@ export class TitleCaser {
       const originalNonWhitespaceTokens = tokens.filter((token) => token && !/^\s+$/.test(token));
 
       const transformToken = (word, tokenIndex, wordPosition) => {
+        if (/^[a-z]+:\/\/\S+/i.test(word)) {
+          return word.toLowerCase();
+        }
+
         const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
         if (leadingOpeningPunctuation) {
           const innerWord = word.slice(leadingOpeningPunctuation.length);
@@ -186,14 +368,49 @@ export class TitleCaser {
             : innerWord;
 
           if (/^[A-Za-z]/.test(innerWordWithoutClosingPunctuation)) {
+            const shouldCapitalizeBracketedWord = /[([{]/.test(leadingOpeningPunctuation) &&
+              !(
+                style === "ap" &&
+                innerWordWithoutClosingPunctuation.toLowerCase() === "in" &&
+                normalizeTokenForDictionaryLookup(getNextNonWhitespaceToken(tokens, tokenIndex)) === "the"
+              );
+            const quotedWordPosition = (
+              /["'“‘«‹„‚]/.test(leadingOpeningPunctuation) ||
+              shouldCapitalizeBracketedWord
+            ) && !trailingClosingPunctuation
+              ? 0
+              : wordPosition;
+
             return leadingOpeningPunctuation +
-              transformToken(innerWordWithoutClosingPunctuation, tokenIndex, wordPosition) +
+              transformToken(innerWordWithoutClosingPunctuation, tokenIndex, quotedWordPosition) +
               trailingClosingPunctuation;
+          }
+        }
+
+        const trailingClosingPunctuation = TitleCaserUtils.getTrailingClosingPunctuation(word);
+        if (trailingClosingPunctuation) {
+          const innerWord = word.slice(0, -trailingClosingPunctuation.length);
+          if (/^[A-Za-z]/.test(innerWord)) {
+            return transformToken(innerWord, tokenIndex, wordPosition) + trailingClosingPunctuation;
           }
         }
 
         if (isApInfinitiveTo(word, tokens, tokenIndex)) {
           return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+
+        if (isTechnologyDisciplineIt(word, tokens, tokenIndex)) {
+          return "IT";
+        }
+
+        const timeMeridiem = isTimeMeridiemToken(word, tokens, tokenIndex);
+        if (timeMeridiem) {
+          return timeMeridiem;
+        }
+
+        const millisecondMeasurement = isMillisecondMeasurementToken(word, tokens, tokenIndex);
+        if (millisecondMeasurement) {
+          return millisecondMeasurement;
         }
 
         switch (true) {
@@ -212,41 +429,21 @@ export class TitleCaser {
             return replacement.toLowerCase() === word.toLowerCase()
               ? replacement
               : transformToken(replacement, tokenIndex, wordPosition);
+          case getCanonicalTokenReplacement(word) !== null:
+            return getCanonicalTokenReplacement(word);
           case TitleCaserUtils.isWordInArray(word, specialTermsList):
             // ! If the word is in the specialTermsList array, return the correct casing.
             return TitleCaserUtils.correctTerm(word, specialTermsList);
           case TitleCaserUtils.isElidedWord(word):
             // ! If the word is an elided word, return the correct casing.
             return TitleCaserUtils.normalizeElidedWord(word);
+          case normalizeSlashSeparatedToken(word) !== null:
+            return normalizeSlashSeparatedToken(word);
           case TitleCaserUtils.hasHyphen(word):
-            // Separate the base word from any trailing punctuation
-            const baseWord = word.replace(/[\W_]+$/, "");
-            const trailingPunctuation = word.slice(baseWord.length);
-
-            // Split the base word at the hyphen and process each part
-            const parts = baseWord.split("-");
-            const replacedParts = parts.map((part) => {
-              const lowerCasePart = part.toLowerCase();
-              if (replaceTermsArray.includes(lowerCasePart)) {
-                return replaceTermObj[lowerCasePart];
-              }
-              return part;
-            });
-
-            // Determine if any part was replaced
-            const isReplaced = !replacedParts.every((part, index) => part === parts[index]);
-
-            // Reassemble the word with the hyphen, reattach trailing punctuation, and return
-            const processedWord = isReplaced
-              ? transformToken(replacedParts.join("-"), tokenIndex, wordPosition)
-              : TitleCaserUtils.correctTermHyphenated(word, style);
-            return processedWord.endsWith(trailingPunctuation) ? processedWord : processedWord + trailingPunctuation;
+            return normalizeHyphenatedCanonicalSegments(word);
           case TitleCaserUtils.hasSuffix(word, style):
             // ! If the word has a suffix, return the correct casing.
             return TitleCaserUtils.correctSuffix(word, specialTermsList);
-          case TitleCaserUtils.hasUppercaseIntentional(word):
-            // ! If the word has an intentional uppercase letter, return the correct casing.
-            return word;
           case TitleCaserUtils.isShortWord(word, style) && wordPosition !== 0:
             // Find previous non-whitespace token
             let prevToken = null;
@@ -257,15 +454,15 @@ export class TitleCaser {
               }
             }
 
-            const isAtEndOfSentence =
-              prevToken && TitleCaserUtils.endsWithSymbol(prevToken, [":", "?", "!", "."]);
-
-            if (isAtEndOfSentence) {
+            if (isSubtitleBoundaryToken(prevToken)) {
               return word.charAt(0).toUpperCase() + word.slice(1);
             }
 
             const wordCasing = TitleCaserUtils.normalizeCasingForWordByStyle(word, style);
             return wordCasing;
+          case TitleCaserUtils.hasUppercaseIntentional(word):
+            // ! If the word has an intentional uppercase letter, return the correct casing.
+            return word;
           case TitleCaserUtils.endsWithSymbol(word):
             this.logWarning(`Check if the word ends with a symbol: ${word}`);
             // ! If the word ends with a symbol, return the correct casing.
@@ -285,10 +482,6 @@ export class TitleCaser {
                   const correctedTerm = TitleCaserUtils.correctTerm(part, specialTermsList);
                   this.logWarning(`Word is in specialTermsList, corrected term: ${correctedTerm}`);
                   return correctedTerm;
-                } else if (replaceTermsArray.includes(part)) {
-                  const replacement = replaceTermObj[part];
-                  this.logWarning(`Word is in replaceTermsArray, replacement: ${replacement}`);
-                  return replacement;
                 } else if (
                   TitleCaserUtils.dictionaryIsGivenName(part) ||
                   TitleCaserUtils.dictionaryIsFamilyName(part)
@@ -411,8 +604,15 @@ export class TitleCaser {
         if (i === firstShortWordTokenIndex || i === lastShortWordTokenIndex) continue;
 
         const currentWord = wordsForShortWords[i];
-        const prevWord = wordsForShortWords[i - 1];
+        let prevWord = wordsForShortWords[i - 1];
         const nextWord = wordsForShortWords[i + 1];
+
+        for (let j = i - 1; j >= 0; j--) {
+          if (!/^\s+$/.test(wordsForShortWords[j])) {
+            prevWord = wordsForShortWords[j];
+            break;
+          }
+        }
 
         if (
           currentWord === currentWord.toUpperCase() ||
@@ -423,6 +623,11 @@ export class TitleCaser {
 
         if (isApInfinitiveTo(currentWord, wordsForShortWords, i)) {
           wordsForShortWords[i] = currentWord.charAt(0).toUpperCase() + currentWord.slice(1);
+          continue;
+        }
+
+        if (isSubtitleBoundaryToken(prevWord) && TitleCaserUtils.isWordInArray(currentWord, shortWordsList)) {
+          wordsForShortWords[i] = capitalizeShortWordToken(currentWord);
           continue;
         }
 
@@ -487,6 +692,16 @@ export class TitleCaser {
         TitleCaserUtils.isFinalWordRegionalAcronym(finalWord, wordBeforeFinal, twoWordsBeforeFinal)
       ) {
         wordsForFinalPass[wordsForFinalPass.length - 1] = finalWord.toUpperCase();
+      } else if (
+        finalWord &&
+        TitleCaserUtils.isShortWord(
+          finalWord.replace(REGEX_PATTERNS.TRAILING_PUNCTUATION, ""),
+          style
+        ) &&
+        !TitleCaserUtils.hasUppercaseIntentional(finalWord)
+      ) {
+        const finalWordIndex = wordsForFinalPass.lastIndexOf(finalWord);
+        wordsForFinalPass[finalWordIndex] = capitalizeShortWordToken(finalWord);
       }
 
       inputString = wordsForFinalPass.join("");
@@ -674,8 +889,15 @@ export class TitleCaser {
 
       if (normalizeWhitespace) {
         inputString = inputString
+          .replace(/\s*<br>\s*/gi, " <br> ")
+          .replace(/\s+([:;,.!?])/g, "$1")
+          .replace(/\s*-\s*/g, "-")
           .replace(/\s+/g, " ")
           .trim();
+
+        if (style === "ap") {
+          inputString = inputString.replace(/\s*\/\s*/g, "/");
+        }
       }
 
       return inputString;

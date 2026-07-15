@@ -52,7 +52,7 @@ export function casingExtendTitleCaserUtils(TitleCaserUtils) {
 
         const combinedList = [...shortConjunctionsList, ...articlesList, ...shortPrepositionsList, ...neverCapitalizedList];
 
-        return combinedList.includes(lowerWord) ? word : false;
+        return combinedList.includes(lowerWord) ? lowerWord : false;
       },
       writable: true,
       configurable: true,

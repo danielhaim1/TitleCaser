@@ -91,6 +91,25 @@ export function replacementsExtendTitleCaserUtils(TitleCaserUtils) {
           delimiters = new RegExp(`[${delimiters.join("")}]`);
         }
 
+        const exactTermIndex = correctTerms.findIndex(
+          (term) => term.toLowerCase() === word.toLowerCase()
+        );
+        if (exactTermIndex >= 0) {
+          return correctTerms[exactTermIndex];
+        }
+
+        const possessiveMatch = word.match(/^(.+)(['\u2019]s)$/i);
+        if (possessiveMatch) {
+          const [, baseWord, possessiveSuffix] = possessiveMatch;
+          const baseTermIndex = correctTerms.findIndex(
+            (term) => term.toLowerCase() === baseWord.toLowerCase()
+          );
+
+          if (baseTermIndex >= 0) {
+            return `${correctTerms[baseTermIndex]}${possessiveSuffix.charAt(0)}s`;
+          }
+        }
+
         const parts = word.split(delimiters);
         const numParts = parts.length;
 
@@ -120,23 +139,32 @@ export function replacementsExtendTitleCaserUtils(TitleCaserUtils) {
     // Correct a hyphenated or dashed term by style
     correctTermHyphenated: {
       value(word, style) {
-        const dashMatch = word.match(/[-–—]/);
-        if (!dashMatch) return word;
-
-        const dash = dashMatch[0];
-        const hyphenatedWords = word.split(/[-–—]/);
+        const compoundParts = word.split(/([-–—])/);
+        const hyphenatedWords = compoundParts.filter((_, index) => index % 2 === 0);
+        if (hyphenatedWords.length < 2) return word;
+        if (hyphenatedWords.filter((segment) => /[A-Za-z0-9]/.test(segment)).length < 2) return word;
 
         const containsRegionalAcronym = hyphenatedWords.some((segment) =>
           regionalAcronymList.includes(
             segment.toLowerCase().replace(/[^\w]/g, "")
           )
         );
-        const capitalizeFirst = (w) => w.charAt(0).toUpperCase() + w.slice(1);
+        const capitalizeFirst = (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
         const lowercaseRest = (w) => w.charAt(0) + w.slice(1).toLowerCase();
+        const capitalizeCompoundSegment = (w, index, length) => {
+          if (
+            TitleCaserUtils.isShortWord(w, style) &&
+            index > 0 &&
+            index < length - 1
+          ) {
+            return w.toLowerCase();
+          }
+          return capitalizeFirst(w);
+        };
 
         const styleFunctions = {
-          ap: capitalizeFirst,
-          chicago: capitalizeFirst,
+          ap: capitalizeCompoundSegment,
+          chicago: capitalizeCompoundSegment,
           apa: (w, index, length) => {
             if (
               !containsRegionalAcronym &&
@@ -180,12 +208,20 @@ export function replacementsExtendTitleCaserUtils(TitleCaserUtils) {
 
           if (uniqueTermsIndex >= 0) {
             correctedWord = specialTermsList[uniqueTermsIndex];
+            if (TitleCaserUtils.hasUppercaseIntentional(correctedWord)) {
+              return correctedWord;
+            }
           }
 
           return processWord(correctedWord, i, hyphenatedWords.length);
         });
 
-        return processedWords.join(dash);
+        return compoundParts
+          .map((part, index) => {
+            if (index % 2 === 0) return processedWords[index / 2];
+            return style === "ap" ? "-" : part;
+          })
+          .join("");
       },
       writable: true,
       configurable: true,
