@@ -63,7 +63,10 @@
     "package.json"
   ],
   "scripts": {
-    "build": "npx webpack --mode production && rm -rf docs/assets/js/full docs/assets/js/lite docs/assets/js/titlecaser.amd.js docs/assets/js/titlecaser.esm.js docs/assets/js/titlecaser.module.js && mkdir -p docs/assets/js && cp -R dist/full dist/lite docs/assets/js/",
+    "build": "npm run build:dist && npm run build:docs-assets",
+    "build:dist": "webpack --mode production",
+    "build:docs-assets": "rm -rf docs/assets/js/full docs/assets/js/lite docs/assets/js/titlecaser.amd.js docs/assets/js/titlecaser.esm.js docs/assets/js/titlecaser.module.js && mkdir -p docs/assets/js && cp -R dist/full dist/lite docs/assets/js/",
+    "build:docs": "cd docs && bundle exec jekyll build",
     "build-docs": "cd docs && bundle install && bundle exec jekyll build",
     "release": "npm run release:patch",
     "release:current": "npm run build && git add -A && git commit -m \"Release: v$(node -p 'require(\"./package.json\").version')\" && git tag -a v$(node -p 'require(\"./package.json\").version') -m \"Release v$(node -p 'require(\"./package.json\").version')\" && git push --follow-tags && npm publish",

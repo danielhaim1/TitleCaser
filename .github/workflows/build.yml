@@ -4,45 +4,54 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
+    name: Build package, build docs, and deploy Pages
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v7
+      - name: Check out repository
+        uses: actions/checkout@v7
 
-    - name: Install Node.js and dependencies
-      uses: actions/setup-node@v7
-      with:
-        node-version: '22'
-        cache: npm
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
 
-    - name: Install npm dependencies
-      run: npm install
-      env:
-        PUPPETEER_SKIP_DOWNLOAD: true
+      - name: Install npm dependencies
+        run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
 
-    - name: Build and bundle JavaScript code
-      run: npm run build
+      - name: Build distribution bundles
+        run: npm run build:dist
 
-    - name: Install Ruby and Jekyll
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.1'
-        bundler-cache: true
-        working-directory: docs
+      - name: Sync browser bundles into docs
+        run: npm run build:docs-assets
 
-    - name: Build Jekyll site
-      run: bundle exec jekyll build
-      working-directory: docs
-  
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/_site
-        enable_jekyll: true
+      - name: Set up Ruby and Jekyll
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+          working-directory: docs
+
+      - name: Build Jekyll site
+        run: npm run build:docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_site
+          enable_jekyll: true
