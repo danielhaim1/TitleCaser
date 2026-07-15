@@ -240,9 +240,7 @@ export class TitleCaser {
         return null;
       };
 
-      const isDottedAcronymToken = (token) => {
-        if (!token) return false;
-
+      const isDottedAcronymToken = (token = "") => {
         const normalizedToken = token
           .replace(/^[("'“‘[{]+/, "")
           .replace(/["'”’)\]},;:!?]+$/, "");
@@ -251,8 +249,7 @@ export class TitleCaser {
       };
 
       const isSubtitleBoundaryToken = (token) => {
-        if (!token) return false;
-        if (style !== "ap" && isDottedAcronymToken(token)) return false;
+        if (!token || (style !== "ap" && isDottedAcronymToken(token))) return false;
 
         const boundarySymbols = style === "apa"
           ? [":", ";", "?", "!", "."]

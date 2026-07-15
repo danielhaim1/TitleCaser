@@ -271,6 +271,7 @@ describe("TitleCaserUtils – Replacements", () => {
     expect(TitleCaserUtils.correctTermHyphenated("server-side", "wikipedia")).toBe("Server-side");
     expect(TitleCaserUtils.correctTermHyphenated("server-side", "unknown")).toBe("server-side");
     expect(TitleCaserUtils.correctTermHyphenated("plain", "ap")).toBe("plain");
+    expect(TitleCaserUtils.correctTermHyphenated("word-", "ap")).toBe("word-");
     expect(TitleCaserUtils.correctTermHyphenated("us-backed", "ap")).toBe("US-Backed");
     expect(TitleCaserUtils.correctTermHyphenated("iv-v", "chicago")).toBe("IV-V");
     expect(TitleCaserUtils.correctTermHyphenated("aws-backed", "chicago")).toBe("AWS-Backed");
