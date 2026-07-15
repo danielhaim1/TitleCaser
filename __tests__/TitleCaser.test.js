@@ -141,6 +141,11 @@ describe("TitleCaser – normalizeWhitespace Option", () => {
     expect(titleCaser.toTitleCase("   hello world   ")).toBe("Hello World");
   });
 
+  test("default behavior title-cases first word after leading whitespace", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+    expect(titleCaser.toTitleCase("   the   quick   brown   fox   ")).toBe("The Quick Brown Fox");
+  });
+
   test("normalizeWhitespace: false preserves internal spacing", () => {
     const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
     expect(titleCaser.toTitleCase("hello   world")).toBe("Hello   World");
@@ -149,6 +154,11 @@ describe("TitleCaser – normalizeWhitespace Option", () => {
   test("normalizeWhitespace: false preserves leading/trailing whitespace", () => {
     const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
     expect(titleCaser.toTitleCase("   hello world   ")).toBe("   Hello World   ");
+  });
+
+  test("normalizeWhitespace: false title-cases first word after leading whitespace", () => {
+    const titleCaser = new TitleCaser({ style: "ap", normalizeWhitespace: false });
+    expect(titleCaser.toTitleCase("   the   quick   brown   fox   ")).toBe("   The   Quick   Brown   Fox   ");
   });
 
   test("normalizeWhitespace: false preserves newlines", () => {

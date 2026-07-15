@@ -65,6 +65,7 @@ describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
 describe("TitleCaser AP – Style Stability", () => {
   runTest('should correctly handle brand names with "ap" style', "GOOgle and VMWARE", "Google and VMware");
   runTest('should handle brand name "NERDs Candy" with AP style', "NERDs Candy", "NERDs Candy");
+  runTest('should preserve international brand casing with "ap" style', "skoda", "Škoda");
   runTest(
     "should handle possessives and colons (AP style)",
     "the iphone's impact on modern communication: a sociolinguistic analysis",

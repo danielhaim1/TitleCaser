@@ -176,7 +176,7 @@ export class TitleCaser {
       const tokens = inputString.split(/(\s+)/);
       const originalNonWhitespaceTokens = tokens.filter((token) => token && !/^\s+$/.test(token));
 
-      const transformToken = (word, i) => {
+      const transformToken = (word, tokenIndex, wordPosition) => {
         const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
         if (leadingOpeningPunctuation) {
           const innerWord = word.slice(leadingOpeningPunctuation.length);
@@ -187,12 +187,12 @@ export class TitleCaser {
 
           if (/^[A-Za-z]/.test(innerWordWithoutClosingPunctuation)) {
             return leadingOpeningPunctuation +
-              transformToken(innerWordWithoutClosingPunctuation, i) +
+              transformToken(innerWordWithoutClosingPunctuation, tokenIndex, wordPosition) +
               trailingClosingPunctuation;
           }
         }
 
-        if (isApInfinitiveTo(word, tokens, i)) {
+        if (isApInfinitiveTo(word, tokens, tokenIndex)) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         }
 
@@ -211,7 +211,7 @@ export class TitleCaser {
             const replacement = replaceTermObj[word.toLowerCase()];
             return replacement.toLowerCase() === word.toLowerCase()
               ? replacement
-              : transformToken(replacement, i);
+              : transformToken(replacement, tokenIndex, wordPosition);
           case TitleCaserUtils.isWordInArray(word, specialTermsList):
             // ! If the word is in the specialTermsList array, return the correct casing.
             return TitleCaserUtils.correctTerm(word, specialTermsList);
@@ -238,7 +238,7 @@ export class TitleCaser {
 
             // Reassemble the word with the hyphen, reattach trailing punctuation, and return
             const processedWord = isReplaced
-              ? transformToken(replacedParts.join("-"), i)
+              ? transformToken(replacedParts.join("-"), tokenIndex, wordPosition)
               : TitleCaserUtils.correctTermHyphenated(word, style);
             return processedWord.endsWith(trailingPunctuation) ? processedWord : processedWord + trailingPunctuation;
           case TitleCaserUtils.hasSuffix(word, style):
@@ -247,10 +247,10 @@ export class TitleCaser {
           case TitleCaserUtils.hasUppercaseIntentional(word):
             // ! If the word has an intentional uppercase letter, return the correct casing.
             return word;
-          case TitleCaserUtils.isShortWord(word, style) && i !== 0:
+          case TitleCaserUtils.isShortWord(word, style) && wordPosition !== 0:
             // Find previous non-whitespace token
             let prevToken = null;
-            for (let j = i - 1; j >= 0; j--) {
+            for (let j = tokenIndex - 1; j >= 0; j--) {
               if (!/^\s+$/.test(tokens[j])) {
                 prevToken = tokens[j];
                 break;
@@ -327,9 +327,11 @@ export class TitleCaser {
         }
       };
 
+      let wordPosition = -1;
       const wordsInTitleCase = tokens.map((token, i) => {
         if (!token || /^\s+$/.test(token)) return token;
-        return transformToken(token, i);
+        wordPosition += 1;
+        return transformToken(token, i, wordPosition);
       });
 
       // Join the words in the array into a string.
@@ -399,7 +401,15 @@ export class TitleCaser {
       inputString = wordsForAcronyms.join("");
 
       const wordsForShortWords = inputString.split(/(\s+)/);
-      for (let i = 1; i < wordsForShortWords.length - 1; i++) {
+      const shortWordTokenIndexes = wordsForShortWords
+        .map((token, index) => (/^\s+$/.test(token) || token === "" ? null : index))
+        .filter((index) => index !== null);
+      const firstShortWordTokenIndex = shortWordTokenIndexes[0];
+      const lastShortWordTokenIndex = shortWordTokenIndexes[shortWordTokenIndexes.length - 1];
+
+      for (let i = 0; i < wordsForShortWords.length; i++) {
+        if (i === firstShortWordTokenIndex || i === lastShortWordTokenIndex) continue;
+
         const currentWord = wordsForShortWords[i];
         const prevWord = wordsForShortWords[i - 1];
         const nextWord = wordsForShortWords[i + 1];

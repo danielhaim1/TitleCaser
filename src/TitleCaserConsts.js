@@ -130,6 +130,7 @@ export const wordReplacementsList = [
   { "nuxtjs": "Nuxt.js" },
   { "reactjs": "React" },
   { "react.js": "React" },
+  { "skoda": "Škoda" },
   { "cyber security": "cybersecurity" },
   { "cyber-security": "cybersecurity" },
   // { 'twitter': 'Twitter, formerly known as 𝕏' }
