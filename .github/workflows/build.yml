@@ -39,12 +39,17 @@ jobs:
       - name: Sync browser bundles into docs
         run: npm run build:docs-assets
 
-      - name: Set up Ruby and Jekyll
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
-          bundler-cache: true
-          working-directory: docs
+          ruby-version: '3.2'
+
+      - name: Install docs dependencies
+        working-directory: docs
+        run: |
+          bundle config set path vendor/bundle
+          bundle lock --add-platform x86_64-linux
+          bundle install --jobs 4 --retry 3
 
       - name: Build Jekyll site
         run: npm run build:docs
