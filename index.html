@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>TitleCaser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A powerful utility for transforming text to title case with support for multiple style guides and extensive customization options.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <main class="demo-page">
+    <section class="demo-shell" aria-labelledby="demo-title">
+        <header class="demo-header">
+            <div class="demo-header-content">
+                <div class="demo-kicker-row" aria-label="Project status">
+                    <span>Open Source</span>
+                </div>
+                <h1 id="demo-title">TitleCaser</h1>
+                <p class="demo-description">
+                    Convert headlines across AP, APA, Chicago, NYT, and Wikipedia styles with dictionary-backed names, brands, acronyms, quotes, and punctuation handling.
+                </p>
+            </div>
+
+            <div class="demo-actions" aria-label="Project links">
+                <a href="https://github.com/danielhaim1/titlecaser" class="demo-link demo-link-primary" target="_blank" rel="noopener noreferrer">
+                    GitHub
+                </a>
+                <a href="https://github.com/danielhaim1/titlecaser#readme" class="demo-link" target="_blank" rel="noopener noreferrer">
+                    Documentation
+                </a>
+            </div>
+        </header>
+
+        <details class="example-panel">
+            <summary class="example-panel-summary">
+                <span>
+                    <strong>Try an Example</strong>
+                    <small>Load sample titles that demonstrate common casing edge cases.</small>
+                </span>
+            </summary>
+            <div class="demo-toolbar" aria-label="Example titles">
+                <button type="button" id="titleShuffleBtn" class="example-chip example-chip-strong">Random Example</button>
+                <button type="button" class="example-chip" data-example="ap">AP Style</button>
+                <button type="button" class="example-chip" data-example="apa">APA Style</button>
+                <button type="button" class="example-chip" data-example="nyt">NYT Style</button>
+                <button type="button" class="example-chip" data-example="quotes">Quotes</button>
+                <button type="button" class="example-chip" data-example="brands">Brands</button>
+                <button type="button" class="example-chip" data-example="acronyms">Acronyms</button>
+                <button type="button" class="example-chip" data-example="wikipedia">Wikipedia Names</button>
+            </div>
+        </details>
+
+        <form class="demo-form">
+            <fieldset class="style-selector" aria-label="Title case style">
+                <label>
+                    <input type="radio" name="styleSelect" value="apa" checked>
+                    <span>APA</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="ap">
+                    <span>AP</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="chicago">
+                    <span>Chicago</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="nyt">
+                    <span>NYT</span>
+                </label>
+                <label>
+                    <input type="radio" name="styleSelect" value="wikipedia">
+                    <span>Wikipedia</span>
+                </label>
+            </fieldset>
+
+            <div class="converter-grid">
+                <section class="converter-panel" aria-labelledby="before-title">
+                    <div class="panel-header">
+                        <h2 id="before-title">Before</h2>
+                        <button type="button" id="titleConvertBtn" class="primary-button">Convert</button>
+                    </div>
+                    <textarea
+                        id="textField"
+                        name="textField"
+                        rows="8"
+                        spellcheck="false"
+                        placeholder="Paste or type a title here"></textarea>
+                </section>
+
+                <section class="converter-panel" aria-labelledby="after-title">
+                    <div class="panel-header">
+                        <h2 id="after-title">After</h2>
+                        <button type="button" id="copyOutputBtn" class="secondary-button">Copy</button>
+                    </div>
+                    <div id="output" class="output-box" aria-live="polite">
+                        <p id="before" hidden></p>
+                        <p id="after" class="output-text"></p>
+                    </div>
+                </section>
+            </div>
+        </form>
+
+        <section class="docs-preview" aria-labelledby="docs-preview-title">
+            <div class="docs-preview-header">
+                <h2 id="docs-preview-title">Get started</h2>
+                <p>
+                    Install the package, choose a build profile, then pass a style and optional runtime settings into the title casing engine.
+                </p>
+                <a href="https://github.com/danielhaim1/titlecaser#readme" class="docs-preview-link" target="_blank" rel="noopener noreferrer">
+                    Read Full Documentation
+                </a>
+            </div>
+
+            <div class="docs-grid">
+                <article class="docs-card">
+                    <h3>Install</h3>
+                    <pre><code>npm install @danielhaim/titlecaser</code></pre>
+                    <p>Use the default full build for dictionary-assisted Wikipedia mode and broader entity detection.</p>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Node Usage</h3>
+                    <pre><code>import { TitleCaser } from '@danielhaim/titlecaser';
+
+const tc = new TitleCaser({ style: 'ap' });
+
+tc.toTitleCase('inside the race to secure ai systems');</code></pre>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Browser Usage</h3>
+                    <pre><code>&lt;script src="./dist/full/titlecaser.amd.js"&gt;&lt;/script&gt;
+
+"how nato logistics depend on rail lines"
+  .toTitleCase({ style: 'apa' });</code></pre>
+                </article>
+
+                <article class="docs-card">
+                    <h3>Build Profiles</h3>
+                    <div class="docs-pill-row">
+                        <span>full</span>
+                        <span>lite</span>
+                    </div>
+                    <p>Import the lite build when bundle size matters, or the full build when dictionary-backed detection is more important.</p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="demo-footer">
+            <span>Full Build Demo</span>
+            <span>v1.8.1</span>
+        </footer>
+    </section>
+</main>
+
+  <script src="assets/js/full/titlecaser.amd.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>
