@@ -86,6 +86,62 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
   );
 });
 
+describe("TitleCaser Wikipedia – Demonyms and Identity Terms", () => {
+  const identityCases = [
+    ["why many americans still cannot access care", "Why many Americans still cannot access care"],
+    ["latinas led the campaign for better housing", "Latinas led the campaign for better housing"],
+    ["latinos organized across the city", "Latinos organized across the city"],
+    ["latinx students challenged the policy", "Latinx students challenged the policy"],
+    ["jews reported rising security concerns", "Jews reported rising security concerns"],
+    ["jewish leaders met with city officials", "Jewish leaders met with city officials"],
+    ["muslims described barriers to voting", "Muslims described barriers to voting"],
+    ["sikhs opened a new community center", "Sikhs opened a new community center"],
+    ["christians debated the proposal", "Christians debated the proposal"],
+    ["hindus marked the festival downtown", "Hindus marked the festival downtown"],
+    ["buddhists rebuilt the temple after the storm", "Buddhists rebuilt the temple after the storm"],
+    ["catholics responded to the report", "Catholics responded to the report"],
+    ["mormons expanded relief efforts", "Mormons expanded relief efforts"],
+    ["mexicans voted in record numbers", "Mexicans voted in record numbers"],
+    ["canadians faced new travel rules", "Canadians faced new travel rules"],
+    ["japanese officials revised the forecast", "Japanese officials revised the forecast"],
+    ["russians questioned the official account", "Russians questioned the official account"],
+    ["ukrainians rebuilt schools near the front", "Ukrainians rebuilt schools near the front"],
+    ["palestinians described worsening shortages", "Palestinians described worsening shortages"],
+    ["filipinos sent remittances after the typhoon", "Filipinos sent remittances after the typhoon"],
+    ["senegalese voters returned to the polls", "Senegalese voters returned to the polls"],
+    ["new zealanders protested the mining plan", "New Zealanders protested the mining plan"],
+    ["native americans sued over water rights", "Native Americans sued over water rights"],
+    ["south africans demanded an inquiry", "South Africans demanded an inquiry"],
+    ["central africans fled renewed fighting", "Central Africans fled renewed fighting"],
+    ["sri lankans waited for election results", "Sri Lankans waited for election results"],
+    ["sierra leoneans celebrated the court ruling", "Sierra Leoneans celebrated the court ruling"],
+    ["costa ricans debated the energy plan", "Costa Ricans debated the energy plan"],
+    ["argentinians protested austerity measures", "Argentinians protested austerity measures"],
+    ["brazilians marched against corruption", "Brazilians marched against corruption"],
+    ["chileans approved the referendum", "Chileans approved the referendum"],
+    ["colombians questioned the peace deal", "Colombians questioned the peace deal"],
+    ["venezuelans crossed the border for medicine", "Venezuelans crossed the border for medicine"],
+    ["haitians rebuilt after the earthquake", "Haitians rebuilt after the earthquake"],
+    ["jamaicans prepared for the hurricane", "Jamaicans prepared for the hurricane"],
+    ["nigerians challenged the court order", "Nigerians challenged the court order"],
+    ["kenyans counted ballots overnight", "Kenyans counted ballots overnight"],
+    ["ethiopians welcomed the ceasefire", "Ethiopians welcomed the ceasefire"],
+    ["egyptians questioned the new restrictions", "Egyptians questioned the new restrictions"],
+    ["iraqis returned to damaged neighborhoods", "Iraqis returned to damaged neighborhoods"],
+    ["iranians protested the sentence", "Iranians protested the sentence"],
+    ["israelis waited for coalition talks", "Israelis waited for coalition talks"],
+    ["turks voted in a close election", "Turks voted in a close election"],
+    ["greeks faced another round of cuts", "Greeks faced another round of cuts"],
+    ["romanians challenged the corruption law", "Romanians challenged the corruption law"],
+    ["roma communities demanded recognition", "Roma communities demanded recognition"],
+  ];
+
+  test.each(identityCases)("%s -> %s", (input, expected) => {
+    const titleCaser = new TitleCaser({ style: "wikipedia" });
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+});
+
 describe("TitleCaser Wikipedia – Dictionary Proper Phrases", () => {
   runTest(
     "should preserve known proper phrases while lowercasing ordinary words in Wikipedia style",
