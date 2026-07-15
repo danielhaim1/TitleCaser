@@ -83,6 +83,9 @@ function createConfig({
       minimize: true,
       minimizer: [new TerserPlugin(terserOptions)],
     },
+    performance: {
+      hints: false,
+    },
     plugins,
     module: {
       rules: [

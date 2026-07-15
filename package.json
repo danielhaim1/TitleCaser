@@ -1,6 +1,6 @@
 {
   "name": "@danielhaim/titlecaser",
-  "version": "1.8.8",
+  "version": "1.8.9",
   "description": "A powerful utility for transforming text to title case with support for multiple style guides and extensive customization options.",
   "keywords": [
     "title case",
@@ -63,11 +63,12 @@
     "package.json"
   ],
   "scripts": {
-    "build": "npm run build:dist && npm run build:docs-assets",
+    "build": "npm run build:dist && npm run build:docs-assets && npm run build:docs-data",
     "build:dist": "webpack --mode production",
     "build:docs-assets": "rm -rf docs/assets/js/full docs/assets/js/lite docs/assets/js/titlecaser.amd.js docs/assets/js/titlecaser.esm.js docs/assets/js/titlecaser.module.js && mkdir -p docs/assets/js && cp -R dist/full dist/lite docs/assets/js/",
-    "build:docs": "cd docs && bundle exec jekyll build",
-    "build-docs": "cd docs && bundle install && bundle exec jekyll build",
+    "build:docs-data": "node scripts/sync-docs-package-data.js",
+    "build:docs": "npm run build:docs-data && cd docs && bundle exec jekyll build",
+    "build-docs": "npm run build:docs-data && cd docs && bundle install && bundle exec jekyll build",
     "release": "npm run release:patch",
     "release:current": "npm run build && git add -A && git commit -m \"Release: v$(node -p 'require(\"./package.json\").version')\" && git tag -a v$(node -p 'require(\"./package.json\").version') -m \"Release v$(node -p 'require(\"./package.json\").version')\" && git push --follow-tags && npm publish",
     "release-current": "npm run release:current",
