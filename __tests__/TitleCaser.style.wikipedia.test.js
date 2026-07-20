@@ -40,6 +40,26 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "Daniel's guide to title casing",
   );
   runTest(
+    "should promote a lowercase possessive name in ordinary prose",
+    "this is daniel's guide to title casing",
+    "This is Daniel's guide to title casing",
+  );
+  runTest(
+    "should promote a possessive name after a comma-separated sentence",
+    "I am Christopher, I am friends with daniel's sister",
+    "I am Christopher, I am friends with Daniel's sister",
+  );
+  runTest(
+    "should distinguish contractions from possessive names in relationship prose",
+    "that's daniel's sister, she's dating christopher.",
+    "That's Daniel's sister, she's dating Christopher.",
+  );
+  runTest(
+    "should not promote an ordinary possessive word as a name",
+    "this is the software's guide to title casing",
+    "This is the software's guide to title casing",
+  );
+  runTest(
     "should capitalize names introduced by identity and relationship context",
     "i am christopher and this is my friend alexander",
     "I am Christopher and this is my friend Alexander",

@@ -162,8 +162,11 @@ function dictionaryHasNounLikeSuffix(word) {
 }
 
 function dictionaryCapitalizeNameToken(token) {
-  const match = typeof token === "string"
-    ? token.match(/^([A-Za-z][A-Za-z'.-]*)([^A-Za-z'.-]*)$/)
+  const possessiveMatch = typeof token === "string" ? token.match(/^(.+?)(['’]s)$/i) : null;
+  const nameToken = possessiveMatch ? possessiveMatch[1] : token;
+  const possessiveSuffix = possessiveMatch ? `${possessiveMatch[2].charAt(0)}s` : "";
+  const match = typeof nameToken === "string"
+    ? nameToken.match(/^([A-Za-z][A-Za-z'.-]*)([^A-Za-z'.-]*)$/)
     : null;
 
   if (!match) return token;
@@ -178,7 +181,7 @@ function dictionaryCapitalizeNameToken(token) {
     return `${part.charAt(0).toUpperCase()}${part.slice(1).toLowerCase()}`;
   });
 
-  return `${normalizedToken}${match[2]}`;
+  return `${normalizedToken}${match[2]}${possessiveSuffix}`;
 }
 
 function dictionaryGetPreviousWordToken(tokens, startIndex) {
