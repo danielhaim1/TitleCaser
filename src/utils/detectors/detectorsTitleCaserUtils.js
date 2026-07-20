@@ -192,5 +192,52 @@ export function detectorsExtendTitleCaserUtils(TitleCaserUtils) {
         return typeof value === "string" && value.includes("\uFFFD");
       },
     },
+
+    // Check whether a token ends a sentence for Wikipedia sentence-case behavior
+    isSentenceBoundaryToken: {
+      value(token, nextToken = "", previousToken = "") {
+        if (!token || typeof token !== "string") {
+          return false;
+        }
+
+        const trailingClosingPunctuation = TitleCaserUtils.getTrailingClosingPunctuation(token);
+        const tokenWithoutClosingPunctuation = trailingClosingPunctuation
+          ? token.slice(0, -trailingClosingPunctuation.length)
+          : token;
+        const hasEndingSentencePunctuation = /[.!?]$/.test(tokenWithoutClosingPunctuation);
+        const hasAbbreviationLikePeriods = /^([A-Za-z]\.){2,}$/i.test(tokenWithoutClosingPunctuation);
+        const hasSingleLetterOrSyllableAbbreviation = /^[A-Za-z]{1,2}\.$/.test(tokenWithoutClosingPunctuation);
+        const isClosingQuotedToken = /["'”’«»‹›]+$/.test(token);
+        const nextWordLeadingOpeningPunctuation = nextToken
+          ? TitleCaserUtils.getLeadingOpeningPunctuation(nextToken)
+          : "";
+        const nextWordStartsWithQuote = nextWordLeadingOpeningPunctuation.length > 0;
+        const previousTokenHasClosingPunctuation = previousToken
+          ? /[.!?]$/.test(
+              (TitleCaserUtils.getTrailingClosingPunctuation(previousToken)
+                ? previousToken.slice(0, -TitleCaserUtils.getTrailingClosingPunctuation(previousToken).length)
+                : previousToken
+              )
+            )
+          : false;
+        const previousTokenHasSentenceEnding = previousTokenHasClosingPunctuation;
+
+        if (!hasEndingSentencePunctuation) {
+          return false;
+        }
+
+        if (isClosingQuotedToken && /[.!?]$/.test(tokenWithoutClosingPunctuation)) {
+          if (!nextWordStartsWithQuote) {
+            return previousTokenHasSentenceEnding;
+          }
+
+          return true;
+        }
+
+        return hasEndingSentencePunctuation &&
+          !hasAbbreviationLikePeriods &&
+          !hasSingleLetterOrSyllableAbbreviation;
+      },
+    },
   });
 }

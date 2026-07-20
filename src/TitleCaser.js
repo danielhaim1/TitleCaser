@@ -742,8 +742,9 @@ export class TitleCaser {
         const words = inputString.split(/(\s+)/);
         const sentenceWordEntries = [];
         let sentenceOriginalWordIndex = 0;
-        let firstWordFound = false;
         let originalWordIndex = 0;
+        let previousWord = "";
+        let previousWordBefore = "";
 
         for (let i = 0; i < words.length; i++) {
           if (!words[i] || /^\s+$/.test(words[i])) continue;
@@ -829,11 +830,14 @@ export class TitleCaser {
           }
         }
 
-        for (let i = 0; i < words.length; i++) {
-          let word = words[i];
-          if (!word || /^\s+$/.test(word)) continue;
+      for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+        if (!word || /^\s+$/.test(word)) continue;
 
-          const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
+        const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
+          const isStartOfSentence = !previousWord ||
+            TitleCaserUtils.isSentenceBoundaryToken(previousWord, word, previousWordBefore);
+
           const wordWithoutOpeningPunctuation = leadingOpeningPunctuation
             ? word.slice(leadingOpeningPunctuation.length)
             : word;
@@ -854,7 +858,7 @@ export class TitleCaser {
           });
 
           // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
-          if (!firstWordFound && /[A-Za-z]/.test(wordForSentenceCasing)) {
+          if (isStartOfSentence && /[A-Za-z]/.test(wordForSentenceCasing)) {
             // If you want to skip altering brand or acronym, do one more check:
             if (!TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)) {
               // "Normal" first word
@@ -864,7 +868,8 @@ export class TitleCaser {
                 trailingClosingPunctuation;
             }
             // Otherwise, it's a brand/acronym, so leave it
-            firstWordFound = true;
+            previousWordBefore = previousWord;
+            previousWord = word;
             continue;
           }
 
@@ -876,6 +881,8 @@ export class TitleCaser {
           ) {
             words[i] = leadingOpeningPunctuation + wordForSentenceCasing.toLowerCase() + trailingClosingPunctuation;
           }
+          previousWordBefore = previousWord;
+          previousWord = word;
           // else, we keep it exactly as is
         }
 

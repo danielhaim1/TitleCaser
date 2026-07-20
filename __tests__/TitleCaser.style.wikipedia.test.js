@@ -29,6 +29,31 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "‘enough!’ says leader",
     "‘Enough!’ says leader",
   );
+  describe("TitleCaser Wikipedia – Sentence-ending punctuation", () => {
+    const sentenceBoundaryCases = [
+      ["should capitalize after a question mark", "when? right now", "When? Right now"],
+      ["should capitalize after an exclamation mark", "when! right now", "When! Right now"],
+      ["should capitalize after a period", "it worked. good work", "It worked. Good work"],
+      ["should capitalize after multiple sentence-ending punctuations", "what? when? where?", "What? When? Where?"],
+      ["should capitalize after quoted punctuation", "the question? \"right now!\" \"okay.\" \"good\"", "The question? \"Right now!\" \"Okay.\" \"Good\""],
+      ["should capitalize quoted segments made from ASCII and curly punctuation", "what? «right now!» «okay.» «good»", "What? «Right now!» «Okay.» «Good»"],
+      ["should capitalize with quoted sentence punctuation in single quotes", "'when?' 'right now!' 'okay.' 'good'", "'When?' 'Right now!' 'Okay.' 'Good'"],
+      ["should capitalize with smart quotes around each quoted segment", "‘when?’ ‘right now!’ ‘okay.’ ‘good’", "‘When?’ ‘Right now!’ ‘Okay.’ ‘Good’"],
+      ["should capitalize after quoted segments before another quote", "that? \"right now!\" \"okay?\" \"good\" again", "That? \"Right now!\" \"Okay?\" \"Good\" again"],
+      ["should capitalize quoted phrases after quoted sentence punctuation and continue with quoted phrase", "the signal? \"red.\" \"yellow.\" \"green!\" then", "The signal? \"Red.\" \"Yellow.\" \"Green!\" Then"],
+      ["should capitalize in a chained sentence", "first this. next line? then now! end", "First this. Next line? Then now! End"],
+      ["should keep sentence case for words after newline-separated punctuation", "first.\nsecond starts here. third", "First. Second starts here. Third"],
+      ["should capitalize after punctuation inside parentheses", "(when?) this happened", "(When?) This happened"],
+      ["should capitalize after punctuation and keep following noun capitalization", "a test (really!). next phrase says yes", "A test (really!). Next phrase says yes"],
+      ["should capitalize after punctuation before quotes", "when? \"right now\" said she. \"okay?\" he replied", "When? \"Right now\" said she. \"Okay?\" He replied"],
+    ];
+
+    test.each(sentenceBoundaryCases)("%s", (description, input, expected) => {
+      const titleCaser = new TitleCaser({ style: "wikipedia" });
+      expect(titleCaser.toTitleCase(input)).toBe(expected);
+    });
+  });
+
   runTest(
     "should normalize spelling replacements without forcing title-case capitalization",
     "blockchain technology and cyber security: opportunities and challenges for secure digital transactions",
