@@ -1,0 +1,16 @@
+export const historicalRegressionCases = [
+  ["default", "capitalizes a basic two-word title", "hello world", "Hello World"],
+  ["default", "normalizes repeated whitespace while applying title case", "the book   of     life", "The Book of Life"],
+  ["default", "normalizes technology names, acronyms, and hyphenated compounds", "nodejs development on aws: an in-depth tutorial on server-side javascript deployment", "Node.js Development on AWS: An In-Depth Tutorial on Server-Side JavaScript Deployment"],
+  ["ap", "keeps us as a pronoun before a government-related phrase", "It's up to us in government to decide.", "It's Up to Us in Government To Decide."],
+  ["ap", "recognizes UK in a government-related clause", "The uk, with its strong government, leads the way.", "The UK, With Its Strong Government, Leads the Way."],
+  ["ap", "distinguishes UK and US country codes in a military context", "We visited the uk and the US, and both have strong military forces.", "We Visited the UK and the US, and Both Have Strong Military Forces."],
+  ["ap", "keeps us as a pronoun before a military-related phrase", "It's up to us in military to decide.", "It's Up to Us in Military To Decide."],
+  ["ap", "preserves UK in a territory-related clause", "The UK, with its vast territory, has diverse landscapes.", "The UK, With Its Vast Territory, Has Diverse Landscapes."],
+  ["ap", "recognizes UK and US country codes in a diplomatic context", "We visited the uk and the US, and both engage in diplomatic talks.", "We Visited the UK and the US, and Both Engage in Diplomatic Talks."],
+  ["ap", "keeps us as a pronoun before an international activity", "It's important for us to participate in international talks.", "It's Important for Us To Participate in International Talks."],
+  ["ap", "recognizes USA before a legislative term", "The usa introduces a new bill for economic reform.", "The USA Introduces a New Bill for Economic Reform."],
+  ["ap", "recognizes UK and US country codes in a legislative context", "We visited the uk and the US, and both consider a bill for environmental protection.", "We Visited the UK and the US, and Both Consider a Bill for Environmental Protection."],
+  ["chicago", "trims surrounding whitespace and collapses repeated internal spaces", "      This    string   has   too   many  spaces  ", "This String Has Too Many Spaces"],
+  ["wikipedia", "preserves a known organization while applying Wikipedia sentence case", "announcing a new collaboration with the cybersmile foundation: how to combat cyberbullying", "Announcing a new collaboration with The Cybersmile Foundation: how to combat cyberbullying"],
+];

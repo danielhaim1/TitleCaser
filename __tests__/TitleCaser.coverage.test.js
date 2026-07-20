@@ -20,7 +20,7 @@ import {
   buildSimpleTermCasingMap as buildSimpleTermCasingMapFromConsts,
 } from "../src/TitleCaserConsts.js";
 
-const { createBundledProfileTitleCaser } = require("../testHelpers/profileTestHelper");
+const { createBundledProfileTitleCaser } = require("./helpers/profileTestHelper");
 
 function createCompleteValidationConfig(overrides = {}) {
   return {

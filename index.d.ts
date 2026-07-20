@@ -8,8 +8,8 @@ export interface TitleCaserSecurityOptions {
   rejectZeroWidthCharacters?: boolean;
 }
 
-export type TitleCaserStyle = 'ap' | 'apa' | 'chicago' | 'wikipedia' | 'nyt' | 'british';
-export type TitleCaserDictionaryProfile = 'lite' | 'full';
+export type TitleCaserStyle = "ap" | "apa" | "chicago" | "wikipedia" | "nyt" | "british";
+export type TitleCaserDictionaryProfile = "lite" | "full";
 export type TitleCaserReplacementMap = { [key: string]: string };
 export type TitleCaserReplacementPair = [string, string];
 
@@ -19,6 +19,8 @@ export interface TitleCaserOptions {
   smartQuotes?: boolean;
   normalizeQuotes?: boolean;
   normalizeWhitespace?: boolean;
+  wikipediaPreserveUserCapitalization?: boolean;
+  wikipediaPreserveAllCaps?: boolean;
   minTitleChars?: number;
   maxTitleChars?: number;
   minTitleLength?: number;

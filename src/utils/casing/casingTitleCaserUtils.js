@@ -48,9 +48,15 @@ export function casingExtendTitleCaserUtils(TitleCaserUtils) {
         if (!word || !style || !styleConfigMap[style]) return false;
 
         const lowerWord = word.toLowerCase();
-        const { shortConjunctionsList, articlesList, shortPrepositionsList, neverCapitalizedList } = styleConfigMap[style];
+        const { shortConjunctionsList, articlesList, shortPrepositionsList, neverCapitalizedList } =
+          styleConfigMap[style];
 
-        const combinedList = [...shortConjunctionsList, ...articlesList, ...shortPrepositionsList, ...neverCapitalizedList];
+        const combinedList = [
+          ...shortConjunctionsList,
+          ...articlesList,
+          ...shortPrepositionsList,
+          ...neverCapitalizedList,
+        ];
 
         return combinedList.includes(lowerWord) ? lowerWord : false;
       },

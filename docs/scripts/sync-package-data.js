@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, '..', '..');
 const packagePath = path.join(rootDir, 'package.json');
 const outputDir = path.join(rootDir, 'docs', '_data');
 const outputPath = path.join(outputDir, 'package.json');

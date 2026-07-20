@@ -1,6 +1,6 @@
-const { TitleCaser } = require("../src/TitleCaser");
-const liteBundle = require("../dist/lite/titlecaser.module.js");
-const fullBundle = require("../dist/full/titlecaser.module.js");
+const { TitleCaser } = require("../../src/TitleCaser");
+const liteBundle = require("../../dist/lite/titlecaser.module.js");
+const fullBundle = require("../../dist/full/titlecaser.module.js");
 
 const supportedDictionaryProfiles = Object.freeze(["lite", "full"]);
 const bundledProfileTitleCasers = Object.freeze({

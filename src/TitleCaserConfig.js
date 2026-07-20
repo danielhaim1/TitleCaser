@@ -21,6 +21,8 @@ export const TITLE_CASER_CONFIG_DEFAULTS = Object.freeze({
   allowEmojis: validationDefaultConfig.allowEmojis,
   allowSpecialCharacters: validationDefaultConfig.allowSpecialCharacters,
   dictionaryProfile: validationDefaultConfig.dictionaryProfile,
+  wikipediaPreserveUserCapitalization: validationDefaultConfig.wikipediaPreserveUserCapitalization,
+  wikipediaPreserveAllCaps: validationDefaultConfig.wikipediaPreserveAllCaps,
   ignoreList: emptyArray,
   neverCapitalize: emptyArray,
   phraseReplacementList: emptyObject,
@@ -99,6 +101,8 @@ export class TitleCaserConfig {
       allowEmojis: this.allowEmojis,
       allowSpecialCharacters: this.allowSpecialCharacters,
       dictionaryProfile: this.dictionaryProfile,
+      wikipediaPreserveUserCapitalization: this.wikipediaPreserveUserCapitalization,
+      wikipediaPreserveAllCaps: this.wikipediaPreserveAllCaps,
       neverCapitalize,
       phraseReplacementList: { ...this.phraseReplacementList },
       security: {

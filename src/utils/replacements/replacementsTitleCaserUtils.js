@@ -176,7 +176,7 @@ export function replacementsExtendTitleCaserUtils(TitleCaserUtils) {
             }
             return capitalizeFirst(w);
           },
-          nyt: capitalizeFirst,
+          nyt: capitalizeCompoundSegment,
           wikipedia: (w, index) =>
             index === 0 ? capitalizeFirst(w) : lowercaseRest(w),
         };

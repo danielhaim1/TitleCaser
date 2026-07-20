@@ -1,11 +1,16 @@
 import { TitleCaser } from "../index.js";
-import { runRareNounTrapWikipediaTests } from "../testHelpers/rareNounTrapCases.js";
+import { runRareNounTrapWikipediaTests } from "./helpers/rareNounTrapCases.js";
 
 function runTest(description, input, expected) {
   test(description, () => {
     const titleCaser = new TitleCaser({ style: "wikipedia" });
     expect(titleCaser.toTitleCase(input)).toBe(expected);
   });
+}
+
+function runTestWithOptions(input, expected, options = {}) {
+  const titleCaser = new TitleCaser({ style: "wikipedia", ...options });
+  expect(titleCaser.toTitleCase(input)).toBe(expected);
 }
 
 describe("TitleCaser Wikipedia – Sentence Case", () => {
@@ -53,6 +58,96 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
       expect(titleCaser.toTitleCase(input)).toBe(expected);
     });
   });
+
+  describe("TitleCaser Wikipedia – User capitalization mode", () => {
+    const userCapitalizationCases = [
+      ["should ignore non-user capitalizations when preserve mode is off",
+        "went to Disneyland and Magic Mountain",
+        "Went to Disneyland and magic mountain",
+        {}],
+      ["should infer Rocky from Chris's lowercase name-list context",
+        "went to the movies with jenny, jack, rocky, cindy, frank and peter",
+        "Went to the movies with Jenny, Jack, Rocky, Cindy, Frank and Peter",
+        {}],
+      ["should normalize lowercase names across introductory and invited person lists",
+        "william, robin, and hope summers invited alice, rocky, michael, Sarah and David",
+        "William, Robin, and Hope Summers invited Alice, Rocky, Michael, Sarah and David",
+        {}],
+      ["should not promote ambiguous common words without a coordinated list",
+        "We need hope for a mild summer and must pay the bill.",
+        "We need hope for a mild summer and must pay the bill.",
+        {}],
+      ["should not promote a bird name without a coordinated list",
+        "A robin landed near the garden gate.",
+        "A robin landed near the garden gate.",
+        {}],
+      ["should preserve user-cased names in mixed words", "went to Disneyland and Magic Mountain",
+        "Went to Disneyland and Magic Mountain",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should match user-cased name-list example exactly",
+        "Went to the movies with Jenny, daniel, Rocky, Cindy, Frank and Peter",
+        "Went to the movies with Jenny, Daniel, Rocky, Cindy, Frank and Peter",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should promote a lower-case Rocky outlier in a coordinated person list",
+        "Went to the movies with Jacqueline, Jack, rocky, Cindy, Frank and Peter",
+        "Went to the movies with Jacqueline, Jack, Rocky, Cindy, Frank and Peter",
+        {}],
+      ["should promote list-member Rocky without changing a later common-noun rocky",
+        "Hope Summers and Robin Williams invited Alice, rocky, Michael, Sarah and David to discuss a new film while the road became rocky.",
+        "Hope Summers and Robin Williams invited Alice, Rocky, Michael, Sarah and David to discuss a new film while the road became rocky.",
+        {}],
+      ["should preserve explicit user casing alongside normalized known given names",
+        "went to the movies with Jenny, christopher, rocky, Cindy, Frank and Peter",
+        "Went to the movies with Jenny, Christopher, Rocky, Cindy, Frank and Peter",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should infer Rocky while preserving known given names and a later adjectival rocky",
+        "Jacqueline, jack, rocky, cindy, Frank and Peter arrived after the storm made the road rocky.",
+        "Jacqueline, Jack, Rocky, Cindy, Frank and Peter arrived after the storm made the road rocky.",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep a quoted sentence-capitalized segment chain when user case preservation is enabled",
+        "when? \"right now!\" \"okay.\" \"good\"",
+        "When? \"Right now!\" \"Okay.\" \"Good\"",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should normalize all-caps canonical terms when preserve-all-caps is disabled",
+        "went to DISNEYLAND",
+        "Went to Disneyland",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should preserve all-caps words when preserve-all-caps mode is enabled",
+        "went to DISNEYLAND and Magic Mountain",
+        "Went to DISNEYLAND and Magic Mountain",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should preserve a wholly all-caps title when preserve-all-caps mode is enabled",
+        "WENT TO DISNEYLAND",
+        "WENT TO DISNEYLAND",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should preserve mixed-cap user capitalization while preserving sentence boundaries",
+        "that? \"right now!\" \"okay?\" \"good\" again",
+        "That? \"Right now!\" \"Okay?\" \"Good\" again",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep user capitalization after quoted punctuation and before more quoted text",
+        "when? \"right now\" said she. \"okay?\" he replied",
+        "When? \"Right now\" said she. \"Okay?\" He replied",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep user capitalization for AI-like all-caps abbreviations when configured",
+        "can we use AI to predict the habits of the ai sloth",
+        "Can we use AI to predict the habits of the ai sloth",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should retain canonical casing when user casing is not explicit",
+        "can we use ai to predict the habits of the ai sloth",
+        "Can we use AI to predict the habits of the ai sloth",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: false }],
+    ];
+
+    test.each(userCapitalizationCases)("%s", (description, input, expected, options) => {
+      runTestWithOptions(input, expected, options);
+    });
+  });
+
+  runTest(
+    "should distinguish the AI acronym from the contextual ai sloth name",
+    "can we use ai to predict the habits of the ai sloth",
+    "Can we use AI to predict the habits of the ai sloth",
+  );
 
   runTest(
     "should normalize spelling replacements without forcing title-case capitalization",

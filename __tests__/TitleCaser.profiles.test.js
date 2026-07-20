@@ -3,7 +3,7 @@ const {
   createProfileTitleCaser,
   runProfileCases,
   supportedDictionaryProfiles,
-} = require("../testHelpers/profileTestHelper");
+} = require("./helpers/profileTestHelper");
 const fs = require("fs");
 const path = require("path");
 const { TitleCaserUtils } = require("../src/TitleCaserUtils");

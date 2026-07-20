@@ -1,6 +1,8 @@
 import { TitleCaser } from "../index.js";
-import { runNameHeuristicTitleCaseTests } from "../testHelpers/nameHeuristicCases.js";
-import { runRareNounTrapTitleCaseTests } from "../testHelpers/rareNounTrapCases.js";
+import { apTitleCaseEdgeCases } from "./fixtures/ap-title-case-edge-cases.js";
+import { runNameHeuristicTitleCaseTests } from "./helpers/nameHeuristicCases.js";
+import { runPhrasalVerbTitleCaseTests } from "./helpers/phrasalVerbCases.js";
+import { runRareNounTrapTitleCaseTests } from "./helpers/rareNounTrapCases.js";
 
 function runTest(description, input, expected, style = "ap") {
   test(description, () => {
@@ -15,6 +17,18 @@ function createTest(description, options, input, expectedOutput) {
     expect(titleCaser.toTitleCase(input)).toEqual(expectedOutput);
   });
 }
+
+describe("TitleCaser AP – Coordinated Proper Names", () => {
+  test("should normalize lowercase names across introductory and invited person lists", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+
+    expect(titleCaser.toTitleCase(
+      "william, robin, and hope summers invited alice, rocky, michael, Sarah and David",
+    )).toBe(
+      "William, Robin, and Hope Summers Invited Alice, Rocky, Michael, Sarah and David",
+    );
+  });
+});
 
 describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
   const cases = [
@@ -846,5 +860,38 @@ describe("TitleCaser AP – Failed Chicago Regression Coverage", () => {
   );
 });
 
+describe("TitleCaser AP - Specification Coverage", () => {
+  const specificationCases = [
+    ["secondary-source verified", "capitalizes a short subordinating conjunction within a title", "a decision if the data changes", "A Decision If the Data Changes"],
+    ["secondary-source verified", "capitalizes As as a subordinating conjunction within a title", "a question as we were leaving", "A Question As We Were Leaving"],
+    ["secondary-source verified", "capitalizes That as a subordinating conjunction", "a guide that works", "A Guide That Works"],
+    ["secondary-source verified", "capitalizes Than as a subordinating conjunction", "better than expected", "Better Than Expected"],
+    ["secondary-source verified", "capitalizes a subtitle-opening article", "a guide to testing: a practical reference", "A Guide to Testing: A Practical Reference"],
+    ["TitleCaser policy", "capitalizes an opening article inside quotes", '"an example inside quotes"', '"An Example Inside Quotes"'],
+    ["TitleCaser policy", "capitalizes an opening article inside parentheses", "the rule (a practical example)", "The Rule (A Practical Example)"],
+    ["TitleCaser policy", "keeps minor words lowercase inside hyphenated compounds", "state-of-the-art and step-by-step guide", "State-of-the-Art and Step-by-Step Guide"],
+    ["TitleCaser policy", "capitalizes compound-initial minor words", "an in-depth guide", "An In-Depth Guide"],
+    ["TitleCaser policy", "capitalizes principal words on both sides of slashes", "could/should we test before/after deployment?", "Could/Should We Test Before/After Deployment?"],
+    ["TitleCaser policy", "normalizes possessives and elided names", "apple's buyer's guide for o'connor", "Apple's Buyer's Guide for O’Connor"],
+    ["TitleCaser policy", "preserves known abbreviations", "Q&A with AT&T: v. vs. guide", "Q&A With AT&T: v. vs. Guide"],
+    ["TitleCaser policy", "preserves protected tokens", "visit example.com and user@example.com from /var/run with package-lock.json", "Visit example.com and user@example.com From /var/run With package-lock.json"],
+    ["TitleCaser policy", "preserves numerals and version strings", "the 2nd guide to version 3.0", "The 2nd Guide to Version 3.0"],
+  ];
+
+  test.each(specificationCases)("[%s] %s", (_confidence, _description, input, expected) => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+});
+
 runNameHeuristicTitleCaseTests(TitleCaser, "ap");
+describe("TitleCaser AP - Additional Title Case Coverage", () => {
+  test.each(apTitleCaseEdgeCases)("%s", (_description, input, expected) => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+});
+runPhrasalVerbTitleCaseTests(TitleCaser, "ap");
 runRareNounTrapTitleCaseTests(TitleCaser, "ap");

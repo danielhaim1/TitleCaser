@@ -1,4 +1,8 @@
 import { TitleCaserUtils } from "../src/TitleCaserUtils.js";
+import {
+  contextualNameCases,
+  titleCaseStyles,
+} from "./fixtures/coordinated-list-proper-name-cases.js";
 
 describe("TitleCaserUtils – Options", () => {
   test("validateOption should accept only arrays of strings", () => {
@@ -65,6 +69,22 @@ describe("TitleCaserUtils – Words", () => {
   });
 });
 
+describe("TitleCaserUtils – URL Detection", () => {
+  test("should recognize unambiguous URLs without matching dotted terms", () => {
+    expect(TitleCaserUtils.isUrlLikeToken("https://example.co.uk/API?format=SDK#top")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("ftp://registry.example.xn--p1ai/package")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("www.example.technology/path")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky/")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp//rocky")).toBe(false);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky path")).toBe(false);
+    expect(TitleCaserUtils.isUrlLikeToken("node.js")).toBe(false);
+    expect(TitleCaserUtils.isUrlLikeToken("")).toBe(false);
+    expect(TitleCaserUtils.isUrlLikeToken(1)).toBe(false);
+  });
+});
+
 describe("TitleCaserUtils – Casing", () => {
   test("should detect uppercase casing patterns", () => {
     expect(TitleCaserUtils.hasUppercaseMultiple("USA")).toBe(true);
@@ -89,6 +109,188 @@ describe("TitleCaserUtils – Casing", () => {
 });
 
 describe("TitleCaserUtils – Detectors", () => {
+  describe.each(titleCaseStyles)("%s coordinated-list contextual-name detection", (style) => {
+    test.each(contextualNameCases)("$description", ({ input, expectedOccurrences }) => {
+      const candidates = TitleCaserUtils
+        .dictionaryGetCoordinatedListProperNameCandidates({ input, style });
+      const expectedCandidates = expectedOccurrences.filter(
+        ({ classification }) => classification === "contextual-person",
+      );
+      const expectedCandidateLocations = expectedCandidates.map(({ value, occurrence, classification }) => {
+        const matches = Array.from(
+          input.matchAll(new RegExp(`\\b${value}\\b`, "gi")),
+        );
+
+        return {
+          word: value.toLowerCase(),
+          startIndex: matches[occurrence - 1].index,
+          classification,
+        };
+      });
+
+      expect(candidates.map(({ word, startIndex, classification }) => ({ word, startIndex, classification })))
+        .toEqual(expectedCandidateLocations);
+    });
+  });
+
+  describe("dictionaryGetCoordinatedListProperNameCandidates", () => {
+    const getCandidateWords = (input) =>
+      TitleCaserUtils
+        .dictionaryGetCoordinatedListProperNameCandidates({ input })
+        .map(({ word }) => word);
+
+    test.each([
+      {
+        input: "Jacqueline, jack, Rocky, Cindy, Frank and Peter arrived.",
+        expected: ["jack"],
+        reason: "detects a lowercase name among capitalized single-word peers",
+      },
+      {
+        input: "Robin Williams, rocky, Michael, Sarah and David attended.",
+        expected: ["rocky"],
+        reason: "detects a lowercase name when one peer is a multiword proper name",
+      },
+      {
+        input: "Hope Summers and Robin Williams invited Alice, rocky, Michael, Sarah and David.",
+        expected: ["rocky"],
+        reason: "detects the candidate in the second coordinated list",
+      },
+      {
+        input: "Emma, hope, Daniel, Olivia and James arrived.",
+        expected: ["hope"],
+        reason: "detects an ambiguous common word when list context establishes a name",
+      },
+      {
+        input: "Mark, summer, Julia, Ethan and Chloe attended.",
+        expected: ["summer"],
+        reason: "detects another ambiguous common word as a name from peer evidence",
+      },
+      {
+        input: "Alice, Robin, Hope and may attended the event in May.",
+        expected: ["may"],
+        reason: "distinguishes lowercase May as a list candidate from the later month name",
+      },
+      {
+        input: "Alice, Bob, rocky, David and Emma reviewed https://example.com/rocky.",
+        expected: ["rocky"],
+        reason: "returns the list candidate without confusing the same token inside a URL",
+      },
+    ])("$reason", ({ input, expected }) => {
+      expect(getCandidateWords(input)).toEqual(expected);
+    });
+
+    test.each([
+      {
+        input: "The report discussed hope, faith, joy, summer and spring.",
+        reason: "ordinary lowercase noun list",
+      },
+      {
+        input: "The colors were Red, Blue, green and Black.",
+        reason: "category labels are not person names",
+      },
+      {
+        input: "Critical, Major, minor, Moderate and Low.",
+        reason: "severity labels are not proper-name peers",
+      },
+      {
+        input: 'Alice, "robin", Michael, Sarah and David.',
+        reason: "quoted token must not be promoted",
+      },
+      {
+        input: "fileId, rocky, Michael, Sarah and David.",
+        reason: "identifier-like peer invalidates the name-list assumption",
+      },
+      {
+        input: "/tmp/rocky, Michael, Sarah and David.",
+        reason: "filesystem token must not become a candidate",
+      },
+      {
+        input: "https://example.com/rocky, Michael, Sarah and David.",
+        reason: "URL token must not become a candidate",
+      },
+      {
+        input: "User@Example.Com, rocky, Michael, Sarah and David.",
+        reason: "email token invalidates the name-list assumption",
+      },
+      {
+        input: "Machine Learning, rocky, Michael, Sarah and David.",
+        reason: "capitalized phrase alone is not sufficient proper-name evidence",
+      },
+      {
+        input: "Customer Support, robin, Michael, Sarah and David.",
+        reason: "organizational phrase must not count as a person-name peer",
+      },
+    ])("does not return a candidate for $reason", ({ input }) => {
+      expect(getCandidateWords(input)).toEqual([]);
+    });
+
+    test.each([
+      [
+        "Jacqueline, jack, rocky, cindy, Frank and Peter arrived after the storm made the road rocky.",
+        ["rocky"],
+      ],
+      [
+        "Hope Summers and Robin Williams invited Alice, rocky, Michael, Sarah and David to discuss a new film while the road became rocky.",
+        ["rocky"],
+      ],
+      [
+        "Emma, hope, Daniel, Olivia and James joined Mark, summer, Julia, Ethan and Chloe before discussing hope for a mild summer.",
+        ["hope", "summer"],
+      ],
+    ])("selects only the list occurrence in: %s", (input, expected) => {
+      expect(getCandidateWords(input)).toEqual(expected);
+    });
+
+    test.each([
+      ["This was a rocky relationship.", []],
+      ["The road was rocky after the storm.", []],
+      ["We still have hope.", []],
+      ["They hope for better results.", []],
+      ["It was a long summer.", []],
+      ["May was unusually warm.", []],
+      ["A robin landed on the fence.", []],
+      ["Jack opened the door.", []],
+      ["The jack was stored in the garage.", []],
+      ["Frank was honest about the issue.", []],
+      ["The discussion became critical.", []],
+      ["The result was minor.", []],
+      ["This was a rocky relationship, but it eventually improved.", []],
+      ["We had hope, although the situation looked difficult.", []],
+      ["During summer, the roads become crowded.", []],
+      ["Robin, who lives nearby, arrived late.", []],
+      ["Jack, however, refused to continue.", []],
+      ["The road was rocky, wet and narrow.", []],
+    ])("rejects non-list prose: %s", (input, expected) => {
+      expect(getCandidateWords(input)).toEqual(expected);
+    });
+
+    test.each([
+      ["Rocky won the championship.", []],
+      ["Hope spoke to the committee.", []],
+      ["Summer graduated last week.", []],
+      ["Robin called this morning.", []],
+      ["Jack left early.", []],
+      ["Frank apologized yesterday.", []],
+      ["May announced the results.", []],
+    ])("does not treat a standalone proper name as a candidate: %s", (input, expected) => {
+      expect(getCandidateWords(input)).toEqual(expected);
+    });
+
+    test("list recognition alone does not satisfy candidate detection", () => {
+      const input = "Jacqueline, jack, Rocky, Cindy, Frank and Peter arrived.";
+
+      expect(TitleCaserUtils.dictionaryGetCoordinatedListMatches({ input })).not.toEqual([]);
+      expect(getCandidateWords(input)).toEqual(["jack"]);
+    });
+
+    test("a list-like structure may still produce no proper-name candidate", () => {
+      const input = "The colors were Red, Blue, green and Black.";
+
+      expect(TitleCaserUtils.dictionaryGetCoordinatedListMatches({ input })).not.toEqual([]);
+      expect(getCandidateWords(input)).toEqual([]);
+    });
+  });
+
   test("should expose language alphabets and regex patterns", () => {
     expect(TitleCaserUtils.detectorGetSupportedLanguages()).toEqual(expect.arrayContaining(["en", "pl", "ru", "vi"]));
     expect(TitleCaserUtils.detectorGetLanguageAlphabet("pl")).toContain("ł");
