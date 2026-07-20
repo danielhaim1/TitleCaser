@@ -140,7 +140,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
           throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
         }
 
-        const match = word.match(/^[([{"'“‘«‹„‚]+/);
+        const match = word.match(/^[*([{"'“‘«‹„‚]+/);
         return match ? match[0] : "";
       },
       writable: true,
@@ -154,7 +154,7 @@ export function punctuationExtendTitleCaserUtils(TitleCaserUtils) {
           throw new Error(`Parameter 'word' must be a string. Received '${typeof word}' instead.`);
         }
 
-        const match = word.match(/[)\]}"'”’»›]+$/);
+        const match = word.match(/[*)\]}"'”’»›]+$/);
         return match ? match[0] : "";
       },
       writable: true,

@@ -1,4 +1,6 @@
 import regionalAcronyms from "./data/acronyms/list-regional-acronym-rules.json";
+import phrasalVerbs from "./data/grammar/list-phrasal-verbs.json";
+import wikipediaContextualPhrases from "./data/wikipedia/list-contextual-phrases.json";
 import {
   brandNames,
   curatedDataList,
@@ -83,6 +85,7 @@ function hasIntentionalCasing(term) {
 const mergedArray = mergeArrays(curatedDataList);
 
 export const specialTermsList = mergedArray;
+export const phrasalVerbList = phrasalVerbs;
 export const knownTermCasingMap = {
   ...buildKnownTermCasingMap(curatedDataList),
   ...buildSimpleTermCasingMap(brandNames, geographyCodesAndNames),
@@ -126,6 +129,7 @@ export const wordReplacementsList = [
   { "full stack": "fullstack" },
   { "full-stack": "fullstack" },
   { "nodejs": "Node.js" },
+  { "node.js": "Node.js" },
   { "nextjs": "Next.js" },
   { "nuxtjs": "Nuxt.js" },
   { "reactjs": "React" },
@@ -158,7 +162,7 @@ export const styleConfigMap = Object.freeze({
   ap: {
     caseStyle: "title",
     // AP: Capitalize all words 4+ letters and all verbs/adverbs
-    shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
+    shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for", "v", "v.", "vs", "vs."],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
       // Pure prepositions (2–3 letters) safe to lowercase in AP
@@ -244,12 +248,13 @@ export const styleConfigMap = Object.freeze({
 
   nyt: {
     caseStyle: "title",
-    // NYT style aligns closely with Chicago/AP
-    shortConjunctionsList: ["and", "but", "or", "nor", "yet", "so", "for"],
+    // NYT-derived minor words, including legal-versus abbreviations
+    shortConjunctionsList: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet", "v", "v.", "vs", "vs."],
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
       "at",
       "by",
+      "en",
       "for",
       "in",
       "of",
@@ -304,6 +309,10 @@ export const phraseReplacementMap = {
   "on & off": "On & Off",
   "on and off": "On and Off",
 };
+
+export const wikipediaContextualPhraseCasingMap = Object.freeze({
+  ...wikipediaContextualPhrases,
+});
 
 // * ! ===============================================
 // * ! Regex Patterns

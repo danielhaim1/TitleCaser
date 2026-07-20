@@ -19,6 +19,8 @@ export interface TitleCaserOptions {
   smartQuotes?: boolean;
   normalizeQuotes?: boolean;
   normalizeWhitespace?: boolean;
+  wikipediaPreserveUserCapitalization?: boolean;
+  wikipediaPreserveAllCaps?: boolean;
   minTitleChars?: number;
   maxTitleChars?: number;
   minTitleLength?: number;

@@ -17,6 +17,8 @@ export const validationDefaultConfig = Object.freeze({
   allowSpecialCharacters: true,
   normalizeQuotes: false,
   dictionaryProfile: "full",
+  wikipediaPreserveUserCapitalization: false,
+  wikipediaPreserveAllCaps: false,
   security: validationDefaultSecurityConfig,
 });
 
@@ -35,6 +37,8 @@ const validationAllowedConfigKeys = new Set([
   "dictionaryProfile",
   "ignoreList",
   "neverCapitalize",
+  "wikipediaPreserveUserCapitalization",
+  "wikipediaPreserveAllCaps",
   "phraseReplacementList",
   "wordReplacementsList",
   "replaceTerms",
@@ -341,7 +345,7 @@ export function validationExtendTitleCaserUtils(TitleCaserUtils) {
           validationThrow("Invalid config: dictionaryProfile must be a supported dictionary profile.");
         }
 
-        ["smartQuotes", "normalizeQuotes", "normalizeWhitespace", "debug", "allowEmojis", "allowSpecialCharacters"].forEach((key) => {
+        ["smartQuotes", "normalizeQuotes", "normalizeWhitespace", "debug", "allowEmojis", "allowSpecialCharacters", "wikipediaPreserveUserCapitalization", "wikipediaPreserveAllCaps"].forEach((key) => {
           if (typeof runtimeConfig[key] !== "boolean") {
             validationThrow(`Invalid config: ${key} must be a boolean.`);
           }

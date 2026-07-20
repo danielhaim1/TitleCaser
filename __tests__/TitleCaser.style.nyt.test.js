@@ -1,5 +1,7 @@
 import { TitleCaser } from "../index.js";
+import { nytTitleCaseEdgeCases } from "./fixtures/nyt-title-case-edge-cases.js";
 import { runNameHeuristicTitleCaseTests } from "./helpers/nameHeuristicCases.js";
+import { runPhrasalVerbTitleCaseTests } from "./helpers/phrasalVerbCases.js";
 import { runRareNounTrapTitleCaseTests } from "./helpers/rareNounTrapCases.js";
 
 function runTest(description, input, expected) {
@@ -18,4 +20,12 @@ describe("TitleCaser NYT – Style Stability", () => {
 });
 
 runNameHeuristicTitleCaseTests(TitleCaser, "nyt");
+describe("TitleCaser NYT - Additional Title Case Coverage", () => {
+  test.each(nytTitleCaseEdgeCases)("%s", (_description, input, expected) => {
+    const titleCaser = new TitleCaser({ style: "nyt" });
+
+    expect(titleCaser.toTitleCase(input)).toBe(expected);
+  });
+});
+runPhrasalVerbTitleCaseTests(TitleCaser, "nyt");
 runRareNounTrapTitleCaseTests(TitleCaser, "nyt");

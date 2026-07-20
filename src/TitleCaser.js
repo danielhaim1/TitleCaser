@@ -6,7 +6,9 @@ import {
   styleConfigMap,
   REGEX_PATTERNS,
   knownTermCasingMap,
+  phrasalVerbList,
   regionalAcronymList,
+  wikipediaContextualPhraseCasingMap,
 } from "./TitleCaserConsts.js";
 
 import { TitleCaserUtils } from "./TitleCaserUtils.js";
@@ -22,6 +24,8 @@ export class TitleCaser {
       smartQuotes: false,
       normalizeQuotes: false,
       normalizeWhitespace: true,
+      wikipediaPreserveUserCapitalization: false,
+      wikipediaPreserveAllCaps: false,
       debug: false,
       allowEmojis: true,
       allowSpecialCharacters: true,
@@ -68,6 +72,8 @@ export class TitleCaser {
         neverCapitalize = [],
         wordReplacementsList: configuredWordReplacementsList,
         smartQuotes = false, // Set to false by default
+        wikipediaPreserveUserCapitalization = false,
+        wikipediaPreserveAllCaps = false,
         normalizeQuotes = false,
         normalizeWhitespace = true,
         dictionaryProfile = "full",
@@ -168,6 +174,20 @@ export class TitleCaser {
           previousTwoWord !== "from" &&
           !/['\u2019]s$/i.test(previousWord) &&
           TitleCaserUtils.dictionaryIsVerb(nextWord, dictionaryProfile)
+        );
+      };
+
+      const isPhrasalVerbParticle = (word, tokenList, currentIndex) => {
+        if (style === "wikipedia") return false;
+
+        const particle = normalizeTokenForDictionaryLookup(word);
+        const verb = normalizeTokenForDictionaryLookup(
+          getPreviousNonWhitespaceToken(tokenList, currentIndex),
+        );
+
+        return phrasalVerbList.some(
+          ([phrasalVerb, phrasalParticle]) =>
+            verb === phrasalVerb && particle === phrasalParticle,
         );
       };
 
@@ -337,10 +357,37 @@ export class TitleCaser {
       // Replace <br> and <br /> tags with a placeholder.
       inputString = inputString.replace(REGEX_PATTERNS.HTML_BREAK, " nl2br ");
 
-      // Check if the entire input string is uppercase and normalize it to lowercase
-      // before processing if it is. This ensures consistent handling for all-caps text.
+      const preservedUrls = [];
+      const preserveUrlTokens = (value) => value.replace(/\S+/g, (token) => {
+        const leadingPunctuation = token.match(/^[([{\"'“‘«‹]+/)?.[0] || "";
+        const tokenWithoutLeadingPunctuation = token.slice(leadingPunctuation.length);
+        const trailingPunctuation = tokenWithoutLeadingPunctuation.match(/[)\]}\"'”’»›,.;:!?]+$/)?.[0] || "";
+        const url = trailingPunctuation
+          ? tokenWithoutLeadingPunctuation.slice(0, -trailingPunctuation.length)
+          : tokenWithoutLeadingPunctuation;
+
+        if (!TitleCaserUtils.isUrlLikeToken(url)) {
+          return token;
+        }
+
+        const placeholder = `\uE000${preservedUrls.length}\uE001`;
+        preservedUrls.push(url);
+        return `${leadingPunctuation}${placeholder}${trailingPunctuation}`;
+      });
+      const restoreUrlTokens = (value) => value.replace(/\uE000(\d+)\uE001/g, (_placeholder, index) => {
+        return preservedUrls[Number(index)];
+      });
+
+      inputString = preserveUrlTokens(inputString);
+
+      // Check if the non-URL text is entirely uppercase and normalize it to lowercase
+      // before processing. URLs remain opaque and keep their original casing.
       const isEntireStringUppercase = TitleCaserUtils.isEntirelyUppercase(inputString.replace(/[^a-zA-Z]/g, ''));
-      if (isEntireStringUppercase) {
+      const shouldPreserveEntireUppercaseWikipediaInput =
+        style === "wikipedia" &&
+        wikipediaPreserveUserCapitalization &&
+        wikipediaPreserveAllCaps;
+      if (isEntireStringUppercase && !shouldPreserveEntireUppercaseWikipediaInput) {
         this.logWarning("Input string is entirely uppercase, normalizing to lowercase first");
         inputString = inputString.toLowerCase();
       }
@@ -352,8 +399,8 @@ export class TitleCaser {
       const originalNonWhitespaceTokens = tokens.filter((token) => token && !/^\s+$/.test(token));
 
       const transformToken = (word, tokenIndex, wordPosition) => {
-        if (/^[a-z]+:\/\/\S+/i.test(word)) {
-          return word.toLowerCase();
+        if (TitleCaserUtils.isUrlLikeToken(word)) {
+          return word;
         }
 
         const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
@@ -393,6 +440,10 @@ export class TitleCaser {
         }
 
         if (isApInfinitiveTo(word, tokens, tokenIndex)) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+
+        if (isPhrasalVerbParticle(word, tokens, tokenIndex)) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         }
 
@@ -623,6 +674,21 @@ export class TitleCaser {
           continue;
         }
 
+        if (isPhrasalVerbParticle(currentWord, wordsForShortWords, i)) {
+          wordsForShortWords[i] = currentWord.charAt(0).toUpperCase() + currentWord.slice(1);
+          continue;
+        }
+
+        const closingQuoteMatch = currentWord.match(/^(.*?)(["'”’»›]+)$/);
+        if (
+          closingQuoteMatch &&
+          TitleCaserUtils.isShortWord(closingQuoteMatch[1], style) &&
+          !TitleCaserUtils.hasUppercaseIntentional(closingQuoteMatch[1])
+        ) {
+          wordsForShortWords[i] = `${capitalizeShortWordToken(closingQuoteMatch[1])}${closingQuoteMatch[2]}`;
+          continue;
+        }
+
         if (isSubtitleBoundaryToken(prevWord) && TitleCaserUtils.isWordInArray(currentWord, shortWordsList)) {
           wordsForShortWords[i] = capitalizeShortWordToken(currentWord);
           continue;
@@ -718,6 +784,21 @@ export class TitleCaser {
           const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
 
           // Replace the phrase in the input string with its corresponding replacement
+          replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
+        }
+
+        return replacedValue;
+      };
+
+      const applyWikipediaContextualPhraseCasing = (value) => {
+        let replacedValue = value;
+        const phraseEntries = Object.entries(wikipediaContextualPhraseCasingMap)
+          .sort(([phraseA], [phraseB]) => phraseB.length - phraseA.length);
+
+        for (const [phrase, replacement] of phraseEntries) {
+          const escapedPhrase = phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&");
+          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
+
           replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
         }
 
@@ -830,11 +911,18 @@ export class TitleCaser {
           }
         }
 
-      for (let i = 0; i < words.length; i++) {
-        let word = words[i];
-        if (!word || /^\s+$/.test(word)) continue;
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+          if (!word || /^\s+$/.test(word)) continue;
 
-        const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
+          if (TitleCaserUtils.isUrlLikeToken(word)) {
+            words[i] = word;
+            previousWordBefore = previousWord;
+            previousWord = word;
+            continue;
+          }
+
+          const leadingOpeningPunctuation = TitleCaserUtils.getLeadingOpeningPunctuation(word);
           const isStartOfSentence = !previousWord ||
             TitleCaserUtils.isSentenceBoundaryToken(previousWord, word, previousWordBefore);
 
@@ -846,6 +934,26 @@ export class TitleCaser {
             ? wordWithoutOpeningPunctuation.slice(0, -trailingClosingPunctuation.length)
             : wordWithoutOpeningPunctuation;
           const originalWord = originalNonWhitespaceTokens[originalWordIndex] || "";
+          const originalLeadingOpeningPunctuation = originalWord
+            ? TitleCaserUtils.getLeadingOpeningPunctuation(originalWord)
+            : "";
+          const originalWordWithoutOpeningPunctuation = originalLeadingOpeningPunctuation
+            ? originalWord.slice(originalLeadingOpeningPunctuation.length)
+            : originalWord;
+          const originalTrailingClosingPunctuation = originalWordWithoutOpeningPunctuation
+            ? TitleCaserUtils.getTrailingClosingPunctuation(originalWordWithoutOpeningPunctuation)
+            : "";
+          const originalWordForSentenceCasing = originalWordWithoutOpeningPunctuation
+            ? originalTrailingClosingPunctuation
+              ? originalWordWithoutOpeningPunctuation.slice(0, -originalTrailingClosingPunctuation.length)
+              : originalWordWithoutOpeningPunctuation
+            : "";
+          const isAllCapsOriginalWord = TitleCaserUtils.isEntirelyUppercase(originalWordForSentenceCasing);
+          const shouldPreserveWikipediaUserCapitalization = wikipediaPreserveUserCapitalization &&
+            TitleCaser.shouldPreserveUserCasingInWikipedia(
+              originalWordForSentenceCasing,
+              wikipediaPreserveAllCaps,
+            );
           const originalWordPosition = originalWordIndex;
           originalWordIndex++;
           const wikipediaCasingDecision = TitleCaserUtils.dictionaryGetWikipediaCasingDecision({
@@ -859,24 +967,41 @@ export class TitleCaser {
 
           // 1) The first word: Capitalize first letter only, preserve existing brand/case in the rest
           if (isStartOfSentence && /[A-Za-z]/.test(wordForSentenceCasing)) {
-            // If you want to skip altering brand or acronym, do one more check:
-            if (!TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)) {
-              // "Normal" first word
+            if (shouldPreserveWikipediaUserCapitalization) {
+              words[i] = leadingOpeningPunctuation +
+                originalWordForSentenceCasing +
+                trailingClosingPunctuation;
+            } else if (
+              (wikipediaPreserveUserCapitalization && !wikipediaPreserveAllCaps && isAllCapsOriginalWord) ||
+              !TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)
+            ) {
               words[i] = leadingOpeningPunctuation +
                 wordForSentenceCasing.charAt(0).toUpperCase() +
                 wordForSentenceCasing.slice(1).toLowerCase() +
                 trailingClosingPunctuation;
             }
-            // Otherwise, it's a brand/acronym, so leave it
             previousWordBefore = previousWord;
             previousWord = word;
             continue;
           }
 
-          // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase
-          if (
+          // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase.
+          const isAllCapsWord = isAllCapsOriginalWord;
+          const shouldPreserveByWikipediaHeuristics = (wikipediaPreserveUserCapitalization && !wikipediaPreserveAllCaps && isAllCapsWord)
+            ? false
+            : wikipediaCasingDecision.shouldPreserve;
+
+          if (shouldPreserveWikipediaUserCapitalization) {
+            words[i] = leadingOpeningPunctuation + originalWordForSentenceCasing + trailingClosingPunctuation;
+          } else if (
+            wikipediaPreserveUserCapitalization &&
+            !wikipediaPreserveAllCaps &&
+            isAllCapsWord
+          ) {
+            words[i] = leadingOpeningPunctuation + wordForSentenceCasing.toLowerCase() + trailingClosingPunctuation;
+          } else if (
             !sentenceNameTokenIndexes.has(i) &&
-            !wikipediaCasingDecision.shouldPreserve &&
+            !shouldPreserveByWikipediaHeuristics &&
             !TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)
           ) {
             words[i] = leadingOpeningPunctuation + wordForSentenceCasing.toLowerCase() + trailingClosingPunctuation;
@@ -886,10 +1011,18 @@ export class TitleCaser {
           // else, we keep it exactly as is
         }
 
-        inputString = TitleCaserUtils.dictionaryNormalizeKnownProperPhrases(words.join(""), dictionaryProfile);
-        inputString = applyKnownTermCasing(inputString);
+        const wordsJoined = words.join("");
+        if (!wikipediaPreserveUserCapitalization) {
+          inputString = TitleCaserUtils.dictionaryNormalizeKnownProperPhrases(wordsJoined, dictionaryProfile);
+          inputString = applyKnownTermCasing(inputString);
+        } else {
+          inputString = TitleCaserUtils.dictionaryNormalizeKnownProperPhrases(wordsJoined, dictionaryProfile);
+        }
         inputString = applyPhraseReplacements(inputString);
+        inputString = applyWikipediaContextualPhraseCasing(inputString);
       }
+
+      inputString = restoreUrlTokens(inputString);
 
       if (normalizeWhitespace) {
         inputString = inputString
@@ -900,7 +1033,7 @@ export class TitleCaser {
           .trim();
 
         if (style === "ap") {
-          inputString = inputString.replace(/\s*\/\s*/g, "/");
+          inputString = inputString.replace(/\s*\/\s*(?![A-Za-z0-9._-]+(?:\/|$))/g, "/");
         }
       }
 
@@ -1051,5 +1184,25 @@ export class TitleCaser {
 
     // Otherwise, no. It's safe to lowercase.
     return false;
+  }
+
+  /**
+   * Determines if Wikipedia mode should preserve user-provided casing for a word
+   * @param {string} word - The word to check
+   * @param {boolean} preserveAllCaps - If true, preserve all-caps words; otherwise, normalize them to lowercase
+   * @param {string} profile - The dictionary profile to use for user-capitalization checks
+   * @returns {boolean} True if user-provided casing should be preserved
+   */
+  static shouldPreserveUserCasingInWikipedia(word, preserveAllCaps = false) {
+    if (!word || !/[A-Za-z]/.test(word)) {
+      return false;
+    }
+
+    if (TitleCaserUtils.isEntirelyUppercase(word) && !preserveAllCaps) {
+      return false;
+    }
+
+    return TitleCaserUtils.casingHasInitialCapital(word) ||
+      TitleCaserUtils.hasUppercaseIntentional(word);
   }
 }

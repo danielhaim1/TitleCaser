@@ -97,12 +97,12 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
         "When? \"Right now\" said she. \"Okay?\" He replied",
         { wikipediaPreserveUserCapitalization: true }],
       ["should keep user capitalization for AI-like all-caps abbreviations when configured",
-        "can we use AI to predict the habits of the south american ai sloth",
-        "Can we use AI to predict the habits of the South American ai sloth",
+        "can we use AI to predict the habits of the ai sloth",
+        "Can we use AI to predict the habits of the ai sloth",
         { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
       ["should retain canonical casing when user casing is not explicit",
-        "can we use ai to predict the habits of the south american ai sloth",
-        "Can we use AI to predict the habits of the South American ai sloth",
+        "can we use ai to predict the habits of the ai sloth",
+        "Can we use AI to predict the habits of the ai sloth",
         { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: false }],
     ];
 
@@ -113,8 +113,8 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
 
   runTest(
     "should distinguish the AI acronym from the contextual ai sloth name",
-    "can we use ai to predict the habits of the south american ai sloth",
-    "Can we use AI to predict the habits of the South American ai sloth",
+    "can we use ai to predict the habits of the ai sloth",
+    "Can we use AI to predict the habits of the ai sloth",
   );
 
   runTest(

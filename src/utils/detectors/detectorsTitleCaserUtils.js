@@ -1,3 +1,15 @@
+import { knownTermCasingMap, wordReplacementsList } from "../../TitleCaserConsts.js";
+
+const bareDomainTopLevelDomains = new Set([
+  "academy", "agency", "ai", "app", "asia", "au", "be", "biz", "blog", "br", "ca", "cc", "ch", "cl", "cloud", "cn", "co", "com", "coop", "de", "dev", "digital", "dk", "edu", "email", "es", "eu", "fi", "fm", "fr", "gov", "hk", "id", "ie", "in", "info", "int", "io", "it", "jobs", "jp", "kr", "live", "me", "media", "mil", "mobi", "museum", "mx", "name", "net", "network", "news", "nl", "no", "nz", "online", "org", "ph", "pl", "pro", "pt", "ru", "sa", "se", "sg", "site", "solutions", "software", "space", "store", "systems", "tech", "technology", "tel", "th", "travel", "tv", "tw", "ua", "uk", "us", "vn", "website", "world", "xyz", "za", "js",
+]);
+const fileExtensions = new Set([
+  "7z", "bash", "c", "cjs", "conf", "cpp", "css", "csv", "doc", "docx", "env", "fish", "gif", "go", "graphql", "gql", "gz", "h", "html", "htm", "ini", "java", "jpeg", "jpg", "js", "json", "less", "lock", "log", "md", "mdx", "mjs", "mov", "mp3", "mp4", "pdf", "php", "png", "ppt", "pptx", "py", "rb", "rs", "sass", "scss", "sh", "sql", "svg", "tar", "toml", "ts", "tsv", "tsx", "txt", "wav", "webm", "webp", "xlsx", "xls", "xml", "yaml", "yml", "zip", "zsh",
+]);
+const canonicalReplacementTerms = new Set(
+  wordReplacementsList.map((replacement) => Object.keys(replacement)[0].toLowerCase()),
+);
+
 const detectorLanguagePatterns = {
   en: "[A-Za-z]+",
   pl: "[A-Za-zęĘóÓąĄśŚłŁżŻźŹćĆńŃ]+",
@@ -113,6 +125,58 @@ export function detectorsExtendTitleCaserUtils(TitleCaserUtils) {
       },
     },
 
+    // Check whether a token is an opaque URL, domain, email address, path, or filename.
+    isUrlLikeToken: {
+      value(token) {
+        if (!token || typeof token !== "string") {
+          return false;
+        }
+
+        const normalizedToken = token
+          .replace(/^[([{\"'“‘«‹]+/, "")
+          .replace(/[)\]}\"'”’»›,.;:!?]+$/, "");
+        const urlSuffix = "(?::\\d{1,5})?(?:[/?#]\\S*)?";
+        const domainLabel = "[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?";
+        const topLevelDomain = "(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59})";
+        const wwwDomainPattern = new RegExp(
+          `^www\\.(?:${domainLabel}\\.)+${topLevelDomain}${urlSuffix}$`,
+          "i",
+        );
+        const bareDomainPattern = new RegExp(
+          `^(?:${domainLabel}\\.)+${topLevelDomain}${urlSuffix}$`,
+          "i",
+        );
+        const emailPattern = new RegExp(
+          `^[a-z0-9.!#$%&'*+/=?^_\\x60{|}~-]+@(?:${domainLabel}\\.)+${topLevelDomain}$`,
+          "i",
+        );
+        const bareDomainHost = normalizedToken.split(/[/:?#]/, 1)[0];
+        const bareDomainTopLevelDomain = bareDomainHost.split(".").at(-1)?.toLowerCase();
+        const hasKnownBareDomainTopLevelDomain =
+          bareDomainTopLevelDomains.has(bareDomainTopLevelDomain) ||
+          bareDomainTopLevelDomain?.startsWith("xn--");
+        const fileExtension = normalizedToken.split(".").at(-1)?.toLowerCase();
+        const isFilename =
+          /^[A-Za-z0-9][A-Za-z0-9._-]*\.[A-Za-z0-9]+$/.test(normalizedToken) &&
+          fileExtensions.has(fileExtension);
+        const isAbsolutePath = /^\/(?:[^/\s]+\/?)*$/.test(normalizedToken);
+
+        if (
+          knownTermCasingMap[normalizedToken.toLowerCase()] ||
+          canonicalReplacementTerms.has(normalizedToken.toLowerCase())
+        ) {
+          return false;
+        }
+
+        return /^(?:https?|ftp):\/\/\S+$/i.test(normalizedToken) ||
+          wwwDomainPattern.test(normalizedToken) ||
+          (hasKnownBareDomainTopLevelDomain && bareDomainPattern.test(normalizedToken)) ||
+          emailPattern.test(normalizedToken) ||
+          isAbsolutePath ||
+          isFilename;
+      },
+    },
+
     // Check if a full word matches the configured language alphabet
     detectorIsLanguageWord: {
       value(word, language) {
@@ -220,15 +284,13 @@ export function detectorsExtendTitleCaserUtils(TitleCaserUtils) {
               )
             )
           : false;
-        const previousTokenHasSentenceEnding = previousTokenHasClosingPunctuation;
-
         if (!hasEndingSentencePunctuation) {
           return false;
         }
 
         if (isClosingQuotedToken && /[.!?]$/.test(tokenWithoutClosingPunctuation)) {
           if (!nextWordStartsWithQuote) {
-            return previousTokenHasSentenceEnding;
+            return previousTokenHasClosingPunctuation;
           }
 
           return true;
