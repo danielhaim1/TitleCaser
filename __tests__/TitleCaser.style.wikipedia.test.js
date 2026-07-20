@@ -35,6 +35,21 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "Walt Disney announced a new film",
   );
   runTest(
+    "should keep a lowercase possessive suffix when capitalizing a name",
+    "daniel's guide to title casing",
+    "Daniel's guide to title casing",
+  );
+  runTest(
+    "should capitalize names introduced by identity and relationship context",
+    "i am christopher and this is my friend alexander",
+    "I am Christopher and this is my friend Alexander",
+  );
+  runTest(
+    "should preserve a possessive proper name in ordinary prose",
+    "He is Ethan, a longtime friend of Michael's and the founder of a software company.",
+    "He is Ethan, a longtime friend of Michael's and the founder of a software company.",
+  );
+  runTest(
     "should handle Wikipedia style with colon usage",
     "The business of fashion: how luxury brands set themselves apart",
     "The business of fashion: how luxury brands set themselves apart",

@@ -826,7 +826,7 @@ export class TitleCaser {
         }
 
         const sentenceNameTokenIndexes = new Set();
-        for (let i = 0; i < sentenceWordEntries.length - 1; i++) {
+        for (let i = 0; i < sentenceWordEntries.length; i++) {
           const currentEntry = sentenceWordEntries[i];
           const currentOriginalWord = currentEntry.originalWord || currentEntry.word;
           const previousEntry = sentenceWordEntries[i - 1];
@@ -839,8 +839,23 @@ export class TitleCaser {
             TitleCaserUtils.dictionaryIsWord(currentOriginalWord, dictionaryProfile) ||
             TitleCaserUtils.dictionaryIsWord(currentOriginalWord);
           const currentHasEntityBoundaryBefore = !previousOriginalWord || /[,;:([{"']$/.test(previousOriginalWord);
+          const previousWord = TitleCaserUtils.dictionaryNormalizeWord(previousOriginalWord);
+          const previousTwoWord = TitleCaserUtils.dictionaryNormalizeWord(
+            sentenceWordEntries[i - 2]?.originalWord || sentenceWordEntries[i - 2]?.word || "",
+          );
+          const isNameIntroducedByContext =
+            currentIsKnownName &&
+            ((previousTwoWord === "i" && previousWord === "am") ||
+              (previousTwoWord === "my" && previousWord === "friend"));
+          const isCapitalizedPossessiveName =
+            currentIsKnownName && currentHasOriginalCapitalization && /(?:'s|’s)$/i.test(currentOriginalWord);
           const entityTokens = [];
           const tokenIndexes = [];
+
+          if (isNameIntroducedByContext || isCapitalizedPossessiveName) {
+            sentenceNameTokenIndexes.add(currentEntry.tokenIndex);
+            continue;
+          }
 
           if (!TitleCaserUtils.dictionaryIsLikelyEntityStart(currentOriginalWord, dictionaryProfile)) {
             continue;
