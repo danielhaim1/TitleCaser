@@ -25,6 +25,16 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "The future of DevOps: how to prepare for the next era of software development",
   );
   runTest(
+    "should preserve the first-person pronoun alongside coordinated-name normalization",
+    "we are going to the rocky mountains, rocky and I are going",
+    "We are going to the Rocky Mountains, rocky and I are going",
+  );
+  runTest(
+    "should capitalize Walt Disney without an article or company suffix",
+    "walt disney announced a new film",
+    "Walt Disney announced a new film",
+  );
+  runTest(
     "should handle Wikipedia style with colon usage",
     "The business of fashion: how luxury brands set themselves apart",
     "The business of fashion: how luxury brands set themselves apart",

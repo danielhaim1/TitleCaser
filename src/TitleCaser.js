@@ -970,6 +970,8 @@ export class TitleCaser {
 
           if (shouldPreserveWikipediaUserCapitalization) {
             words[i] = leadingOpeningPunctuation + originalWordForSentenceCasing + trailingClosingPunctuation;
+          } else if (wordForSentenceCasing.toLowerCase() === "i") {
+            words[i] = leadingOpeningPunctuation + "I" + trailingClosingPunctuation;
           } else if (shouldPromoteCoordinatedListCandidate) {
             words[i] =
               leadingOpeningPunctuation +
