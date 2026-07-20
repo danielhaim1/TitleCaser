@@ -433,6 +433,12 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
       },
     },
 
+    dictionaryIsAmbiguousGivenName: {
+      value(word) {
+        return dictionaryAmbiguousGivenNameSet.has(dictionaryNormalizeWordSource(word));
+      },
+    },
+
     // Check if a word is a known family name
     dictionaryIsFamilyName: {
       value(word) {

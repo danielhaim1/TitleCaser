@@ -839,11 +839,26 @@ export class TitleCaser {
             TitleCaserUtils.dictionaryIsWord(currentOriginalWord, dictionaryProfile) ||
             TitleCaserUtils.dictionaryIsWord(currentOriginalWord);
           const currentHasEntityBoundaryBefore = !previousOriginalWord || /[,;:([{"']$/.test(previousOriginalWord);
+          const nextEntry = sentenceWordEntries[i + 1];
+          const nextOriginalWord = nextEntry ? nextEntry.originalWord || nextEntry.word : "";
+          const previousIsModifierOrFunctionWord =
+            TitleCaserUtils.isArticle(previousOriginalWord, style) ||
+            TitleCaserUtils.isShortPreposition(previousOriginalWord, style) ||
+            TitleCaserUtils.dictionaryIsAdjective(previousOriginalWord, dictionaryProfile);
+          const isNameTerminal =
+            !nextOriginalWord ||
+            /[,;:.!?]$/.test(currentOriginalWord) ||
+            TitleCaserUtils.isShortConjunction(nextOriginalWord, style);
+          const isContextuallyUnambiguousGivenName =
+            currentIsGivenName &&
+            !TitleCaserUtils.dictionaryIsAmbiguousGivenName(currentOriginalWord) &&
+            !previousIsModifierOrFunctionWord &&
+            isNameTerminal;
           const isPossessiveName = currentIsKnownName && /(?:'s|’s)$/i.test(currentOriginalWord);
           const entityTokens = [];
           const tokenIndexes = [];
 
-          if (isPossessiveName) {
+          if (isContextuallyUnambiguousGivenName || isPossessiveName) {
             sentenceNameTokenIndexes.add(currentEntry.tokenIndex);
             continue;
           }
