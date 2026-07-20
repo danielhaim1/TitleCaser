@@ -147,7 +147,7 @@ export function detectorsExtendTitleCaserUtils(TitleCaserUtils) {
         const fileExtension = normalizedToken.split(".").at(-1)?.toLowerCase();
         const isFilename =
           /^[A-Za-z0-9][A-Za-z0-9._-]*\.[A-Za-z0-9]+$/.test(normalizedToken) && fileExtensions.has(fileExtension);
-        const isAbsolutePath = /^\/(?:[^/\s]+\/?)*$/.test(normalizedToken);
+        const isAbsolutePath = /^\/(?:[^/\s]+(?:\/[^/\s]+)*)?\/?$/.test(normalizedToken);
 
         if (
           knownTermCasingMap[normalizedToken.toLowerCase()] ||

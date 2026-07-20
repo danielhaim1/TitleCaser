@@ -74,6 +74,11 @@ describe("TitleCaserUtils – URL Detection", () => {
     expect(TitleCaserUtils.isUrlLikeToken("https://example.co.uk/API?format=SDK#top")).toBe(true);
     expect(TitleCaserUtils.isUrlLikeToken("ftp://registry.example.xn--p1ai/package")).toBe(true);
     expect(TitleCaserUtils.isUrlLikeToken("www.example.technology/path")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky/")).toBe(true);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp//rocky")).toBe(false);
+    expect(TitleCaserUtils.isUrlLikeToken("/tmp/rocky path")).toBe(false);
     expect(TitleCaserUtils.isUrlLikeToken("node.js")).toBe(false);
     expect(TitleCaserUtils.isUrlLikeToken("")).toBe(false);
     expect(TitleCaserUtils.isUrlLikeToken(1)).toBe(false);
