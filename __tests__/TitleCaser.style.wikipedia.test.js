@@ -35,6 +35,32 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "I'm sure it's not the tool that's the problem, it's the way it's being used, I'm telling you.",
   );
   runTest(
+    "should convert title case with contractions to sentence case",
+    "Yeah, It's Not Who You Know, It's What You're Supposed to do with this information.",
+    "Yeah, It's not who you know, it's what you're supposed to do with this information.",
+  );
+
+  runTest(
+    "should convert title case with contractions to sentence case",
+    "It's Not Who You Know, It's What You're Supposed to do with this information.",
+    "It's not who you know, it's what you're supposed to do with this information.",
+  );
+  runTest(
+    "should convert title case with contractions to sentence case",
+    "It's Not Who You Know, It's What You Do and How You're Remembered.",
+    "It's not who you know, it's what you do and how you're remembered.",
+  );
+  runTest(
+    "should keep a contraction as one word",
+    "you're remembered",
+    "You're remembered",
+  );
+  runTest(
+    "should not treat common contractions as proper-name tokens",
+    "you've said we'll go, they'd agree, i'm ready, you're here, and we aren't late.",
+    "You've said we'll go, they'd agree, I'm ready, you're here, and we aren't late.",
+  );
+  runTest(
     "should capitalize Walt Disney without an article or company suffix",
     "walt disney announced a new film",
     "Walt Disney announced a new film",

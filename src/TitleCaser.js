@@ -831,6 +831,13 @@ export class TitleCaser {
           sentenceOriginalWordIndex++;
         }
 
+        const sentenceWordsAfterFirst = sentenceWordEntries.slice(1);
+        const isLikelyTitleCasedWikipediaInput =
+          !wikipediaPreserveUserCapitalization &&
+          sentenceWordsAfterFirst.length >= 3 &&
+          sentenceWordsAfterFirst.filter((entry) => TitleCaserUtils.casingHasInitialCapital(entry.originalWord)).length /
+            sentenceWordsAfterFirst.length >=
+            0.9;
         const sentenceNameTokenIndexes = new Set();
         for (let i = 0; i < sentenceWordEntries.length; i++) {
           const currentEntry = sentenceWordEntries[i];
@@ -866,6 +873,10 @@ export class TitleCaser {
 
           if (isContextuallyUnambiguousGivenName || isPossessiveName) {
             sentenceNameTokenIndexes.add(currentEntry.tokenIndex);
+            continue;
+          }
+
+          if (isLikelyTitleCasedWikipediaInput && i > 0) {
             continue;
           }
 
@@ -958,6 +969,15 @@ export class TitleCaser {
             TitleCaser.shouldPreserveUserCasingInWikipedia(originalWordForSentenceCasing, wikipediaPreserveAllCaps);
           const originalWordPosition = originalWordIndex;
           originalWordIndex++;
+          const titleCasedFragmentWords = originalNonWhitespaceTokens.slice(
+            originalWordPosition,
+            originalWordPosition + 3,
+          );
+          const shouldPreserveLeadingTitleCasedFragmentCapital =
+            originalWordPosition === 1 &&
+            /,$/.test(originalNonWhitespaceTokens[0] || "") &&
+            titleCasedFragmentWords.length === 3 &&
+            titleCasedFragmentWords.every((token) => TitleCaserUtils.casingHasInitialCapital(token));
           const shouldPromoteCoordinatedListCandidate =
             style === "wikipedia" && coordinatedListCandidateWordIndexes.has(originalWordPosition);
           const wikipediaCasingDecision = TitleCaserUtils.dictionaryGetWikipediaCasingDecision({
@@ -991,12 +1011,19 @@ export class TitleCaser {
           // 2) For subsequent words, only force-lowercase if we do NOT want to preserve uppercase.
           const isAllCapsWord = isAllCapsOriginalWord;
           const shouldPreserveByWikipediaHeuristics =
-            wikipediaPreserveUserCapitalization && !wikipediaPreserveAllCaps && isAllCapsWord
+            isLikelyTitleCasedWikipediaInput ||
+            (wikipediaPreserveUserCapitalization && !wikipediaPreserveAllCaps && isAllCapsWord)
               ? false
               : wikipediaCasingDecision.shouldPreserve;
 
           if (shouldPreserveWikipediaUserCapitalization) {
             words[i] = leadingOpeningPunctuation + originalWordForSentenceCasing + trailingClosingPunctuation;
+          } else if (shouldPreserveLeadingTitleCasedFragmentCapital) {
+            words[i] =
+              leadingOpeningPunctuation +
+              wordForSentenceCasing.charAt(0).toUpperCase() +
+              wordForSentenceCasing.slice(1).toLowerCase() +
+              trailingClosingPunctuation;
           } else if (/^i(?:['’](?:d|ll|m|ve))?$/i.test(wordForSentenceCasing)) {
             words[i] =
               leadingOpeningPunctuation +

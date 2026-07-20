@@ -30,23 +30,46 @@ const dictionaryNameContinuationBlocklist = new Set([
   "by",
   "for",
   "from",
+  "he",
+  "her",
+  "hers",
+  "him",
+  "his",
+  "i",
   "in",
   "into",
+  "it",
+  "its",
   "jr",
+  "me",
+  "mine",
+  "my",
   "nor",
   "of",
   "off",
   "on",
+  "our",
+  "ours",
   "or",
   "over",
   "per",
+  "she",
   "so",
   "sr",
   "the",
+  "their",
+  "theirs",
+  "them",
+  "they",
   "to",
   "under",
+  "us",
   "via",
+  "we",
   "with",
+  "you",
+  "your",
+  "yours",
   "yet",
   "how",
   "what",
@@ -159,6 +182,10 @@ function dictionaryHasNounLikeSuffix(word) {
     word.length > suffix.length + 2 &&
     word.endsWith(suffix)
   ));
+}
+
+function dictionaryIsUnambiguousContraction(word) {
+  return typeof word === "string" && /(?:n['’]t|['’](?:d|ll|m|re|ve))$/i.test(word);
 }
 
 function dictionaryCapitalizeNameToken(token) {
@@ -470,7 +497,10 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
       value(word, profile = dictionaryDefaultProfile) {
         const normalizedWord = dictionaryNormalizeWordSource(word);
 
-        if (TitleCaserUtils.dictionaryIsEntityBlocklistedWord(normalizedWord)) {
+        if (
+          dictionaryIsUnambiguousContraction(word) ||
+          TitleCaserUtils.dictionaryIsEntityBlocklistedWord(normalizedWord)
+        ) {
           return false;
         }
 
@@ -492,7 +522,10 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
       value(word, profile = dictionaryDefaultProfile) {
         const normalizedWord = dictionaryNormalizeWordSource(word);
 
-        if (TitleCaserUtils.dictionaryIsEntityBlocklistedWord(normalizedWord)) {
+        if (
+          dictionaryIsUnambiguousContraction(word) ||
+          TitleCaserUtils.dictionaryIsEntityBlocklistedWord(normalizedWord)
+        ) {
           return false;
         }
 
@@ -746,6 +779,7 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
         const nextWord = dictionaryNormalizeWordSource(nextOriginalWord);
         const hasOriginalCapitalization = dictionaryHasInitialCapital(originalWord);
         const hasOriginalLowercase = dictionaryHasLowercaseInitial(originalWord);
+        const isStructuralWord = dictionaryNameContinuationBlocklist.has(normalizedWord);
         const isKnownNoun =
           dictionaryIsNounSource(normalizedWord, profile) ||
           dictionaryIsNounSource(normalizedWord, dictionaryDefaultProfile);
@@ -776,7 +810,16 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
           };
         }
 
+        if (dictionaryIsUnambiguousContraction(originalWord)) {
+          return {
+            commonWordScore,
+            entityScore,
+            shouldPreserve: false,
+          };
+        }
+
         if (hasOriginalLowercase) commonWordScore += 4;
+        if (isStructuralWord) commonWordScore += 6;
         if (isKnownNoun) commonWordScore += 4;
         if (isKnownNonNoun) commonWordScore += 3;
         if (previousIsContextWord) commonWordScore += 4;
