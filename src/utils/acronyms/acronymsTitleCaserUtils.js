@@ -45,7 +45,8 @@ export function acronymsExtendTitleCaserUtils(TitleCaserUtils) {
         }
 
         return (
-          regionalAcronymList.includes(firstWordStripped) && regionalAcronymFollowingWordsList.includes(nextWordStripped)
+          regionalAcronymList.includes(firstWordStripped) &&
+          regionalAcronymFollowingWordsList.includes(nextWordStripped)
         );
       },
       writable: true,

@@ -196,6 +196,203 @@ function dictionaryHasEntityBoundaryBefore(tokens, startIndex) {
   return !previousToken || /[,;:([{"']$/.test(previousToken);
 }
 
+function dictionaryCollectBacktickCodeRanges(input) {
+  const ranges = [];
+  const codeSpanPattern = /`[^`]*`/g;
+  let match;
+
+  while ((match = codeSpanPattern.exec(input || ""))) {
+    ranges.push([match.index, codeSpanPattern.lastIndex]);
+  }
+
+  return ranges;
+}
+
+function dictionaryIsInsideRange(ranges, tokenStart, tokenEnd) {
+  if (!Array.isArray(ranges)) return false;
+
+  return ranges.some(([rangeStart, rangeEnd]) =>
+    tokenStart >= rangeStart && tokenEnd <= rangeEnd,
+  );
+}
+
+function dictionaryIsLikelyIdentifierLikeToken(token) {
+  return /^[a-z][a-z0-9_]*[A-Z][a-zA-Z0-9_]*$/.test(token);
+}
+
+function dictionaryLooksLikeProtectedTokenContext(input, token, tokenStart, codeRanges) {
+  if (!token || tokenStart < 0) return true;
+
+  const tokenEnd = tokenStart + token.length;
+  const previousChar = tokenStart > 0 ? input[tokenStart - 1] : "";
+  const nextChar = input[tokenEnd] || "";
+  const isTerminalPeriod = nextChar === "." &&
+    (tokenEnd + 1 >= input.length || /\s/.test(input[tokenEnd + 1]));
+  const pathBoundaryPattern = /[./@_\\:'"“”‘’`(){}\[\]\-&=%?\/]/;
+
+  if (dictionaryIsInsideRange(codeRanges, tokenStart, tokenEnd)) return true;
+
+  return pathBoundaryPattern.test(previousChar) ||
+    (pathBoundaryPattern.test(nextChar) && !isTerminalPeriod) ||
+    dictionaryIsLikelyIdentifierLikeToken(token);
+}
+
+function dictionaryIsLikelyCoordinatedListStart(input, listStartIndex) {
+  let previousIndex = listStartIndex - 1;
+
+  while (previousIndex >= 0 && /\s/.test(input[previousIndex])) {
+    previousIndex -= 1;
+  }
+
+  if (previousIndex < 0) return true;
+
+  const previousChar = input[previousIndex];
+
+  if (/["'“”‘’`\]\[(){}]/.test(previousChar)) {
+    return false;
+  }
+
+  if (previousChar === ",") {
+    return false;
+  }
+
+  return true;
+}
+
+function dictionaryGetCoordinatedListPeerNameSignal(words) {
+  if (!Array.isArray(words) || !words.length) return 0;
+
+  const normalizedWords = words
+    .map((word) => (typeof word === "string" ? word.toLowerCase() : ""))
+    .filter(Boolean);
+  if (!normalizedWords.length) return 0;
+
+  if (normalizedWords.length === 1) {
+    const normalizedWord = normalizedWords[0];
+    if (dictionaryNameContinuationBlocklist.has(normalizedWord)) return 0;
+
+    return dictionaryGivenNameSet.has(normalizedWord) || dictionaryFamilyNameSet.has(normalizedWord)
+      ? 1
+      : 0;
+  }
+
+  if (normalizedWords.length !== 2) return 0;
+
+  const [firstWord, lastWord] = normalizedWords;
+
+  if (dictionaryNameContinuationBlocklist.has(firstWord)) return 0;
+  if (dictionaryNameContinuationBlocklist.has(lastWord)) return 0;
+
+  return dictionaryGivenNameSet.has(firstWord) && dictionaryFamilyNameSet.has(lastWord) ? 1 : 0;
+}
+
+function dictionaryIsLikelyPersonNamePair(words) {
+  if (!Array.isArray(words) || words.length !== 2) return false;
+
+  const [firstWord, lastWord] = words;
+  const normalizedFirst = firstWord.toLowerCase();
+  const normalizedLast = lastWord.toLowerCase();
+  const hasApostrophes = /['’]/.test(firstWord) || /['’]/.test(lastWord);
+
+  return (
+    !hasApostrophes &&
+    /^[A-Z]/.test(firstWord) &&
+    /^[A-Z]/.test(lastWord) &&
+    dictionaryGivenNameSet.has(normalizedFirst) &&
+    dictionaryFamilyNameSet.has(normalizedLast)
+  );
+}
+
+function dictionaryCanDropLeadingTwoWordCapture(words) {
+  if (!Array.isArray(words) || words.length !== 2) return false;
+
+  return (
+    /^[a-z]/.test(words[0]) &&
+    !dictionaryIsLikelyPersonNamePair(words)
+  );
+}
+
+function dictionaryGetCoordinatedListCandidatesFromItems(items) {
+  if (!Array.isArray(items) || items.length < 3) return [];
+
+  const listStartItem = items[0];
+  if (!dictionaryGetCoordinatedListPeerNameSignal(listStartItem.words)) return [];
+
+  const lowercaseSingleWordNameItems = items.filter(({ words, candidateEntry }) =>
+    words.length === 1 &&
+    /^[a-z]/.test(words[0]) &&
+    candidateEntry &&
+    (
+      dictionaryGivenNameSet.has(candidateEntry.word) ||
+      dictionaryAmbiguousGivenNameSet.has(candidateEntry.word)
+    )
+  );
+
+  const ambiguousLowercaseSingleWordItems = lowercaseSingleWordNameItems.filter(({ candidateEntry }) =>
+    dictionaryAmbiguousGivenNameSet.has(candidateEntry.word),
+  );
+
+  const candidateItems = lowercaseSingleWordNameItems.length === 1
+    ? lowercaseSingleWordNameItems
+    : ambiguousLowercaseSingleWordItems;
+
+  if (candidateItems.length !== 1) return [];
+
+  const [candidateItem] = candidateItems;
+  const peerItems = items.filter((item) => item !== candidateItem);
+  const peerNameSignalCount = peerItems.filter(({ words }) =>
+    dictionaryGetCoordinatedListPeerNameSignal(words) > 0,
+  ).length;
+
+  if (
+    peerItems.length >= 3 &&
+    peerNameSignalCount >= 3
+  ) {
+    return [{ ...candidateItem.candidateEntry, classification: "contextual-person" }];
+  }
+
+  return [];
+}
+
+function dictionaryIsLikelyContextualPersonNamePair(words) {
+  if (!Array.isArray(words) || words.length !== 2) return false;
+
+  const [firstWord, lastWord] = words;
+  const normalizedFirst = firstWord.toLowerCase();
+  const normalizedLast = lastWord.toLowerCase();
+
+  return (
+    dictionaryGivenNameSet.has(normalizedFirst) &&
+    !dictionaryNameContinuationBlocklist.has(normalizedLast) &&
+    /^[A-Za-z][A-Za-z'’-]*$/.test(lastWord)
+  );
+}
+
+function dictionaryGetCoordinatedListConfirmedMemberEntries(items) {
+  if (!Array.isArray(items) || items.length < 3) return [];
+
+  const strongPersonItems = items.filter(({ words }) =>
+    dictionaryGetCoordinatedListPeerNameSignal(words) > 0 ||
+    dictionaryIsLikelyContextualPersonNamePair(words),
+  );
+  if (strongPersonItems.length < 3) return [];
+
+  return items.flatMap(({ words, wordEntries = [] }) => {
+    const isSingleKnownName =
+      words.length === 1 &&
+      (
+        dictionaryGivenNameSet.has(words[0].toLowerCase()) ||
+        dictionaryFamilyNameSet.has(words[0].toLowerCase()) ||
+        dictionaryAmbiguousGivenNameSet.has(words[0].toLowerCase())
+      );
+    const isContextualPersonNamePair = dictionaryIsLikelyContextualPersonNamePair(words);
+
+    if (!isSingleKnownName && !isContextualPersonNamePair) return [];
+
+    return wordEntries.filter(({ originalWord }) => /^[a-z]/.test(originalWord));
+  });
+}
+
 export function buildDictionaryProperPhraseIndex(properPhrases) {
   const phraseIndex = Object.entries(properPhrases)
     .reduce((index, [phrase, replacement]) => {
@@ -319,9 +516,31 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
       },
     },
 
-    // Find one lower-case outlier in a comma-separated list whose peers are names.
-    dictionaryGetCoordinatedListProperNameCandidates: {
+    // Return structural matches used by the contextual person-name detector.
+    dictionaryGetCoordinatedListMatches: {
       value({ input = "" } = {}) {
+        if (typeof input !== "string" || !input) return [];
+
+        const listItemPattern = "[A-Za-z][A-Za-z'’-]*(?:\\s+[A-Za-z][A-Za-z'’-]*){0,1}";
+        const listPattern = new RegExp(
+          `\\b${listItemPattern}(?:\\s*,\\s*${listItemPattern}){1,}\\s*,?\\s+(?:and|or)\\s+${listItemPattern}\\b`,
+          "gi",
+        );
+
+        return Array.from(input.matchAll(listPattern))
+          .filter((listMatch) => dictionaryIsLikelyCoordinatedListStart(input, listMatch.index))
+          .map((listMatch) => ({
+            listText: listMatch[0],
+            startIndex: listMatch.index,
+          }));
+      },
+    },
+
+    // Infer a single ambiguous lowercase given name only when a strict coordinated list
+    // with people-like peer evidence exists. This is intentionally scoped to this
+    // exact structural pattern and is not a general named-entity-recognition pass.
+    dictionaryGetCoordinatedListProperNameCandidates: {
+      value({ input = "", includeConfirmedListMembers = false } = {}) {
         if (typeof input !== "string" || !input) return [];
 
         const wordPattern = /[A-Za-z][A-Za-z'’-]*/g;
@@ -331,111 +550,173 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
           startIndex: match.index,
           wordIndex,
         }));
-        const listItemPattern = "[A-Za-z][A-Za-z'’-]*(?:\\s+[A-Za-z][A-Za-z'’-]*){0,2}";
-        const listPattern = new RegExp(
-          `\\b${listItemPattern}(?:\\s*,\\s*${listItemPattern}){2,}\\s*,?\\s+(?:and|or)\\s+${listItemPattern}\\b`,
-          "gi",
+        const wordEntryByStart = new Map(
+          wordEntries.map((entry) => [entry.startIndex, entry]),
         );
         const candidates = [];
+        const confirmedListMembers = [];
+        const codeRanges = dictionaryCollectBacktickCodeRanges(input);
 
-        for (const listMatch of input.matchAll(listPattern)) {
+        const listItemsMatchPattern = /\s*,\s*(?:and|or)\s+|\s*,\s*|\s+(?:and|or)\s+/gi;
+
+        const parseItemsFromListText = (listText, listTextStartIndex) => {
           const listItems = [];
-          const itemSeparatorPattern = /\s*,\s*|\s+(?:and|or)\s+/gi;
           let itemStartIndex = 0;
           let separatorMatch;
+          listItemsMatchPattern.lastIndex = 0;
 
-          while ((separatorMatch = itemSeparatorPattern.exec(listMatch[0]))) {
-            const rawItem = listMatch[0].slice(itemStartIndex, separatorMatch.index);
+          while ((separatorMatch = listItemsMatchPattern.exec(listText))) {
+            const rawItem = listText.slice(itemStartIndex, separatorMatch.index);
             const leadingWhitespaceLength = rawItem.search(/\S/);
+
             if (leadingWhitespaceLength !== -1) {
               listItems.push({
                 rawItem: rawItem.trim(),
-                startIndex: listMatch.index + itemStartIndex + leadingWhitespaceLength,
+                startIndex: listTextStartIndex + itemStartIndex + leadingWhitespaceLength,
               });
             }
+
             itemStartIndex = separatorMatch.index + separatorMatch[0].length;
           }
 
-          const finalRawItem = listMatch[0].slice(itemStartIndex);
+          const finalRawItem = listText.slice(itemStartIndex);
           const finalLeadingWhitespaceLength = finalRawItem.search(/\S/);
+
           if (finalLeadingWhitespaceLength !== -1) {
             listItems.push({
               rawItem: finalRawItem.trim(),
-              startIndex: listMatch.index + itemStartIndex + finalLeadingWhitespaceLength,
+              startIndex: listTextStartIndex + itemStartIndex + finalLeadingWhitespaceLength,
             });
           }
 
-          const parsedListItems = listItems.map(({ rawItem, startIndex }, itemIndex) => {
-            let wordMatches = Array.from(rawItem.matchAll(wordPattern));
+          let listHasMalformedItem = false;
+          const parsedListItems = listItems
+            .map(({ rawItem, startIndex }, itemIndex) => {
+              let wordMatches = Array.from(rawItem.matchAll(wordPattern));
+              const trailingWord = wordMatches.length === 2
+                ? wordMatches[1][0].toLowerCase()
+                : "";
 
-            if (itemIndex === 0) {
-              const lastLowercaseWordIndex = wordMatches.reduce(
-                (lastIndex, match, index) => (/^[a-z]/.test(match[0]) ? index : lastIndex),
-                -1,
-              );
-              if (lastLowercaseWordIndex >= 0 && lastLowercaseWordIndex < wordMatches.length - 1) {
-                wordMatches = wordMatches.slice(lastLowercaseWordIndex + 1);
-              } else if (wordMatches.length > 1 && /^[a-z]/.test(wordMatches[0][0])) {
-                wordMatches = wordMatches.slice(-1);
-              }
-            }
-
-            if (itemIndex === listItems.length - 1 && wordMatches.length > 1) {
-              const trailingLowercaseWordIndex = wordMatches.findIndex(
-                (match, index) => index > 0 && /^[a-z]/.test(match[0]),
-              );
-              if (trailingLowercaseWordIndex > 0) {
-                wordMatches = wordMatches.slice(0, trailingLowercaseWordIndex);
-              } else if (/^[a-z]/.test(wordMatches[0][0])) {
+              if (
+                itemIndex === listItems.length - 1 &&
+                wordMatches.length === 2 &&
+                (
+                  dictionaryNameContinuationBlocklist.has(trailingWord) ||
+                  /(?:ed|ing)$/.test(trailingWord)
+                )
+              ) {
                 wordMatches = wordMatches.slice(0, 1);
               }
-            }
 
-            const firstWord = wordMatches[0];
-            const candidateEntry = firstWord && wordEntries.find(
-              (entry) => entry.startIndex === startIndex + firstWord.index,
-            );
+              const words = wordMatches.map((match) => match[0]);
+              const isLikelyPersonNamePair = dictionaryIsLikelyPersonNamePair(words);
+              const isLikelyContextualPersonNamePair =
+                dictionaryIsLikelyContextualPersonNamePair(words);
+              const canDropLeadingTwoWordCapture =
+                !isLikelyContextualPersonNamePair &&
+                dictionaryCanDropLeadingTwoWordCapture(words);
+              const isMalformedTwoWordItem =
+                words.length === 2 &&
+                !isLikelyPersonNamePair &&
+                !isLikelyContextualPersonNamePair;
 
-            return {
-              words: wordMatches.map((match) => match[0]),
-              candidateEntry,
-            };
-          });
-          const ambiguousLowerCaseItems = parsedListItems.filter(({ words, candidateEntry }) =>
-            words.length === 1 &&
-            /^[a-z]/.test(words[0]) &&
-            candidateEntry &&
-            dictionaryAmbiguousGivenNameSet.has(candidateEntry.word),
-          );
+              const wordStarts = wordMatches.map((match) => startIndex + match.index);
+              const hasUnsafeWord = words.some((word, wordIndex) =>
+                dictionaryLooksLikeProtectedTokenContext(
+                  input,
+                  word,
+                  wordStarts[wordIndex],
+                  codeRanges,
+                ),
+              );
 
-          if (ambiguousLowerCaseItems.length !== 1) continue;
+              if (hasUnsafeWord) {
+                listHasMalformedItem = true;
+                return null;
+              }
 
-          const [candidateItem] = ambiguousLowerCaseItems;
-          const candidate = candidateItem.candidateEntry;
-          if (!candidate) continue;
+              if (isMalformedTwoWordItem && !canDropLeadingTwoWordCapture) {
+                listHasMalformedItem = true;
+                return null;
+              }
 
-          const peerItems = parsedListItems.filter((item) => item !== candidateItem);
-          const peerNameSignalCount = peerItems.filter(({ words }) =>
-            words.length > 0 &&
-            (
-              words.every((word) => /^[A-Z]/.test(word)) ||
-              (words.length === 1 && TitleCaserUtils.dictionaryIsGivenName(words[0]))
-            ),
-          ).length;
-          const hasGivenNamePeer = peerItems.some(({ words }) =>
-            words.length === 1 && TitleCaserUtils.dictionaryIsGivenName(words[0]),
+              const firstNameWordIndex = canDropLeadingTwoWordCapture
+                ? wordMatches.length - 1
+                : 0;
+
+              return {
+                words: words.slice(firstNameWordIndex),
+                startIndex: wordStarts[firstNameWordIndex],
+                canDropLeadingTwoWordCapture,
+                wordEntries: wordMatches.slice(firstNameWordIndex).map((match, index) =>
+                  wordEntryByStart.get(wordStarts[firstNameWordIndex + index]),
+                ).filter(Boolean),
+                candidateEntry: wordStarts.length
+                  ? wordEntryByStart.get(wordStarts[firstNameWordIndex])
+                  : null,
+              };
+            })
+            .filter(Boolean);
+
+          return {
+            parsedListItems,
+            listHasMalformedItem,
+            listItems,
+          };
+        };
+
+        for (const { listText, startIndex } of TitleCaserUtils.dictionaryGetCoordinatedListMatches({ input })) {
+          const { parsedListItems, listHasMalformedItem, listItems } = parseItemsFromListText(
+            listText,
+            startIndex,
           );
 
           if (
-            peerItems.length >= 3 &&
-            hasGivenNamePeer &&
-            peerNameSignalCount / peerItems.length >= 0.8
+            listHasMalformedItem ||
+            !parsedListItems.length
           ) {
-            candidates.push({ ...candidate, classification: "contextual-person" });
+            continue;
+          }
+
+          for (let listStartOffset = 0; listStartOffset < parsedListItems.length - 2; listStartOffset++) {
+            const alignedItems = parsedListItems.slice(listStartOffset);
+            if (!alignedItems.length) continue;
+
+            const listStartItem = alignedItems[0];
+            const leadingItems = parsedListItems.slice(0, listStartOffset);
+            const canShiftToLeadingItems = leadingItems.every((item) => item.canDropLeadingTwoWordCapture);
+
+            if (
+              !canShiftToLeadingItems &&
+              !dictionaryIsLikelyCoordinatedListStart(input, listStartItem.startIndex)
+            ) {
+              continue;
+            }
+
+            const newCandidates = dictionaryGetCoordinatedListCandidatesFromItems(alignedItems);
+            const newConfirmedListMembers = dictionaryGetCoordinatedListConfirmedMemberEntries(
+              alignedItems,
+            );
+
+            if (newConfirmedListMembers.length) {
+              confirmedListMembers.push(...newConfirmedListMembers);
+            }
+            if (newCandidates.length) {
+              candidates.push(...newCandidates);
+            }
+
+            if (newCandidates.length || newConfirmedListMembers.length) break;
           }
         }
 
-        return candidates;
+        if (!includeConfirmedListMembers) return candidates;
+
+        const confirmedMembersByWordIndex = new Map(
+          confirmedListMembers.map((entry) => [entry.wordIndex, entry]),
+        );
+
+        return Array.from(confirmedMembersByWordIndex.values())
+          .map((entry) => ({ ...entry, classification: "contextual-person" }));
       },
     },
 

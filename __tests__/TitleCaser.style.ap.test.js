@@ -18,6 +18,18 @@ function createTest(description, options, input, expectedOutput) {
   });
 }
 
+describe("TitleCaser AP – Coordinated Proper Names", () => {
+  test("should normalize lowercase names across introductory and invited person lists", () => {
+    const titleCaser = new TitleCaser({ style: "ap" });
+
+    expect(titleCaser.toTitleCase(
+      "william, robin, and hope summers invited alice, rocky, michael, Sarah and David",
+    )).toBe(
+      "William, Robin, and Hope Summers Invited Alice, Rocky, Michael, Sarah and David",
+    );
+  });
+});
+
 describe("TitleCaser AP – Regional Acronyms and Pronouns", () => {
   const cases = [
     ['should capitalize "US" when preceded by "the"', "They signed the treaty with the us", "They Signed the Treaty With the US"],

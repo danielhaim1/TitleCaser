@@ -58,11 +58,48 @@ export const contextualNameCases = [
     ],
   },
   {
+    description: "does not infer ambiguous words without a coordinated list",
+    input: "We need hope for a mild summer and must pay the bill.",
+    expectedOccurrences: [
+      { value: "hope", occurrence: 1, classification: "common-word" },
+      { value: "summer", occurrence: 1, classification: "common-word" },
+      { value: "bill", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not infer a bird as a person without a coordinated list",
+    input: "A robin landed near the garden gate.",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
     description: "does not infer a name from a capitalized product list",
     input: "The available finishes were Pearl, Rose, jet, Slate and Sand.",
     expectedOccurrences: [
       { value: "Rose", occurrence: 1, classification: "product-term" },
       { value: "jet", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not infer a person from intensity-style and title-case nouns",
+    input: "Critical, Major, minor, Moderate and Low.",
+    expectedOccurrences: [
+      { value: "Critical", occurrence: 1, classification: "common-word" },
+      { value: "Major", occurrence: 1, classification: "common-word" },
+      { value: "minor", occurrence: 1, classification: "common-word" },
+      { value: "Moderate", occurrence: 1, classification: "common-word" },
+      { value: "Low", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not infer a person from a color list",
+    input: "The colors were Red, Blue, green and Black.",
+    expectedOccurrences: [
+      { value: "Red", occurrence: 1, classification: "common-word" },
+      { value: "Blue", occurrence: 1, classification: "common-word" },
+      { value: "green", occurrence: 1, classification: "common-word" },
+      { value: "Black", occurrence: 1, classification: "common-word" },
     ],
   },
   {
@@ -80,6 +117,119 @@ export const contextualNameCases = [
       { value: "rocky", occurrence: 1, classification: "contextual-person" },
       { value: "rocky", occurrence: 2, classification: "protected-token" },
       { value: "rocky", occurrence: 3, classification: "common-word" },
+    ],
+  },
+  {
+    description: "rejects coordinator parsing when a parenthetical interrupts the list",
+    input: "Alice (editor), robin, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "rejects coordinator parsing when a suffix interrupts the list",
+    input: "Alice Jr., robin, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "rejects coordinator parsing when a multiword first item includes apostrophe punctuation",
+    input: "Alice O'Neil, robin, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "rejects coordinator parsing when an item is quoted",
+    input: 'Alice, "robin", Michael, Sarah and David',
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat tokens from backtick code spans as list evidence",
+    input: "Alice, `robin`, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat camelCase identifiers as list evidence",
+    input: "fileId, rocky, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat file paths as list evidence",
+    input: "/tmp/rocky, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not infer candidates from URL path segments",
+    input: "https://example.com/rocky, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat email and domain-like tokens as list evidence",
+    input: "User@Example.Com, rocky, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat capitalized non-name multiword peers as strong person evidence",
+    input: "Machine Learning, rocky, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat mountain-like title-cased pairs as full people",
+    input: "Rocky Mountain, robin, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "Rocky", occurrence: 1, classification: "common-word" },
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not treat business noun phrases as people peers",
+    input: "Customer Support, robin, Michael, Sarah and David",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "recognizes a full-name peer in an otherwise valid person list",
+    input: "Robin Williams, rocky, Michael, Sarah and David attended.",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "contextual-person" },
+    ],
+  },
+  {
+    description: "requires three recognized person peers",
+    input: "Alice, rocky, Michael and spring arrived.",
+    expectedOccurrences: [
+      { value: "rocky", occurrence: 1, classification: "common-word" },
+    ],
+  },
+  {
+    description: "does not let an unrelated code span affect a valid person list",
+    input: "Alice, robin, Michael, Sarah and David met after `build` finished.",
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "contextual-person" },
+    ],
+  },
+  {
+    description: "does not infer a person from a quoted coordinated list",
+    input: '"Alice, robin, Michael, Sarah and David',
+    expectedOccurrences: [
+      { value: "robin", occurrence: 1, classification: "common-word" },
     ],
   },
 ];

@@ -8,8 +8,8 @@ export interface TitleCaserSecurityOptions {
   rejectZeroWidthCharacters?: boolean;
 }
 
-export type TitleCaserStyle = 'ap' | 'apa' | 'chicago' | 'wikipedia' | 'nyt' | 'british';
-export type TitleCaserDictionaryProfile = 'lite' | 'full';
+export type TitleCaserStyle = "ap" | "apa" | "chicago" | "wikipedia" | "nyt" | "british";
+export type TitleCaserDictionaryProfile = "lite" | "full";
 export type TitleCaserReplacementMap = { [key: string]: string };
 export type TitleCaserReplacementPair = [string, string];
 

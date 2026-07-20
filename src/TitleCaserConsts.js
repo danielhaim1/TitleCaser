@@ -1,11 +1,7 @@
 import regionalAcronyms from "./data/acronyms/list-regional-acronym-rules.json";
 import phrasalVerbs from "./data/grammar/list-phrasal-verbs.json";
 import wikipediaContextualPhrases from "./data/wikipedia/list-contextual-phrases.json";
-import {
-  brandNames,
-  curatedDataList,
-  geographyCodesAndNames,
-} from "./data/terms/index.js";
+import { brandNames, curatedDataList, geographyCodesAndNames } from "./data/terms/index.js";
 
 function mergeArrays(...arraysOrObjects) {
   const merged = [];
@@ -110,7 +106,7 @@ export const shortWordsList = [
   "across",
   "over",
   "under",
-  "between"
+  "between",
 ];
 
 export const wordReplacementsList = [
@@ -118,7 +114,7 @@ export const wordReplacementsList = [
   { "a.s.a.p": "ASAP" },
   { "f.a.q": "FAQ" },
   { "f.a.q.s": "FAQs" },
-  { "FAQS": "FAQs" },
+  { FAQS: "FAQs" },
   { "f.y.i": "FYI" },
   { "d.i.y": "DIY" },
   { "t.b.d": "TBD" },
@@ -128,14 +124,14 @@ export const wordReplacementsList = [
   { "front-end": "frontend" },
   { "full stack": "fullstack" },
   { "full-stack": "fullstack" },
-  { "nodejs": "Node.js" },
+  { nodejs: "Node.js" },
   { "node.js": "Node.js" },
-  { "nextjs": "Next.js" },
-  { "nuxtjs": "Nuxt.js" },
-  { "reactjs": "React" },
+  { nextjs: "Next.js" },
+  { nuxtjs: "Nuxt.js" },
+  { reactjs: "React" },
   { "react.js": "React" },
-  { "skoda": "Škoda" },
-  { "ecommerce": "E-Commerce" },
+  { skoda: "Škoda" },
+  { ecommerce: "E-Commerce" },
   { "e-commerce": "E-Commerce" },
   { "e commerce": "E-Commerce" },
   { "cyber security": "cybersecurity" },
@@ -166,17 +162,17 @@ export const styleConfigMap = Object.freeze({
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
       // Pure prepositions (2–3 letters) safe to lowercase in AP
-      "at",   // e.g., "Dinner at Eight"
-      "by",   // e.g., "Written by the Author"
-      "for",  // e.g., "A Gift for You"
-      "in",   // e.g., "Made in America"
-      "of",   // e.g., "State of Mind"
-      "off",  // e.g., "10% Off Everything"
-      "on",   // e.g., "The War on Drugs"
-      "out",  // e.g., "Out of Context"
-      "per",  // e.g., "As per Usual"
-      "to",   // e.g., "Back to the Future"
-      "via"   // e.g., "Sent via Email"
+      "at", // e.g., "Dinner at Eight"
+      "by", // e.g., "Written by the Author"
+      "for", // e.g., "A Gift for You"
+      "in", // e.g., "Made in America"
+      "of", // e.g., "State of Mind"
+      "off", // e.g., "10% Off Everything"
+      "on", // e.g., "The War on Drugs"
+      "out", // e.g., "Out of Context"
+      "per", // e.g., "As per Usual"
+      "to", // e.g., "Back to the Future"
+      "via", // e.g., "Sent via Email"
     ],
     neverCapitalizedList: [],
   },
@@ -188,7 +184,7 @@ export const styleConfigMap = Object.freeze({
     articlesList: ["a", "an", "the"],
     shortPrepositionsList: [
       // Strictly ≤3-letter prepositions per APA 7th edition
-      "as",   // Subordinating conj. but included per APA convention
+      "as", // Subordinating conj. but included per APA convention
       "at",
       "by",
       "for",
@@ -199,7 +195,7 @@ export const styleConfigMap = Object.freeze({
       "out",
       "per",
       "to",
-      "via"
+      "via",
     ],
     neverCapitalizedList: [],
   },
@@ -220,7 +216,7 @@ export const styleConfigMap = Object.freeze({
       "on",
       "per",
       "to",
-      "via"
+      "via",
     ],
     neverCapitalizedList: [],
   },
@@ -241,7 +237,7 @@ export const styleConfigMap = Object.freeze({
       "on",
       "per",
       "to",
-      "via"
+      "via",
     ],
     neverCapitalizedList: ["etc."],
   },
@@ -251,20 +247,7 @@ export const styleConfigMap = Object.freeze({
     // NYT-derived minor words, including legal-versus abbreviations
     shortConjunctionsList: ["and", "as", "but", "for", "if", "nor", "or", "so", "yet", "v", "v.", "vs", "vs."],
     articlesList: ["a", "an", "the"],
-    shortPrepositionsList: [
-      "at",
-      "by",
-      "en",
-      "for",
-      "in",
-      "of",
-      "off",
-      "on",
-      "out",
-      "per",
-      "to",
-      "via"
-    ],
+    shortPrepositionsList: ["at", "by", "en", "for", "in", "of", "off", "on", "out", "per", "to", "via"],
     neverCapitalizedList: [],
   },
 
@@ -285,10 +268,10 @@ export const styleConfigMap = Object.freeze({
       "out",
       "per",
       "to",
-      "via"
+      "via",
     ],
     neverCapitalizedList: [],
-  }
+  },
 });
 
 // * ! ===============================================
@@ -304,8 +287,8 @@ export const ignoredWordList = [];
 export const phraseReplacementMap = {
   ...buildPhraseReplacementMap(curatedDataList),
   ...buildPhraseReplacementMap(brandNames),
-  'the cybersmile foundation': 'The Cybersmile Foundation',
-  'co. by colgate': 'CO. by Colgate',
+  "the cybersmile foundation": "The Cybersmile Foundation",
+  "co. by colgate": "CO. by Colgate",
   "on & off": "On & Off",
   "on and off": "On and Off",
 };
