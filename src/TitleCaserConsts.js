@@ -126,6 +126,7 @@ export const wordReplacementsList = [
   { "full-stack": "fullstack" },
   { nodejs: "Node.js" },
   { "node.js": "Node.js" },
+  { mcdonalds: "McDonald's" },
   { nextjs: "Next.js" },
   { nuxtjs: "Nuxt.js" },
   { reactjs: "React" },

@@ -45,6 +45,11 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "Nickelodeon announced a new series",
   );
   runTest(
+    "should restore the apostrophe in the McDonald's brand name",
+    "mcdonalds announced a new menu",
+    "McDonald's announced a new menu",
+  );
+  runTest(
     "should preserve canonical city names and contractions",
     "I'm traveling from New York to paris",
     "I'm traveling from New York to Paris",
