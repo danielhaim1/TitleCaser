@@ -30,9 +30,34 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
     "We are going to the Rocky Mountains, rocky and I are going",
   );
   runTest(
+    "should preserve first-person contractions in ordinary prose",
+    "i'm sure it's not the tool that's the problem, it's the way it's being used, i'm telling you.",
+    "I'm sure it's not the tool that's the problem, it's the way it's being used, I'm telling you.",
+  );
+  runTest(
     "should capitalize Walt Disney without an article or company suffix",
     "walt disney announced a new film",
     "Walt Disney announced a new film",
+  );
+  runTest(
+    "should preserve canonical Nickelodeon casing",
+    "nickelodeon announced a new series",
+    "Nickelodeon announced a new series",
+  );
+  runTest(
+    "should preserve canonical city names and contractions",
+    "I'm traveling from New York to paris",
+    "I'm traveling from New York to Paris",
+  );
+  runTest(
+    "should restore canonical city casing from lowercase input",
+    "i'm traveling from new york to paris",
+    "I'm traveling from New York to Paris",
+  );
+  runTest(
+    "should preserve canonical city and possessive brand phrases in prose",
+    "I'm going to los angeles to see the walt disney's new attraction.",
+    "I'm going to Los Angeles to see the Walt Disney's new attraction.",
   );
   runTest(
     "should keep a lowercase possessive suffix when capitalizing a name",

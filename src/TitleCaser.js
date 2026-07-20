@@ -543,7 +543,7 @@ export class TitleCaser {
           case TitleCaserUtils.startsWithSymbol(word):
             // ! If the word starts with a symbol, return the correct casing.
             return !TitleCaserUtils.isWordInArray(word, specialTermsList) ? word : TitleCaserUtils.correctTerm(word);
-          case TitleCaserUtils.hasRomanNumeral(word):
+          case !TitleCaserUtils.hasApostrophe(word) && TitleCaserUtils.hasRomanNumeral(word):
             // ! If the word has a roman numeral, return the correct casing.
             return word.toUpperCase();
           case TitleCaserUtils.hasNumbers(word):
@@ -766,10 +766,13 @@ export class TitleCaser {
 
           // Create a regular expression for case-insensitive matching of the phrase
           const escapedPhrase = phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&");
-          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
+          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(['\u2019]s)?(?=$|[^A-Za-z0-9'])`, "gi");
 
           // Replace the phrase in the input string with its corresponding replacement
-          replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
+          replacedValue = replacedValue.replace(
+            regex,
+            (_, prefix, _phrase, possessiveSuffix = "") => `${prefix}${replacement}${possessiveSuffix}`,
+          );
         }
 
         return replacedValue;
@@ -783,9 +786,12 @@ export class TitleCaser {
 
         for (const [phrase, replacement] of phraseEntries) {
           const escapedPhrase = phrase.replace(REGEX_PATTERNS.REGEX_ESCAPE, "\\$&");
-          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(?=$|[^A-Za-z0-9'])`, "gi");
+          const regex = new RegExp(`(^|[^A-Za-z0-9'])(${escapedPhrase})(['\u2019]s)?(?=$|[^A-Za-z0-9'])`, "gi");
 
-          replacedValue = replacedValue.replace(regex, (_, prefix) => `${prefix}${replacement}`);
+          replacedValue = replacedValue.replace(
+            regex,
+            (_, prefix, _phrase, possessiveSuffix = "") => `${prefix}${replacement}${possessiveSuffix}`,
+          );
         }
 
         return replacedValue;
@@ -991,8 +997,12 @@ export class TitleCaser {
 
           if (shouldPreserveWikipediaUserCapitalization) {
             words[i] = leadingOpeningPunctuation + originalWordForSentenceCasing + trailingClosingPunctuation;
-          } else if (wordForSentenceCasing.toLowerCase() === "i") {
-            words[i] = leadingOpeningPunctuation + "I" + trailingClosingPunctuation;
+          } else if (/^i(?:['’](?:d|ll|m|ve))?$/i.test(wordForSentenceCasing)) {
+            words[i] =
+              leadingOpeningPunctuation +
+              "I" +
+              wordForSentenceCasing.slice(1).toLowerCase() +
+              trailingClosingPunctuation;
           } else if (shouldPromoteCoordinatedListCandidate) {
             words[i] =
               leadingOpeningPunctuation +
