@@ -1,6 +1,6 @@
 import { TitleCaser } from "../index.js";
-import { runNameHeuristicTitleCaseTests } from "../testHelpers/nameHeuristicCases.js";
-import { runRareNounTrapTitleCaseTests } from "../testHelpers/rareNounTrapCases.js";
+import { runNameHeuristicTitleCaseTests } from "./helpers/nameHeuristicCases.js";
+import { runRareNounTrapTitleCaseTests } from "./helpers/rareNounTrapCases.js";
 
 function runTest(description, input, expected, style = "ap") {
   test(description, () => {

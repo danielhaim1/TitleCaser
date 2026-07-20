@@ -22,9 +22,6 @@ module.exports = {
 	    lines: 100
 	  }
 	},
-	testMatch: [
-	  '**/__tests__/**/*.(js|ts)',
-	  '**/*.(test|spec).(js|ts)'
-	]
+	testMatch: ['**/*.(test|spec).(js|ts)']
   };
   

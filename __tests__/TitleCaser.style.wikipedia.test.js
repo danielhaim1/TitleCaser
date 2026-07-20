@@ -1,11 +1,16 @@
 import { TitleCaser } from "../index.js";
-import { runRareNounTrapWikipediaTests } from "../testHelpers/rareNounTrapCases.js";
+import { runRareNounTrapWikipediaTests } from "./helpers/rareNounTrapCases.js";
 
 function runTest(description, input, expected) {
   test(description, () => {
     const titleCaser = new TitleCaser({ style: "wikipedia" });
     expect(titleCaser.toTitleCase(input)).toBe(expected);
   });
+}
+
+function runTestWithOptions(input, expected, options = {}) {
+  const titleCaser = new TitleCaser({ style: "wikipedia", ...options });
+  expect(titleCaser.toTitleCase(input)).toBe(expected);
 }
 
 describe("TitleCaser Wikipedia – Sentence Case", () => {
@@ -53,6 +58,64 @@ describe("TitleCaser Wikipedia – Sentence Case", () => {
       expect(titleCaser.toTitleCase(input)).toBe(expected);
     });
   });
+
+  describe("TitleCaser Wikipedia – User capitalization mode", () => {
+    const userCapitalizationCases = [
+      ["should ignore non-user capitalizations when preserve mode is off",
+        "went to Disneyland and Magic Mountain",
+        "Went to Disneyland and magic mountain",
+        {}],
+      ["should preserve user-cased names in mixed words", "went to Disneyland and Magic Mountain",
+        "Went to Disneyland and Magic Mountain",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should preserve user-cased list names while keeping lower-case names",
+        "went to the movies with Jenny, Jack, rocky, Cindy, Frank and Peter",
+        "Went to the movies with Jenny, Jack, rocky, Cindy, Frank and Peter",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep a quoted sentence-capitalized segment chain when user case preservation is enabled",
+        "when? \"right now!\" \"okay.\" \"good\"",
+        "When? \"Right now!\" \"Okay.\" \"Good\"",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should normalize all-caps ordinary words even in preserve mode when disabled",
+        "went to DISNEYLAND",
+        "Went to disneyland",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should preserve all-caps words when preserve-all-caps mode is enabled",
+        "went to DISNEYLAND and Magic Mountain",
+        "Went to DISNEYLAND and Magic Mountain",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should preserve a wholly all-caps title when preserve-all-caps mode is enabled",
+        "WENT TO DISNEYLAND",
+        "WENT TO DISNEYLAND",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should preserve mixed-cap user capitalization while preserving sentence boundaries",
+        "that? \"right now!\" \"okay?\" \"good\" again",
+        "That? \"Right now!\" \"Okay?\" \"Good\" again",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep user capitalization after quoted punctuation and before more quoted text",
+        "when? \"right now\" said she. \"okay?\" he replied",
+        "When? \"Right now\" said she. \"Okay?\" He replied",
+        { wikipediaPreserveUserCapitalization: true }],
+      ["should keep user capitalization for AI-like all-caps abbreviations when configured",
+        "can we use AI to predict the habits of the south american ai sloth",
+        "Can we use AI to predict the habits of the South American ai sloth",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: true }],
+      ["should retain canonical casing when user casing is not explicit",
+        "can we use ai to predict the habits of the south american ai sloth",
+        "Can we use AI to predict the habits of the South American ai sloth",
+        { wikipediaPreserveUserCapitalization: true, wikipediaPreserveAllCaps: false }],
+    ];
+
+    test.each(userCapitalizationCases)("%s", (description, input, expected, options) => {
+      runTestWithOptions(input, expected, options);
+    });
+  });
+
+  runTest(
+    "should distinguish the AI acronym from the contextual ai sloth name",
+    "can we use ai to predict the habits of the south american ai sloth",
+    "Can we use AI to predict the habits of the South American ai sloth",
+  );
 
   runTest(
     "should normalize spelling replacements without forcing title-case capitalization",
