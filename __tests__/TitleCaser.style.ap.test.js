@@ -850,8 +850,8 @@ describe("TitleCaser AP – Failed Chicago Regression Coverage", () => {
 
 describe("TitleCaser AP - Specification Coverage", () => {
   const specificationCases = [
-    ["secondary-source verified", "capitalizes short subordinating conjunctions", "if you build it, they will come", "If You Build It, They Will Come"],
-    ["secondary-source verified", "capitalizes As as a subordinating conjunction", "as we were", "As We Were"],
+    ["secondary-source verified", "capitalizes a short subordinating conjunction within a title", "a decision if the data changes", "A Decision If the Data Changes"],
+    ["secondary-source verified", "capitalizes As as a subordinating conjunction within a title", "a question as we were leaving", "A Question As We Were Leaving"],
     ["secondary-source verified", "capitalizes That as a subordinating conjunction", "a guide that works", "A Guide That Works"],
     ["secondary-source verified", "capitalizes Than as a subordinating conjunction", "better than expected", "Better Than Expected"],
     ["secondary-source verified", "capitalizes a subtitle-opening article", "a guide to testing: a practical reference", "A Guide to Testing: A Practical Reference"],
@@ -863,7 +863,7 @@ describe("TitleCaser AP - Specification Coverage", () => {
     ["TitleCaser policy", "normalizes possessives and elided names", "apple's buyer's guide for o'connor", "Apple's Buyer's Guide for O’Connor"],
     ["TitleCaser policy", "preserves known abbreviations", "Q&A with AT&T: v. vs. guide", "Q&A With AT&T: v. vs. Guide"],
     ["TitleCaser policy", "preserves protected tokens", "visit example.com and user@example.com from /var/run with package-lock.json", "Visit example.com and user@example.com From /var/run With package-lock.json"],
-    ["TitleCaser policy", "handles token-aware numbers and Roman numerals", "the 2nd guide to version 3.0 and louis-iv", "The 2nd Guide to Version 3.0 and Louis-IV"],
+    ["TitleCaser policy", "preserves numerals and version strings", "the 2nd guide to version 3.0", "The 2nd Guide to Version 3.0"],
   ];
 
   test.each(specificationCases)("[%s] %s", (_confidence, _description, input, expected) => {

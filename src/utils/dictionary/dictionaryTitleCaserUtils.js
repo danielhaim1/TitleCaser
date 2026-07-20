@@ -14,10 +14,12 @@ import {
 } from "../../data/dictionary/index.js";
 import familyNames from "../../data/names/list-family-names.json";
 import givenNames from "../../data/names/list-given-names.json";
+import ambiguousGivenNames from "../../data/names/list-ambiguous-given-names.json";
 import { specialTermsList } from "../../TitleCaserConsts.js";
 
 const dictionaryFamilyNameSet = new Set(familyNames);
 const dictionaryGivenNameSet = new Set(givenNames);
+const dictionaryAmbiguousGivenNameSet = new Set(ambiguousGivenNames);
 const dictionaryNameContinuationBlocklist = new Set([
   "a",
   "an",
@@ -314,6 +316,126 @@ export function dictionaryExtendTitleCaserUtils(TitleCaserUtils) {
     dictionaryIsLikelyNameContinuation: {
       value(word, profile = dictionaryDefaultProfile) {
         return TitleCaserUtils.dictionaryIsLikelyEntityContinuation(word, profile);
+      },
+    },
+
+    // Find one lower-case outlier in a comma-separated list whose peers are names.
+    dictionaryGetCoordinatedListProperNameCandidates: {
+      value({ input = "" } = {}) {
+        if (typeof input !== "string" || !input) return [];
+
+        const wordPattern = /[A-Za-z][A-Za-z'’-]*/g;
+        const wordEntries = Array.from(input.matchAll(wordPattern)).map((match, wordIndex) => ({
+          word: match[0].toLowerCase(),
+          originalWord: match[0],
+          startIndex: match.index,
+          wordIndex,
+        }));
+        const listItemPattern = "[A-Za-z][A-Za-z'’-]*(?:\\s+[A-Za-z][A-Za-z'’-]*){0,2}";
+        const listPattern = new RegExp(
+          `\\b${listItemPattern}(?:\\s*,\\s*${listItemPattern}){2,}\\s*,?\\s+(?:and|or)\\s+${listItemPattern}\\b`,
+          "gi",
+        );
+        const candidates = [];
+
+        for (const listMatch of input.matchAll(listPattern)) {
+          const listItems = [];
+          const itemSeparatorPattern = /\s*,\s*|\s+(?:and|or)\s+/gi;
+          let itemStartIndex = 0;
+          let separatorMatch;
+
+          while ((separatorMatch = itemSeparatorPattern.exec(listMatch[0]))) {
+            const rawItem = listMatch[0].slice(itemStartIndex, separatorMatch.index);
+            const leadingWhitespaceLength = rawItem.search(/\S/);
+            if (leadingWhitespaceLength !== -1) {
+              listItems.push({
+                rawItem: rawItem.trim(),
+                startIndex: listMatch.index + itemStartIndex + leadingWhitespaceLength,
+              });
+            }
+            itemStartIndex = separatorMatch.index + separatorMatch[0].length;
+          }
+
+          const finalRawItem = listMatch[0].slice(itemStartIndex);
+          const finalLeadingWhitespaceLength = finalRawItem.search(/\S/);
+          if (finalLeadingWhitespaceLength !== -1) {
+            listItems.push({
+              rawItem: finalRawItem.trim(),
+              startIndex: listMatch.index + itemStartIndex + finalLeadingWhitespaceLength,
+            });
+          }
+
+          const parsedListItems = listItems.map(({ rawItem, startIndex }, itemIndex) => {
+            let wordMatches = Array.from(rawItem.matchAll(wordPattern));
+
+            if (itemIndex === 0) {
+              const lastLowercaseWordIndex = wordMatches.reduce(
+                (lastIndex, match, index) => (/^[a-z]/.test(match[0]) ? index : lastIndex),
+                -1,
+              );
+              if (lastLowercaseWordIndex >= 0 && lastLowercaseWordIndex < wordMatches.length - 1) {
+                wordMatches = wordMatches.slice(lastLowercaseWordIndex + 1);
+              } else if (wordMatches.length > 1 && /^[a-z]/.test(wordMatches[0][0])) {
+                wordMatches = wordMatches.slice(-1);
+              }
+            }
+
+            if (itemIndex === listItems.length - 1 && wordMatches.length > 1) {
+              const trailingLowercaseWordIndex = wordMatches.findIndex(
+                (match, index) => index > 0 && /^[a-z]/.test(match[0]),
+              );
+              if (trailingLowercaseWordIndex > 0) {
+                wordMatches = wordMatches.slice(0, trailingLowercaseWordIndex);
+              } else if (/^[a-z]/.test(wordMatches[0][0])) {
+                wordMatches = wordMatches.slice(0, 1);
+              }
+            }
+
+            const firstWord = wordMatches[0];
+            const candidateEntry = firstWord && wordEntries.find(
+              (entry) => entry.startIndex === startIndex + firstWord.index,
+            );
+
+            return {
+              words: wordMatches.map((match) => match[0]),
+              candidateEntry,
+            };
+          });
+          const ambiguousLowerCaseItems = parsedListItems.filter(({ words, candidateEntry }) =>
+            words.length === 1 &&
+            /^[a-z]/.test(words[0]) &&
+            candidateEntry &&
+            dictionaryAmbiguousGivenNameSet.has(candidateEntry.word),
+          );
+
+          if (ambiguousLowerCaseItems.length !== 1) continue;
+
+          const [candidateItem] = ambiguousLowerCaseItems;
+          const candidate = candidateItem.candidateEntry;
+          if (!candidate) continue;
+
+          const peerItems = parsedListItems.filter((item) => item !== candidateItem);
+          const peerNameSignalCount = peerItems.filter(({ words }) =>
+            words.length > 0 &&
+            (
+              words.every((word) => /^[A-Z]/.test(word)) ||
+              (words.length === 1 && TitleCaserUtils.dictionaryIsGivenName(words[0]))
+            ),
+          ).length;
+          const hasGivenNamePeer = peerItems.some(({ words }) =>
+            words.length === 1 && TitleCaserUtils.dictionaryIsGivenName(words[0]),
+          );
+
+          if (
+            peerItems.length >= 3 &&
+            hasGivenNamePeer &&
+            peerNameSignalCount / peerItems.length >= 0.8
+          ) {
+            candidates.push({ ...candidate, classification: "contextual-person" });
+          }
+        }
+
+        return candidates;
       },
     },
 

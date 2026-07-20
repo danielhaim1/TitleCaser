@@ -1,5 +1,6 @@
 import countriesAndCodes from "../geography/list-countries-and-codes.json";
 import demonyms from "../geography/list-demonyms.json";
+import geographicFeatures from "../geography/list-geographic-features.json";
 import religiousGroups from "../religion/list-religious-groups.json";
 import brandNames from "../names/list-brand-names.json";
 import academicTimeTerms from "./list-academic-time-terms.json";
@@ -13,6 +14,7 @@ import technologyComputingTerms from "./list-technology-computing-terms.json";
 const geographyCodesAndNames = {
   ...countriesAndCodes,
   demonyms,
+  ...geographicFeatures,
   religiousGroups,
 };
 

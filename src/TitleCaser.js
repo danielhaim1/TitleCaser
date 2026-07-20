@@ -397,6 +397,10 @@ export class TitleCaser {
       // Tokenize preserving whitespace
       const tokens = inputString.split(/(\s+)/);
       const originalNonWhitespaceTokens = tokens.filter((token) => token && !/^\s+$/.test(token));
+      const coordinatedListCandidateWordIndexes = new Set(
+        TitleCaserUtils.dictionaryGetCoordinatedListProperNameCandidates({ input: inputString, style })
+          .map(({ wordIndex }) => wordIndex),
+      );
 
       const transformToken = (word, tokenIndex, wordPosition) => {
         if (TitleCaserUtils.isUrlLikeToken(word)) {
@@ -933,6 +937,8 @@ export class TitleCaser {
           const wordForSentenceCasing = trailingClosingPunctuation
             ? wordWithoutOpeningPunctuation.slice(0, -trailingClosingPunctuation.length)
             : wordWithoutOpeningPunctuation;
+          const canonicalWordCasing = replacementCasingMap[wordForSentenceCasing.toLowerCase()] ||
+            knownTermCasingMap[wordForSentenceCasing.toLowerCase()];
           const originalWord = originalNonWhitespaceTokens[originalWordIndex] || "";
           const originalLeadingOpeningPunctuation = originalWord
             ? TitleCaserUtils.getLeadingOpeningPunctuation(originalWord)
@@ -956,6 +962,8 @@ export class TitleCaser {
             );
           const originalWordPosition = originalWordIndex;
           originalWordIndex++;
+          const shouldPromoteCoordinatedListCandidate =
+            style === "wikipedia" && coordinatedListCandidateWordIndexes.has(originalWordPosition);
           const wikipediaCasingDecision = TitleCaserUtils.dictionaryGetWikipediaCasingDecision({
             originalWord,
             previousOriginalWord: originalNonWhitespaceTokens[originalWordPosition - 1] || "",
@@ -976,8 +984,9 @@ export class TitleCaser {
               !TitleCaser.shouldKeepCasing(wordForSentenceCasing, replacementCasingMap)
             ) {
               words[i] = leadingOpeningPunctuation +
-                wordForSentenceCasing.charAt(0).toUpperCase() +
-                wordForSentenceCasing.slice(1).toLowerCase() +
+                (canonicalWordCasing ||
+                  (wordForSentenceCasing.charAt(0).toUpperCase() +
+                    wordForSentenceCasing.slice(1).toLowerCase())) +
                 trailingClosingPunctuation;
             }
             previousWordBefore = previousWord;
@@ -993,12 +1002,19 @@ export class TitleCaser {
 
           if (shouldPreserveWikipediaUserCapitalization) {
             words[i] = leadingOpeningPunctuation + originalWordForSentenceCasing + trailingClosingPunctuation;
+          } else if (shouldPromoteCoordinatedListCandidate) {
+            words[i] = leadingOpeningPunctuation +
+              wordForSentenceCasing.charAt(0).toUpperCase() +
+              wordForSentenceCasing.slice(1).toLowerCase() +
+              trailingClosingPunctuation;
           } else if (
             wikipediaPreserveUserCapitalization &&
             !wikipediaPreserveAllCaps &&
             isAllCapsWord
           ) {
-            words[i] = leadingOpeningPunctuation + wordForSentenceCasing.toLowerCase() + trailingClosingPunctuation;
+            words[i] = leadingOpeningPunctuation +
+              (canonicalWordCasing || wordForSentenceCasing.toLowerCase()) +
+              trailingClosingPunctuation;
           } else if (
             !sentenceNameTokenIndexes.has(i) &&
             !shouldPreserveByWikipediaHeuristics &&

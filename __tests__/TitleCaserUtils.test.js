@@ -1,4 +1,8 @@
 import { TitleCaserUtils } from "../src/TitleCaserUtils.js";
+import {
+  contextualNameCases,
+  titleCaseStyles,
+} from "./fixtures/coordinated-list-proper-name-cases.js";
 
 describe("TitleCaserUtils – Options", () => {
   test("validateOption should accept only arrays of strings", () => {
@@ -100,6 +104,30 @@ describe("TitleCaserUtils – Casing", () => {
 });
 
 describe("TitleCaserUtils – Detectors", () => {
+  describe.each(titleCaseStyles)("%s coordinated-list contextual-name detection", (style) => {
+    test.each(contextualNameCases)("$description", ({ input, expectedOccurrences }) => {
+      const candidates = TitleCaserUtils
+        .dictionaryGetCoordinatedListProperNameCandidates({ input, style });
+      const expectedCandidates = expectedOccurrences.filter(
+        ({ classification }) => classification === "contextual-person",
+      );
+      const expectedCandidateLocations = expectedCandidates.map(({ value, occurrence, classification }) => {
+        const matches = Array.from(
+          input.matchAll(new RegExp(`\\b${value}\\b`, "gi")),
+        );
+
+        return {
+          word: value.toLowerCase(),
+          startIndex: matches[occurrence - 1].index,
+          classification,
+        };
+      });
+
+      expect(candidates.map(({ word, startIndex, classification }) => ({ word, startIndex, classification })))
+        .toEqual(expectedCandidateLocations);
+    });
+  });
+
   test("should expose language alphabets and regex patterns", () => {
     expect(TitleCaserUtils.detectorGetSupportedLanguages()).toEqual(expect.arrayContaining(["en", "pl", "ru", "vi"]));
     expect(TitleCaserUtils.detectorGetLanguageAlphabet("pl")).toContain("ł");
